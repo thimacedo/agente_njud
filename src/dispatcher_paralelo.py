@@ -110,12 +110,19 @@ def worker_loop(
     fila_tarefas: mp.Queue,
     pasta_estado: Path,
     threads_por_worker: int,
+    usar_whisper_timestamped: bool = False,
 ):
     """Processo de vida longa: carrega o modelo Whisper UMA vez, depois
     consome tarefas da fila até receber o sentinel None."""
     os.environ["OMP_NUM_THREADS"] = str(threads_por_worker)
     os.environ["MKL_NUM_THREADS"] = str(threads_por_worker)
     _aplicar_prioridade_baixa()
+
+    if usar_whisper_timestamped:
+        import whisper_timestamped as wt
+        modelo_wt = wt.load_model("small", device="cpu", compute_type="int8")
+    else:
+        modelo_wt = None
 
     from faster_whisper import WhisperModel
     from divisor_boletins.audio import processar_arquivo
@@ -128,7 +135,7 @@ def worker_loop(
                            cpu_threads=threads_por_worker)
     pasta_saida_cortes = pasta_estado.parent / "JORNAIS_DIVIDIDOS"
     logger_worker = LogPipeline(pasta_estado.parent / "_logs" / f"worker_{worker_id}")
-    print(f"[worker {worker_id}] pronto.")
+    print(f"[worker {worker_id}] pronto. whisper_timestamped={usar_whisper_timestamped}")
 
     # HEARTBEAT: prova de vida para o monitor_tempo_real.py. Gravado ao
     # receber tarefa, a cada conclusão e quando ocioso (via timeout da fila).
@@ -214,6 +221,12 @@ class _EstadoArquivoUnico:
             dados = json.loads(caminho.read_text(encoding="utf-8"))
             from processo_unico import TentativaLog
             tentativas = [TentativaLog(**t) for t in dados.pop("tentativas", [])]
+            # Filtra chaves que não existem no dataclass (ex.: "erro" gravado pelo
+            # handler de exceção do worker). Sem isso, arquivos com status ERRO
+            # crasham eternamente no retry e nunca são reprocessados.
+            import dataclasses
+            validas = {f_.name for f_ in dataclasses.fields(EstadoArquivo)}
+            dados = {k: v for k, v in dados.items() if k in validas}
             self._e = EstadoArquivo(tentativas=tentativas, **dados)
         else:
             self._e = EstadoArquivo(arquivo=arquivo, njud=njud)
@@ -280,7 +293,7 @@ def executar(pasta_boletins: Path, pasta_saida: Path, max_workers: int | None,
     fila = mp.Queue()
     processos = []
     for i in range(n_workers):
-        p = mp.Process(target=worker_loop, args=(i, fila, pasta_estado, threads_por_worker))
+        p = mp.Process(target=worker_loop, args=(i, fila, pasta_estado, threads_por_worker, usar_whisper_timestamped))
         p.start()
         processos.append(p)
 
@@ -302,6 +315,19 @@ def executar(pasta_boletins: Path, pasta_saida: Path, max_workers: int | None,
     for p in processos:
         p.join()
 
+    # Watchdog mínimo: se ainda houver tarefas pendentes após o pool
+    # inicial terminar, assume que algum worker morreu e respawn.
+    pendentes = listar_tarefas_pendentes(pasta_boletins, pasta_estado)
+    if pendentes:
+        print(f"[dispatcher] watchdog: {len(pendentes)} tarefa(s) pendente(s); respawn do pool...")
+        processos = []
+        for i in range(n_workers):
+            p = mp.Process(target=worker_loop, args=(i, fila, pasta_estado, threads_por_worker, usar_whisper_timestamped))
+            p.start()
+            processos.append(p)
+        for p in processos:
+            p.join()
+
     # ================================================================
     # AUTONOMIA: montagem automática dos NJUDs completos (2026-08-24)
     # O processo único não termina em "cortes prontos" — termina no
@@ -313,19 +339,27 @@ def executar(pasta_boletins: Path, pasta_saida: Path, max_workers: int | None,
     pasta_jornais = pasta_saida / "JORNAIS_FINAL"
     pasta_jornais.mkdir(parents=True, exist_ok=True)
 
-    njuds_pendentes: dict[str, int] = {}
+    # Fonte da verdade para montagem: estado_por_arquivo/*.json
+    # Motivo: total_esperado_njud() baseado em pastas pode divergir se a
+    # estrutura de entrada mudar; o estado reflete exatamente o que foi
+    # processado e é a base do gate por-NJUD.
+    njuds_estado: dict[str, dict] = {}
     for p_estado in pasta_estado.glob("*.json"):
         try:
             d = json.loads(p_estado.read_text(encoding="utf-8"))
         except Exception:
             continue
-        njuds_pendentes.setdefault(d.get("njud", "?"), 0)
-        if d.get("status") in ("OK", "ESGOTADO_ACEITO"):
-            njuds_pendentes[d["njud"]] += 1
+        njud = d.get("njud", "?")
+        status = d.get("status", "PENDENTE")
+        njuds_estado.setdefault(njud, {"total": 0, "concluidos": 0})
+        njuds_estado[njud]["total"] += 1
+        if status in ("OK", "ESGOTADO_ACEITO"):
+            njuds_estado[njud]["concluidos"] += 1
 
     njuds_prontos = [
-        njud for njud, concluidos in njuds_pendentes.items()
-        if concluidos >= total_esperado_njud(njud, pasta_boletins)
+        njud
+        for njud, info in sorted(njuds_estado.items())
+        if info["total"] > 0 and info["concluidos"] == info["total"]
     ]
 
     if not njuds_prontos:
@@ -374,6 +408,8 @@ def main():
                          help="Teto manual opcional; o real é min(cpu, ram, teto).")
     parser.add_argument("--threads-por-worker", type=int, default=THREADS_POR_WORKER_PADRAO)
     parser.add_argument("--limiar-cpu", type=float, default=LIMIAR_CPU_PAUSA)
+    parser.add_argument("--usar-whisper-timestamped", action="store_true",
+                        help="Usa whisper-timestamped para timestamps mais estáveis nas bordas.")
     args = parser.parse_args()
 
     executar(

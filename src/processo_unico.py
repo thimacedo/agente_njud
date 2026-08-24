@@ -76,9 +76,10 @@ class TentativaLog:
 class EstadoArquivo:
     arquivo: str
     njud: str
-    status: str = "PENDENTE"        # PENDENTE | OK | ESGOTADO | ESGOTADO_ACEITO
+    status: str = "PENDENTE"        # PENDENTE | OK | ESGOTADO | ESGOTADO_ACEITO | ERRO
     estrategia_atual: str = "calibracao_correlacao"
     tentativas: list[TentativaLog] = field(default_factory=list)
+    erro: str = ""
 
     def proxima_estrategia(self, motivo_classificado: str) -> Optional[str]:
         """Decide a próxima estratégia com base no motivo estruturado
@@ -107,7 +108,12 @@ class EstadoProcesso:
             dados = json.loads(self.caminho.read_text(encoding="utf-8"))
             for nome, d in dados.items():
                 tentativas = [TentativaLog(**t) for t in d.pop("tentativas", [])]
-                self.arquivos[nome] = EstadoArquivo(tentativas=tentativas, **d)
+                # Filtra chaves que não existem no dataclass (ex.: "erro" gravado
+                # pelo handler de exceção dos workers). Sem isso, arquivos com
+                # status ERRO crasham eternamente no retry e nunca são reprocessados.
+                known = {"arquivo", "njud", "status", "estrategia_atual", "tentativas"}
+                filtered = {k: v for k, v in d.items() if k in known}
+                self.arquivos[nome] = EstadoArquivo(tentativas=tentativas, **filtered)
 
     def salvar(self):
         dados = {

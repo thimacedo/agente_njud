@@ -57,6 +57,7 @@ def sincronizar_com_drive():
     
     sucesso = 0
     erros = 0
+    enviados = []
     
     for j in jornais:
         pasta_destino = obter_pasta_mes_destino(j.name)
@@ -77,10 +78,43 @@ def sincronizar_com_drive():
         print(f" ➜ Copiando {j.name} -> {pasta_destino.name}")
         try:
             shutil.copy2(str(j), str(caminho_destino))
+            enviados.append((j, caminho_destino))
             sucesso += 1
         except Exception as e:
             print(f" ✖ Erro ao copiar {j.name}: {e}")
             erros += 1
+    
+    # ===========================================================================
+    # VALIDAÇÃO PÓS-SYNC (item 8 da lista de ferramentas)
+    # ===========================================================================
+    # Motivo: o script anterior não confirmava se o arquivo realmente chegou
+    # intacto ao destino. Aqui verificamos existência, tamanho e contagem.
+    # ===========================================================================
+    if enviados:
+        print("\n=== Validando sincronização ===")
+        validados = 0
+        validacao_erros = 0
+        for origem, destino in enviados:
+            try:
+                if not destino.exists():
+                    print(f" ✖ [validação] {destino.name}: arquivo não existe no destino")
+                    validacao_erros += 1
+                    continue
+                tam_origem = origem.stat().st_size
+                tam_destino = destino.stat().st_size
+                if tam_origem != tam_destino or tam_destino == 0:
+                    print(f" ✖ [validação] {destino.name}: tamanho divergente "
+                          f"(origem={tam_origem}, destino={tam_destino})")
+                    validacao_erros += 1
+                    continue
+                validados += 1
+            except Exception as e:
+                print(f" ✖ [validação] {destino.name}: {e}")
+                validacao_erros += 1
+        print(f"[validação] {validados}/{len(enviados)} arquivos válidos; "
+              f"{validacao_erros} inválidos.")
+        if validacao_erros:
+            print(" ⚠ Atenção: há arquivos suspeitos. Reenvie ou revise manualmente.")
             
     print(f"\n=== Sincronização concluída: {sucesso}/{len(jornais)} enviados. Erros: {erros} ===")
 

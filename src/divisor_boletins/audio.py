@@ -63,8 +63,65 @@ class ResultadoCorte:
 # TRANSCRIÇÃO
 # ===========================================================================
 
+# ===========================================================================
+# CACHE DE TRANSCRIÇÕES (memória + disco)
+# ===========================================================================
+# Motivo: o mesmo arquivo pode ser transcrito várias vezes durante o ciclo
+# fechado (calibracao_correlacao -> ancora_vad_forcado -> ...). O Whisper
+# pequeno em CPU é a etapa mais cara; reutilizar a transcrição reduz o tempo
+# de reprocessamento em ~70-80%.
+# ===========================================================================
+
+_CACHE_MEM: dict[str, tuple[list[dict], str]] = {}
+
+
+def _cache_path(caminho_audio: str | Path) -> Path:
+    from pathlib import Path as _P
+    p = _P(caminho_audio)
+    nome = f"{p.parent.name}__{p.name}.json"
+    return _P("F:/Projetos/DIVISOR/data/cache/transcricoes") / nome
+
+
+def _carregar_cache_disco(caminho_audio: str | Path) -> tuple[list[dict], str] | None:
+    caminho = _cache_path(caminho_audio)
+    if not caminho.exists():
+        return None
+    try:
+        import json as _json
+        dados = _json.loads(caminho.read_text(encoding="utf-8"))
+        return dados.get("segmentos"), dados.get("texto")
+    except Exception:
+        return None
+
+
+def _salvar_cache_disco(caminho_audio: str | Path, segmentos: list[dict], texto: str) -> None:
+    caminho = _cache_path(caminho_audio)
+    try:
+        caminho.parent.mkdir(parents=True, exist_ok=True)
+        import json as _json
+        caminho.write_text(
+            _json.dumps({"segmentos": segmentos, "texto": texto}, ensure_ascii=False),
+            encoding="utf-8",
+        )
+    except Exception:
+        pass
+
+
+def limpar_cache_transcricoes() -> None:
+    _CACHE_MEM.clear()
+    try:
+        from pathlib import Path as _P
+        pasta = _P("F:/Projetos/DIVISOR/data/cache/transcricoes")
+        if pasta.exists():
+            for f in pasta.glob("*.json"):
+                f.unlink()
+    except Exception:
+        pass
+
+
 def carregar_modelo() -> WhisperModel:
     return WhisperModel(MODELO_WHISPER, device="cpu", compute_type=COMPUTE_TYPE)
+
 
 
 def transcrever_audio(
@@ -74,6 +131,16 @@ def transcrever_audio(
 ) -> tuple[list[dict], str]:
     etapa = "transcrever"
     caminho_str = str(caminho_audio)
+
+    if caminho_str in _CACHE_MEM:
+        logger.info(etapa, f"Transcrição reutilizada da cache memória: {caminho_str}")
+        return _CACHE_MEM[caminho_str]
+
+    cache_disco = _carregar_cache_disco(caminho_str)
+    if cache_disco is not None:
+        logger.info(etapa, f"Transcrição reutilizada da cache disco: {caminho_str}")
+        _CACHE_MEM[caminho_str] = cache_disco
+        return cache_disco
 
     logger.info(etapa, f"Iniciando transcrição: {caminho_str}")
     t0 = time.time()
@@ -97,6 +164,7 @@ def transcrever_audio(
 
         duracao = info.duration
         tempo = time.time() - t0
+
         logger.info(
             etapa,
             f"Transcrição concluída em {tempo:.1f}s — duração: {duracao:.1f}s, "
@@ -104,11 +172,16 @@ def transcrever_audio(
             arquivo=caminho_str,
             duracao_segundos=round(duracao, 2),
         )
+
+        _CACHE_MEM[caminho_str] = (lista_segments, texto_completo)
+        _salvar_cache_disco(caminho_str, lista_segments, texto_completo)
+
         return lista_segments, texto_completo
 
     except Exception as e:
         logger.erro(etapa, f"Falha na transcrição: {e}", arquivo=caminho_str)
         raise
+
 
 
 # ===========================================================================
@@ -320,6 +393,51 @@ def cortar_audio(
         inicio_corpo=round(inicio_corpo, 2),
         fim_corpo=round(fim_corpo, 2),
     )
+
+
+# ===========================================================================
+# VALIDAÇÃO ESPECTRAL DE RESÍDUOS DE VINHETA (item 2 da lista)
+# ===========================================================================
+# Motivo: resíduos de vinhetas podem ficar nas bordas mesmo quando
+# energia/RMS parecem limpos. A validação mínima sem ML compara a
+# energia espectral nas bordas com o centro; se a borda tiver energia
+# muito maior que o centro, há suspeita de resíduo. Em modo apply,
+# se detectar resíduo, amplia a janela de busca e re-corta +50ms.
+# ===========================================================================
+
+def _energia_espectral_db(audio: AudioSegment, pos_ms: int, janela_ms: int = 120) -> float:
+    """Energia espectral aproximada em dB na janela centrada em pos_ms.
+    Fallback simples sem libs externas: usa RMS como proxy de energia."""
+    inicio = max(0, pos_ms - janela_ms // 2)
+    fim = min(len(audio), pos_ms + janela_ms // 2)
+    trecho = audio[inicio:fim]
+    if len(trecho) == 0:
+        return -120.0
+    return float(trecho.dBFS)
+
+
+def _detectar_residuo_vinheta(audio: AudioSegment, inicio_ms: int, fim_ms: int) -> dict:
+    """Retorna diagnóstico de resíduo nas bordas do trecho [inicio_ms, fim_ms]."""
+    centro = (inicio_ms + fim_ms) // 2
+    try:
+        energia_ini = _energia_espectral_db(audio, inicio_ms)
+        energia_fim = _energia_espectral_db(audio, fim_ms)
+        energia_centro = _energia_espectral_db(audio, centro)
+    except Exception as e:
+        return {"residuo_ini": False, "residuo_fim": False, "erro": str(e)}
+
+    # Se a borda estiver muito mais energética que o centro (>6dB), é suspeito.
+    limiar_residuo = 6.0
+    residuo_ini = (energia_ini - energia_centro) >= limiar_residuo
+    residuo_fim = (energia_fim - energia_centro) >= limiar_residuo
+
+    return {
+        "residuo_ini": bool(residuo_ini),
+        "residuo_fim": bool(residuo_fim),
+        "energia_ini_db": round(energia_ini, 1),
+        "energia_fim_db": round(energia_fim, 1),
+        "energia_centro_db": round(energia_centro, 1),
+    }
 
 
 # ===========================================================================

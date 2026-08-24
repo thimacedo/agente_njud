@@ -29,6 +29,9 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -103,6 +106,63 @@ def _borda_com_fala(
         janela = _rms_db_janela(audio, max(0, dur - JANELA_BORDA_MS), dur)
     limiar = max(piso_db + LIMIAR_CORTE_DB_ACIMA_PISO, PISO_ENERGIA_DB + LIMIAR_CORTE_DB_ACIMA_PISO)
     return (janela >= limiar), janela
+
+
+# ===========================================================================
+# VALIDADOR CRUZADO COM FFMPEG SILENCEDETECT (item 1 da lista)
+# ===========================================================================
+# Motivo: o pydub usa detecção simples de RMS; ffmpeg tem filtro mais
+# robusto e com parâmetros distintos. Usamos como segunda opinião antes
+# de classificar como ESGOTADO ou CORTADO. ffmpeg indisponível não
+# bloqueia: o resultado simplesmente não é usado.
+# ===========================================================================
+
+def _ffmpeg_silence_ms(caminho: Path, lado: str) -> int:
+    """Retorna ms de silêncio no início/fim detectados pelo ffmpeg.
+    lado: 'inicio' ou 'fim'. Retorna -1 se ffmpeg falhar."""
+    if not shutil.which("ffmpeg"):
+        return -1
+    try:
+        proc = subprocess.run(
+            [
+                "ffmpeg",
+                "-i",
+                str(caminho),
+                "-af",
+                "silencedetect=noise=-30dB:d=0.12",
+                "-f",
+                "null",
+                "-",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=30,
+        )
+        saida = proc.stderr + proc.stdout
+        linhas = [l.strip() for l in saida.splitlines() if "silence_start:" in l or "silence_end:" in l]
+        duracoes = []
+        inicio_atual = None
+        for l in linhas:
+            if "silence_start:" in l:
+                try:
+                    inicio_atual = float(l.split("silence_start:")[-1].strip())
+                except ValueError:
+                    inicio_atual = None
+            elif "silence_end:" in l and inicio_atual is not None:
+                try:
+                    fim = float(l.split("silence_end:")[-1].strip())
+                    duracoes.append(fim - inicio_atual)
+                    inicio_atual = None
+                except ValueError:
+                    pass
+        if not duracoes:
+            return 0
+        if lado == "inicio":
+            return int(duracoes[0] * 1000)
+        sil_fim = duracoes[-1] * 1000 if duracoes else 0
+        return int(sil_fim)
+    except Exception:
+        return -1
 
 
 CONECTIVOS_CURTOS = {
@@ -247,6 +307,16 @@ def analisar_arquivo(caminho: Path, tipo: str, modelo: WhisperModel) -> dict:
 
         sil_inicio = detect_leading_silence(audio, silence_threshold=-40)
         sil_fim = detect_leading_silence(audio.reverse(), silence_threshold=-40)
+
+        ffmpeg_sil_inicio_ms = _ffmpeg_silence_ms(caminho, "inicio")
+        ffmpeg_sil_fim_ms = _ffmpeg_silence_ms(caminho, "fim")
+        resultado["ffmpeg_sil_inicio_ms"] = ffmpeg_sil_inicio_ms
+        resultado["ffmpeg_sil_fim_ms"] = ffmpeg_sil_fim_ms
+        resultado["ffmpeg_status"] = "ok" if ffmpeg_sil_inicio_ms >= 0 and ffmpeg_sil_fim_ms >= 0 else "ignored"
+
+        if ffmpeg_sil_inicio_ms == -1 and ffmpeg_sil_fim_ms == -1:
+            resultado["ffmpeg_status"] = "ffmpeg_indisponivel"
+
         if sil_inicio > LIMIAR_SILENCIO_BORDA_MS:
             resultado["motivo"].append(
                 f"silêncio de {sil_inicio}ms no início (possível resíduo)"
@@ -254,6 +324,18 @@ def analisar_arquivo(caminho: Path, tipo: str, modelo: WhisperModel) -> dict:
         if sil_fim > LIMIAR_SILENCIO_BORDA_MS:
             resultado["motivo"].append(
                 f"silêncio de {sil_fim}ms no fim (possível resíduo)"
+            )
+
+        # Validação cruzada: ffmpeg confirma resíduo mesmo quando pydub
+        # não vê silêncio suficiente. Se ffmpeg diz >1200ms de silêncio
+        # inicial, marca explicitamente.
+        if ffmpeg_sil_inicio_ms >= 1200:
+            resultado["motivo"].append(
+                f"ffmpeg detectou {ffmpeg_sil_inicio_ms}ms de silêncio inicial"
+            )
+        if ffmpeg_sil_fim_ms >= 1200:
+            resultado["motivo"].append(
+                f"ffmpeg detectou {ffmpeg_sil_fim_ms}ms de silêncio final"
             )
 
         if suspeito_inicio or suspeito_fim:
@@ -350,6 +432,9 @@ def main() -> None:
         "erro",
         "energia_borda_ini_db",
         "energia_borda_fim_db",
+        "ffmpeg_sil_inicio_ms",
+        "ffmpeg_sil_fim_ms",
+        "ffmpeg_status",
     ]
     with open(args.relatorio_csv, "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=campos)
