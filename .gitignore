@@ -1,5 +1,10 @@
 # Áudio e dados brutos (nunca versionar)
 JORNAIS/
+BOLETINS/
+boletins/
+jornais/
+*BOLETIM*
+*NJUD*
 *.mp3
 *.wav
 *.ogg
