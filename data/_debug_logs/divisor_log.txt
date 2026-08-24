@@ -1,0 +1,11 @@
+[2026-08-24 08:57:17] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B2_TJRN_MANTEM_COBRANCA_MULTA_BANCO_NJUD_1918.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 08:57:17] [INFO] transcrever: Iniciando transcrição: JORNAIS\AGOSTO\NJUD 1918\BOLETIM_RADIO_TJRN_26_08_2026_B2_TJRN_MANTEM_COBRANCA_MULTA_BANCO_NJUD_1918.mp3
+[2026-08-24 08:57:44] [INFO] transcrever: Transcrição concluída em 26.5s — duração: 97.4s, 23 segmentos | {'arquivo': 'JORNAIS\\AGOSTO\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B2_TJRN_MANTEM_COBRANCA_MULTA_BANCO_NJUD_1918.mp3', 'duracao_segundos': '97.41'}
+[2026-08-24 08:57:44] [INFO] buscar_abertura: Âncora 'no ar' encontrada (substring) no segmento t=0.0s
+[2026-08-24 08:57:44] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=82.6s
+[2026-08-24 08:57:47] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '9958->11098', 'fronteira': '41290->40870', 'fim_corpo': '87463->86923'}
+[2026-08-24 08:57:49] [INFO] cortar: Cortado limpo por locução: CABEÇA 29.7s, CORPO 46.0s | {'arquivo': 'data\\_debug_cortes\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B2_TJRN_MANTEM_COBRANCA_MULTA_BANCO_NJUD_1918_CABECA.mp3', 'inicio_cabeca': '9.96', 'fim_cabeca': '40.7', 'inicio_corpo': '41.88', 'fim_corpo': '87.46'}
+[2026-08-24 09:37:53] [INFO] buscar_abertura: Âncora 'no ar' encontrada (substring) no segmento t=0.0s
+[2026-08-24 09:37:53] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=82.6s
+[2026-08-24 09:51:55] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 09:51:55] [INFO] buscar_passagem_vad: Bloco inicial identificado como rabo da vinheta (termina em 8.89s). Manchete=[11.16→16.05]s; passagem=1.54s até 17.59s

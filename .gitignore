@@ -1,0 +1,22 @@
+# Áudio e dados brutos (nunca versionar)
+JORNAIS/
+*.mp3
+*.wav
+*.ogg
+*.m4a
+
+# Saídas, caches e estado de execução
+data/output/
+data/cache/
+data/processed/
+__pycache__/
+*.pyc
+
+# Backups com timestamp
+_backup_estado_antes_*.csv
+logs/backups/
+
+# Ambiente / segredos
+.env
+.venv/
+venv/
