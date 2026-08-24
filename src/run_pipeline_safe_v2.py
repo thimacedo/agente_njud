@@ -27,6 +27,7 @@ NJUDS_POR_MES_CSV = PROJECT_ROOT / "data" / "njuds_por_mes.csv"
 JOURNAL_NJUDS_CSV = PROJECT_ROOT / "data" / "jornal_njuds.csv"
 
 SRC_COPIAR = PROJECT_ROOT / "src" / "copiar_boletins.py"
+SRC_PLANEJADOR = PROJECT_ROOT / "src" / "planejador_copia.py"
 SRC_DIVIDIR = PROJECT_ROOT / "src" / "divisor_boletins"
 SRC_AUDITORIA = PROJECT_ROOT / "src" / "analisar_cortes_individuais.py"
 SRC_SINCRONIZAR = PROJECT_ROOT / "src" / "sincronizar_drive.py"
