@@ -123,12 +123,10 @@ def dry_run_plan(months: list[str]) -> dict:
 def etapa_copiar(apply: bool, months: list[str]) -> bool:
     missing = check_assets()
     if missing:
-        print(f"✖ Vinhetas faltando: missing")
+        print(f"✖ Vinhetas faltando: {missing}")
         return False
 
-    env = os.environ.copy()
-    env["PYTHONPATH"] = str(PROJECT_ROOT / "src")
-    print(f"=== [ORQUESTRADOR] 1. Cópia/Plano ({'apply' if apply else 'dry-run'}) ===")
+    print(f"=== [ORQUESTRADOR] 1. Planejamento/Workspace ({'apply' if apply else 'dry-run'}) ===")
 
     if not PLAN_CSV.exists():
         print(f"✖ Plano não encontrado: {PLAN_CSV}")
@@ -150,16 +148,37 @@ def etapa_copiar(apply: bool, months: list[str]) -> bool:
         writer.writerows(filtered)
     print(f"Plano filtrado gerado: {tmp_plan} ({len(filtered)} linhas)")
 
-    cmd = [sys.executable, str(SRC_COPIAR)]
-    cmd += ["--apply"] if apply else ["--dry-run"]
-    cmd += ["--plan", str(tmp_plan)]
+    json_plan = OUTPUT_ROOT / f"plano_{'_'.join(months).replace(' ','_')}.json"
+    workspace = OUTPUT_ROOT / "workspace_temp"
+    manifest_path = OUTPUT_ROOT / "workspace_temp_manifest.json"
+
+    cmd = [sys.executable, str(SRC_PLANEJADOR)]
+    cmd += ["--plan", str(tmp_plan), "--out-plan", str(json_plan)]
     code, out, err = run_cmd(cmd, cwd=PROJECT_ROOT)
     print(out.strip())
     if err.strip():
         print(err.strip())
     if code != 0:
-        print("✖ Falha em copiar_boletins")
+        print("✖ Falha no planejador JSON")
         return False
+
+    cmd = [sys.executable, str(SRC_PLANEJADOR)]
+    cmd += ["--exec-plan", str(json_plan), "--workspace", str(workspace)]
+    cmd += ["--apply"] if apply else []
+    code, out, err = run_cmd(cmd, cwd=PROJECT_ROOT)
+    print(out.strip())
+    if err.strip():
+        print(err.strip())
+    if code != 0:
+        print("✖ Falha na cópia seletiva para workspace")
+        return False
+
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        total_itens = len(manifest.get("entradas", []))
+    except Exception:
+        total_itens = len(filtered)
+    print(f"✔ Workspace pronto: {workspace} ({total_itens} itens)")
     return True
 
 

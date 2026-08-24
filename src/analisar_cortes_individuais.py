@@ -404,6 +404,7 @@ def main() -> None:
         help="Pasta com os cortes (ex: F:/Projetos/DIVISOR/data/processed/JORNAIS_DIVIDIDOS)",
     )
     parser.add_argument("relatorio_csv", help="Caminho de saída do relatório CSV")
+    parser.add_argument("--limit", type=int, default=None, help="Processa apenas os N primeiros arquivos")
     args = parser.parse_args()
 
     pasta = Path(args.pasta_jornais_divididos)
@@ -441,7 +442,7 @@ def main() -> None:
         writer.writeheader()
         f.flush()
 
-        for i, (arq, tipo) in enumerate(arquivos, start=1):
+        for i, (arq, tipo) in enumerate(arquivos[: args.limit], start=1) if args.limit else enumerate(arquivos, start=1):
             print(f"[{i}/{len(arquivos)}] {arq.name} ({tipo})...", end=" ")
             r = analisar_arquivo(arq, tipo, modelo)
             resultados.append(r)
@@ -464,12 +465,15 @@ def main() -> None:
         print(f"  {tipo:8s} {classe:30s} {qtd}")
 
     cortados = [r for r in resultados if r["classificacao"] == "CORTADO"]
+    total_analisados = len(resultados)
     if cortados:
-        print(f"\n{len(cortados)} arquivo(s) CORTADO(s) — priorize a audição manual destes:")
+        print(f"\n{len(cortados)}/{total_analisados} arquivo(s) CORTADO(s) — priorize a audição manual destes:")
         for r in cortados[:30]:
             print(f"  {r['arquivo']} ({r['tipo']}): {r['motivo']}")
         if len(cortados) > 30:
             print(f"  ... e mais {len(cortados) - 30}")
+    else:
+        print(f"\nNenhum CORTADO em {total_analisados} arquivo(s) analisados.")
 
 
 if __name__ == "__main__":
