@@ -12,12 +12,29 @@ Receita:
 from __future__ import annotations
 
 import re
+from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
 from pydub import AudioSegment
 
 from .log import LogPipeline
+
+
+def semana_dia_para_codigo(data_str: str) -> str:
+    """
+    Converte uma data no formato DD-MM-AAAA para código SSDD.
+    SS = semana ISO com 2 dígitos
+    DD = dia da semana ISO com 2 dígitos (1=segunda ... 7=domingo)
+    """
+    try:
+        dia, mes, ano = map(int, data_str.split('-'))
+        dt = datetime(ano, mes, dia)
+        semana = dt.isocalendar().week
+        dia_semana = dt.isocalendar().weekday
+        return f"{semana:02d}{dia_semana:02d}"
+    except Exception:
+        return "0000"
 
 
 # Estrutura padronizada de diretórios do workspace
@@ -227,21 +244,8 @@ def montar_jornal(
     # VHT ENCERRAMENTO
     jornal += vht_encerramento
 
-    # 5. Salva com padrão de nomenclatura: NJUD_1826_02-03-2026.mp3
-    #
-    # NÃO REVERTER PARA CONTAGEM DE DIAS ÚTEIS: a data vem da leitura
-    # direta do nome dos boletins que compõem este jornal (padrão
-    # BOLETIM_RADIO_TJRN_DD_MM_AAAA_...), não de uma contagem de dias
-    # úteis a partir de uma âncora fixa (NJUD 1792 = 08/01/2026+ tabela
-    # de feriados). A contagem por dias úteis é uma segunda fonte de
-    # verdade independente da data real — qualquer desvio da premissa
-    # (feriado não listado, NJUD pulado, ajuste manual já feito antes)
-    # faz toda data derivada dali em diante ficar sistematicamente
-    # errada, sem nenhum aviso. Ler a data direto do nome do arquivo não
-    # pode divergir da fonte real, porque é a própria fonte. Corrigido
-    # em 2026-08-21; já reapareceu uma vez por restauração de versão antiga.
+    # 5. Salva com padrão: NJUD_<SSDD>_<DD-MM-AAAA>.mp3
     pasta_saida.mkdir(parents=True, exist_ok=True)
-    num_match = re.search(r"(\d+)", nome_jornal)
     data_str = ""
     _padrao_data_boletim = re.compile(r"_(\d{2})_(\d{2})_(\d{4})_")
 
@@ -252,6 +256,8 @@ def montar_jornal(
             data_str = f"{dia}-{mes}-{ano}"
             break
 
+    codigo_semana_dia = semana_dia_para_codigo(data_str) if data_str else "0000"
+
     if not data_str:
         logger.aviso(
             etapa,
@@ -259,14 +265,9 @@ def montar_jornal(
             f"'{nome_jornal}' (esperado padrão _DD_MM_AAAA_); nome final "
             f"sairá sem data.",
         )
-
-    if num_match:
-        num_njud = num_match.group(1)
-        nome_arquivo_final = (
-            f"NJUD_{num_njud}_{data_str}.mp3" if data_str else f"NJUD_{num_njud}.mp3"
-        )
+        nome_arquivo_final = f"NJUD_{codigo_semana_dia}.mp3"
     else:
-        nome_arquivo_final = f"{nome_jornal}.mp3"
+        nome_arquivo_final = f"NJUD_{codigo_semana_dia}_{data_str}.mp3"
 
     caminho_saida = pasta_saida / nome_arquivo_final
     jornal.export(str(caminho_saida), format="mp3")
@@ -278,6 +279,8 @@ def montar_jornal(
         duracao_total=round(duracao_total, 2),
         boletins=len(cabecas),
         intercalado=intercalar and len(pares) > 1,
+        codigo_semana_dia=codigo_semana_dia,
+        data=data_str,
     )
 
     return caminho_saida
@@ -300,11 +303,8 @@ def montar_todos_jornais(
         logger.erro("pipeline", f"Pasta de entrada não existe: {pasta_entrada}")
         return []
 
-    # 1. Nível esperado: <pasta_entrada>/<MES>/<NJUD XXXX>
-    #    (alinhamento 2026-08-24, DECISOES.md item 6): o dispatcher_paralelo
-    #    grava os cortes DIRETO em <pasta_entrada>/<NJUD XXXX>/ — sem nível
-    #    de mês. Ambas as formas são aceitas: subpasta cujo nome casa com
-    #    "NJUD <num>" é tratada como jornal direto.
+    resultados: list[Path] = []
+    erros = 0
     import re
 
     def _eh_njud(nome: str) -> bool:
@@ -314,15 +314,7 @@ def montar_todos_jornais(
         p for p in pasta_entrada.iterdir()
         if p.is_dir() and not p.name.startswith("_")
     )
-    if not meses:
-        logger.aviso(
-            "pipeline",
-            f"Nenhuma subpasta de mês encontrada em {pasta_entrada}",
-        )
-        return []
 
-    resultados: list[Path] = []
-    erros = 0
     for mes_pasta in meses:
         if not mes_pasta.is_dir():
             continue
@@ -365,6 +357,58 @@ def montar_todos_jornais(
             else:
                 logger.erro("pipeline", f"Falha ao montar jornal: {nome_jornal}")
                 erros += 1
+
+    # Fallback: se não houver subpastas, agrupa arquivos soltos por data do nome
+    if not resultados:
+        import tempfile, shutil
+        data_map = {}
+        for mp3 in pasta_entrada.glob("*_CABECA.mp3"):
+            m = re.search(r"BOLETIM_RADIO_TJRN_(\d{2})_(\d{2})_(\d{4})_", mp3.name)
+            if m:
+                dia, mes, ano = m.groups()
+                data_key = f"{ano}-{mes}-{dia}"
+                data_map.setdefault(data_key, []).append(mp3)
+
+        if data_map:
+            tmp_root = pasta_entrada / "_tmp_data"
+            tmp_root.mkdir(exist_ok=True)
+            for data_key, arquivos in sorted(data_map.items()):
+                pasta_data = tmp_root / data_key
+                pasta_data.mkdir(exist_ok=True)
+                for mp3 in arquivos:
+                    shutil.copy2(mp3, pasta_data / mp3.name)
+                    corpo = mp3.parent / mp3.name.replace("_CABECA.mp3", "_CORPO.mp3")
+                    if corpo.exists():
+                        shutil.copy2(corpo, pasta_data / corpo.name)
+                nome_jornal = f"JORNAL_{data_key}"
+                caminho = montar_jornal(
+                    pasta_data,
+                    pasta_saida,
+                    logger,
+                    nome_jornal=nome_jornal,
+                    intercalar=intercalar,
+                )
+                if caminho:
+                    resultados.append(caminho)
+                else:
+                    logger.erro("pipeline", f"Falha ao montar jornal: {nome_jornal}")
+                    erros += 1
+            try:
+                shutil.rmtree(tmp_root, ignore_errors=True)
+            except Exception:
+                pass
+            logger.info(
+                "pipeline",
+                f"=== Montagem concluída: {len(resultados)} jornais gerados ===",
+                total=len(resultados),
+                erros=erros,
+            )
+            return resultados
+        logger.aviso(
+            "pipeline",
+            f"Nenhuma subpasta de mês encontrada em {pasta_entrada}",
+        )
+        return []
 
     logger.info(
         "pipeline",
