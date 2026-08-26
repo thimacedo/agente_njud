@@ -27,25 +27,34 @@ class Settings:
             load_dotenv()
         
         # Caminhos padrão
+        self.BASE_DIR = Path(os.getenv('BASE_DIR', 'F:/Projetos/DIVISOR'))
         self.BOLETINS_BRUTOS = os.getenv(
             'BOLETINS_BRUTOS',
-            './boletins_brutos'
+            str(self.BASE_DIR / 'boletins_brutos')
         )
         self.BOLETINS_CORTADOS = os.getenv(
             'BOLETINS_CORTADOS',
-            './boletins_cortados'
+            str(self.BASE_DIR / 'data/processed/JORNAIS_DIVIDIDOS')
         )
+        self.DIR_OUTPUT = Path(os.getenv(
+            'DIR_OUTPUT',
+            str(self.BASE_DIR / 'data/output')
+        ))
         self.JORNAIS_MONTADOS = os.getenv(
             'JORNAIS_MONTADOS',
-            './jornais_montados'
+            str(self.DIR_OUTPUT / 'JORNAIS_FINAL')
         )
         self.DRIVE_SYNC = os.getenv(
             'DRIVE_SYNC',
-            './drive_sync'
+            r'H:\Meu Drive\RADIO TJRN CONTEÚDO\00_PRODUCAO_2026\02_JORNAIS_NJUD\03_AUDIOS_RADIO'
         )
+        self.DIR_DRIVE_JORNAIS = Path(os.getenv(
+            'DIR_DRIVE_JORNAIS',
+            self.DRIVE_SYNC
+        ))
         self.LOGS_DIR = os.getenv(
             'LOGS_DIR',
-            './logs'
+            str(self.BASE_DIR / 'logs')
         )
         
         # Parâmetros de qualidade de áudio
@@ -95,10 +104,13 @@ class Settings:
     def to_dict(self) -> dict:
         """Retorna configurações como dicionário."""
         return {
+            'BASE_DIR': str(self.BASE_DIR),
             'BOLETINS_BRUTOS': self.BOLETINS_BRUTOS,
             'BOLETINS_CORTADOS': self.BOLETINS_CORTADOS,
+            'DIR_OUTPUT': str(self.DIR_OUTPUT),
             'JORNAIS_MONTADOS': self.JORNAIS_MONTADOS,
             'DRIVE_SYNC': self.DRIVE_SYNC,
+            'DIR_DRIVE_JORNAIS': str(self.DIR_DRIVE_JORNAIS),
             'LOGS_DIR': self.LOGS_DIR,
             'DURACAO_MINIMA_BOLETIM': self.DURACAO_MINIMA_BOLETIM,
             'DURACAO_MINIMA_JORNAL': self.DURACAO_MINIMA_JORNAL,

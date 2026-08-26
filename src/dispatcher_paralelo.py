@@ -247,18 +247,30 @@ class _EstadoArquivoUnico:
 # AGREGADOR (só leitura — usado pelo gate de montagem)
 # ===========================================================================
 
-def njud_completo(pasta_estado: Path, njud: str, total_esperado: int) -> bool:
-    estados = []
+def njud_completo(pasta_estado: Path, njud: str, pasta_boletins: Path) -> bool:
+    """Valida se NJUD está completo comparando estados E contagem física.
+    
+    Bug crítico corrigido 2026-08-25: antes só lia estados JSON, o que podia
+    considerar NJUD completo com 3 de 4 boletins se um worker crashasse sem
+    escrever o JSON. Agora valida contra arquivos físicos na origem.
+    """
+    # Conta estados OK/ESGOTADO_ACEITO
+    estados_concluidos = []
     for p in pasta_estado.glob("*.json"):
         try:
             d = json.loads(p.read_text(encoding="utf-8"))
         except Exception:
             continue
-        if d.get("njud") == njud:
-            estados.append(d.get("status"))
-    if len(estados) < total_esperado:
+        if d.get("njud") == njud and d.get("status") in ("OK", "ESGOTADO_ACEITO"):
+            estados_concluidos.append(d)
+    
+    # Validação crítica: compara com contagem física real (antes era código morto)
+    total_fisico = total_esperado_njud(njud, pasta_boletins)
+    if len(estados_concluidos) < total_fisico:
         return False
-    return all(s in ("OK", "ESGOTADO_ACEITO") for s in estados)
+    
+    # Regra inegociável: precisa de 4 boletins (ou 3 com exceção explícita)
+    return len(estados_concluidos) >= 3
 
 
 # ===========================================================================
@@ -316,8 +328,9 @@ def executar(pasta_boletins: Path, pasta_saida: Path, max_workers: int | None,
     for p in processos:
         p.join()
 
-    # Watchdog mínimo: se ainda houver tarefas pendentes após o pool
-    # inicial terminar, assume que algum worker morreu e respawn.
+    # Watchdog: se ainda houver tarefas pendentes após o pool inicial terminar,
+    # assume que algum worker morreu e respawn — REPOE as tarefas na fila e
+    # reenvia os sentinels corretamente (bug crítico corrigido 2026-08-25).
     pendentes = listar_tarefas_pendentes(pasta_boletins, pasta_estado)
     if pendentes:
         print(f"[dispatcher] watchdog: {len(pendentes)} tarefa(s) pendente(s); respawn do pool...")
@@ -326,6 +339,12 @@ def executar(pasta_boletins: Path, pasta_saida: Path, max_workers: int | None,
             p = mp.Process(target=worker_loop, args=(i, fila, pasta_estado, threads_por_worker, usar_whisper_timestamped))
             p.start()
             processos.append(p)
+        # REPOE as tarefas pendentes na nova fila (antes não repunha → hang infinito)
+        for tarefa in pendentes:
+            fila.put(tarefa)
+        # Reenvia sentinels para garantir encerramento
+        for _ in processos:
+            fila.put(None)
         for p in processos:
             p.join()
 
@@ -357,11 +376,11 @@ def executar(pasta_boletins: Path, pasta_saida: Path, max_workers: int | None,
         if status in ("OK", "ESGOTADO_ACEITO"):
             njuds_estado[njud]["concluidos"] += 1
 
-    njuds_prontos = [
-        njud
-        for njud, info in sorted(njuds_estado.items())
-        if info["total"] > 0 and info["concluidos"] == info["total"]
-    ]
+    # Gate por-NJUD agora usa njud_completo() com validação física (bug fix 2026-08-25)
+    njuds_prontos = []
+    for njud, info in sorted(njuds_estado.items()):
+        if njud_completo(pasta_estado, njud, pasta_boletins):
+            njuds_prontos.append(njud)
 
     if not njuds_prontos:
         print("[dispatcher] Nenhum NJUD completo — nada a montar.")
