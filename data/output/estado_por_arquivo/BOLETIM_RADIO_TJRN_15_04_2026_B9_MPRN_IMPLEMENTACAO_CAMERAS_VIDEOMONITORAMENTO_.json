@@ -1,0 +1,15 @@
+{
+  "arquivo": "F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1928\\BOLETIM_RADIO_TJRN_15_04_2026_B9_MPRN_IMPLEMENTACAO_CAMERAS_VIDEOMONITORAMENTO_.mp3",
+  "njud": "NJUD 1928",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T22:28:20",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

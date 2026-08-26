@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\ABRIL\\NJUD 1858\\BOLETIM_RADIO_TJRN_09_04_2026_B10_TRERN_AUTOATENDIMENTO_ELEITORAL_BIOMETRIA_.mp3",
+  "njud": "NJUD 1858",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T11:45:41",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

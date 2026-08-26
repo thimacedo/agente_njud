@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\MAIO\\NJUD 1872\\BOLETIM_RADIO_TJRN_06_05_2026_B5_TEMPO_MINIMO_CARTEIRA_ESTUDANTES_1782542565.mp3",
+  "njud": "NJUD 1872",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T13:07:50",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

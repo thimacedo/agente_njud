@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\AGOSTO\\NJUD 1923\\BOLETIM_RADIO_TJRN_26_08_2026_B1_RESPONSAVEL_INTERINO_MARCELINO_VIEIRA.mp3",
+  "njud": "NJUD 1923",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-26T14:08:19",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

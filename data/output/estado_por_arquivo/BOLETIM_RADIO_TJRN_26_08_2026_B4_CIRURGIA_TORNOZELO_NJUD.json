@@ -1,0 +1,15 @@
+{
+  "arquivo": "F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1923\\BOLETIM_RADIO_TJRN_26_08_2026_B4_CIRURGIA_TORNOZELO_NJUD.mp3",
+  "njud": "NJUD 1923",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T22:10:40",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\ABRIL\\NJUD 1853\\BOLETIM_RADIO_TJRN_07_04_2026_B7_FALHA_ELETRONICA_CONCURSO.mp3",
+  "njud": "NJUD 1853",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T11:25:25",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

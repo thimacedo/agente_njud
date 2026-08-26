@@ -1,0 +1,165 @@
+{
+  "inicio": "2026-08-26T13:14:28.687531",
+  "fim": "2026-08-26T13:17:07.732982",
+  "duracao_total_segundos": 159.045451,
+  "total_etapas": 10,
+  "etapas_sucesso": 10,
+  "etapas_falha": 0,
+  "etapas": [
+    {
+      "nome": "planejamento",
+      "descricao": "Validação e preparação do ambiente",
+      "status": "SUCESSO",
+      "inicio": "2026-08-26T13:14:28.690078",
+      "fim": "2026-08-26T13:14:28.698353",
+      "duracao_segundos": 0.008275,
+      "resultados": {
+        "boletins_encontrados": 32,
+        "jornais_esperados": 8,
+        "boletins_sobra": 0,
+        "pasta_cortes": "data\\processed\\JORNAIS_DIVIDIDOS\\AGOSTO_PI2",
+        "pasta_jornais": "data\\output\\AGOSTO_PI2"
+      },
+      "erros": [],
+      "avisos": []
+    },
+    {
+      "nome": "copia",
+      "descricao": "Cópia segura dos boletins para área de trabalho",
+      "status": "SUCESSO",
+      "inicio": "2026-08-26T13:14:28.698353",
+      "fim": "2026-08-26T13:14:29.801823",
+      "duracao_segundos": 1.10347,
+      "resultados": {
+        "arquivos_copiados": 32
+      },
+      "erros": [],
+      "avisos": []
+    },
+    {
+      "nome": "corte",
+      "descricao": "Divisão dos boletins em CABEÇA e CORPO",
+      "status": "SUCESSO",
+      "inicio": "2026-08-26T13:14:29.801823",
+      "fim": "2026-08-26T13:16:17.731283",
+      "duracao_segundos": 107.92946,
+      "resultados": {
+        "cortes_realizados": 32,
+        "cortes_falhos": 0
+      },
+      "erros": [],
+      "avisos": []
+    },
+    {
+      "nome": "auditoria_cortes",
+      "descricao": "Validação da qualidade dos cortes",
+      "status": "SUCESSO",
+      "inicio": "2026-08-26T13:16:17.772201",
+      "fim": "2026-08-26T13:16:17.781189",
+      "duracao_segundos": 0.008988,
+      "resultados": {
+        "cabecas_total": 32,
+        "cabecas_validas": 30,
+        "corpos_total": 32,
+        "corpos_validos": 32,
+        "arquivos_invalidos": 2,
+        "pares_completos": 30,
+        "boletins_incompletos": 2
+      },
+      "erros": [],
+      "avisos": [
+        "2 boletins incompletos: ['BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS_', 'BOLETIM_RADIO_TJRN_26_08_2026_B6_INDENIZACAO_GRIFE_FALSIFICADA']"
+      ]
+    },
+    {
+      "nome": "ajustes",
+      "descricao": "Correções automáticas pós-auditoria",
+      "status": "SUCESSO",
+      "inicio": "2026-08-26T13:16:17.781189",
+      "fim": "2026-08-26T13:16:17.789475",
+      "duracao_segundos": 0.008286,
+      "resultados": {
+        "ajustes_realizados": 2
+      },
+      "erros": [],
+      "avisos": []
+    },
+    {
+      "nome": "melhorias_cortes",
+      "descricao": "Aplicação de melhorias de áudio",
+      "status": "SUCESSO",
+      "inicio": "2026-08-26T13:16:17.789475",
+      "fim": "2026-08-26T13:16:17.790731",
+      "duracao_segundos": 0.001256,
+      "resultados": {
+        "arquivos_processados": 62
+      },
+      "erros": [],
+      "avisos": []
+    },
+    {
+      "nome": "montagem",
+      "descricao": "Montagem dos jornais completos",
+      "status": "SUCESSO",
+      "inicio": "2026-08-26T13:16:17.790731",
+      "fim": "2026-08-26T13:17:03.648515",
+      "duracao_segundos": 45.857784,
+      "resultados": {
+        "jornais_gerados": 9,
+        "caminhos_jornais": [
+          "data\\output\\AGOSTO_PI2\\NJUD_1603_15-04-2026.mp3",
+          "data\\output\\AGOSTO_PI2\\NJUD_1604_16-04-2026.mp3",
+          "data\\output\\AGOSTO_PI2\\NJUD_3503_26-08-2026.mp3",
+          "data\\output\\AGOSTO_PI2\\NJUD_1603_15-04-2026.mp3",
+          "data\\output\\AGOSTO_PI2\\NJUD_1604_16-04-2026.mp3",
+          "data\\output\\AGOSTO_PI2\\NJUD_3503_26-08-2026.mp3",
+          "data\\output\\AGOSTO_PI2\\NJUD_1602_14-04-2026.mp3",
+          "data\\output\\AGOSTO_PI2\\NJUD_1603_15-04-2026.mp3",
+          "data\\output\\AGOSTO_PI2\\NJUD_3503_26-08-2026.mp3"
+        ]
+      },
+      "erros": [],
+      "avisos": []
+    },
+    {
+      "nome": "auditoria_jornais",
+      "descricao": "Validação da qualidade dos jornais",
+      "status": "SUCESSO",
+      "inicio": "2026-08-26T13:17:03.648515",
+      "fim": "2026-08-26T13:17:07.702766",
+      "duracao_segundos": 4.054251,
+      "resultados": {
+        "jornais_validos": 9,
+        "jornais_invalidos": 0
+      },
+      "erros": [],
+      "avisos": []
+    },
+    {
+      "nome": "melhorias_jornais",
+      "descricao": "Aplicação de melhorias finais",
+      "status": "SUCESSO",
+      "inicio": "2026-08-26T13:17:07.703772",
+      "fim": "2026-08-26T13:17:07.704771",
+      "duracao_segundos": 0.000999,
+      "resultados": {
+        "jornais_processados": 9
+      },
+      "erros": [],
+      "avisos": []
+    },
+    {
+      "nome": "upload",
+      "descricao": "Sincronização com Google Drive",
+      "status": "SUCESSO",
+      "inicio": "2026-08-26T13:17:07.704771",
+      "fim": "2026-08-26T13:17:07.732982",
+      "duracao_segundos": 0.028211,
+      "resultados": {
+        "uploads_realizados": 9
+      },
+      "erros": [],
+      "avisos": []
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\ABRIL\\NJUD 1865\\BOLETIM_RADIO_TJRN_14_04_2026_B8_BLOQUEIO_APLICATIVO_MENSAGENS.mp3",
+  "njud": "NJUD 1865",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T12:09:00",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

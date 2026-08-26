@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\MAIO\\NJUD 1883\\BOLETIM_RADIO_TJRN_13_05_2026_B1_INDENIZACAO_DEBITO_IPTU_1782542566.mp3",
+  "njud": "NJUD 1883",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T13:57:56",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

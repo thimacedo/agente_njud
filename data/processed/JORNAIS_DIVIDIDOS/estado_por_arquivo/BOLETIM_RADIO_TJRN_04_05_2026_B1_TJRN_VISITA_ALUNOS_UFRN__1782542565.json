@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\MAIO\\NJUD 1866\\BOLETIM_RADIO_TJRN_04_05_2026_B1_TJRN_VISITA_ALUNOS_UFRN__1782542565.mp3",
+  "njud": "NJUD 1866",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T12:41:39",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

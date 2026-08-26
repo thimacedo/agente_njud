@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\ABRIL\\NJUD 1859\\BOLETIM_RADIO_TJRN_10_04_2026_B3_TJRN_COSERN_CANCELAR_DEBITO_FRAUDE_.mp3",
+  "njud": "NJUD 1859",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T11:50:42",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

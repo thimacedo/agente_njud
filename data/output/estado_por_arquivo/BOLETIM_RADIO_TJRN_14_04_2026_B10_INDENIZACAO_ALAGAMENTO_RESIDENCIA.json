@@ -1,0 +1,15 @@
+{
+  "arquivo": "F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1925\\BOLETIM_RADIO_TJRN_14_04_2026_B10_INDENIZACAO_ALAGAMENTO_RESIDENCIA.mp3",
+  "njud": "NJUD 1925",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T22:16:38",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

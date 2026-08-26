@@ -1,0 +1,13 @@
+{
+ "atualizado": "2026-08-25",
+ "sincronizado_ok": [
+  "NJUD_1918_26-08-2026.mp3"
+ ],
+ "quarentena_local": "F:/Projetos/DIVISOR/data/output/fila_refacao_quarentena",
+ "motivo_quarentena": "1923-1926 ja existem legitimamente em 07-JUL (28-07..31-07); fontes locais de AGO desses NJUDs contem boletins de ABRIL (contaminadas). Nao sincronizar.",
+ "aguardando_operador": [
+  "NJUD_1919..1922 (sem fonte local)",
+  "decisao sobre fontes contaminadas de 1923-1929 em JORNAIS/AGOSTO"
+ ],
+ "limpeza_drive": "85 duplicatas SSDD/variantes removidas (ver _logs/limpeza_sync_indevido.json)"
+}

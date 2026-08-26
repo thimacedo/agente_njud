@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\ABRIL\\NJUD 1858\\BOLETIM_RADIO_TJRN_09_04_2026_B9_TRERN_CAMPANHA_ARRECADACOES_LIVROS_INFANTIS_.mp3",
+  "njud": "NJUD 1858",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T11:47:55",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

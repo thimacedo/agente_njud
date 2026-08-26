@@ -1,0 +1,15 @@
+{
+  "arquivo": "F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1925\\BOLETIM_RADIO_TJRN_26_08_2026_B10_TRTRN_SUPERA_META.mp3",
+  "njud": "NJUD 1925",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T22:18:27",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\ABRIL\\NJUD 1861\\BOLETIM_RADIO_TJRN_13_04_2026_B1_TJRN_CONDENA_PLATAFORMA_DIGITAL_FALHA_.mp3",
+  "njud": "NJUD 1861",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T11:56:33",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

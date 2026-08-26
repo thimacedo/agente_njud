@@ -1,0 +1,15 @@
+{
+  "arquivo": "F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B2_TJRN_MANTEM_COBRANCA_MULTA_BANCO_NJUD_1918.mp3",
+  "njud": "NJUD 1918",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T21:59:56",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

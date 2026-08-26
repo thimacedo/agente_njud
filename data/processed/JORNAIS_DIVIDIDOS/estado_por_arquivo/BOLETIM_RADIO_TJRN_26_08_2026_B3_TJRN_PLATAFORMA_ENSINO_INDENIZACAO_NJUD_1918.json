@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\AGOSTO\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B3_TJRN_PLATAFORMA_ENSINO_INDENIZACAO_NJUD_1918.mp3",
+  "njud": "NJUD 1918",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-26T14:06:55",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

@@ -1,0 +1,39 @@
+{
+ "data": "2026-08-25",
+ "auditoria_inicial": {
+  "jornais_canonicos": 139,
+  "nao_conformidades": [
+   "1923-1929 nao sincronizados/contaminados",
+   "29 variantes nao-canonicas"
+  ]
+ },
+ "acoes": [
+  "Corrigido NameError em dispatcher_paralelo.py (usar_whisper_timestamped)",
+  "Processados 32 boletins de AGO -> 8 jornais montados",
+  "Corrigida nomenclatura em montagem.py (NJUD real da subpasta prevalece sobre SSDD)",
+  "Auditoria Whisper de integridade: 8/8 OK",
+  "Sync indevido de 97 jornais antigos revertido: 97 lixos removidos do H:",
+  "6 copias _old de MAR removidas (regra: nenhuma copia _old no H:)"
+ ],
+ "drive_final": {
+  "01 - JAN - 26": 17,
+  "02 - FEV - 26": 17,
+  "03 - MAR - 26": 22,
+  "04 - ABR - 26": 17,
+  "05 - MAI - 26": 20,
+  "06 - JUN - 26": 19,
+  "07 - JUL - 26": 23,
+  "08 - AGO - 26": 4,
+  "11 - NOV - 26": 0,
+  "12 - DEZ - 26": 0
+ },
+ "total_final": 139,
+ "sincronizado_novo": [
+  "NJUD_1918_26-08-2026.mp3"
+ ],
+ "quarentena_local": "F:/Projetos/DIVISOR/data/output/fila_refacao_quarentena (7 jornais com fontes contaminadas)",
+ "pendencias_operador": [
+  "NJUD 1919-1922 sem fonte local",
+  "Decidir destino das fontes contaminadas de AGOSTO (boletins de abril dentro de pastas NJUD 1925-1929)"
+ ]
+}

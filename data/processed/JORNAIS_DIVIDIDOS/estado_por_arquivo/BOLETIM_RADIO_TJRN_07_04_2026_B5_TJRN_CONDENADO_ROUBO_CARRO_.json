@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\ABRIL\\NJUD 1852\\BOLETIM_RADIO_TJRN_07_04_2026_B5_TJRN_CONDENADO_ROUBO_CARRO_.mp3",
+  "njud": "NJUD 1852",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T11:22:57",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

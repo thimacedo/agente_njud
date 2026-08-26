@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\JUNHO\\NJUD 1887\\BOLETIM_RADIO_TJRN_01_06_2026_B7_TJRN_COBRANCA_INDEVIDA_LOCACAO_.mp3",
+  "njud": "NJUD 1887",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T15:11:31",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

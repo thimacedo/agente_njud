@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\ABRIL\\NJUD 1860\\BOLETIM_RADIO_TJRN_10_04_2026_B8_TJRN_DUPLA_CONDENADA_ASSALTO_.mp3",
+  "njud": "NJUD 1860",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T11:54:26",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

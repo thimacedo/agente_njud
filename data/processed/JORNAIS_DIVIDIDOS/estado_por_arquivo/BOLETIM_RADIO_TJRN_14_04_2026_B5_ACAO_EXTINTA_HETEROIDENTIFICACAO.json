@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\ABRIL\\NJUD 1865\\BOLETIM_RADIO_TJRN_14_04_2026_B5_ACAO_EXTINTA_HETEROIDENTIFICACAO.mp3",
+  "njud": "NJUD 1865",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T12:06:38",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

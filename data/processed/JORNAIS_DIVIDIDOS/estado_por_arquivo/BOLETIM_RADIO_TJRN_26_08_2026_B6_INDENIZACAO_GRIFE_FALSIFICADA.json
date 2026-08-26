@@ -1,0 +1,24 @@
+{
+  "arquivo": "JORNAIS\\AGOSTO\\NJUD 1924\\BOLETIM_RADIO_TJRN_26_08_2026_B6_INDENIZACAO_GRIFE_FALSIFICADA.mp3",
+  "njud": "NJUD 1924",
+  "status": "OK",
+  "estrategia_atual": "ancora_vad_forcado",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-26T14:11:08",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: texto bate com padrão de alucinação: 'Se inscreva no canal e se inscreva no canal para não esquecer de deixar um like '",
+        "CABECA classificada como POSSIVEL_ALUCINACAO_WHISPER"
+      ]
+    },
+    {
+      "estrategia": "ancora_vad_forcado",
+      "timestamp": "2026-08-26T14:11:38",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

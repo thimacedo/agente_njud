@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\ABRIL\\NJUD 1856\\BOLETIM_RADIO_TJRN_08_04_2026_B9_TJRN_ANULA_CONTRATO_OTICA_.mp3",
+  "njud": "NJUD 1856",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T11:39:57",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

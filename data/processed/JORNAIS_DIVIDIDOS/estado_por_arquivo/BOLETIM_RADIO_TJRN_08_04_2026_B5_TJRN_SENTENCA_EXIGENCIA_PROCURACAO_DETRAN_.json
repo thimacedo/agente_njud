@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\ABRIL\\NJUD 1855\\BOLETIM_RADIO_TJRN_08_04_2026_B5_TJRN_SENTENCA_EXIGENCIA_PROCURACAO_DETRAN_.mp3",
+  "njud": "NJUD 1855",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T11:35:13",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

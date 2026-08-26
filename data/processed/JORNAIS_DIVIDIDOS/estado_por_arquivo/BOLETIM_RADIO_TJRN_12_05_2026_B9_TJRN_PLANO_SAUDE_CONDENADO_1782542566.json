@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\MAIO\\NJUD 1883\\BOLETIM_RADIO_TJRN_12_05_2026_B9_TJRN_PLANO_SAUDE_CONDENADO_1782542566.mp3",
+  "njud": "NJUD 1883",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T13:56:54",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

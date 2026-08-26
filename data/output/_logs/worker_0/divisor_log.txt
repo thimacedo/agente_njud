@@ -1,0 +1,437 @@
+[2026-08-24 21:58:17] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B2_TJRN_MANTEM_COBRANCA_MULTA_BANCO_NJUD_1918.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 21:58:17] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1918\BOLETIM_RADIO_TJRN_26_08_2026_B2_TJRN_MANTEM_COBRANCA_MULTA_BANCO_NJUD_1918.mp3
+[2026-08-24 21:58:56] [INFO] transcrever: Transcrição concluída em 39.8s — duração: 97.4s, 21 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B2_TJRN_MANTEM_COBRANCA_MULTA_BANCO_NJUD_1918.mp3', 'duracao_segundos': '97.41'}
+[2026-08-24 21:58:56] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 21:58:56] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=82.6s
+[2026-08-24 21:58:59] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 40.70s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B2_TJRN_MANTEM_COBRANCA_MULTA_BANCO_NJUD_1918.mp3'}
+[2026-08-24 21:59:01] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 21:59:01] [INFO] buscar_passagem_vad: Bloco inicial identificado como rabo da vinheta (termina em 8.89s). Manchete=[11.16→16.05]s; passagem=1.54s até 17.59s
+[2026-08-24 21:59:01] [AVISO] ⚠ fim_corpo: Match de assinatura em t=82.6s descartado: sem VH de encerramento confirmada logo após (distância=-2.8s).
+[2026-08-24 21:59:01] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=82.6s
+[2026-08-24 21:59:01] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '11161->11101', 'fronteira': '16824->17544', 'fim_corpo': '82500->82500'}
+[2026-08-24 21:59:03] [INFO] cortar: Cortado limpo por locução: CABEÇA 6.3s, CORPO 64.9s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B2_TJRN_MANTEM_COBRANCA_MULTA_BANCO_NJUD_1918_CABECA.mp3', 'inicio_cabeca': '11.16', 'fim_cabeca': '16.05', 'inicio_corpo': '17.59', 'fim_corpo': '82.5'}
+[2026-08-24 21:59:56] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B3_TJRN_PLATAFORMA_ENSINO_INDENIZACAO_NJUD_1918.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 21:59:56] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1918\BOLETIM_RADIO_TJRN_26_08_2026_B3_TJRN_PLATAFORMA_ENSINO_INDENIZACAO_NJUD_1918.mp3
+[2026-08-24 22:00:49] [INFO] transcrever: Transcrição concluída em 52.5s — duração: 94.1s, 18 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B3_TJRN_PLATAFORMA_ENSINO_INDENIZACAO_NJUD_1918.mp3', 'duracao_segundos': '94.15'}
+[2026-08-24 22:00:49] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 22:00:49] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=79.0s
+[2026-08-24 22:00:52] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 61.48s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B3_TJRN_PLATAFORMA_ENSINO_INDENIZACAO_NJUD_1918.mp3'}
+[2026-08-24 22:00:53] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:00:53] [INFO] buscar_passagem_vad: Bloco inicial identificado como rabo da vinheta (termina em 8.89s). Manchete=[11.23→17.62]s; passagem=1.51s até 19.13s
+[2026-08-24 22:00:53] [AVISO] ⚠ fim_corpo: Match de assinatura em t=79.0s descartado: sem VH de encerramento confirmada logo após (distância=-3.0s).
+[2026-08-24 22:00:53] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=79.0s
+[2026-08-24 22:00:55] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '11226->11166', 'fronteira': '18376->19096', 'fim_corpo': '79040->78920'}
+[2026-08-24 22:00:57] [INFO] cortar: Cortado limpo por locução: CABEÇA 7.8s, CORPO 59.7s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B3_TJRN_PLATAFORMA_ENSINO_INDENIZACAO_NJUD_1918_CABECA.mp3', 'inicio_cabeca': '11.23', 'fim_cabeca': '17.62', 'inicio_corpo': '19.13', 'fim_corpo': '79.04'}
+[2026-08-24 22:01:50] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B5_TJRN_OPERADORA_SAUDE_CONDENADA_NJUD_1918.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:01:50] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1918\BOLETIM_RADIO_TJRN_26_08_2026_B5_TJRN_OPERADORA_SAUDE_CONDENADA_NJUD_1918.mp3
+[2026-08-24 22:02:32] [INFO] transcrever: Transcrição concluída em 41.3s — duração: 98.8s, 17 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B5_TJRN_OPERADORA_SAUDE_CONDENADA_NJUD_1918.mp3', 'duracao_segundos': '98.82'}
+[2026-08-24 22:02:32] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 22:02:32] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=82.6s
+[2026-08-24 22:02:34] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 64.41s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B5_TJRN_OPERADORA_SAUDE_CONDENADA_NJUD_1918.mp3'}
+[2026-08-24 22:02:35] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:02:35] [INFO] buscar_passagem_vad: Bloco inicial identificado como rabo da vinheta (termina em 8.89s). Manchete=[11.29→18.39]s; passagem=1.60s até 19.99s
+[2026-08-24 22:02:35] [AVISO] ⚠ fim_corpo: Match de assinatura em t=82.6s descartado: sem VH de encerramento confirmada logo após (distância=-4.2s).
+[2026-08-24 22:02:35] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=82.6s
+[2026-08-24 22:02:36] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '11290->11230', 'fronteira': '19192->18322', 'fim_corpo': '74780->73700'}
+[2026-08-24 22:02:37] [INFO] cortar: Cortado limpo por locução: CABEÇA 7.0s, CORPO 55.3s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B5_TJRN_OPERADORA_SAUDE_CONDENADA_NJUD_1918_CABECA.mp3', 'inicio_cabeca': '11.29', 'fim_cabeca': '18.39', 'inicio_corpo': '19.99', 'fim_corpo': '74.78'}
+[2026-08-24 22:03:27] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B8_TJRN_ESMARN_ISCRICOES_WORKSHOP_APOSENTADORIA_NJUD_1918.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:03:27] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1918\BOLETIM_RADIO_TJRN_26_08_2026_B8_TJRN_ESMARN_ISCRICOES_WORKSHOP_APOSENTADORIA_NJUD_1918.mp3
+[2026-08-24 22:04:04] [INFO] transcrever: Transcrição concluída em 36.8s — duração: 82.9s, 16 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B8_TJRN_ESMARN_ISCRICOES_WORKSHOP_APOSENTADORIA_NJUD_1918.mp3', 'duracao_segundos': '82.86'}
+[2026-08-24 22:04:04] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 22:04:04] [INFO] buscar_encerramento: Âncora 'samuel ferreira' encontrada (substring) no segmento t=68.0s
+[2026-08-24 22:04:06] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 70.63s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B8_TJRN_ESMARN_ISCRICOES_WORKSHOP_APOSENTADORIA_NJUD_1918.mp3'}
+[2026-08-24 22:04:07] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:04:07] [INFO] buscar_passagem_vad: Bloco inicial identificado como rabo da vinheta (termina em 8.89s). Manchete=[11.45→15.13]s; passagem=1.51s até 16.63s
+[2026-08-24 22:04:07] [AVISO] ⚠ fim_corpo: Match de assinatura em t=68.0s descartado: sem VH de encerramento confirmada logo após (distância=-2.8s).
+[2026-08-24 22:04:07] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=68.0s
+[2026-08-24 22:04:07] [INFO] cortar: Bordas ancoradas: {'inicio_cabeca': '11450->11350', 'modo': 'adaptativo', 'fronteira': '15880->16600', 'fim_corpo': '58760->59120'}
+[2026-08-24 22:04:08] [INFO] cortar: Cortado limpo por locução: CABEÇA 5.2s, CORPO 42.4s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B8_TJRN_ESMARN_ISCRICOES_WORKSHOP_APOSENTADORIA_NJUD_1918_CABECA.mp3', 'inicio_cabeca': '11.45', 'fim_cabeca': '15.13', 'inicio_corpo': '16.63', 'fim_corpo': '58.76'}
+[2026-08-24 22:04:46] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B1_RESPONSAVEL_INTERINO_MARCELINO_VIEIRA.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:04:46] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1923\BOLETIM_RADIO_TJRN_26_08_2026_B1_RESPONSAVEL_INTERINO_MARCELINO_VIEIRA.mp3
+[2026-08-24 22:05:22] [INFO] transcrever: Transcrição concluída em 36.2s — duração: 93.9s, 19 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1923\\BOLETIM_RADIO_TJRN_26_08_2026_B1_RESPONSAVEL_INTERINO_MARCELINO_VIEIRA.mp3', 'duracao_segundos': '93.88'}
+[2026-08-24 22:05:22] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 22:05:22] [INFO] buscar_encerramento: Âncora 'voce acabou de ouvir' encontrada (substring) no segmento t=81.9s
+[2026-08-24 22:05:23] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 47.68s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1923\\BOLETIM_RADIO_TJRN_26_08_2026_B1_RESPONSAVEL_INTERINO_MARCELINO_VIEIRA.mp3'}
+[2026-08-24 22:05:25] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:05:25] [INFO] buscar_passagem_vad: Bloco inicial identificado como rabo da vinheta (termina em 8.89s). Manchete=[11.35→16.53]s; passagem=1.54s até 18.07s
+[2026-08-24 22:05:25] [INFO] fim_corpo: Assinatura confirmada por regex+timing no segmento t=78.9s: 'Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues.' (distância até VH enc.: 0.0s)
+[2026-08-24 22:05:26] [INFO] cortar: Bordas ancoradas: {'inicio_cabeca': '11354->11294', 'fronteira': '17303->16393', 'modo': 'adaptativo', 'fim_corpo': '78740->78260'}
+[2026-08-24 22:05:27] [INFO] cortar: Cortado limpo por locução: CABEÇA 5.0s, CORPO 61.8s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1923\\BOLETIM_RADIO_TJRN_26_08_2026_B1_RESPONSAVEL_INTERINO_MARCELINO_VIEIRA_CABECA.mp3', 'inicio_cabeca': '11.35', 'fim_cabeca': '16.53', 'inicio_corpo': '18.07', 'fim_corpo': '78.74'}
+[2026-08-24 22:06:12] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B2_PESQUISA_JURISPRUDENCIA_INTERAMERICANA_NJUD.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:06:12] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1923\BOLETIM_RADIO_TJRN_26_08_2026_B2_PESQUISA_JURISPRUDENCIA_INTERAMERICANA_NJUD.mp3
+[2026-08-24 22:06:49] [INFO] transcrever: Transcrição concluída em 36.5s — duração: 112.4s, 19 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1923\\BOLETIM_RADIO_TJRN_26_08_2026_B2_PESQUISA_JURISPRUDENCIA_INTERAMERICANA_NJUD.mp3', 'duracao_segundos': '112.35'}
+[2026-08-24 22:06:49] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 22:06:49] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 97.2s
+[2026-08-24 22:06:49] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.44 < limiar=0.55).
+[2026-08-24 22:06:49] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 23.38s (posição_ok=True, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1923\\BOLETIM_RADIO_TJRN_26_08_2026_B2_PESQUISA_JURISPRUDENCIA_INTERAMERICANA_NJUD.mp3'}
+[2026-08-24 22:06:50] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:06:50] [INFO] buscar_passagem_vad: Bloco inicial identificado como rabo da vinheta (termina em 8.89s). Manchete=[11.39→18.71]s; passagem=1.48s até 20.19s
+[2026-08-24 22:06:50] [AVISO] ⚠ fim_corpo: Match de assinatura em t=97.2s descartado: sem VH de encerramento confirmada logo após (distância=-3.1s).
+[2026-08-24 22:06:50] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=96.7s com margem 0.5s
+[2026-08-24 22:06:51] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '11386->11206', 'fronteira': '19448->18548', 'fim_corpo': '88240->89380'}
+[2026-08-24 22:06:52] [INFO] cortar: Cortado limpo por locução: CABEÇA 7.2s, CORPO 70.7s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1923\\BOLETIM_RADIO_TJRN_26_08_2026_B2_PESQUISA_JURISPRUDENCIA_INTERAMERICANA_NJUD_CABECA.mp3', 'inicio_cabeca': '11.39', 'fim_cabeca': '18.71', 'inicio_corpo': '20.19', 'fim_corpo': '88.24'}
+[2026-08-24 22:07:34] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B3_INDENIZACAO_FRAUDE_TELEFONIA_NJUD_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:07:34] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1923\BOLETIM_RADIO_TJRN_26_08_2026_B3_INDENIZACAO_FRAUDE_TELEFONIA_NJUD_.mp3
+[2026-08-24 22:08:10] [INFO] transcrever: Transcrição concluída em 36.1s — duração: 102.3s, 21 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1923\\BOLETIM_RADIO_TJRN_26_08_2026_B3_INDENIZACAO_FRAUDE_TELEFONIA_NJUD_.mp3', 'duracao_segundos': '102.27'}
+[2026-08-24 22:08:10] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 22:08:10] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 86.8s
+[2026-08-24 22:08:10] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.48 < limiar=0.55).
+[2026-08-24 22:08:12] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 67.43s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1923\\BOLETIM_RADIO_TJRN_26_08_2026_B3_INDENIZACAO_FRAUDE_TELEFONIA_NJUD_.mp3'}
+[2026-08-24 22:08:12] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:08:12] [INFO] buscar_passagem_vad: Bloco inicial identificado como rabo da vinheta (termina em 8.89s). Manchete=[11.19→16.98]s; passagem=1.64s até 18.62s
+[2026-08-24 22:08:12] [AVISO] ⚠ fim_corpo: Match de assinatura em t=86.8s descartado: sem VH de encerramento confirmada logo após (distância=-3.3s).
+[2026-08-24 22:08:12] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=86.3s com margem 0.5s
+[2026-08-24 22:08:13] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '11193->11133', 'fronteira': '17800->18530', 'fim_corpo': '78120->76680'}
+[2026-08-24 22:08:14] [INFO] cortar: Cortado limpo por locução: CABEÇA 7.3s, CORPO 58.0s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1923\\BOLETIM_RADIO_TJRN_26_08_2026_B3_INDENIZACAO_FRAUDE_TELEFONIA_NJUD__CABECA.mp3', 'inicio_cabeca': '11.19', 'fim_cabeca': '16.98', 'inicio_corpo': '18.62', 'fim_corpo': '78.12'}
+[2026-08-24 22:09:01] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B4_CIRURGIA_TORNOZELO_NJUD.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:09:01] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1923\BOLETIM_RADIO_TJRN_26_08_2026_B4_CIRURGIA_TORNOZELO_NJUD.mp3
+[2026-08-24 22:09:43] [INFO] transcrever: Transcrição concluída em 42.7s — duração: 119.2s, 23 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1923\\BOLETIM_RADIO_TJRN_26_08_2026_B4_CIRURGIA_TORNOZELO_NJUD.mp3', 'duracao_segundos': '119.25'}
+[2026-08-24 22:09:43] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 22:09:43] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 104.0s
+[2026-08-24 22:09:43] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.48 < limiar=0.55).
+[2026-08-24 22:09:46] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 90.48s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1923\\BOLETIM_RADIO_TJRN_26_08_2026_B4_CIRURGIA_TORNOZELO_NJUD.mp3'}
+[2026-08-24 22:09:47] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:09:47] [INFO] buscar_passagem_vad: Bloco inicial identificado como rabo da vinheta (termina em 8.89s). Manchete=[11.13→18.45]s; passagem=1.70s até 20.15s
+[2026-08-24 22:09:47] [AVISO] ⚠ fim_corpo: Match de assinatura em t=104.0s descartado: sem VH de encerramento confirmada logo após (distância=-3.1s).
+[2026-08-24 22:09:47] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=103.5s com margem 0.5s
+[2026-08-24 22:09:48] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '11129->11069', 'fronteira': '19304->20024', 'fim_corpo': '95100->96480'}
+[2026-08-24 22:09:49] [INFO] cortar: Cortado limpo por locução: CABEÇA 8.9s, CORPO 76.4s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1923\\BOLETIM_RADIO_TJRN_26_08_2026_B4_CIRURGIA_TORNOZELO_NJUD_CABECA.mp3', 'inicio_cabeca': '11.13', 'fim_cabeca': '18.45', 'inicio_corpo': '20.15', 'fim_corpo': '95.1'}
+[2026-08-24 22:10:40] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B5_PROPAGANDA_ENGANOSA_IMOVEL_NJUD_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:10:40] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1924\BOLETIM_RADIO_TJRN_26_08_2026_B5_PROPAGANDA_ENGANOSA_IMOVEL_NJUD_.mp3
+[2026-08-24 22:11:12] [INFO] transcrever: Transcrição concluída em 32.1s — duração: 97.0s, 18 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1924\\BOLETIM_RADIO_TJRN_26_08_2026_B5_PROPAGANDA_ENGANOSA_IMOVEL_NJUD_.mp3', 'duracao_segundos': '97.04'}
+[2026-08-24 22:11:12] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 22:11:12] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 82.0s
+[2026-08-24 22:11:12] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.37 < limiar=0.55).
+[2026-08-24 22:11:12] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 84.82s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1924\\BOLETIM_RADIO_TJRN_26_08_2026_B5_PROPAGANDA_ENGANOSA_IMOVEL_NJUD_.mp3'}
+[2026-08-24 22:11:13] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:11:13] [INFO] buscar_passagem_vad: Bloco inicial identificado como rabo da vinheta (termina em 8.89s). Manchete=[11.48→17.59]s; passagem=1.70s até 19.29s
+[2026-08-24 22:11:13] [AVISO] ⚠ fim_corpo: Match de assinatura em t=82.0s descartado: sem VH de encerramento confirmada logo após (distância=-2.9s).
+[2026-08-24 22:11:13] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=81.5s com margem 0.5s
+[2026-08-24 22:11:14] [INFO] cortar: Bordas ancoradas: {'inicio_cabeca': '11482->11352', 'fronteira': '18440->17570', 'modo': 'adaptativo', 'fim_corpo': '72900->72420'}
+[2026-08-24 22:11:15] [INFO] cortar: Cortado limpo por locução: CABEÇA 6.1s, CORPO 54.8s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1924\\BOLETIM_RADIO_TJRN_26_08_2026_B5_PROPAGANDA_ENGANOSA_IMOVEL_NJUD__CABECA.mp3', 'inicio_cabeca': '11.48', 'fim_cabeca': '17.59', 'inicio_corpo': '19.29', 'fim_corpo': '72.9'}
+[2026-08-24 22:11:52] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B6_INDENIZACAO_GRIFE_FALSIFICADA.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:11:52] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1924\BOLETIM_RADIO_TJRN_26_08_2026_B6_INDENIZACAO_GRIFE_FALSIFICADA.mp3
+[2026-08-24 22:12:26] [INFO] transcrever: Transcrição concluída em 33.7s — duração: 100.4s, 20 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1924\\BOLETIM_RADIO_TJRN_26_08_2026_B6_INDENIZACAO_GRIFE_FALSIFICADA.mp3', 'duracao_segundos': '100.41'}
+[2026-08-24 22:12:26] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 22:12:26] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 85.7s
+[2026-08-24 22:12:26] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.50 < limiar=0.55).
+[2026-08-24 22:12:29] [INFO] cortar: Bordas ancoradas: {'inicio_cabeca': '9958->11328', 'fronteira': '11683->11313', 'modo': 'adaptativo', 'fim_corpo': '88280->88280'}
+[2026-08-24 22:12:31] [INFO] cortar: Cortado limpo por locução: CABEÇA 0.2s, CORPO 76.6s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1924\\BOLETIM_RADIO_TJRN_26_08_2026_B6_INDENIZACAO_GRIFE_FALSIFICADA_CABECA.mp3', 'inicio_cabeca': '9.96', 'fim_cabeca': '11.1', 'inicio_corpo': '12.27', 'fim_corpo': '88.28'}
+[2026-08-24 22:13:16] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B6_INDENIZACAO_GRIFE_FALSIFICADA.mp3 (estratégia=ancora_vad_forcado)
+[2026-08-24 22:13:16] [INFO] transcrever: Transcrição reutilizada da cache memória: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1924\BOLETIM_RADIO_TJRN_26_08_2026_B6_INDENIZACAO_GRIFE_FALSIFICADA.mp3
+[2026-08-24 22:13:16] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 22:13:16] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 85.7s
+[2026-08-24 22:13:16] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.50 < limiar=0.55).
+[2026-08-24 22:13:17] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:13:17] [INFO] buscar_passagem_vad: Bloco inicial identificado como rabo da vinheta (termina em 8.89s). Manchete=[11.39→17.40]s; passagem=1.60s até 19.00s
+[2026-08-24 22:13:17] [AVISO] ⚠ fim_corpo: Match de assinatura em t=85.7s descartado: sem VH de encerramento confirmada logo após (distância=-2.6s).
+[2026-08-24 22:13:17] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=85.2s com margem 0.5s
+[2026-08-24 22:13:17] [INFO] cortar: Bordas ancoradas: {'inicio_cabeca': '11386->11316', 'fronteira': '18200->17330', 'modo': 'adaptativo', 'fim_corpo': '76280->75860'}
+[2026-08-24 22:13:18] [INFO] cortar: Cortado limpo por locução: CABEÇA 5.9s, CORPO 58.4s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1924\\BOLETIM_RADIO_TJRN_26_08_2026_B6_INDENIZACAO_GRIFE_FALSIFICADA_CABECA.mp3', 'inicio_cabeca': '11.39', 'fim_cabeca': '17.4', 'inicio_corpo': '19.0', 'fim_corpo': '76.28'}
+[2026-08-24 22:13:50] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B7_FACULDADE_CONDENADA_COBRANCA_INDEVIDA.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:13:50] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1924\BOLETIM_RADIO_TJRN_26_08_2026_B7_FACULDADE_CONDENADA_COBRANCA_INDEVIDA.mp3
+[2026-08-24 22:14:11] [INFO] transcrever: Transcrição concluída em 21.5s — duração: 100.4s, 19 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1924\\BOLETIM_RADIO_TJRN_26_08_2026_B7_FACULDADE_CONDENADA_COBRANCA_INDEVIDA.mp3', 'duracao_segundos': '100.41'}
+[2026-08-24 22:14:11] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 22:14:11] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=86.7s
+[2026-08-24 22:14:14] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 29.09s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1924\\BOLETIM_RADIO_TJRN_26_08_2026_B7_FACULDADE_CONDENADA_COBRANCA_INDEVIDA.mp3'}
+[2026-08-24 22:14:15] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:14:15] [INFO] buscar_passagem_vad: Bloco inicial identificado como rabo da vinheta (termina em 8.89s). Manchete=[11.26→16.66]s; passagem=1.51s até 18.17s
+[2026-08-24 22:14:15] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=86.7s
+[2026-08-24 22:14:15] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '11258->11198', 'fronteira': '17416->18016', 'fim_corpo': '76420->77200'}
+[2026-08-24 22:14:16] [INFO] cortar: Cortado limpo por locução: CABEÇA 6.7s, CORPO 59.1s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1924\\BOLETIM_RADIO_TJRN_26_08_2026_B7_FACULDADE_CONDENADA_COBRANCA_INDEVIDA_CABECA.mp3', 'inicio_cabeca': '11.26', 'fim_cabeca': '16.66', 'inicio_corpo': '18.17', 'fim_corpo': '76.42'}
+[2026-08-24 22:14:46] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B9_PLATAFORMA_AUXILIO_PENAS_PECUNIARIAS.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:14:46] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1924\BOLETIM_RADIO_TJRN_26_08_2026_B9_PLATAFORMA_AUXILIO_PENAS_PECUNIARIAS.mp3
+[2026-08-24 22:15:06] [INFO] transcrever: Transcrição concluída em 19.5s — duração: 89.5s, 20 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1924\\BOLETIM_RADIO_TJRN_26_08_2026_B9_PLATAFORMA_AUXILIO_PENAS_PECUNIARIAS.mp3', 'duracao_segundos': '89.5'}
+[2026-08-24 22:15:06] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 22:15:06] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=74.8s
+[2026-08-24 22:15:09] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 49.65s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1924\\BOLETIM_RADIO_TJRN_26_08_2026_B9_PLATAFORMA_AUXILIO_PENAS_PECUNIARIAS.mp3'}
+[2026-08-24 22:15:09] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:15:09] [INFO] buscar_passagem_vad: Bloco inicial identificado como rabo da vinheta (termina em 8.89s). Manchete=[11.45→18.68]s; passagem=1.51s até 20.19s
+[2026-08-24 22:15:09] [AVISO] ⚠ fim_corpo: Match de assinatura em t=74.8s descartado: sem VH de encerramento confirmada logo após (distância=-2.8s).
+[2026-08-24 22:15:09] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=74.8s
+[2026-08-24 22:15:10] [INFO] cortar: Bordas ancoradas: {'inicio_cabeca': '11450->11320', 'modo': 'adaptativo', 'fronteira': '19432->18532', 'fim_corpo': '74460->74700'}
+[2026-08-24 22:15:11] [INFO] cortar: Cortado limpo por locução: CABEÇA 7.1s, CORPO 56.1s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1924\\BOLETIM_RADIO_TJRN_26_08_2026_B9_PLATAFORMA_AUXILIO_PENAS_PECUNIARIAS_CABECA.mp3', 'inicio_cabeca': '11.45', 'fim_cabeca': '18.68', 'inicio_corpo': '20.19', 'fim_corpo': '74.46'}
+[2026-08-24 22:15:36] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_14_04_2026_B10_INDENIZACAO_ALAGAMENTO_RESIDENCIA.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:15:36] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1925\BOLETIM_RADIO_TJRN_14_04_2026_B10_INDENIZACAO_ALAGAMENTO_RESIDENCIA.mp3
+[2026-08-24 22:16:00] [INFO] transcrever: Transcrição concluída em 23.8s — duração: 80.5s, 19 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1925\\BOLETIM_RADIO_TJRN_14_04_2026_B10_INDENIZACAO_ALAGAMENTO_RESIDENCIA.mp3', 'duracao_segundos': '80.54'}
+[2026-08-24 22:16:00] [INFO] buscar_abertura: Âncora 'boletim informativo do rio grande do norte' encontrada (similaridade=0.56) no segmento t=77.3s
+[2026-08-24 22:16:00] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 77.3s
+[2026-08-24 22:16:00] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.36 < limiar=0.55).
+[2026-08-24 22:16:02] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 62.94s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1925\\BOLETIM_RADIO_TJRN_14_04_2026_B10_INDENIZACAO_ALAGAMENTO_RESIDENCIA.mp3'}
+[2026-08-24 22:16:03] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:16:03] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 0.23s de não-fala entre t=16.95s e t=17.18s
+[2026-08-24 22:16:03] [AVISO] ⚠ fim_corpo: Match de assinatura em t=77.3s descartado: sem VH de encerramento confirmada logo após (distância=-3.1s).
+[2026-08-24 22:16:03] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=76.8s com margem 0.5s
+[2026-08-24 22:16:03] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '7000->6160', 'fronteira': '17064->17004', 'fim_corpo': '68460->68620'}
+[2026-08-24 22:16:04] [INFO] cortar: Cortado limpo por locução: CABEÇA 10.7s, CORPO 51.5s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1925\\BOLETIM_RADIO_TJRN_14_04_2026_B10_INDENIZACAO_ALAGAMENTO_RESIDENCIA_CABECA.mp3', 'inicio_cabeca': '7.0', 'fim_cabeca': '16.95', 'inicio_corpo': '17.18', 'fim_corpo': '68.46'}
+[2026-08-24 22:16:38] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_14_04_2026_B9_CONDENACAO_GOLPE_IDOSA.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:16:38] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1925\BOLETIM_RADIO_TJRN_14_04_2026_B9_CONDENACAO_GOLPE_IDOSA.mp3
+[2026-08-24 22:17:09] [INFO] transcrever: Transcrição concluída em 30.9s — duração: 91.1s, 24 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1925\\BOLETIM_RADIO_TJRN_14_04_2026_B9_CONDENACAO_GOLPE_IDOSA.mp3', 'duracao_segundos': '91.14'}
+[2026-08-24 22:17:09] [INFO] buscar_abertura: Âncora 'boletim informativo do rio grande do norte' encontrada (similaridade=0.56) no segmento t=87.3s
+[2026-08-24 22:17:09] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 87.3s
+[2026-08-24 22:17:09] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.46 < limiar=0.55).
+[2026-08-24 22:17:10] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 21.42s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1925\\BOLETIM_RADIO_TJRN_14_04_2026_B9_CONDENACAO_GOLPE_IDOSA.mp3'}
+[2026-08-24 22:17:11] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:17:11] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 0.42s de não-fala entre t=19.22s e t=19.64s
+[2026-08-24 22:17:11] [AVISO] ⚠ fim_corpo: Match de assinatura em t=87.3s descartado: sem VH de encerramento confirmada logo após (distância=-3.8s).
+[2026-08-24 22:17:11] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=86.8s com margem 0.5s
+[2026-08-24 22:17:11] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '7546->7306', 'fronteira': '19432->19382', 'fim_corpo': '79080->77670'}
+[2026-08-24 22:17:12] [INFO] cortar: Cortado limpo por locução: CABEÇA 12.0s, CORPO 58.2s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1925\\BOLETIM_RADIO_TJRN_14_04_2026_B9_CONDENACAO_GOLPE_IDOSA_CABECA.mp3', 'inicio_cabeca': '7.55', 'fim_cabeca': '19.22', 'inicio_corpo': '19.64', 'fim_corpo': '79.08'}
+[2026-08-24 22:17:43] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B10_TRTRN_SUPERA_META.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:17:43] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1925\BOLETIM_RADIO_TJRN_26_08_2026_B10_TRTRN_SUPERA_META.mp3
+[2026-08-24 22:18:02] [INFO] transcrever: Transcrição concluída em 19.4s — duração: 73.2s, 14 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1925\\BOLETIM_RADIO_TJRN_26_08_2026_B10_TRTRN_SUPERA_META.mp3', 'duracao_segundos': '73.17'}
+[2026-08-24 22:18:02] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 22:18:02] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=57.2s
+[2026-08-24 22:18:03] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 58.67s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1925\\BOLETIM_RADIO_TJRN_26_08_2026_B10_TRTRN_SUPERA_META.mp3'}
+[2026-08-24 22:18:05] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:18:05] [INFO] buscar_passagem_vad: Bloco inicial identificado como rabo da vinheta (termina em 8.89s). Manchete=[11.39→16.69]s; passagem=1.51s até 18.20s
+[2026-08-24 22:18:05] [AVISO] ⚠ fim_corpo: Match de assinatura em t=57.2s descartado: sem VH de encerramento confirmada logo após (distância=-3.8s).
+[2026-08-24 22:18:05] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=57.2s
+[2026-08-24 22:18:05] [INFO] cortar: Bordas ancoradas: {'inicio_cabeca': '11386->11316', 'modo': 'adaptativo', 'fronteira': '17448->16548', 'fim_corpo': '57160->58180'}
+[2026-08-24 22:18:06] [INFO] cortar: Cortado limpo por locução: CABEÇA 5.1s, CORPO 41.5s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1925\\BOLETIM_RADIO_TJRN_26_08_2026_B10_TRTRN_SUPERA_META_CABECA.mp3', 'inicio_cabeca': '11.39', 'fim_cabeca': '16.69', 'inicio_corpo': '18.2', 'fim_corpo': '57.16'}
+[2026-08-24 22:18:27] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_26_08_2026_B8_CNJ_VIDEOS_CUIDADOS.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:18:27] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1925\BOLETIM_RADIO_TJRN_26_08_2026_B8_CNJ_VIDEOS_CUIDADOS.mp3
+[2026-08-24 22:18:49] [INFO] transcrever: Transcrição concluída em 22.0s — duração: 85.0s, 18 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1925\\BOLETIM_RADIO_TJRN_26_08_2026_B8_CNJ_VIDEOS_CUIDADOS.mp3', 'duracao_segundos': '85.0'}
+[2026-08-24 22:18:49] [INFO] buscar_abertura: Âncora 'boletim informativo do tribunal de justica' encontrada (substring) no segmento t=0.0s
+[2026-08-24 22:18:49] [INFO] buscar_encerramento: Âncora 'voce acabou de ouvir' encontrada (substring) no segmento t=73.0s
+[2026-08-24 22:18:51] [INFO] cortar: Bordas ancoradas: {'inicio_cabeca': '9958->11328', 'modo': 'adaptativo', 'fronteira': '19576->19576', 'fim_corpo': '75054->74514'}
+[2026-08-24 22:18:52] [INFO] cortar: Cortado limpo por locução: CABEÇA 8.1s, CORPO 54.8s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1925\\BOLETIM_RADIO_TJRN_26_08_2026_B8_CNJ_VIDEOS_CUIDADOS_CABECA.mp3', 'inicio_cabeca': '9.96', 'fim_cabeca': '18.99', 'inicio_corpo': '20.16', 'fim_corpo': '75.05'}
+[2026-08-24 22:19:19] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_15_04_2026_B1_TJRN_ADVOGADA_CONSTRANGIDA_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:19:19] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1926\BOLETIM_RADIO_TJRN_15_04_2026_B1_TJRN_ADVOGADA_CONSTRANGIDA_.mp3
+[2026-08-24 22:19:40] [INFO] transcrever: Transcrição concluída em 21.4s — duração: 67.3s, 15 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1926\\BOLETIM_RADIO_TJRN_15_04_2026_B1_TJRN_ADVOGADA_CONSTRANGIDA_.mp3', 'duracao_segundos': '67.27'}
+[2026-08-24 22:19:40] [AVISO] ⚠ fallback_abertura: Fallback abertura usando fim do primeiro segmento: 6.0s
+[2026-08-24 22:19:40] [AVISO] ⚠ buscar_abertura: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.48 < limiar=0.55).
+[2026-08-24 22:19:40] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 66.7s
+[2026-08-24 22:19:40] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.32 < limiar=0.55).
+[2026-08-24 22:19:41] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 38.10s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1926\\BOLETIM_RADIO_TJRN_15_04_2026_B1_TJRN_ADVOGADA_CONSTRANGIDA_.mp3'}
+[2026-08-24 22:19:41] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 2
+[2026-08-24 22:19:41] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 0.10s de não-fala entre t=19.89s e t=19.99s
+[2026-08-24 22:19:41] [INFO] fim_corpo: Assinatura confirmada por regex+timing no segmento t=62.1s: 'no código do processo civil, do Tribunal de Justiça do Rio Grande do Norte, Lívia' (distância até VH enc.: 0.0s)
+[2026-08-24 22:19:42] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '7705->7525', 'fronteira': '19944->19894', 'fim_corpo': '55220->54500'}
+[2026-08-24 22:19:43] [INFO] cortar: Cortado limpo por locução: CABEÇA 12.3s, CORPO 34.5s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1926\\BOLETIM_RADIO_TJRN_15_04_2026_B1_TJRN_ADVOGADA_CONSTRANGIDA__CABECA.mp3', 'inicio_cabeca': '7.71', 'fim_cabeca': '19.89', 'inicio_corpo': '19.99', 'fim_corpo': '55.22'}
+[2026-08-24 22:20:07] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_15_04_2026_B2_TJRN_EMPRESARIA_INDENIZADA_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:20:07] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1926\BOLETIM_RADIO_TJRN_15_04_2026_B2_TJRN_EMPRESARIA_INDENIZADA_.mp3
+[2026-08-24 22:20:30] [INFO] transcrever: Transcrição concluída em 22.7s — duração: 77.9s, 17 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1926\\BOLETIM_RADIO_TJRN_15_04_2026_B2_TJRN_EMPRESARIA_INDENIZADA_.mp3', 'duracao_segundos': '77.9'}
+[2026-08-24 22:20:30] [INFO] buscar_abertura: Âncora 'boletim informativo do rio grande do norte' encontrada (similaridade=0.56) no segmento t=74.5s
+[2026-08-24 22:20:30] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 74.5s
+[2026-08-24 22:20:30] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.36 < limiar=0.55).
+[2026-08-24 22:20:31] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 61.03s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1926\\BOLETIM_RADIO_TJRN_15_04_2026_B2_TJRN_EMPRESARIA_INDENIZADA_.mp3'}
+[2026-08-24 22:20:32] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 2
+[2026-08-24 22:20:32] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 0.10s de não-fala entre t=23.89s e t=23.99s
+[2026-08-24 22:20:32] [AVISO] ⚠ fim_corpo: Match de assinatura em t=74.5s descartado: sem VH de encerramento confirmada logo após (distância=-3.3s).
+[2026-08-24 22:20:32] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=74.0s com margem 0.5s
+[2026-08-24 22:20:32] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '7514->7454', 'fronteira': '23944->23894', 'fim_corpo': '65840->66970'}
+[2026-08-24 22:20:33] [INFO] cortar: Cortado limpo por locução: CABEÇA 16.3s, CORPO 43.0s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1926\\BOLETIM_RADIO_TJRN_15_04_2026_B2_TJRN_EMPRESARIA_INDENIZADA__CABECA.mp3', 'inicio_cabeca': '7.51', 'fim_cabeca': '23.89', 'inicio_corpo': '23.99', 'fim_corpo': '65.84'}
+[2026-08-24 22:20:59] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_15_04_2026_B3_TJRN_COLISAO_E_FUGA_CONDUTOR_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:20:59] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1926\BOLETIM_RADIO_TJRN_15_04_2026_B3_TJRN_COLISAO_E_FUGA_CONDUTOR_.mp3
+[2026-08-24 22:21:24] [INFO] transcrever: Transcrição concluída em 24.7s — duração: 78.5s, 21 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1926\\BOLETIM_RADIO_TJRN_15_04_2026_B3_TJRN_COLISAO_E_FUGA_CONDUTOR_.mp3', 'duracao_segundos': '78.5'}
+[2026-08-24 22:21:24] [INFO] buscar_abertura: Âncora 'boletim informativo do rio grande do norte' encontrada (similaridade=0.56) no segmento t=75.1s
+[2026-08-24 22:21:24] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 75.1s
+[2026-08-24 22:21:24] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.46 < limiar=0.55).
+[2026-08-24 22:21:24] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 43.57s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1926\\BOLETIM_RADIO_TJRN_15_04_2026_B3_TJRN_COLISAO_E_FUGA_CONDUTOR_.mp3'}
+[2026-08-24 22:21:25] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 2
+[2026-08-24 22:21:25] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 0.20s de não-fala entre t=16.60s e t=16.79s
+[2026-08-24 22:21:25] [AVISO] ⚠ fim_corpo: Match de assinatura em t=75.1s descartado: sem VH de encerramento confirmada logo após (distância=-3.3s).
+[2026-08-24 22:21:25] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=74.6s com margem 0.5s
+[2026-08-24 22:21:25] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '7610->7430', 'fronteira': '16696->16656', 'fim_corpo': '66380->67220'}
+[2026-08-24 22:21:26] [INFO] cortar: Cortado limpo por locução: CABEÇA 9.1s, CORPO 50.5s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1926\\BOLETIM_RADIO_TJRN_15_04_2026_B3_TJRN_COLISAO_E_FUGA_CONDUTOR__CABECA.mp3', 'inicio_cabeca': '7.61', 'fim_cabeca': '16.6', 'inicio_corpo': '16.79', 'fim_corpo': '66.38'}
+[2026-08-24 22:21:55] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_15_04_2026_B4_TJRN_VARA_CIVEL_NATAL_PREMIO_ADVOGADOS_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:21:55] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1926\BOLETIM_RADIO_TJRN_15_04_2026_B4_TJRN_VARA_CIVEL_NATAL_PREMIO_ADVOGADOS_.mp3
+[2026-08-24 22:22:22] [INFO] transcrever: Transcrição concluída em 26.5s — duração: 76.7s, 16 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1926\\BOLETIM_RADIO_TJRN_15_04_2026_B4_TJRN_VARA_CIVEL_NATAL_PREMIO_ADVOGADOS_.mp3', 'duracao_segundos': '76.7'}
+[2026-08-24 22:22:22] [INFO] buscar_abertura: Âncora 'boletim informativo do rio grande do norte' encontrada (similaridade=0.56) no segmento t=73.3s
+[2026-08-24 22:22:22] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 73.3s
+[2026-08-24 22:22:22] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.30 < limiar=0.55).
+[2026-08-24 22:22:22] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 29.36s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1926\\BOLETIM_RADIO_TJRN_15_04_2026_B4_TJRN_VARA_CIVEL_NATAL_PREMIO_ADVOGADOS_.mp3'}
+[2026-08-24 22:22:23] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 2
+[2026-08-24 22:22:23] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 0.10s de não-fala entre t=18.04s e t=18.14s
+[2026-08-24 22:22:23] [AVISO] ⚠ fim_corpo: Match de assinatura em t=73.3s descartado: sem VH de encerramento confirmada logo após (distância=-3.3s).
+[2026-08-24 22:22:23] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=72.8s com margem 0.5s
+[2026-08-24 22:22:23] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '8026->7906', 'fronteira': '18087->18047', 'fim_corpo': '64580->63560'}
+[2026-08-24 22:22:24] [INFO] cortar: Cortado limpo por locução: CABEÇA 10.0s, CORPO 45.4s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1926\\BOLETIM_RADIO_TJRN_15_04_2026_B4_TJRN_VARA_CIVEL_NATAL_PREMIO_ADVOGADOS__CABECA.mp3', 'inicio_cabeca': '8.03', 'fim_cabeca': '18.04', 'inicio_corpo': '18.14', 'fim_corpo': '64.58'}
+[2026-08-24 22:22:47] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_15_04_2026_B5_TJRN_SELECAO_ESTAGIO_PAU_FERROS_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:22:47] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1927\BOLETIM_RADIO_TJRN_15_04_2026_B5_TJRN_SELECAO_ESTAGIO_PAU_FERROS_.mp3
+[2026-08-24 22:23:08] [INFO] transcrever: Transcrição concluída em 21.2s — duração: 61.9s, 15 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B5_TJRN_SELECAO_ESTAGIO_PAU_FERROS_.mp3', 'duracao_segundos': '61.86'}
+[2026-08-24 22:23:08] [INFO] buscar_abertura: Âncora 'boletim informativo do rio grande do norte' encontrada (similaridade=0.56) no segmento t=58.9s
+[2026-08-24 22:23:08] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 58.9s
+[2026-08-24 22:23:08] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.47 < limiar=0.55).
+[2026-08-24 22:23:09] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 35.10s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B5_TJRN_SELECAO_ESTAGIO_PAU_FERROS_.mp3'}
+[2026-08-24 22:23:09] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 5
+[2026-08-24 22:23:09] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 0.13s de não-fala entre t=14.71s e t=14.84s
+[2026-08-24 22:23:09] [AVISO] ⚠ fim_corpo: Match de assinatura em t=58.9s descartado: sem VH de encerramento confirmada logo após (distância=-2.9s).
+[2026-08-24 22:23:09] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=58.4s com margem 0.5s
+[2026-08-24 22:23:09] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '8282->8222', 'fronteira': '14775->14755', 'fim_corpo': '49800->50290'}
+[2026-08-24 22:23:11] [INFO] cortar: Cortado limpo por locução: CABEÇA 6.4s, CORPO 35.4s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B5_TJRN_SELECAO_ESTAGIO_PAU_FERROS__CABECA.mp3', 'inicio_cabeca': '8.28', 'fim_cabeca': '14.71', 'inicio_corpo': '14.84', 'fim_corpo': '49.8'}
+[2026-08-24 22:23:33] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:23:33] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1927\BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS_.mp3
+[2026-08-24 22:23:54] [INFO] transcrever: Transcrição concluída em 20.6s — duração: 69.7s, 15 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS_.mp3', 'duracao_segundos': '69.67'}
+[2026-08-24 22:23:54] [AVISO] ⚠ fallback_abertura: Fallback abertura usando fim do primeiro segmento: 5.8s
+[2026-08-24 22:23:54] [AVISO] ⚠ buscar_abertura: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.54 < limiar=0.55).
+[2026-08-24 22:23:54] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=66.6s
+[2026-08-24 22:23:54] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 27.71s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS_.mp3'}
+[2026-08-24 22:23:55] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 2
+[2026-08-24 22:23:55] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 1.54s de não-fala entre t=7.57s e t=9.11s
+[2026-08-24 22:23:55] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=66.6s
+[2026-08-24 22:23:55] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '7002->7422', 'fronteira': '8344->7444', 'fim_corpo': '57560->57680'}
+[2026-08-24 22:23:56] [INFO] cortar: Cortado limpo por locução: CABEÇA 0.2s, CORPO 49.9s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS__CABECA.mp3', 'inicio_cabeca': '7.0', 'fim_cabeca': '7.57', 'inicio_corpo': '9.11', 'fim_corpo': '57.56'}
+[2026-08-24 22:24:20] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS_.mp3 (estratégia=ancora_vad_forcado)
+[2026-08-24 22:24:20] [INFO] transcrever: Transcrição reutilizada da cache memória: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1927\BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS_.mp3
+[2026-08-24 22:24:20] [AVISO] ⚠ fallback_abertura: Fallback abertura usando fim do primeiro segmento: 5.8s
+[2026-08-24 22:24:20] [AVISO] ⚠ buscar_abertura: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.54 < limiar=0.55).
+[2026-08-24 22:24:20] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=66.6s
+[2026-08-24 22:24:20] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 2
+[2026-08-24 22:24:20] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 1.54s de não-fala entre t=7.57s e t=9.11s
+[2026-08-24 22:24:20] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=66.6s
+[2026-08-24 22:24:20] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '7002->7422', 'fronteira': '8344->7444', 'fim_corpo': '57560->57680'}
+[2026-08-24 22:24:21] [INFO] cortar: Cortado limpo por locução: CABEÇA 0.2s, CORPO 49.9s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS__CABECA.mp3', 'inicio_cabeca': '7.0', 'fim_cabeca': '7.57', 'inicio_corpo': '9.11', 'fim_corpo': '57.56'}
+[2026-08-24 22:24:44] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS_.mp3 (estratégia=janela_silencio_ampliada)
+[2026-08-24 22:24:44] [INFO] transcrever: Transcrição reutilizada da cache memória: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1927\BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS_.mp3
+[2026-08-24 22:24:44] [AVISO] ⚠ fallback_abertura: Fallback abertura usando fim do primeiro segmento: 5.8s
+[2026-08-24 22:24:44] [AVISO] ⚠ buscar_abertura: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.54 < limiar=0.55).
+[2026-08-24 22:24:44] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=66.6s
+[2026-08-24 22:24:45] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 27.71s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS_.mp3'}
+[2026-08-24 22:24:45] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 2
+[2026-08-24 22:24:45] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 1.54s de não-fala entre t=7.57s e t=9.11s
+[2026-08-24 22:24:45] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=66.6s
+[2026-08-24 22:24:46] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '7002->9042', 'fronteira': '8344->7444', 'fim_corpo': '57560->56050'}
+[2026-08-24 22:24:46] [INFO] cortar: Cortado limpo por locução: CABEÇA 0.2s, CORPO 46.6s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS__CABECA.mp3', 'inicio_cabeca': '7.0', 'fim_cabeca': '7.57', 'inicio_corpo': '9.11', 'fim_corpo': '57.56'}
+[2026-08-24 22:25:13] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS_.mp3 (estratégia=grade_fixa_locucao_estendida)
+[2026-08-24 22:25:13] [INFO] transcrever: Transcrição reutilizada da cache memória: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1927\BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS_.mp3
+[2026-08-24 22:25:13] [AVISO] ⚠ fallback_abertura: Fallback abertura usando fim do primeiro segmento: 5.8s
+[2026-08-24 22:25:13] [AVISO] ⚠ buscar_abertura: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.54 < limiar=0.55).
+[2026-08-24 22:25:13] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=66.6s
+[2026-08-24 22:25:14] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 2
+[2026-08-24 22:25:14] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 1.54s de não-fala entre t=7.57s e t=9.11s
+[2026-08-24 22:25:14] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=66.6s
+[2026-08-24 22:25:14] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '7002->7422', 'fronteira': '8344->7444', 'fim_corpo': '57560->57680'}
+[2026-08-24 22:25:15] [INFO] cortar: Cortado limpo por locução: CABEÇA 0.2s, CORPO 49.9s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B6_TJRN_NOMEIA_TRES_CANDIDATOS__CABECA.mp3', 'inicio_cabeca': '7.0', 'fim_cabeca': '7.57', 'inicio_corpo': '9.11', 'fim_corpo': '57.56'}
+[2026-08-24 22:25:41] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_15_04_2026_B7_TRTRN_PROGRAMA_REGISTRE_SE.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:25:41] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1927\BOLETIM_RADIO_TJRN_15_04_2026_B7_TRTRN_PROGRAMA_REGISTRE_SE.mp3
+[2026-08-24 22:26:02] [INFO] transcrever: Transcrição concluída em 21.0s — duração: 68.0s, 15 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B7_TRTRN_PROGRAMA_REGISTRE_SE.mp3', 'duracao_segundos': '68.02'}
+[2026-08-24 22:26:02] [AVISO] ⚠ fallback_abertura: Fallback abertura usando fim do primeiro segmento: 4.5s
+[2026-08-24 22:26:02] [AVISO] ⚠ buscar_abertura: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.54 < limiar=0.55).
+[2026-08-24 22:26:02] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=64.2s
+[2026-08-24 22:26:02] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 26.95s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B7_TRTRN_PROGRAMA_REGISTRE_SE.mp3'}
+[2026-08-24 22:26:04] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 1
+[2026-08-24 22:26:04] [AVISO] ⚠ buscar_passagem_vad: VAD encontrou apenas 1 bloco na janela; rejeitando VAD e caindo para fallback de texto.
+[2026-08-24 22:26:04] [INFO] fim_manchete: Fim da manchete validado por pontuação em t=4.5s
+[2026-08-24 22:26:04] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=64.2s
+[2026-08-24 22:26:05] [INFO] cortar: Bordas ancoradas: {'inicio_cabeca': '194->110', 'modo': 'adaptativo', 'fronteira': '5020->6040', 'fim_corpo': '55879->57079'}
+[2026-08-24 22:26:05] [INFO] cortar: Cortado limpo por locução: CABEÇA 5.8s, CORPO 50.9s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B7_TRTRN_PROGRAMA_REGISTRE_SE_CABECA.mp3', 'inicio_cabeca': '0.19', 'fim_cabeca': '4.52', 'inicio_corpo': '5.52', 'fim_corpo': '55.88'}
+[2026-08-24 22:26:32] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_15_04_2026_B8_DPERN_INSCRICAO_CANDIDATO_PM.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:26:32] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1927\BOLETIM_RADIO_TJRN_15_04_2026_B8_DPERN_INSCRICAO_CANDIDATO_PM.mp3
+[2026-08-24 22:26:51] [INFO] transcrever: Transcrição concluída em 19.0s — duração: 52.6s, 13 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B8_DPERN_INSCRICAO_CANDIDATO_PM.mp3', 'duracao_segundos': '52.64'}
+[2026-08-24 22:26:51] [AVISO] ⚠ fallback_abertura: Fallback abertura usando fim do primeiro segmento: 5.8s
+[2026-08-24 22:26:51] [AVISO] ⚠ buscar_abertura: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.54 < limiar=0.55).
+[2026-08-24 22:26:51] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 49.0s
+[2026-08-24 22:26:51] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.51 < limiar=0.55).
+[2026-08-24 22:26:52] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 37.99s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B8_DPERN_INSCRICAO_CANDIDATO_PM.mp3'}
+[2026-08-24 22:26:52] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 3
+[2026-08-24 22:26:52] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 0.23s de não-fala entre t=17.43s e t=17.66s
+[2026-08-24 22:26:52] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=48.5s com margem 0.5s
+[2026-08-24 22:26:52] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '8474->8354', 'fronteira': '17544->17474', 'fim_corpo': '40500->40430'}
+[2026-08-24 22:26:53] [INFO] cortar: Cortado limpo por locução: CABEÇA 9.0s, CORPO 22.9s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1927\\BOLETIM_RADIO_TJRN_15_04_2026_B8_DPERN_INSCRICAO_CANDIDATO_PM_CABECA.mp3', 'inicio_cabeca': '8.47', 'fim_cabeca': '17.43', 'inicio_corpo': '17.66', 'fim_corpo': '40.5'}
+[2026-08-24 22:27:08] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_15_04_2026_B10_TRE_RN_CARTILHA_PROPAGANDA_ELEITORAL_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:27:08] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1928\BOLETIM_RADIO_TJRN_15_04_2026_B10_TRE_RN_CARTILHA_PROPAGANDA_ELEITORAL_.mp3
+[2026-08-24 22:27:22] [INFO] transcrever: Transcrição concluída em 13.7s — duração: 49.2s, 9 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1928\\BOLETIM_RADIO_TJRN_15_04_2026_B10_TRE_RN_CARTILHA_PROPAGANDA_ELEITORAL_.mp3', 'duracao_segundos': '49.24'}
+[2026-08-24 22:27:22] [AVISO] ⚠ fallback_abertura: Fallback abertura usando fim do primeiro segmento: 8.2s
+[2026-08-24 22:27:22] [AVISO] ⚠ buscar_abertura: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.55 < limiar=0.55).
+[2026-08-24 22:27:22] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=45.8s
+[2026-08-24 22:27:22] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 19.59s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1928\\BOLETIM_RADIO_TJRN_15_04_2026_B10_TRE_RN_CARTILHA_PROPAGANDA_ELEITORAL_.mp3'}
+[2026-08-24 22:27:23] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 2
+[2026-08-24 22:27:23] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 0.13s de não-fala entre t=19.48s e t=19.61s
+[2026-08-24 22:27:23] [AVISO] ⚠ fim_corpo: Match de assinatura em t=45.8s descartado: sem VH de encerramento confirmada logo após (distância=-3.3s).
+[2026-08-24 22:27:23] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=45.8s
+[2026-08-24 22:27:23] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '7386->7326', 'fronteira': '19544->19514', 'fim_corpo': '37080->36360'}
+[2026-08-24 22:27:24] [INFO] cortar: Cortado limpo por locução: CABEÇA 12.1s, CORPO 16.7s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1928\\BOLETIM_RADIO_TJRN_15_04_2026_B10_TRE_RN_CARTILHA_PROPAGANDA_ELEITORAL__CABECA.mp3', 'inicio_cabeca': '7.39', 'fim_cabeca': '19.48', 'inicio_corpo': '19.61', 'fim_corpo': '37.08'}
+[2026-08-24 22:27:36] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_15_04_2026_B9_MPRN_IMPLEMENTACAO_CAMERAS_VIDEOMONITORAMENTO_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:27:36] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1928\BOLETIM_RADIO_TJRN_15_04_2026_B9_MPRN_IMPLEMENTACAO_CAMERAS_VIDEOMONITORAMENTO_.mp3
+[2026-08-24 22:27:55] [INFO] transcrever: Transcrição concluída em 18.8s — duração: 60.6s, 14 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1928\\BOLETIM_RADIO_TJRN_15_04_2026_B9_MPRN_IMPLEMENTACAO_CAMERAS_VIDEOMONITORAMENTO_.mp3', 'duracao_segundos': '60.63'}
+[2026-08-24 22:27:55] [AVISO] ⚠ fallback_abertura: Fallback abertura usando fim do primeiro segmento: 5.7s
+[2026-08-24 22:27:55] [AVISO] ⚠ buscar_abertura: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.46 < limiar=0.55).
+[2026-08-24 22:27:55] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=59.3s
+[2026-08-24 22:27:55] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 35.78s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1928\\BOLETIM_RADIO_TJRN_15_04_2026_B9_MPRN_IMPLEMENTACAO_CAMERAS_VIDEOMONITORAMENTO_.mp3'}
+[2026-08-24 22:27:56] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 1
+[2026-08-24 22:27:56] [AVISO] ⚠ buscar_passagem_vad: VAD encontrou apenas 1 bloco na janela; rejeitando VAD e caindo para fallback de texto.
+[2026-08-24 22:27:56] [INFO] fim_manchete: Fim da manchete validado por pontuação em t=17.0s
+[2026-08-24 22:27:56] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=59.3s
+[2026-08-24 22:27:56] [INFO] cortar: Bordas ancoradas: {'inicio_cabeca': '226->110', 'modo': 'adaptativo', 'fronteira': '6226->7246', 'fim_corpo': '48600->49900'}
+[2026-08-24 22:27:57] [INFO] cortar: Cortado limpo por locução: CABEÇA 7.0s, CORPO 42.6s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1928\\BOLETIM_RADIO_TJRN_15_04_2026_B9_MPRN_IMPLEMENTACAO_CAMERAS_VIDEOMONITORAMENTO__CABECA.mp3', 'inicio_cabeca': '0.23', 'fim_cabeca': '5.73', 'inicio_corpo': '6.73', 'fim_corpo': '48.6'}
+[2026-08-24 22:28:20] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_16_04_2026_B1_TJRN_PACIENTE_INDENIZADO_CICATRIZ_QUEIXO.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:28:20] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1928\BOLETIM_RADIO_TJRN_16_04_2026_B1_TJRN_PACIENTE_INDENIZADO_CICATRIZ_QUEIXO.mp3
+[2026-08-24 22:28:44] [INFO] transcrever: Transcrição concluída em 24.6s — duração: 79.2s, 17 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1928\\BOLETIM_RADIO_TJRN_16_04_2026_B1_TJRN_PACIENTE_INDENIZADO_CICATRIZ_QUEIXO.mp3', 'duracao_segundos': '79.23'}
+[2026-08-24 22:28:44] [INFO] buscar_abertura: Âncora 'no ar' encontrada (substring) no segmento t=35.7s
+[2026-08-24 22:28:44] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 75.4s
+[2026-08-24 22:28:44] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.40 < limiar=0.55).
+[2026-08-24 22:28:46] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 49.69s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1928\\BOLETIM_RADIO_TJRN_16_04_2026_B1_TJRN_PACIENTE_INDENIZADO_CICATRIZ_QUEIXO.mp3'}
+[2026-08-24 22:28:47] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 1
+[2026-08-24 22:28:47] [AVISO] ⚠ buscar_passagem_vad: VAD encontrou apenas 1 bloco na janela; rejeitando VAD e caindo para fallback de texto.
+[2026-08-24 22:28:47] [INFO] fim_manchete: Fim da manchete validado por pontuação em t=7.0s
+[2026-08-24 22:28:47] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=74.9s com margem 0.5s
+[2026-08-24 22:28:47] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '34->1440', 'fronteira': '6034->6034', 'fim_corpo': '67360->68200'}
+[2026-08-24 22:28:48] [INFO] cortar: Cortado limpo por locução: CABEÇA 4.5s, CORPO 62.1s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1928\\BOLETIM_RADIO_TJRN_16_04_2026_B1_TJRN_PACIENTE_INDENIZADO_CICATRIZ_QUEIXO_CABECA.mp3', 'inicio_cabeca': '0.03', 'fim_cabeca': '5.53', 'inicio_corpo': '6.53', 'fim_corpo': '67.36'}
+[2026-08-24 22:29:21] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_16_04_2026_B2_TJRN_ACUSADO_VARIOS_DELITOS_GOIANINHA_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:29:21] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1928\BOLETIM_RADIO_TJRN_16_04_2026_B2_TJRN_ACUSADO_VARIOS_DELITOS_GOIANINHA_.mp3
+[2026-08-24 22:29:47] [INFO] transcrever: Transcrição concluída em 25.1s — duração: 76.5s, 16 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1928\\BOLETIM_RADIO_TJRN_16_04_2026_B2_TJRN_ACUSADO_VARIOS_DELITOS_GOIANINHA_.mp3', 'duracao_segundos': '76.51'}
+[2026-08-24 22:29:47] [INFO] buscar_abertura: Âncora 'boletim informativo do rio grande do norte' encontrada (similaridade=0.57) no segmento t=73.7s
+[2026-08-24 22:29:47] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 73.7s
+[2026-08-24 22:29:47] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.37 < limiar=0.55).
+[2026-08-24 22:29:47] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 39.01s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1928\\BOLETIM_RADIO_TJRN_16_04_2026_B2_TJRN_ACUSADO_VARIOS_DELITOS_GOIANINHA_.mp3'}
+[2026-08-24 22:29:48] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 1
+[2026-08-24 22:29:48] [AVISO] ⚠ buscar_passagem_vad: VAD encontrou apenas 1 bloco na janela; rejeitando VAD e caindo para fallback de texto.
+[2026-08-24 22:29:48] [INFO] fim_manchete: Fim da manchete validado por pontuação em t=19.0s
+[2026-08-24 22:29:48] [AVISO] ⚠ fim_corpo: Match de assinatura em t=73.7s descartado: sem VH de encerramento confirmada logo após (distância=-2.8s).
+[2026-08-24 22:29:48] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=73.2s com margem 0.5s
+[2026-08-24 22:29:48] [INFO] cortar: Bordas ancoradas: {'inicio_cabeca': '482->240', 'modo': 'adaptativo', 'fronteira': '6482->5162', 'fim_corpo': '64480->64900'}
+[2026-08-24 22:29:49] [INFO] cortar: Cortado limpo por locução: CABEÇA 4.8s, CORPO 59.6s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1928\\BOLETIM_RADIO_TJRN_16_04_2026_B2_TJRN_ACUSADO_VARIOS_DELITOS_GOIANINHA__CABECA.mp3', 'inicio_cabeca': '0.48', 'fim_cabeca': '5.98', 'inicio_corpo': '6.98', 'fim_corpo': '64.48'}
+[2026-08-24 22:30:21] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_16_04_2026_B3_TJRN_CONDENA_MOTORISTA_ACIDENTE_MOTOCICLISTA_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:30:21] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1929\BOLETIM_RADIO_TJRN_16_04_2026_B3_TJRN_CONDENA_MOTORISTA_ACIDENTE_MOTOCICLISTA_.mp3
+[2026-08-24 22:30:49] [INFO] transcrever: Transcrição concluída em 27.4s — duração: 82.4s, 19 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1929\\BOLETIM_RADIO_TJRN_16_04_2026_B3_TJRN_CONDENA_MOTORISTA_ACIDENTE_MOTOCICLISTA_.mp3', 'duracao_segundos': '82.39'}
+[2026-08-24 22:30:49] [INFO] buscar_abertura: Âncora 'boletim informativo do rio grande do norte' encontrada (similaridade=0.55) no segmento t=78.5s
+[2026-08-24 22:30:49] [AVISO] ⚠ fallback_encerramento: Fallback encerramento usando início do último segmento: 78.5s
+[2026-08-24 22:30:49] [AVISO] ⚠ buscar_encerramento: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.37 < limiar=0.55).
+[2026-08-24 22:30:49] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 53.49s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1929\\BOLETIM_RADIO_TJRN_16_04_2026_B3_TJRN_CONDENA_MOTORISTA_ACIDENTE_MOTOCICLISTA_.mp3'}
+[2026-08-24 22:30:50] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 2
+[2026-08-24 22:30:50] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 0.32s de não-fala entre t=22.23s e t=22.55s
+[2026-08-24 22:30:50] [AVISO] ⚠ fim_corpo: Match de assinatura em t=78.5s descartado: sem VH de encerramento confirmada logo após (distância=-4.0s).
+[2026-08-24 22:30:50] [AVISO] ⚠ fim_corpo: Assinatura não confirmada por regex; cortando CORPO em t=78.0s com margem 0.5s
+[2026-08-24 22:30:50] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '7610->7550', 'fronteira': '22392->22332', 'fim_corpo': '70460->69680'}
+[2026-08-24 22:30:51] [INFO] cortar: Cortado limpo por locução: CABEÇA 14.7s, CORPO 47.2s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1929\\BOLETIM_RADIO_TJRN_16_04_2026_B3_TJRN_CONDENA_MOTORISTA_ACIDENTE_MOTOCICLISTA__CABECA.mp3', 'inicio_cabeca': '7.61', 'fim_cabeca': '22.23', 'inicio_corpo': '22.55', 'fim_corpo': '70.46'}
+[2026-08-24 22:31:18] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_16_04_2026_B4_TJRN_CANCELAMENTO_PASSAGENS_AEREAS_COLOMBIA_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:31:18] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1929\BOLETIM_RADIO_TJRN_16_04_2026_B4_TJRN_CANCELAMENTO_PASSAGENS_AEREAS_COLOMBIA_.mp3
+[2026-08-24 22:31:46] [INFO] transcrever: Transcrição concluída em 28.2s — duração: 90.6s, 21 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1929\\BOLETIM_RADIO_TJRN_16_04_2026_B4_TJRN_CANCELAMENTO_PASSAGENS_AEREAS_COLOMBIA_.mp3', 'duracao_segundos': '90.62'}
+[2026-08-24 22:31:46] [INFO] buscar_abertura: Âncora 'no ar' encontrada (substring) no segmento t=64.1s
+[2026-08-24 22:31:46] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=87.5s
+[2026-08-24 22:31:48] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 76.01s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1929\\BOLETIM_RADIO_TJRN_16_04_2026_B4_TJRN_CANCELAMENTO_PASSAGENS_AEREAS_COLOMBIA_.mp3'}
+[2026-08-24 22:31:49] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 1
+[2026-08-24 22:31:49] [AVISO] ⚠ buscar_passagem_vad: VAD encontrou apenas 1 bloco na janela; rejeitando VAD e caindo para fallback de texto.
+[2026-08-24 22:31:49] [INFO] fim_manchete: Fim da manchete validado por pontuação em t=6.3s
+[2026-08-24 22:31:49] [AVISO] ⚠ fim_corpo: Match de assinatura em t=87.5s descartado: sem VH de encerramento confirmada logo após (distância=-2.9s).
+[2026-08-24 22:31:49] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=87.5s
+[2026-08-24 22:31:49] [INFO] cortar: Bordas ancoradas: {'inicio_cabeca': '322->170', 'modo': 'adaptativo', 'fronteira': '6820->6400', 'fim_corpo': '78420->77760'}
+[2026-08-24 22:31:50] [INFO] cortar: Cortado limpo por locução: CABEÇA 6.1s, CORPO 71.3s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1929\\BOLETIM_RADIO_TJRN_16_04_2026_B4_TJRN_CANCELAMENTO_PASSAGENS_AEREAS_COLOMBIA__CABECA.mp3', 'inicio_cabeca': '0.32', 'fim_cabeca': '6.32', 'inicio_corpo': '7.32', 'fim_corpo': '78.42'}
+[2026-08-24 22:32:25] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_16_04_2026_B5_TJRN_MUNICIPIO_NATAL_CONDENADO_TRANSBORDAMENTO_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:32:25] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1929\BOLETIM_RADIO_TJRN_16_04_2026_B5_TJRN_MUNICIPIO_NATAL_CONDENADO_TRANSBORDAMENTO_.mp3
+[2026-08-24 22:32:52] [INFO] transcrever: Transcrição concluída em 27.1s — duração: 75.2s, 17 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1929\\BOLETIM_RADIO_TJRN_16_04_2026_B5_TJRN_MUNICIPIO_NATAL_CONDENADO_TRANSBORDAMENTO_.mp3', 'duracao_segundos': '75.23'}
+[2026-08-24 22:32:52] [AVISO] ⚠ fallback_abertura: Fallback abertura usando fim do primeiro segmento: 4.6s
+[2026-08-24 22:32:52] [AVISO] ⚠ buscar_abertura: Âncora não encontrada — usando fallback proporcional (confiança melhor=0.55 < limiar=0.55).
+[2026-08-24 22:32:52] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=72.3s
+[2026-08-24 22:32:53] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 54.12s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1929\\BOLETIM_RADIO_TJRN_16_04_2026_B5_TJRN_MUNICIPIO_NATAL_CONDENADO_TRANSBORDAMENTO_.mp3'}
+[2026-08-24 22:32:53] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 1
+[2026-08-24 22:32:53] [AVISO] ⚠ buscar_passagem_vad: VAD encontrou apenas 1 bloco na janela; rejeitando VAD e caindo para fallback de texto.
+[2026-08-24 22:32:54] [INFO] fim_manchete: Fim da manchete validado por pontuação em t=17.2s
+[2026-08-24 22:32:54] [AVISO] ⚠ fim_corpo: Match de assinatura em t=72.3s descartado: sem VH de encerramento confirmada logo após (distância=-2.8s).
+[2026-08-24 22:32:54] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=72.3s
+[2026-08-24 22:32:54] [INFO] cortar: Bordas ancoradas: {'inicio_cabeca': '450->240', 'modo': 'adaptativo', 'fronteira': '6450->6210', 'fim_corpo': '63160->62080'}
+[2026-08-24 22:32:55] [INFO] cortar: Cortado limpo por locução: CABEÇA 5.9s, CORPO 55.8s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1929\\BOLETIM_RADIO_TJRN_16_04_2026_B5_TJRN_MUNICIPIO_NATAL_CONDENADO_TRANSBORDAMENTO__CABECA.mp3', 'inicio_cabeca': '0.45', 'fim_cabeca': '5.95', 'inicio_corpo': '6.95', 'fim_corpo': '63.16'}
+[2026-08-24 22:33:27] [INFO] processar_arquivo: Processando: BOLETIM_RADIO_TJRN_16_04_2026_B6_TJRN_CONDENA_LOJA_INDENIZACAO_.mp3 (estratégia=calibracao_correlacao)
+[2026-08-24 22:33:27] [INFO] transcrever: Iniciando transcrição: F:\Projetos\DIVISOR\JORNAIS\AGOSTO\NJUD 1929\BOLETIM_RADIO_TJRN_16_04_2026_B6_TJRN_CONDENA_LOJA_INDENIZACAO_.mp3
+[2026-08-24 22:33:49] [INFO] transcrever: Transcrição concluída em 21.7s — duração: 69.5s, 14 segmentos | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1929\\BOLETIM_RADIO_TJRN_16_04_2026_B6_TJRN_CONDENA_LOJA_INDENIZACAO_.mp3', 'duracao_segundos': '69.54'}
+[2026-08-24 22:33:49] [INFO] buscar_abertura: Âncora 'boletim informativo do rio grande do norte' encontrada (similaridade=0.56) no segmento t=66.8s
+[2026-08-24 22:33:49] [INFO] buscar_encerramento: Âncora 'leonardo almeida' encontrada (substring) no segmento t=66.8s
+[2026-08-24 22:33:50] [AVISO] ⚠ calibracao: Falso positive de correlação: fronteira de passagem em 34.25s (posição_ok=False, maior_gap=0.00s). Descartando calibração. | {'arquivo': 'F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1929\\BOLETIM_RADIO_TJRN_16_04_2026_B6_TJRN_CONDENA_LOJA_INDENIZACAO_.mp3'}
+[2026-08-24 22:33:51] [INFO] buscar_passagem_vad: VAD blocos encontrados na janela 7.0s-25.0s: 2
+[2026-08-24 22:33:51] [INFO] buscar_passagem_vad: Passagem isolada via VAD: 0.20s de não-fala entre t=21.75s e t=21.95s
+[2026-08-24 22:33:51] [AVISO] ⚠ fim_corpo: Match de assinatura em t=66.8s descartado: sem VH de encerramento confirmada logo após (distância=-2.7s).
+[2026-08-24 22:33:51] [INFO] fim_corpo: Removendo encerramento do CORPO a partir de t=66.8s
+[2026-08-24 22:33:51] [INFO] cortar: Bordas ancoradas: {'modo': 'adaptativo', 'inicio_cabeca': '7000->6820', 'fronteira': '21847->21747', 'fim_corpo': '57480->56520'}
+[2026-08-24 22:33:52] [INFO] cortar: Cortado limpo por locução: CABEÇA 14.8s, CORPO 34.7s | {'arquivo': 'F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_DIVIDIDOS\\NJUD 1929\\BOLETIM_RADIO_TJRN_16_04_2026_B6_TJRN_CONDENA_LOJA_INDENIZACAO__CABECA.mp3', 'inicio_cabeca': '7.0', 'fim_cabeca': '21.75', 'inicio_corpo': '21.95', 'fim_corpo': '57.48'}

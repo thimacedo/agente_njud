@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\MAIO\\NJUD 1882\\BOLETIM_RADIO_TJRN_12_05_2026_B5_TJRN_FALHA_SERVICO_RASTREAMENTO_1782542566.mp3",
+  "njud": "NJUD 1882",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T13:51:15",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

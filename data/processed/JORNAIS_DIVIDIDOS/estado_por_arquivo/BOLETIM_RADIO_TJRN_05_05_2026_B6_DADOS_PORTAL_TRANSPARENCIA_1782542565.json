@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\MAIO\\NJUD 1869\\BOLETIM_RADIO_TJRN_05_05_2026_B6_DADOS_PORTAL_TRANSPARENCIA_1782542565.mp3",
+  "njud": "NJUD 1869",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T12:58:17",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

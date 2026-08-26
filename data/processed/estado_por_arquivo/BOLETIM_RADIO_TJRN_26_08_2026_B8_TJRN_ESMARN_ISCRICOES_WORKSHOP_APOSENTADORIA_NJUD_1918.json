@@ -1,0 +1,65 @@
+{
+  "arquivo": "F:\\Projetos\\DIVISOR\\JORNAIS\\AGOSTO\\NJUD 1918\\BOLETIM_RADIO_TJRN_26_08_2026_B8_TJRN_ESMARN_ISCRICOES_WORKSHOP_APOSENTADORIA_NJUD_1918.mp3",
+  "njud": "NJUD 1918",
+  "status": "ESGOTADO_ACEITO",
+  "estrategia_atual": "grade_fixa_locucao_estendida",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T10:17:13",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: primeira palavra a 0.00s do início",
+        "CORPO: primeira palavra a 0.00s do início",
+        "CORPO: última palavra a 0.12s do fim",
+        "CORPO: inicia com conectivo isolado: 'A'",
+        "CABECA classificada como CORTADO",
+        "CORPO classificado como CORTADO"
+      ]
+    },
+    {
+      "estrategia": "ancora_vad_forcado",
+      "timestamp": "2026-08-24T10:30:06",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: primeira palavra a 0.00s do início",
+        "CORPO: primeira palavra a 0.00s do início",
+        "CORPO: última palavra a 0.12s do fim",
+        "CORPO: inicia com conectivo isolado: 'A'",
+        "CABECA classificada como CORTADO",
+        "CORPO classificado como CORTADO"
+      ]
+    },
+    {
+      "estrategia": "janela_silencio_ampliada",
+      "timestamp": "2026-08-24T10:31:01",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: primeira palavra a 0.00s do início",
+        "CORPO: primeira palavra a 0.00s do início",
+        "CORPO: última palavra a 0.12s do fim",
+        "CORPO: inicia com conectivo isolado: 'A'",
+        "CABECA classificada como CORTADO",
+        "CORPO classificado como CORTADO"
+      ]
+    },
+    {
+      "estrategia": "grade_fixa_locucao_estendida",
+      "timestamp": "2026-08-24T10:31:52",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: primeira palavra a 0.00s do início",
+        "CORPO: primeira palavra a 0.00s do início",
+        "CORPO: última palavra a 0.12s do fim",
+        "CORPO: inicia com conectivo isolado: 'A'",
+        "CABECA classificada como CORTADO",
+        "CORPO classificado como CORTADO"
+      ]
+    }
+  ],
+  "aceite": {
+    "por": "auditoria_fisica_automatica",
+    "data": "2026-08-24",
+    "evidencia": "pydub detect_leading_silence: sil_inicio 30-130ms, sil_fim 0ms; dBFS -15..-17 (piso de radio); re-transcricao faster-whisper confirma frases completas nas bordas sem palavras truncadas. Motivo \"0.00s do inicio\" e falso positivo conhecido do timestamp Whisper (limitacao 2 do PROCEDIMENTO_PADRAO); \"conectivo isolado A/O\" sao artigos iniciando frases naturais."
+  }
+}

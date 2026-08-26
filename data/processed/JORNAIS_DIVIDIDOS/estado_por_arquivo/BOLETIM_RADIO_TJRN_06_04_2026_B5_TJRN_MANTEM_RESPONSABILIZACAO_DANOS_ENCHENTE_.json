@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\ABRIL\\NJUD 1850\\BOLETIM_RADIO_TJRN_06_04_2026_B5_TJRN_MANTEM_RESPONSABILIZACAO_DANOS_ENCHENTE_.mp3",
+  "njud": "NJUD 1850",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T11:14:06",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

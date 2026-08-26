@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\JUNHO\\NJUD 1887\\BOLETIM_RADIO_TJRN_01_06_2026_B6_TJRN_MANTEM_CONDENACAO_HOMEM_.mp3",
+  "njud": "NJUD 1887",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T15:10:00",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

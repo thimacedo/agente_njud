@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\MAIO\\NJUD 1868\\BOLETIM_RADIO_TJRN_04_05_2026_B10_ESTAGIO_POS_VICE_PRESIDENCIA_1782542565.mp3",
+  "njud": "NJUD 1868",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T12:52:04",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

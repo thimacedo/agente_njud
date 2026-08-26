@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\AGOSTO\\NJUD 1929\\BOLETIM_RADIO_TJRN_16_04_2026_B4_TJRN_CANCELAMENTO_PASSAGENS_AEREAS_COLOMBIA_.mp3",
+  "njud": "NJUD 1929",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-26T14:21:43",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

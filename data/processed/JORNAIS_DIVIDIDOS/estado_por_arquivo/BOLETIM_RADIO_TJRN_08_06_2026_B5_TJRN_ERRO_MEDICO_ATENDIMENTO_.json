@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\JUNHO\\NJUD 1894\\BOLETIM_RADIO_TJRN_08_06_2026_B5_TJRN_ERRO_MEDICO_ATENDIMENTO_.mp3",
+  "njud": "NJUD 1894",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T14:35:17",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

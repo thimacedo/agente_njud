@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\AGOSTO\\NJUD 1925\\BOLETIM_RADIO_TJRN_26_08_2026_B8_CNJ_VIDEOS_CUIDADOS.mp3",
+  "njud": "NJUD 1925",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-26T14:14:16",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

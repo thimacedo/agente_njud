@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\JUNHO\\NJUD 1888\\BOLETIM_RADIO_TJRN_02_06_2026_B1_TJRN_ARTIGO_REPOJURN.mp3",
+  "njud": "NJUD 1888",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T15:16:08",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

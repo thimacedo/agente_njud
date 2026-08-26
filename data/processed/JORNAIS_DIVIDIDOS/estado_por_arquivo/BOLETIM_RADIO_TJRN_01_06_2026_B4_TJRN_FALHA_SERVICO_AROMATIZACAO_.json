@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\JUNHO\\NJUD 1886\\BOLETIM_RADIO_TJRN_01_06_2026_B4_TJRN_FALHA_SERVICO_AROMATIZACAO_.mp3",
+  "njud": "NJUD 1886",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T15:06:55",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

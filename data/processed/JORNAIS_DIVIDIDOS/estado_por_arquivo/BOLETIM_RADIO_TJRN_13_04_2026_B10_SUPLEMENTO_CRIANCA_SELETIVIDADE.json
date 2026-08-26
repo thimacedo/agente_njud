@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\ABRIL\\NJUD 1863\\BOLETIM_RADIO_TJRN_13_04_2026_B10_SUPLEMENTO_CRIANCA_SELETIVIDADE.mp3",
+  "njud": "NJUD 1863",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T12:00:59",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}

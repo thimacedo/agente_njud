@@ -1,0 +1,14 @@
+{
+  "arquivo": "JORNAIS\\MAIO\\NJUD 1884\\BOLETIM_RADIO_TJRN_13_05_2026_B3_EMPRESA_TRANSPORTE_CONDENADA_QUEDA_IDOSA_1782542566.mp3",
+  "njud": "NJUD 1884",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-24T14:00:05",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ]
+}
