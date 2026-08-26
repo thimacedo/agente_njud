@@ -72,88 +72,119 @@ def extrair_numero_boletim(nome_arquivo: str) -> int:
 # INTERCALAÇÃO POR BLOCO DE NUMERAÇÃO
 # ===========================================================================
 
-def intercalar_pares_por_bloco(
-    cabecas: list[Path],
-    corpos: list[Path],
+def intercalar_pares_para_jornal(
+    todos_pares: list[tuple[Path, Path]],
+    indice_jornal: int,
     logger: LogPipeline,
-    bloco: int = 4,
 ) -> list[tuple[Path, Path]]:
     """
-    Intercala pares (cabeça, corpo) para ter 2 vozes diferentes em cada jornal.
-    Mantém o par cabeça↔corpo sempre junto.
+    Seleciona e intercala exatamente 4 pares para formar UM jornal.
     
-    Cenário típico: Locutor A grava B1-B5, Locutor B grava B6-B10
-    Para NJUD 1 (4 boletins): [B1(A), B6(B), B2(A), B7(B)]
-    Isso garante 2 vozes alternadas mesmo com poucos boletins por locutor.
+    REGRA FIXA:
+    - Jornal 0: B1, B2, B3, B4
+    - Jornal 1: B5, B6, B7, B8
+    - Jornal N: B(4N+1) a B(4N+4)
     
-    O agrupamento é feito pelo número absoluto do boletim, não por NJUD.
-    Assim, B1 e B6 estarão em grupos diferentes mesmo que ambos pertençam
-    ao mesmo NJUD (quando NJUD = ((num-1)//4)+1).
+    INTERCALAÇÃO DE VOZES:
+    Assume-se que Locutor A gravou B1-B5 e Locutor B gravou B6-B10.
+    Para o Jornal 0 (B1-B4), queremos: [B1(A), B6(B), B2(A), B7(B)]
+    Ou seja, pegamos 2 do primeiro grupo (A) e 2 do segundo grupo (B), intercalando.
     
-    REGRA FIXA: 
-    - Cada jornal tem EXATAMENTE 4 boletins (B1-B4 → NJUD 1, B5-B8 → NJUD 2)
-    - Intercalação automática entre 2 grupos de locutores (B1-B5 vs B6-B10)
-    - Se houver apenas 1 grupo, mantém ordem numérica estrita
+    Args:
+        todos_pares: Lista completa de todos os pares (B1, B2, B3, ..., Bn)
+        indice_jornal: Qual jornal estamos montando (0 = primeiro, 1 = segundo, etc.)
+        logger: Logger para auditoria
+    
+    Returns:
+        Lista com exatamente 4 pares intercalados (ou menos se não houver suficientes)
     """
-    if not cabecas or not corpos:
+    if not todos_pares:
         return []
-
-    mapa_corpo = {}
-    for corpo in corpos:
-        nome_base = corpo.name.replace("_CORPO.mp3", "")
-        mapa_corpo[nome_base] = corpo
-
-    pares = []
-    for cabeca in sorted(cabecas, key=lambda p: extrair_numero_boletim(p.name)):
-        nome_base = cabeca.name.replace("_CABECA.mp3", "")
-        corpo = mapa_corpo.get(nome_base)
-        if corpo is not None:
-            pares.append((cabeca, corpo))
-
-    if len(pares) <= 1:
-        return pares
-
-    # Agrupa por METADE: B1-B5 → grupo 1, B6-B10 → grupo 2, etc.
-    # Isso cria 2 grupos de locutores baseados no intervalo de gravação.
-    # Cada grupo tem ~5 boletins, garantindo que um jornal de 4 boletins
-    # pegue 2 de cada grupo (intercalando as vozes).
-    metade = 5  # Tamanho típico de gravação por locutor
-    grupos: dict[int, list[tuple[Path, Path]]] = {}
-    for cabeca, corpo in pares:
-        num = extrair_numero_boletim(cabeca.name)
-        grupo = ((num - 1) // metade) + 1
-        grupos.setdefault(grupo, []).append((cabeca, corpo))
-
-    if len(grupos) <= 1:
+    
+    # Ordena todos os pares pelo número do boletim
+    todos_pares_ordenados = sorted(
+        todos_pares,
+        key=lambda p: extrair_numero_boletim(p[0].name)
+    )
+    
+    # Calcula quais boletins pertencem a este jornal
+    # Jornal 0 → índices 0,1,2,3 (B1,B2,B3,B4)
+    # Jornal 1 → índices 4,5,6,7 (B5,B6,B7,B8)
+    indice_inicio = indice_jornal * 4
+    indice_fim = indice_inicio + 4
+    
+    pares_do_jornal = todos_pares_ordenados[indice_inicio:indice_fim]
+    
+    if not pares_do_jornal:
+        return []
+    
+    # Se tiver menos de 4 pares, retorna como está (último jornal pode ser incompleto)
+    if len(pares_do_jornal) < 4:
         logger.info(
             "intercalacao",
-            "Apenas um grupo de locutor; mantendo ordem original",
+            f"Jornal {indice_jornal + 1} com apenas {len(pares_do_jornal)} boletins (último jornal)",
         )
-        return pares
-
-    for grupo in grupos:
-        grupos[grupo].sort(key=lambda p: extrair_numero_boletim(p[0].name))
-
-    resultado: list[tuple[Path, Path]] = []
-    indices = {g: 0 for g in grupos}
-    grupo_ids = sorted(grupos.keys())
-
-    while any(indices[g] < len(grupos[g]) for g in grupo_ids):
-        for g in grupo_ids:
-            if indices[g] < len(grupos[g]):
-                resultado.append(grupos[g][indices[g]])
-                indices[g] += 1
-
+        return pares_do_jornal
+    
+    # Separa em dois grupos para intercalação:
+    # Grupo A: primeiros 2 boletins do jornal (ex: B1, B2)
+    # Grupo B: últimos 2 boletins do jornal (ex: B3, B4)
+    # Mas queremos buscar do pool total para pegar vozes diferentes!
+    # Estratégia: se temos B1-B10, Jornal 0 deve pegar B1, B6, B2, B7
+    
+    # Para simplificar: assume-se que os primeiros 5 boletins são Locutor A
+    # e os próximos 5 são Locutor B. Então para o Jornal 0:
+    # - Pega B1 (A), B6 (B), B2 (A), B7 (B)
+    # Isso requer acessar o pool completo, não apenas os 4 do jornal.
+    
+    # Implementação prática:
+    # 1. Identifica o range de boletins deste jornal (ex: B1-B4)
+    # 2. Busca no pool total os correspondentes do "segundo grupo" (B6-B9)
+    # 3. Intercala: [B1, B6, B2, B7]
+    
+    primeiro_num = extrair_numero_boletim(pares_do_jornal[0][0].name)
+    ultimo_num = extrair_numero_boletim(pares_do_jornal[-1][0].name)
+    
+    # Tenta encontrar o "segundo grupo" (locutor B) somando 5 aos números
+    offset_locutor_b = 5
+    pares_intercalados = []
+    
+    for i, par in enumerate(pares_do_jornal):
+        num_atual = extrair_numero_boletim(par[0].name)
+        num_alternado = num_atual + offset_locutor_b
+        
+        # Adiciona o par atual (Locutor A)
+        pares_intercalados.append(par)
+        
+        # Tenta encontrar o par correspondente do Locutor B
+        if i % 2 == 0 and len(pares_intercalados) < 4:
+            # Procura no pool total o par com número alternado
+            for par_total in todos_pares_ordenados:
+                num_total = extrair_numero_boletim(par_total[0].name)
+                if num_total == num_alternado:
+                    pares_intercalados.append(par_total)
+                    break
+    
+    # Garante que temos exatamente 4 pares (ou menos se não houver)
+    if len(pares_intercalados) > 4:
+        pares_intercalados = pares_intercalados[:4]
+    
+    # Se a intercalação não funcionou (não encontrou pares alternados),
+    # retorna a ordem numérica simples
+    if len(pares_intercalados) < 4:
+        logger.info(
+            "intercalacao",
+            f"Intercalação parcial ({len(pares_intercalados)}/4); usando ordem numérica",
+        )
+        return pares_do_jornal
+    
     logger.info(
         "intercalacao",
-        f"Intercalação por blocos de {metade}: "
-        f"{len(resultado)} pares de {len(grupos)} grupos",
-        grupos={
-            g: [c[0].name for c in grupos[g]]
-            for g in grupos
-        },
+        f"Jornal {indice_jornal + 1}: intercalado com {len(pares_intercalados)} pares",
+        boletins=[extrair_numero_boletim(p[0].name) for p in pares_intercalados],
     )
-    return resultado
+    
+    return pares_intercalados
 
 
 # ===========================================================================
@@ -210,23 +241,28 @@ def montar_jornal(
     cabecas.sort(key=lambda p: extrair_numero_boletim(p.name))
     corpos.sort(key=lambda p: extrair_numero_boletim(p.name))
 
-    # 3. Intercalação ATIVADA para ter 2 vozes diferentes por jornal
-    # Cenário típico: Locutor A grava B1-B5, Locutor B grava B6-B10
-    # Resultado desejado no NJUD 1: [B1(A), B6(B), B2(A), B7(B)]
-    # Isso garante diversidade de vozes mesmo com poucos boletins por locutor.
-    if intercalar and len(cabecas) >= 2:
-        pares = intercalar_pares_por_bloco(cabecas, corpos, logger, bloco=4)
+    # 3. Prepara todos os pares (cabeça, corpo) ordenados por número do boletim
+    mapa_corpo = {c.name.replace("_CORPO.mp3", ""): c for c in corpos}
+    todos_pares = []
+    for cabeca in sorted(cabecas, key=lambda p: extrair_numero_boletim(p.name)):
+        nome_base = cabeca.name.replace("_CABECA.mp3", "")
+        corpo = mapa_corpo.get(nome_base)
+        if corpo is not None:
+            todos_pares.append((cabeca, corpo))
+    
+    # 4. Seleciona e intercala os 4 pares corretos para ESTE jornal
+    # Extrai o número do NJUD do nome da pasta para saber qual jornal estamos montando
+    m_njud = re.search(r"NJUD\s*_?\s*(\d+)", nome_jornal, re.IGNORECASE)
+    indice_jornal = 0
+    if m_njud:
+        njud_num = int(m_njud.group(1))
+        indice_jornal = njud_num - 1  # NJUD 1 → índice 0, NJUD 2 → índice 1, etc.
+    
+    if intercalar and len(todos_pares) >= 4:
+        pares = intercalar_pares_para_jornal(todos_pares, indice_jornal, logger)
     else:
-        # Sem intercalação: mantém ordem numérica estrita
-        pares = []
-        mapa_corpo = {c.name.replace("_CORPO.mp3", ""): c for c in corpos}
-        for cabeca in sorted(
-            cabecas, key=lambda p: extrair_numero_boletim(p.name)
-        ):
-            nome_base = cabeca.name.replace("_CABECA.mp3", "")
-            corpo = mapa_corpo.get(nome_base)
-            if corpo is not None:
-                pares.append((cabeca, corpo))
+        # Sem intercalação ou menos de 4 pares: usa ordem numérica simples
+        pares = todos_pares[:4] if len(todos_pares) >= 4 else todos_pares
 
     logger.info(
         etapa,
@@ -234,7 +270,7 @@ def montar_jornal(
         + ", ".join(f"{c1.name} -> {c2.name}" for c1, c2 in pares),
     )
 
-    # 4. Monta seguindo a receita
+    # 5. Monta seguindo a receita
     jornal = AudioSegment.empty()
 
     # VHT ABERTURA
@@ -266,7 +302,7 @@ def montar_jornal(
     # VHT ENCERRAMENTO
     jornal += vht_encerramento
 
-    # 5. Salva com padrão: NJUD_<SSDD>_<DD-MM-AAAA>.mp3
+    # 6. Salva com padrão: NJUD_<SSDD>_<DD-MM-AAAA>.mp3
     pasta_saida.mkdir(parents=True, exist_ok=True)
     data_str = ""
     _padrao_data_boletim = re.compile(r"_(\d{2})_(\d{2})_(\d{4})_")
@@ -407,12 +443,12 @@ def montar_todos_jornais(
                 # Cada 4 boletins formam 1 jornal: B1-B4 → NJUD 1, B5-B8 → NJUD 2, etc.
                 njud_grupo = ((num_boletim - 1) // 4) + 1
                 njud_key = f"NJUD_{njud_grupo}_{data_str}"
-                njud_map.setdefault(njud_key, {"data": data_str, "arquivos": []}).setdefault("arquivos", []).append(mp3)
+                njud_map.setdefault(njud_key, {"data": data_str, "arquivos": [], "njud_num": njud_grupo}).setdefault("arquivos", []).append(mp3)
 
         if njud_map:
             tmp_root = pasta_entrada / "_tmp_njud"
             tmp_root.mkdir(parents=True, exist_ok=True)
-            for njud_key, info in sorted(njud_map.items()):
+            for idx, (njud_key, info) in enumerate(sorted(njud_map.items())):
                 pasta_njud = tmp_root / njud_key
                 pasta_njud.mkdir(parents=True, exist_ok=True)
                 for mp3 in info["arquivos"]:
@@ -421,6 +457,8 @@ def montar_todos_jornais(
                     if corpo.exists():
                         shutil.copy2(corpo, pasta_njud / corpo.name)
                 # Monta o jornal COM intercalação para ter 2 vozes diferentes
+                # O nome_jornal já contém o número (ex: NJUD_1_24-08-2026), então
+                # montar_jornal() extrairá automaticamente o índice correto
                 caminho = montar_jornal(
                     pasta_njud,
                     pasta_saida,

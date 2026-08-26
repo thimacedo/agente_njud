@@ -925,7 +925,7 @@ Exemplos de uso:
     # Define caminho do relatório
     if args.relatorio is None:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        args.relatorio = LOGS_DIR / f"relatorio_{timestamp}.json"
+        args.relatorio = Path(LOGS_DIR) / f"relatorio_{timestamp}.json"
     
     if args.dry_run:
         print("=" * 60)
