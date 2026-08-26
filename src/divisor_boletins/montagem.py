@@ -258,6 +258,14 @@ def montar_jornal(
 
     codigo_semana_dia = semana_dia_para_codigo(data_str) if data_str else "0000"
 
+    # REGRA DE NOMENCLATURA (2026-08-24): priorizar o número real do NJUD
+    # contido no nome da subpasta (ex.: 'NJUD 1923' -> 1923). Nunca derivar
+    # NJUD do código semana-dia nem do ano — evita colisões de nome quando
+    # dois jornais compartilham a mesma data e a captura de dígitos errada.
+    m_njud = re.search(r"NJUD\s*_?\s*(\d{4})", nome_jornal, re.IGNORECASE)
+    if m_njud:
+        codigo_semana_dia = m_njud.group(1)
+
     if not data_str:
         logger.aviso(
             etapa,
@@ -371,10 +379,10 @@ def montar_todos_jornais(
 
         if data_map:
             tmp_root = pasta_entrada / "_tmp_data"
-            tmp_root.mkdir(exist_ok=True)
+            tmp_root.mkdir(parents=True, exist_ok=True)
             for data_key, arquivos in sorted(data_map.items()):
                 pasta_data = tmp_root / data_key
-                pasta_data.mkdir(exist_ok=True)
+                pasta_data.mkdir(parents=True, exist_ok=True)
                 for mp3 in arquivos:
                     shutil.copy2(mp3, pasta_data / mp3.name)
                     corpo = mp3.parent / mp3.name.replace("_CABECA.mp3", "_CORPO.mp3")

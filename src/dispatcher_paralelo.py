@@ -279,7 +279,8 @@ def listar_tarefas_pendentes(pasta_boletins: Path, pasta_estado: Path) -> list[d
 
 
 def executar(pasta_boletins: Path, pasta_saida: Path, max_workers: int | None,
-             threads_por_worker: int, limiar_cpu: float):
+             threads_por_worker: int, limiar_cpu: float,
+             usar_whisper_timestamped: bool = False):
     pasta_estado = pasta_saida / "estado_por_arquivo"
     pasta_estado.mkdir(parents=True, exist_ok=True)
 
@@ -415,6 +416,7 @@ def main():
     executar(
         Path(args.pasta_boletins), Path(args.pasta_saida),
         args.max_workers, args.threads_por_worker, args.limiar_cpu,
+        args.usar_whisper_timestamped,
     )
 
 
