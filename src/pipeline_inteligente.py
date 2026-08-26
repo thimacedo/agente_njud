@@ -42,7 +42,7 @@ DEFAULT_SAIDA_JORNAIS = settings.JORNAIS_MONTADOS
 DEFAULT_DRIVE_SYNC = settings.DRIVE_SYNC
 WORKSPACE = Path(__file__).parent.parent
 DATA_DIR = WORKSPACE / "data"
-LOGS_DIR = settings.LOGS_DIR
+LOGS_DIR = Path(settings.LOGS_DIR)
 
 # Limites e thresholds
 MIN_BOLETINS_POR_JORNAL = 4
