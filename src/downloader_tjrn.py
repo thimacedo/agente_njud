@@ -9,22 +9,26 @@ Uso:
     python src/downloader_tjrn.py --data 2024-08-01 --saida ./boletins_brutos
     python src/downloader_tjrn.py --ultimos 5 --saida ./boletins_brutos
     python src/downloader_tjrn.py --todos --saida ./boletins_brutos
+    python src/downloader_tjrn.py --alvo data/_pipeline_logs/alvos_recuperacao.csv --mes JUNHO --mes JULHO
+    python src/downloader_tjrn.py --rss-only --mes AGOSTO
 """
 
 import argparse
+import csv
 import os
 import re
 import sys
+import feedparser
 from datetime import datetime, timedelta
 from pathlib import Path
-from typing import List, Dict, Optional, Tuple
+from typing import List, Dict, Optional, Tuple, Set
 from urllib.parse import urljoin, urlparse
 
 try:
     import requests
     from bs4 import BeautifulSoup
 except ImportError:
-    print("❌ Dependências faltando: instale com 'pip install requests beautifulsoup4'")
+    print("❌ Dependências faltando: instale com 'pip install requests beautifulsoup4 feedparser'")
     sys.exit(1)
 
 from src.utils.logger import get_logger
@@ -35,6 +39,8 @@ logger = get_logger(__name__)
 # Configurações
 TJRN_BASE_URL = "https://tjrn.jus.br"
 NOTICIAS_DA_HORA_URL = f"{TJRN_BASE_URL}/tjrnplay/programastv/noticias-da-hora/"
+RSS_TJRN_PLAY = f"{NOTICIAS_DA_HORA_URL}?format=feed&type=rss"
+RSS_PORTAL_ANTIGO = "https://radioetv.tjrn.jus.br/index.php/radd/radio/programas/noticias-da-hora?format=feed&type=rss"
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
@@ -202,6 +208,103 @@ class TJRNDownloader:
         if match:
             return int(match.group(1))
         return None
+
+    def _carregar_alvos_csv(self, arquivo_csv: str) -> Set[str]:
+        """Carrega datas alvo de um arquivo CSV."""
+        datas_alvo = set()
+        try:
+            with open(arquivo_csv, 'r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                for row in reader:
+                    if 'data' in row and row['data']:
+                        datas_alvo.add(row['data'])
+            logger.info(f"📋 Carregadas {len(datas_alvo)} datas alvo de {arquivo_csv}")
+        except Exception as e:
+            logger.error(f"❌ Erro ao ler CSV {arquivo_csv}: {e}")
+        return datas_alvo
+
+    def _filtrar_por_mes(self, datas: List[str], meses: List[str]) -> List[str]:
+        """Filtra datas por nomes de meses (JUNHO, JULHO, etc.)."""
+        if not meses:
+            return datas
+        
+        mapeamento_meses = {
+            'JANEIRO': '01', 'FEVEREIRO': '02', 'MARÇO': '03', 'ABRIL': '04',
+            'MAIO': '05', 'JUNHO': '06', 'JULHO': '07', 'AGOSTO': '08',
+            'SETEMBRO': '09', 'OUTUBRO': '10', 'NOVEMBRO': '11', 'DEZEMBRO': '12'
+        }
+        
+        meses_numerics = [mapeamento_meses.get(m.upper(), '') for m in meses]
+        meses_numerics = [m for m in meses_numerics if m]  # Remove vazios
+        
+        datas_filtradas = []
+        for data in datas:
+            try:
+                dt = datetime.strptime(data, '%Y-%m-%d')
+                if f"{dt.month:02d}" in meses_numerics:
+                    datas_filtradas.append(data)
+            except ValueError:
+                continue
+        
+        logger.info(f"Filtradas {len(datas_filtradas)} datas para os meses: {meses}")
+        return datas_filtradas
+
+    def _baixar_via_rss(self, url_rss: str, datas_alvo: Optional[Set[str]] = None, meses: Optional[List[str]] = None) -> List[Dict]:
+        """Baixa boletins via feed RSS do Joomla."""
+        logger.info(f"📡 Tentando RSS: {url_rss}")
+        boletins_encontrados = []
+        
+        try:
+            feed = feedparser.parse(url_rss)
+            logger.info(f"✅ RSS parseado: {len(feed.entries)} entradas encontradas")
+            
+            for entry in feed.entries:
+                # Extrair data da publicação
+                data_pub = None
+                if hasattr(entry, 'published_parsed') and entry.published_parsed:
+                    data_pub = datetime(*entry.published_parsed[:6]).strftime('%Y-%m-%d')
+                elif hasattr(entry, 'updated_parsed') and entry.updated_parsed:
+                    data_pub = datetime(*entry.updated_parsed[:6]).strftime('%Y-%m-%d')
+                
+                if not data_pub:
+                    continue
+                
+                # Filtrar por datas alvo ou meses
+                if datas_alvo and data_pub not in datas_alvo:
+                    continue
+                
+                # Extrair link do áudio
+                audio_url = None
+                if hasattr(entry, 'enclosures') and entry.enclosures:
+                    for enc in entry.enclosures:
+                        if enc.type.startswith('audio/') or enc.href.endswith(('.mp3', '.wav', '.m4a')):
+                            audio_url = enc.href
+                            break
+                
+                if not audio_url and hasattr(entry, 'links'):
+                    for link in entry.links:
+                        if link.type.startswith('audio/') or link.href.endswith(('.mp3', '.wav', '.m4a')):
+                            audio_url = link.href
+                            break
+                
+                # Fallback: buscar no summary/content
+                if not audio_url and hasattr(entry, 'summary'):
+                    match = re.search(r'https?://[^\s<>"]+\.(mp3|wav|m4a)', entry.summary)
+                    if match:
+                        audio_url = match.group(0)
+                
+                if audio_url:
+                    boletins_encontrados.append({
+                        'url': audio_url,
+                        'data': data_pub,
+                        'titulo': entry.title if hasattr(entry, 'title') else 'Boletim',
+                        'fonte': 'RSS'
+                    })
+        
+        except Exception as e:
+            logger.warning(f"⚠️  Falha ao parsear RSS {url_rss}: {e}")
+        
+        return boletins_encontrados
 
     def _extrair_titulo(self, elemento) -> str:
         """Extrai título do boletim."""
@@ -453,6 +556,22 @@ Exemplos:
         help="Número de tentativas (padrão: 3)",
     )
     parser.add_argument(
+        "--alvo",
+        type=str,
+        help="Arquivo CSV com datas alvo para download (ex: alvos_recuperacao.csv)",
+    )
+    parser.add_argument(
+        "--mes",
+        action="append",
+        type=str,
+        help="Mês para filtrar downloads (ex: --mes JUNHO --mes JULHO). Pode ser usado múltiplas vezes.",
+    )
+    parser.add_argument(
+        "--rss-only",
+        action="store_true",
+        help="Usar apenas feed RSS, sem scraping HTML",
+    )
+    parser.add_argument(
         "--dry-run",
         action="store_true",
         help="Simular execução sem baixar arquivos",
@@ -461,8 +580,8 @@ Exemplos:
     args = parser.parse_args()
 
     # Validar argumentos
-    if not any([args.data, args.ultimos, args.todos]):
-        parser.error("É necessário especificar --data, --ultimos ou --todos")
+    if not any([args.data, args.ultimos, args.todos, args.alvo]):
+        parser.error("É necessário especificar --data, --ultimos, --todos ou --alvo")
 
     if args.dry_run:
         logger.info("🔍 MODO DRY-RUN: Nenhuma operação será realizada")
