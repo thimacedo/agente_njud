@@ -361,9 +361,26 @@ def montar_todos_jornais(
     pasta_saida: Path,
     logger: LogPipeline,
     intercalar: bool = True,
+    filtro_mes: Optional[str] = None,  # Ex: "AGOSTO", "ABRIL"
+    filtro_ano: Optional[str] = None,  # Ex: "2026"
 ) -> list[Path]:
-    """Processa cada subpasta de NJUD como UM jornal e monta o áudio final."""
+    """Processa cada subpasta de NJUD como UM jornal e monta o áudio final.
+    
+    Args:
+        pasta_entrada: Pasta contendo os cortes (CABECA/CORPO)
+        pasta_saida: Onde salvar os jornais montados
+        logger: Logger para auditoria
+        intercalar: Se deve intercalar vozes de locutores diferentes
+        filtro_mes: Nome do mês para filtrar (ex: "AGOSTO", "ABRIL")
+        filtro_ano: Ano para filtrar (ex: "2026")
+    """
     logger.info("pipeline", "=== Iniciando montagem de todos os jornais ===")
+    
+    if filtro_mes or filtro_ano:
+        logger.info(
+            "pipeline",
+            f"Filtros aplicados: mes={filtro_mes}, ano={filtro_ano}",
+        )
 
     if not pasta_entrada.is_dir():
         logger.erro("pipeline", f"Pasta de entrada não existe: {pasta_entrada}")
@@ -376,6 +393,24 @@ def montar_todos_jornais(
     def _eh_njud(nome: str) -> bool:
         return bool(re.match(r"NJUD\s*\d+", nome, re.IGNORECASE))
 
+    def _deve_processar_mes(nome_pasta: str) -> bool:
+        """Verifica se a pasta do mês deve ser processada baseada nos filtros."""
+        if not (filtro_mes or filtro_ano):
+            return True
+        
+        nome_upper = nome_pasta.upper()
+        
+        if filtro_mes and filtro_mes.upper() not in nome_upper:
+            return False
+        
+        if filtro_ano and filtro_ano not in nome_pasta:
+            # Tenta extrair ano do nome da pasta
+            m_ano = re.search(r"(20\d{2})", nome_pasta)
+            if not m_ano or m_ano.group(1) != filtro_ano:
+                return False
+        
+        return True
+
     meses = sorted(
         p for p in pasta_entrada.iterdir()
         if p.is_dir() and not p.name.startswith("_")
@@ -383,6 +418,14 @@ def montar_todos_jornais(
 
     for mes_pasta in meses:
         if not mes_pasta.is_dir():
+            continue
+        
+        # Aplica filtro de mês/ano se especificado
+        if not _deve_processar_mes(mes_pasta.name):
+            logger.info(
+                "pipeline",
+                f"Pulando pasta '{mes_pasta.name}' (não corresponde aos filtros)",
+            )
             continue
 
         # Formato plano do dispatcher: a subpasta JÁ É o NJUD.
