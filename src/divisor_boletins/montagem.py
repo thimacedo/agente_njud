@@ -89,6 +89,11 @@ def intercalar_pares_por_bloco(
     O agrupamento é feito pelo número absoluto do boletim, não por NJUD.
     Assim, B1 e B6 estarão em grupos diferentes mesmo que ambos pertençam
     ao mesmo NJUD (quando NJUD = ((num-1)//4)+1).
+    
+    REGRA FIXA: 
+    - Cada jornal tem EXATAMENTE 4 boletins (B1-B4 → NJUD 1, B5-B8 → NJUD 2)
+    - Intercalação automática entre 2 grupos de locutores (B1-B5 vs B6-B10)
+    - Se houver apenas 1 grupo, mantém ordem numérica estrita
     """
     if not cabecas or not corpos:
         return []
@@ -108,7 +113,7 @@ def intercalar_pares_por_bloco(
     if len(pares) <= 1:
         return pares
 
-    # Agrupa por MITADADE: B1-B5 → grupo 1, B6-B10 → grupo 2, etc.
+    # Agrupa por METADE: B1-B5 → grupo 1, B6-B10 → grupo 2, etc.
     # Isso cria 2 grupos de locutores baseados no intervalo de gravação.
     # Cada grupo tem ~5 boletins, garantindo que um jornal de 4 boletins
     # pegue 2 de cada grupo (intercalando as vozes).
