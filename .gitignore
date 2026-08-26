@@ -176,3 +176,14 @@ dmypy.json
 ehthumbs.db
 Thumbs.db
 ```
+# Audio files (opcional - descomente se não quiser versionar áudios)
+# *.mp3
+# *.wav
+
+# Test artifacts
+.pytest_cache/
+*.cover
+
+# OS files
+.DS_Store
+Thumbs.db
