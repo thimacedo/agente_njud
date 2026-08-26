@@ -30,6 +30,7 @@ from utils.logger import get_logger
 from config.settings import Settings
 from utils.validator import validate_audio_file, calculate_checksum
 from utils.error_handler import retry_with_backoff, isolate_failures
+from divisor_boletins.montagem import montar_todos_jornais
 
 # Inicializa logger e configurações
 logger = get_logger("pipeline_inteligente")
@@ -190,7 +191,7 @@ def etapa_planejamento(
         return False
     
     # Conta boletins disponíveis
-    boletins_mp3 = list(pasta_brutos.glob("*.mp3")) + list(pasta_brutos.glob("*.wav")) + list(pasta_brutos.glob("*.m4a"))
+    boletins_mp3 = list(pasta_brutos.rglob("*.mp3")) + list(pasta_brutos.rglob("*.wav")) + list(pasta_brutos.rglob("*.m4a"))
     etapa.resultados["boletins_encontrados"] = len(boletins_mp3)
     
     if len(boletins_mp3) == 0:
@@ -265,7 +266,7 @@ def etapa_copia(
     # Copia arquivos
     arquivos_copiados = 0
     for ext in ["*.mp3", "*.wav", "*.m4a"]:
-        for arquivo in pasta_brutos.glob(ext):
+        for arquivo in pasta_brutos.rglob(ext):
             try:
                 destino = pasta_trabalho / arquivo.name
                 shutil.copy2(arquivo, destino)
@@ -308,30 +309,40 @@ def etapa_corte(
     
     # Importa o divisor
     try:
-        from divisor_boletins.deteccao import processar_arquivo
+        from divisor_boletins.audio import processar_arquivo, carregar_modelo
     except ImportError as e:
         erro = f"Falha ao importar divisor_boletins: {e}"
         etapa.adicionar_erro(erro)
         logger.erro("corte", erro)
         etapa.concluir(sucesso=False)
         return False
-    
+
+    try:
+        modelo = carregar_modelo()
+    except Exception as e:
+        erro = f"Falha ao carregar modelo Whisper: {e}"
+        etapa.adicionar_erro(erro)
+        logger.erro("corte", erro)
+        etapa.concluir(sucesso=False)
+        return False
+
     # Processa cada boletim
     cortes_realizados = 0
     falhas = 0
-    
+
     for audio_file in pasta_trabalho.glob("*.mp3"):
         logger.info("corte", f"Processando: {audio_file.name}")
-        
+
         try:
             resultado = processar_arquivo(
                 audio_file,
                 pasta_cortes,
+                modelo,
                 logger,
-                usar_whisper=True,  # Prioriza Whisper para precisão
+                apply=True,
             )
-            
-            if resultado and resultado.get("sucesso"):
+
+            if resultado and getattr(resultado, "arquivo_cabeca", ""):
                 cortes_realizados += 1
             else:
                 falhas += 1
