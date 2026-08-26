@@ -1,0 +1,30 @@
+RELATÓRIO DE LIMPEZA E ORGANIZAÇÃO DO DRIVE
+Data: 2026-08-26
+Pasta: H:\Meu Drive\RADIO TJRN CONTEÚDO\00_PRODUCAO_2026\02_JORNAIS_NJUD\03_AUDIOS_RADIO
+
+=== AÇÕES REALIZADAS ===
+1. Remoção de arquivos soltos na raiz de 02_JORNAIS_NJUD
+   - 112 arquivos mp3 duplicados/espelhados removidos
+   - 3 arquivos *_INCOMPLETO.mp3 remanescentes removidos
+
+2. Realocação de fins de semana para datas úteis
+   - 4 arquivos movidos para a próxima data útil:
+     * NJUD_1707_26-04-2026.mp3 -> 27-04-2026
+     * NJUD_3007_26-07-2026.mp3 -> 27-07-2026
+     * NJUD_3906_26-09-2026.mp3 -> 28-09-2026
+     * NJUD_5206_26-12-2026.mp3 -> 28-12-2026
+
+3. Realocação de duplicidades por data
+   - 25 arquivos realocados para datas úteis próximas sem repetição
+   - Todos os tamanhos eram diferentes, confirmando jornais distintos
+
+=== ESTADO FINAL ===
+Total de arquivos: 133
+Dias não úteis: 0
+Duplicidades por data: 0
+Estrutura: mantida em 03_AUDIOS_RADIO por mês
+
+=== PRÓXIMOS PASSOS ===
+- Sincronizar alterações com o Google Drive
+- Validar se há conflitos de nome após realocação
+- Atualizar relatório de sincronização
