@@ -263,7 +263,23 @@ def montar_jornal(
     else:
         # Sem intercalação ou menos de 4 pares: usa ordem numérica simples
         pares = todos_pares[:4] if len(todos_pares) >= 4 else todos_pares
-
+    
+    # VERIFICAÇÃO DE INTEGRIDADE: permite exceção de 3 boletins
+    incompleto = False
+    if len(pares) < 4:
+        if len(pares) == 3:
+            logger.aviso(
+                etapa,
+                f"Jornal {nome_jornal} com apenas 3 boletins (EXCEÇÃO APLICADA)",
+            )
+            incompleto = True
+        else:
+            logger.erro(
+                etapa,
+                f"Jornal {nome_jornal} tem apenas {len(pares)} boletins (mínimo 3 necessário)",
+            )
+            return None
+    
     logger.info(
         etapa,
         "Pares: "
@@ -333,7 +349,9 @@ def montar_jornal(
         )
         nome_arquivo_final = f"NJUD_{codigo_semana_dia}.mp3"
     else:
-        nome_arquivo_final = f"NJUD_{codigo_semana_dia}_{data_str}.mp3"
+        # Adiciona sufixo _INCOMPLETO se jornal tiver apenas 3 boletins
+        sufixo = "_INCOMPLETO" if incompleto else ""
+        nome_arquivo_final = f"NJUD_{codigo_semana_dia}_{data_str}{sufixo}.mp3"
 
     caminho_saida = pasta_saida / nome_arquivo_final
     jornal.export(str(caminho_saida), format="mp3")
@@ -343,8 +361,9 @@ def montar_jornal(
         etapa,
         f"Jornal montado: {caminho_saida}",
         duracao_total=round(duracao_total, 2),
-        boletins=len(cabecas),
+        boletins=len(pares),
         intercalado=intercalar and len(pares) > 1,
+        incompleto=incompleto,
         codigo_semana_dia=codigo_semana_dia,
         data=data_str,
     )
