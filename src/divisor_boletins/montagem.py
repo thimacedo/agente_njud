@@ -76,11 +76,19 @@ def intercalar_pares_por_bloco(
     cabecas: list[Path],
     corpos: list[Path],
     logger: LogPipeline,
-    bloco: int = 5,
+    bloco: int = 4,
 ) -> list[tuple[Path, Path]]:
     """
-    Intercala pares (cabeça, corpo) por blocos de numeração de boletim.
+    Intercala pares (cabeça, corpo) para ter 2 vozes diferentes em cada jornal.
     Mantém o par cabeça↔corpo sempre junto.
+    
+    Cenário típico: Locutor A grava B1-B5, Locutor B grava B6-B10
+    Para NJUD 1 (4 boletins): [B1(A), B6(B), B2(A), B7(B)]
+    Isso garante 2 vozes alternadas mesmo com poucos boletins por locutor.
+    
+    O agrupamento é feito pelo número absoluto do boletim, não por NJUD.
+    Assim, B1 e B6 estarão em grupos diferentes mesmo que ambos pertençam
+    ao mesmo NJUD (quando NJUD = ((num-1)//4)+1).
     """
     if not cabecas or not corpos:
         return []
@@ -100,10 +108,15 @@ def intercalar_pares_por_bloco(
     if len(pares) <= 1:
         return pares
 
+    # Agrupa por MITADADE: B1-B5 → grupo 1, B6-B10 → grupo 2, etc.
+    # Isso cria 2 grupos de locutores baseados no intervalo de gravação.
+    # Cada grupo tem ~5 boletins, garantindo que um jornal de 4 boletins
+    # pegue 2 de cada grupo (intercalando as vozes).
+    metade = 5  # Tamanho típico de gravação por locutor
     grupos: dict[int, list[tuple[Path, Path]]] = {}
     for cabeca, corpo in pares:
         num = extrair_numero_boletim(cabeca.name)
-        grupo = ((num - 1) // bloco) + 1
+        grupo = ((num - 1) // metade) + 1
         grupos.setdefault(grupo, []).append((cabeca, corpo))
 
     if len(grupos) <= 1:
@@ -128,7 +141,7 @@ def intercalar_pares_por_bloco(
 
     logger.info(
         "intercalacao",
-        f"Intercalação por blocos de {bloco}: "
+        f"Intercalação por blocos de {metade}: "
         f"{len(resultado)} pares de {len(grupos)} grupos",
         grupos={
             g: [c[0].name for c in grupos[g]]
@@ -192,11 +205,15 @@ def montar_jornal(
     cabecas.sort(key=lambda p: extrair_numero_boletim(p.name))
     corpos.sort(key=lambda p: extrair_numero_boletim(p.name))
 
-    # 3. Intercala pares
-    pares = []
-    if intercalar and len(cabecas) > 1 and len(corpos) > 1:
-        pares = intercalar_pares_por_bloco(cabecas, corpos, logger, bloco=5)
+    # 3. Intercalação ATIVADA para ter 2 vozes diferentes por jornal
+    # Cenário típico: Locutor A grava B1-B5, Locutor B grava B6-B10
+    # Resultado desejado no NJUD 1: [B1(A), B6(B), B2(A), B7(B)]
+    # Isso garante diversidade de vozes mesmo com poucos boletins por locutor.
+    if intercalar and len(cabecas) >= 2:
+        pares = intercalar_pares_por_bloco(cabecas, corpos, logger, bloco=4)
     else:
+        # Sem intercalação: mantém ordem numérica estrita
+        pares = []
         mapa_corpo = {c.name.replace("_CORPO.mp3", ""): c for c in corpos}
         for cabeca in sorted(
             cabecas, key=lambda p: extrair_numero_boletim(p.name)
@@ -366,40 +383,50 @@ def montar_todos_jornais(
                 logger.erro("pipeline", f"Falha ao montar jornal: {nome_jornal}")
                 erros += 1
 
-    # Fallback: se não houver subpastas, agrupa arquivos soltos por data do nome
+    # Fallback: se não houver subpastas, agrupa arquivos soltos POR JORNAL.
+    # Cada jornal deve ter exatamente 4 boletins (4 cabeças + 4 corpos).
+    # Os boletins são numerados sequencialmente (B1, B2, B3, ...) e cada
+    # grupo de 4 forma um jornal independente, mesmo que compartilhem data.
     if not resultados:
-        import tempfile, shutil
-        data_map = {}
+        import shutil
+        njud_map = {}
         for mp3 in pasta_entrada.glob("*_CABECA.mp3"):
-            m = re.search(r"BOLETIM_RADIO_TJRN_(\d{2})_(\d{2})_(\d{4})_", mp3.name)
-            if m:
-                dia, mes, ano = m.groups()
-                data_key = f"{ano}-{mes}-{dia}"
-                data_map.setdefault(data_key, []).append(mp3)
+            # Extrai número do boletim e data do nome:
+            # BOLETIM_RADIO_TJRN_DD_MM_AAAA_B{N}_...
+            m_njud = re.search(r"_B(\d+)_", mp3.name)
+            m_data = re.search(r"BOLETIM_RADIO_TJRN_(\d{2})_(\d{2})_(\d{4})_", mp3.name)
+            if m_njud and m_data:
+                num_boletim = int(m_njud.group(1))
+                dia, mes, ano = m_data.groups()
+                data_str = f"{dia}-{mes}-{ano}"
+                # Cada 4 boletins formam 1 jornal: B1-B4 → NJUD 1, B5-B8 → NJUD 2, etc.
+                njud_grupo = ((num_boletim - 1) // 4) + 1
+                njud_key = f"NJUD_{njud_grupo}_{data_str}"
+                njud_map.setdefault(njud_key, {"data": data_str, "arquivos": []}).setdefault("arquivos", []).append(mp3)
 
-        if data_map:
-            tmp_root = pasta_entrada / "_tmp_data"
+        if njud_map:
+            tmp_root = pasta_entrada / "_tmp_njud"
             tmp_root.mkdir(parents=True, exist_ok=True)
-            for data_key, arquivos in sorted(data_map.items()):
-                pasta_data = tmp_root / data_key
-                pasta_data.mkdir(parents=True, exist_ok=True)
-                for mp3 in arquivos:
-                    shutil.copy2(mp3, pasta_data / mp3.name)
+            for njud_key, info in sorted(njud_map.items()):
+                pasta_njud = tmp_root / njud_key
+                pasta_njud.mkdir(parents=True, exist_ok=True)
+                for mp3 in info["arquivos"]:
+                    shutil.copy2(mp3, pasta_njud / mp3.name)
                     corpo = mp3.parent / mp3.name.replace("_CABECA.mp3", "_CORPO.mp3")
                     if corpo.exists():
-                        shutil.copy2(corpo, pasta_data / corpo.name)
-                nome_jornal = f"JORNAL_{data_key}"
+                        shutil.copy2(corpo, pasta_njud / corpo.name)
+                # Monta o jornal COM intercalação para ter 2 vozes diferentes
                 caminho = montar_jornal(
-                    pasta_data,
+                    pasta_njud,
                     pasta_saida,
                     logger,
-                    nome_jornal=nome_jornal,
-                    intercalar=intercalar,
+                    nome_jornal=njud_key,
+                    intercalar=True,  # Ativa intercalação de locutores
                 )
                 if caminho:
                     resultados.append(caminho)
                 else:
-                    logger.erro("pipeline", f"Falha ao montar jornal: {nome_jornal}")
+                    logger.erro("pipeline", f"Falha ao montar jornal: {njud_key}")
                     erros += 1
             try:
                 shutil.rmtree(tmp_root, ignore_errors=True)
@@ -414,7 +441,7 @@ def montar_todos_jornais(
             return resultados
         logger.aviso(
             "pipeline",
-            f"Nenhuma subpasta de mês encontrada em {pasta_entrada}",
+            f"Nenhum boletim encontrado em {pasta_entrada}",
         )
         return []
 
