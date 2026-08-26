@@ -24,31 +24,25 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-# Importa módulos do pipeline (importação tardia para evitar dependências não instaladas)
-# sys.path.insert(0, str(Path(__file__).parent))
+# Importa módulos utilitários
+sys.path.insert(0, str(Path(__file__).parent))
+from utils.logger import get_logger
+from config.settings import Settings
+from utils.validator import validate_audio_file, calculate_checksum
+from utils.error_handler import retry_with_backoff, isolate_failures
 
-# from divisor_boletins.log import LogPipeline
-# from divisor_boletins.montagem import montar_todos_jornais
-# from divisor_boletins.config import (
-#     PASTA_ENTRADA,
-#     PASTA_DIVIDIDOS,
-#     PASTA_MONTADOS,
-# )
-
-
-# ============================================================================
-# CONFIGURAÇÃO GERAL
-# ============================================================================
-
-WORKSPACE = Path(__file__).parent.parent
-DATA_DIR = WORKSPACE / "data"
-LOGS_DIR = DATA_DIR / "_pipeline_logs"
+# Inicializa logger e configurações
+logger = get_logger("pipeline_inteligente")
+settings = Settings()
 
 # Caminhos configuráveis (podem ser sobrescritos via CLI)
-DEFAULT_BOLETINS_BRUTOS = WORKSPACE / "boletins_brutos"
-DEFAULT_SAIDA_CORTES = WORKSPACE / "boletins_divididos"
-DEFAULT_SAIDA_JORNAIS = WORKSPACE / "jornais_montados"
-DEFAULT_DRIVE_SYNC = WORKSPACE / "drive_sync"
+DEFAULT_BOLETINS_BRUTOS = settings.BOLETINS_BRUTOS
+DEFAULT_SAIDA_CORTES = settings.BOLETINS_CORTADOS
+DEFAULT_SAIDA_JORNAIS = settings.JORNAIS_MONTADOS
+DEFAULT_DRIVE_SYNC = settings.DRIVE_SYNC
+WORKSPACE = Path(__file__).parent.parent
+DATA_DIR = WORKSPACE / "data"
+LOGS_DIR = settings.LOGS_DIR
 
 # Limites e thresholds
 MIN_BOLETINS_POR_JORNAL = 4
