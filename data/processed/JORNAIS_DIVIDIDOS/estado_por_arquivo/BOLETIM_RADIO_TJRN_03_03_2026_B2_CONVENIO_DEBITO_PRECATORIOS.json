@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1830\\BOLETIM_RADIO_TJRN_03_03_2026_B2_CONVENIO_DEBITO_PRECATORIOS.mp3",
+  "njud": "NJUD 1830",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T15:29:37",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

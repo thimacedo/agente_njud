@@ -10,7 +10,7 @@ boletim, e ele só está concluído quando a auditoria o aprova.
 ## REGRAS INEGOCIÁVEIS
 
 1. **Drive H: é somente leitura** para todo o pipeline, EXCETO a etapa final
-   de sincronização (`src/sincronizar_drive.py`), que copia apenas os jornais
+   de sincronização (`src/sync/drive.py`), que copia apenas os jornais
    prontos para `H:\...\02_JORNAIS_NJUD\03_AUDIOS_RADIO\<MÊS>\`.
    - Nenhum outro script cria pastas, renomeia arquivos ou gera cópias `_old`
      no Drive. Correções de nomes são registradas em log, nunca aplicadas no H:.
@@ -32,7 +32,7 @@ boletim, e ele só está concluído quando a auditoria o aprova.
 ### Arquitetura
 
 ```
-dispatcher_paralelo.py  →  N workers persistentes (Whisper carregado 1x)
+dispatcher_paralelo.py → N workers persistentes (Whisper carregado 1x)
         │                        │
         ▼                        ▼
    fila de tarefas         ciclo por arquivo:
@@ -47,11 +47,11 @@ dispatcher_paralelo.py  →  N workers persistentes (Whisper carregado 1x)
 
 ```powershell
 # Janela 1 — processamento
-python src/dispatcher_paralelo.py "F:\Projetos\DIVISOR\JORNAIS" \
+python src/pipeline/dispatcher.py "F:\Projetos\DIVISOR\JORNAIS" \
     "F:\Projetos\DIVISOR\data\processed" --max-workers 3
 
 # Janela 2 — monitor em tempo real (só leitura; abrir/fechar à vontade)
-python src/monitor_tempo_real.py "F:\Projetos\DIVISOR\data\processed" --intervalo 5 --log
+python src/pipeline/monitor.py "F:\Projetos\DIVISOR\data\processed" --intervalo 5 --log
 ```
 
 Para um teste dirigido de UM boletim (sem multiprocessing):
@@ -105,7 +105,7 @@ ou descartar.
 2. Sincronização (única escrita permitida no H:):
 
    ```bash
-   python src/sincronizar_drive.py
+   python src/sync/drive.py
    ```
 
    Falha de conexão → registra `pendentes_drive.json`, não bloqueia nada.

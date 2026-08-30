@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JANEIRO\\NJUD 1800\\BOLETIM_RADIO_TJRN_12_01_2026_B4_TJRN_JUIZADO_VIOLENCIA_DOMESTICA_.mp3",
+  "njud": "NJUD 1800",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T12:46:24",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

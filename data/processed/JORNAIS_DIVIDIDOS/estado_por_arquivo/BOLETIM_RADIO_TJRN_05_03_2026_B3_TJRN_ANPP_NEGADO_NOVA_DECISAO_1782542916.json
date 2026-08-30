@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1834\\BOLETIM_RADIO_TJRN_05_03_2026_B3_TJRN_ANPP_NEGADO_NOVA_DECISAO_1782542916.mp3",
+  "njud": "NJUD 1834",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T15:45:26",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

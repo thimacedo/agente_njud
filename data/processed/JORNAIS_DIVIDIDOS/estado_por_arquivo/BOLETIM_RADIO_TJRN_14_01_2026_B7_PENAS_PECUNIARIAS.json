@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JANEIRO\\NJUD 1805\\BOLETIM_RADIO_TJRN_14_01_2026_B7_PENAS_PECUNIARIAS.mp3",
+  "njud": "NJUD 1805",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T13:09:12",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

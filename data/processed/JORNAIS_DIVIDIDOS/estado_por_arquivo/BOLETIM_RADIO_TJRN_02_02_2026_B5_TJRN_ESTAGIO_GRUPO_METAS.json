@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\FEVEREIRO\\NJUD 1811\\BOLETIM_RADIO_TJRN_02_02_2026_B5_TJRN_ESTAGIO_GRUPO_METAS.mp3",
+  "njud": "NJUD 1811",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T08:31:46",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

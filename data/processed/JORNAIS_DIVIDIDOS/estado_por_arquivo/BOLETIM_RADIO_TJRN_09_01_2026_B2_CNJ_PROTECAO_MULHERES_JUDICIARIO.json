@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JANEIRO\\NJUD 1799\\BOLETIM_RADIO_TJRN_09_01_2026_B2_CNJ_PROTECAO_MULHERES_JUDICIARIO.mp3",
+  "njud": "NJUD 1799",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T12:42:47",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

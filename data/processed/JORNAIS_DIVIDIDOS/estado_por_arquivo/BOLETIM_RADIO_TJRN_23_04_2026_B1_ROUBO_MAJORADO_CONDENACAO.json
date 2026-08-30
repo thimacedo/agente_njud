@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1908\\BOLETIM_RADIO_TJRN_23_04_2026_B1_ROUBO_MAJORADO_CONDENACAO.mp3",
+  "njud": "NJUD 1908",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T13:58:12",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

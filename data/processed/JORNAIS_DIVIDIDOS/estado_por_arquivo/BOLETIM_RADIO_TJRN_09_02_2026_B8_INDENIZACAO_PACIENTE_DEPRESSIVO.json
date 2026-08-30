@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\FEVEREIRO\\NJUD 1824\\BOLETIM_RADIO_TJRN_09_02_2026_B8_INDENIZACAO_PACIENTE_DEPRESSIVO.mp3",
+  "njud": "NJUD 1824",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T11:29:41",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

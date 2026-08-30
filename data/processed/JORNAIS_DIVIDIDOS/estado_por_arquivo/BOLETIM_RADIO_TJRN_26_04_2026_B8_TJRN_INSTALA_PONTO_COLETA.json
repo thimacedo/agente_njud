@@ -1,0 +1,24 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1915\\BOLETIM_RADIO_TJRN_26_04_2026_B8_TJRN_INSTALA_PONTO_COLETA.mp3",
+  "njud": "NJUD 1915",
+  "status": "OK",
+  "estrategia_atual": "ancora_vad_forcado",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:22:25",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: texto bate com padrão de alucinação: 'Legendas pela comunidade de Amara.org'",
+        "CABECA classificada como POSSIVEL_ALUCINACAO_WHISPER"
+      ]
+    },
+    {
+      "estrategia": "ancora_vad_forcado",
+      "timestamp": "2026-08-28T14:23:00",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

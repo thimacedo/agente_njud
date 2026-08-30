@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JANEIRO\\NJUD 1796\\BOLETIM_RADIO_TJRN_08_01_2026_B3_CNJ_SISTEMA_NOVA_VERSAO_1782542960.mp3",
+  "njud": "NJUD 1796",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T12:34:01",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\FEVEREIRO\\NJUD 1812\\BOLETIM_RADIO_TJRN_02_02_2026_B9_TRTRN_DESCARACTERIZA_TRABALHO_INTERMITENTE.mp3",
+  "njud": "NJUD 1812",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T08:35:23",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

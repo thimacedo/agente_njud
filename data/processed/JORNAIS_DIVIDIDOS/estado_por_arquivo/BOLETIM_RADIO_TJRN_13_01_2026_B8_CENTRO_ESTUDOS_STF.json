@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JANEIRO\\NJUD 1803\\BOLETIM_RADIO_TJRN_13_01_2026_B8_CENTRO_ESTUDOS_STF.mp3",
+  "njud": "NJUD 1803",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T13:00:30",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

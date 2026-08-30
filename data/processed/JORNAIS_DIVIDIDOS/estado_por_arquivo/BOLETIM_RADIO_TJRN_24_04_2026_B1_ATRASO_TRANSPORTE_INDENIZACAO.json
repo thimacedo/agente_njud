@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1911\\BOLETIM_RADIO_TJRN_24_04_2026_B1_ATRASO_TRANSPORTE_INDENIZACAO.mp3",
+  "njud": "NJUD 1911",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:06:02",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

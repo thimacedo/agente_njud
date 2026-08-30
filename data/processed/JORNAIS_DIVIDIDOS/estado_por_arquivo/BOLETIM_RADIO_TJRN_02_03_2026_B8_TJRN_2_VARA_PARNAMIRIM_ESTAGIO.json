@@ -1,0 +1,42 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1827\\BOLETIM_RADIO_TJRN_02_03_2026_B8_TJRN_2_VARA_PARNAMIRIM_ESTAGIO.mp3",
+  "njud": "NJUD 1827",
+  "status": "OK",
+  "estrategia_atual": "janela_silencio_ampliada",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T15:20:45",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: inicia com conectivo isolado: 'A'",
+        "CABECA classificada como CORTADO"
+      ]
+    },
+    {
+      "estrategia": "grade_fixa_locucao_estendida",
+      "timestamp": "2026-08-28T15:21:08",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: inicia com conectivo isolado: 'A'",
+        "CABECA classificada como CORTADO"
+      ]
+    },
+    {
+      "estrategia": "ancora_vad_forcado",
+      "timestamp": "2026-08-28T15:21:31",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: inicia com conectivo isolado: 'A'",
+        "CABECA classificada como CORTADO"
+      ]
+    },
+    {
+      "estrategia": "janela_silencio_ampliada",
+      "timestamp": "2026-08-28T15:21:55",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

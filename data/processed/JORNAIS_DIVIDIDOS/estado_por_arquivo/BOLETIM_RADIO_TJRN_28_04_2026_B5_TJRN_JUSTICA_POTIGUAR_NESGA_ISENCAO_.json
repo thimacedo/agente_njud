@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1919\\BOLETIM_RADIO_TJRN_28_04_2026_B5_TJRN_JUSTICA_POTIGUAR_NESGA_ISENCAO_.mp3",
+  "njud": "NJUD 1919",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:34:54",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

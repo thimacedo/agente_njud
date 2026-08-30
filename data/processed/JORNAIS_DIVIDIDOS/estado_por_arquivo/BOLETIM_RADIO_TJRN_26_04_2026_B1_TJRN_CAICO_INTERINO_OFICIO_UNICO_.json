@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1913\\BOLETIM_RADIO_TJRN_26_04_2026_B1_TJRN_CAICO_INTERINO_OFICIO_UNICO_.mp3",
+  "njud": "NJUD 1913",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:14:43",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\FEVEREIRO\\NJUD 1815\\BOLETIM_RADIO_TJRN_04_02_2026_B2_DOACAO_LIVROS_SISTEMA_PRISIONAL.mp3",
+  "njud": "NJUD 1815",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T10:59:26",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

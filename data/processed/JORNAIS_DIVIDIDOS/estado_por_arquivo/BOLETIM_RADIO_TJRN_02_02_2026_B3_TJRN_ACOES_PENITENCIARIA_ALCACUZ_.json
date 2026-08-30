@@ -1,0 +1,45 @@
+{
+  "arquivo": "JORNAIS\\FEVEREIRO\\NJUD 1810\\BOLETIM_RADIO_TJRN_02_02_2026_B3_TJRN_ACOES_PENITENCIARIA_ALCACUZ_.mp3",
+  "njud": "NJUD 1810",
+  "status": "ESGOTADO",
+  "estrategia_atual": "grade_fixa_locucao_estendida",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T08:29:03",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: texto bate com padrão de alucinação: 'Legendas pela comunidade de Amara.org'",
+        "CABECA classificada como POSSIVEL_ALUCINACAO_WHISPER"
+      ]
+    },
+    {
+      "estrategia": "ancora_vad_forcado",
+      "timestamp": "2026-08-28T08:29:30",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: texto bate com padrão de alucinação: 'Legendas pela comunidade de Amara.org'",
+        "CABECA classificada como POSSIVEL_ALUCINACAO_WHISPER"
+      ]
+    },
+    {
+      "estrategia": "janela_silencio_ampliada",
+      "timestamp": "2026-08-28T08:30:01",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: texto bate com padrão de alucinação: 'Legendas pela comunidade de Amara.org'",
+        "CABECA classificada como POSSIVEL_ALUCINACAO_WHISPER"
+      ]
+    },
+    {
+      "estrategia": "grade_fixa_locucao_estendida",
+      "timestamp": "2026-08-28T08:30:27",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: texto bate com padrão de alucinação: 'Legendas pela comunidade de Amara.org'",
+        "CABECA classificada como POSSIVEL_ALUCINACAO_WHISPER"
+      ]
+    }
+  ],
+  "erro": ""
+}

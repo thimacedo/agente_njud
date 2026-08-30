@@ -1,0 +1,25 @@
+RELATÓRIO CONSOLIDADO FINAL - AUDITORIA E PADRONIZAÇÃO
+============================================================
+Data/hora: 2026-08-29T19:49:35.470896
+
+TOTAIS GERAIS
+  Arquivos NJUD_* em pastas-alvo: 373
+  Arquivos BOLETIM_RADIO_TJRN* restantes: 1088
+  Outros arquivos: 0
+  Arquivos em arquivo morto local: 148
+
+ETAPAS EXECUTADAS
+  1. Remoção de duplicatas: Concluído: removidos=137, erros=0
+  2. Renomeação de boletins: Concluído: renomeados=90, erros=0, ignorados=0
+  3. Resolução de conflitos: Concluído: resolvidos=231, erros=603, ignorados=26
+  4. Tratamento sem número CSV: Concluído: movidos=148, erros=0
+
+STATUS FINAL
+  Padronização NJUD: PARCIAL
+  Boletins restantes sem padrão: 1088
+  Conflitos não resolvidos: 603
+
+PRÓXIMOS PASSOS NECESSÁRIOS
+  - Revisar conflitos não resolvidos (603)
+  - Decidir destino dos 1126 boletins restantes
+  - Validar se há demanda para manter boletins brutos

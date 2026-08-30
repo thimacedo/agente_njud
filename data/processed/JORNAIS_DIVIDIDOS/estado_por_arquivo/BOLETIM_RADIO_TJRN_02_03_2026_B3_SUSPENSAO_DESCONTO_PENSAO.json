@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1828\\BOLETIM_RADIO_TJRN_02_03_2026_B3_SUSPENSAO_DESCONTO_PENSAO.mp3",
+  "njud": "NJUD 1828",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T15:24:13",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

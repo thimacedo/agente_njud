@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1846\\BOLETIM_RADIO_TJRN_12_03_2026_B1_TJRN_MANTIDA_LEGALIDADE_NOMEACOES_.mp3",
+  "njud": "NJUD 1846",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T16:24:08",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

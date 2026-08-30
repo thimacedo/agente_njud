@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JUNHO\\NJUD 1893\\BOLETIM_RADIO_TJRN_08_06_2026_B1_TJRN_CONDENA_PORTAL_DE_NOTICIAS_.mp3",
+  "njud": "NJUD 1893",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:55:43",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1914\\BOLETIM_RADIO_TJRN_26_04_2026_B6_TJRN_CONSUMIDOR_REEMBOLSADO_VIDEOGAME_NJUD_1916.mp3",
+  "njud": "NJUD 1914",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:19:20",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JANEIRO\\NJUD 1804\\BOLETIM_RADIO_TJRN_14_01_2026_B8_TJRN_POSSE_GESTAO_DEFENSORIA_PUBLICA.mp3",
+  "njud": "NJUD 1804",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T13:05:24",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

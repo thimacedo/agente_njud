@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JUNHO\\NJUD 1899\\BOLETIM_RADIO_TJRN_10_06_2026_B2_TJRN_VARA_FAMILIA_RETIFICA_EDITAL.mp3",
+  "njud": "NJUD 1899",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T15:07:39",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

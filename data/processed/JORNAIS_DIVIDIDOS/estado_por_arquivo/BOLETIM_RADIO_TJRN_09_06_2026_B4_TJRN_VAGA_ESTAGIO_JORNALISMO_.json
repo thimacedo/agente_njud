@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JUNHO\\NJUD 1897\\BOLETIM_RADIO_TJRN_09_06_2026_B4_TJRN_VAGA_ESTAGIO_JORNALISMO_.mp3",
+  "njud": "NJUD 1897",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T15:01:32",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

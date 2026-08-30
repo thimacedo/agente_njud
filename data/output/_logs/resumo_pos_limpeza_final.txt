@@ -1,0 +1,29 @@
+RESUMO PÓS-LIMPEZA FINAL - SINCRONIZAÇÃO DRIVE
+==================================================
+Data/hora: 2026-08-29T19:23:58.187667
+
+TOTAIS GERAIS
+  Total MP3 no Drive: 367
+  Total em JORNAIS_FINAL local: 97
+  Total no arquivo morto: 270
+  Verificação: 367 = 97 + 270 ? True
+
+DISTRIBUIÇÃO POR PASTA NO DRIVE
+  01 - JAN - 26: 22
+  02 - FEV - 26: 22
+  03 - MAR - 26: 18
+  04 - ABR - 26: 15
+  05 - MAI - 26: 5
+  06 - JUN - 26: 10
+  07 - JUL - 26: 2
+  08 - AGO - 26: 3
+  _arquivo_morto: 270
+
+VALIDAÇÃO
+  Arquivos locais ausentes no Drive: 0
+
+STATUS FINAL
+  Sincronização local -> Drive: OK
+  Limpeza de órfãos: CONCLUÍDA
+  Arquivos não-canônicos: TRATADOS
+  Consistência JORNAIS_FINAL: OK

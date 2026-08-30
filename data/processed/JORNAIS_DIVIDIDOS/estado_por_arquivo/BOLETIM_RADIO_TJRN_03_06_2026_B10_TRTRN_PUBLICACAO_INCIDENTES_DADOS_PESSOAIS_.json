@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JUNHO\\NJUD 1893\\BOLETIM_RADIO_TJRN_03_06_2026_B10_TRTRN_PUBLICACAO_INCIDENTES_DADOS_PESSOAIS_.mp3",
+  "njud": "NJUD 1893",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:54:26",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

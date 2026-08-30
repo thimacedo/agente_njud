@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JANEIRO\\NJUD 1792\\BOLETIM_RADIO_TJRN_07_01_2026_B1_SELECAO_CARTORIOS_PAU_DOS_FERROS.mp3",
+  "njud": "NJUD 1792",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T11:39:31",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

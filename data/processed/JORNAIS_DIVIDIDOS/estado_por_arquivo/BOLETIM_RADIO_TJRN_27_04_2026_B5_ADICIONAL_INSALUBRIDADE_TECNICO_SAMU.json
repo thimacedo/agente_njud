@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1917\\BOLETIM_RADIO_TJRN_27_04_2026_B5_ADICIONAL_INSALUBRIDADE_TECNICO_SAMU.mp3",
+  "njud": "NJUD 1917",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:28:16",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

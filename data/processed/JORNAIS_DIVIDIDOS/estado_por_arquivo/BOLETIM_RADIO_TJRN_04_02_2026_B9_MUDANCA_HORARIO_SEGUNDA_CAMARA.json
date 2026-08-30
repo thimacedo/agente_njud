@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\FEVEREIRO\\NJUD 1817\\BOLETIM_RADIO_TJRN_04_02_2026_B9_MUDANCA_HORARIO_SEGUNDA_CAMARA.mp3",
+  "njud": "NJUD 1817",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T11:04:57",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

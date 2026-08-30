@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1838\\BOLETIM_RADIO_TJRN_06_03_2026_B9_TRTRN_PROCURADORA_CHEFE_UNIAO.mp3",
+  "njud": "NJUD 1838",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T15:58:33",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

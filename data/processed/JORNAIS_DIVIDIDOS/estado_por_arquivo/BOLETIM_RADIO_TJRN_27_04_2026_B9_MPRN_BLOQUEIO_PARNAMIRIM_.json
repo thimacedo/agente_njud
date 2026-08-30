@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1918\\BOLETIM_RADIO_TJRN_27_04_2026_B9_MPRN_BLOQUEIO_PARNAMIRIM_.mp3",
+  "njud": "NJUD 1918",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:30:49",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

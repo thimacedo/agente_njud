@@ -1,0 +1,11 @@
+{
+  "data": "2026-08-29T21:32:47.727796",
+  "pasta": "F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_FINAL",
+  "total": 48,
+  "invalid_count": 3,
+  "invalid": [
+    "F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_FINAL\\NJUD_1504_09-04-2026_INCOMPLETO.mp3",
+    "F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_FINAL\\NJUD_1601_13-04-2026_INCOMPLETO.mp3",
+    "F:\\Projetos\\DIVISOR\\data\\output\\JORNAIS_FINAL\\NJUD_1705_24-04-2026_INCOMPLETO.mp3"
+  ]
+}

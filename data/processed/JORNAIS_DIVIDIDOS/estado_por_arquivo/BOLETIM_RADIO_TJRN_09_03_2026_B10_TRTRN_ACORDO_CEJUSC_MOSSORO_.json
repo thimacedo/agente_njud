@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1841\\BOLETIM_RADIO_TJRN_09_03_2026_B10_TRTRN_ACORDO_CEJUSC_MOSSORO_.mp3",
+  "njud": "NJUD 1841",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T16:04:58",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JUNHO\\NJUD 1891\\BOLETIM_RADIO_TJRN_03_06_2026_B1_TJRN_HOMEM_CONDENADO_COLISAO_CARRO.mp3",
+  "njud": "NJUD 1891",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:49:35",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

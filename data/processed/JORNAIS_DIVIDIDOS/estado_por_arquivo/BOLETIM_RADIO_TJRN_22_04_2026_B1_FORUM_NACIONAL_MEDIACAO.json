@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1906\\BOLETIM_RADIO_TJRN_22_04_2026_B1_FORUM_NACIONAL_MEDIACAO.mp3",
+  "njud": "NJUD 1906",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T13:49:27",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

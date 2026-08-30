@@ -190,7 +190,50 @@ de data/; não regenerar _backup_estado_* sem política de retenção (consolida
 
 ---
 
+## Item 11. Procedimento de limpeza de órfãos e arquivos não-canônicos no Drive (2026-08-29)
+
+**Motivo:** Após sincronização, o Drive acumula arquivos históricos/órfãos que não devem ficar misturados aos jornais ativos. O operador definiu que `H:` é somente leitura, exceto `sync/drive.py`. Para manter a regra e ainda permitir limpeza, o procedimento usa:
+- relatórios locais em `data/output/_logs/`
+- movimentação dentro do próprio Drive, sem API
+- destino único: `_arquivo_morto`
+
+**Fluxo obrigatório:**
+1. Gerar `relatorio_orfaos_drive.csv` com arquivos presentes no Drive e ausentes em `JORNAIS_FINAL`.
+2. Gerar `relatorio_nao_canonicos_drive.csv` com arquivos fora do padrão `NJUD_XXXX_DD-MM-AAAA.mp3`.
+3. Mover arquivos listados para `_arquivo_morto` preservando a estrutura de pasta mensal.
+4. Validar soma: `JORNAIS_FINAL + _arquivo_merto == total_drive`.
+5. Registrar log em `logs/mover_orfaos_drive.log` e `logs/mover_nao_canonicos_drive.log`.
+
+**Proibido reverter:** não apagar arquivos do Drive sem mover para `_arquivo_morto`; não alterar pastas mensais fora desse fluxo.
+
 *Fim do registro de decisões.*
+
+## Item 10. Estrutura modular canônica (2026-08-29)
+
+**Motivo:** A raiz `src/` acumulava 42 scripts com sobreposição de responsabilidades e caminhos hardcoded. Para impedir regressão e facilitar manutenção, o código foi reorganizado em pacotes temáticos.
+
+**Estrutura canônica:**
+- `divisor_boletins/` — core estável (`audio.py`, `deteccao.py`, `calibracao.py`, `montagem.py`, `config.py`, `log.py`, `texto.py`, `cli.py`)
+- `pipeline/` — motores de execução (`single_process.py`, `dispatcher.py`, `monitor.py`, `assembly.py`)
+- `audit/` — auditoria e validação (`individual_cuts.py`, `integrity.py`, `integrity_report.py`, `summaries.py`)
+- `sync/` — sincronização e cópia (`drive.py`, `copy.py`)
+- `plan/` — planejamento (`generator.py`, `allocator.py`, `fixer.py`)
+- `orchestration/` — orquestradores de topo (`safe_runner.py`, `intelligent.py`, `journal_pipeline.py`)
+- `utils/` — utilitários compartilhados (`logger.py`, `validator.py`, `error_handler.py`)
+- `config/` — configurações centralizadas (`settings.py` e `.env`)
+- `tools/` — scripts utilitários legados (`monitor_paralelo_simples.py`, `dashboard_streamlit.py`, `monitor_job.py`, `monitor_montagem_auto.py`, `executar_reprocessamento.py`, `reprocessar_falhos.py`, `sanear_drive.py`, `downloader_tjrn.py`, `gerar_relatorio_pos_download.py`)
+
+**Regras de migração e compatibilidade:**
+- Wrappers `DeprecationWarning` foram deixados na raiz para imports antigos, mas o caminho canônico é sempre o pacote.
+- Entry points devem usar os caminhos de pacote. `iniciar_ciclo.py` importa `pipeline/dispatcher.py` e `pipeline/monitor.py` diretamente.
+- Nenhum caminho hardcoded de projeto (`F:/Projetos/DIVISOR`, `C:/Users/THIAGO`) é permitido fora de `config/settings.py`; todo caminho deve vir de `config.settings` ou CLI.
+- Não mover código de volta para a raiz de `src/`; não duplicar módulos em múltiplas localizações; não remover wrappers de compatibilidade sem antes atualizar TODOS os consumidores.
+
+**Validação obrigatória após alterações:**
+- `python tests/test_imports.py` — todos os módulos canônicos + wrappers devem importar.
+- `py_compile` em toda a árvore `src/` — 0 erros.
+- `grep` por caminhos hardcoded em `src/` — 0 ocorrências.
+
 
 ## Item 6 (2026-08-24 — execução AGOSTO/NJUD 1918)
 1. Auditor acusou "0.00s do início" nos 4 boletins em TODAS as estratégias → ESGOTADO.
@@ -249,3 +292,28 @@ vinheta de encerramento
 
 **Proibido reverter:** qualquer lógica que monte jornal com estrutura diferente
 da acima ou trate as vinhetas de boletim e jornal como intercambiáveis.
+
+## Item 12. Separação estrita entre boletins e NJUDs (2026-08-29)
+
+**Motivo:** Em 2026-08-29 houve sobreposição indevida entre domínios: scripts de
+padronização renomearam arquivos `BOLETIM_RADIO_TJRN_*` para `NJUD_*` em pastas
+de origem/processamento. Isso quebrou a distinção fundamental do fluxo:
+- **Boletim**: unidade bruta de entrada (abertura → cabeça → passagem → corpo → encerramento)
+- **NJUD**: produto final montado (4 boletins → 1 jornal)
+
+**Regra imutável:**
+1. Não renomear `BOLETIM_RADIO_TJRN_*` para `NJUD_*` em nenhuma pasta.
+2. Pastas de boletins mantêm apenas `BOLETIM_RADIO_TJRN_*`.
+3. Pastas de jornais/jornal final contêm apenas `NJUD_*`.
+4. Qualquer script de organização física deve preservar o nome original dos arquivos.
+5. Se houver dúvida sobre o domínio de um arquivo, considere-o boletim por padrão.
+
+**Proibido reverter:** misturar boletins e NJUDs na mesma pasta ou tratamento.
+
+## Item 13. Quarentena de arquivos com ano 2027 (2026-08-29)
+
+**Decisão:** manter a pasta `data/output/data_quarentena_2027/` para revisão futura.
+Foram isolados **58** arquivos com ano `2027` encontrados nas pastas-alvo.
+As pastas principais estão limpas e sem misturas entre boletins e jornais.
+
+**Proibido reverter:** excluir a quarentena sem confirmação explícita do operador.

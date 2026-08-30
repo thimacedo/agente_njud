@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1922\\BOLETIM_RADIO_TJRN_29_04_2026_B6_DANOS_MORAIS_FOGAO_DEFEITUOSO.mp3",
+  "njud": "NJUD 1922",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:44:00",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

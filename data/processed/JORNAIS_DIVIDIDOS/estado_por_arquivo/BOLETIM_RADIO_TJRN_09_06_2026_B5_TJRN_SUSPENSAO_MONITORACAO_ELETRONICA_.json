@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JUNHO\\NJUD 1897\\BOLETIM_RADIO_TJRN_09_06_2026_B5_TJRN_SUSPENSAO_MONITORACAO_ELETRONICA_.mp3",
+  "njud": "NJUD 1897",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T15:02:02",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

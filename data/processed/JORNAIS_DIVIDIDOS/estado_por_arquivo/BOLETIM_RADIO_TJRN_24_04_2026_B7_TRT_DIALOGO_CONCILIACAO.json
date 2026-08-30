@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1912\\BOLETIM_RADIO_TJRN_24_04_2026_B7_TRT_DIALOGO_CONCILIACAO.mp3",
+  "njud": "NJUD 1912",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:10:58",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

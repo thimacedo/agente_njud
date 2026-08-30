@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1843\\BOLETIM_RADIO_TJRN_10_03_2026_B9_TJRN_PRESTADOR_SERVICOS_ACUSADO_.mp3",
+  "njud": "NJUD 1843",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T16:14:16",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

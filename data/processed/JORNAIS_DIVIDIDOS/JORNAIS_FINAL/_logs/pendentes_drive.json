@@ -1,0 +1,14 @@
+{
+  "data": "2026-08-29T05:25:29.214582",
+  "motivo": "drive_offline_e_nomenclatura_invalida",
+  "acao": "executar_novamente_apos_conectar_drive_e_regularizar_nomes",
+  "arquivos_invalidos_movidos": [
+    "NJUD_1810_02-02-2026_INCOMPLETO.mp3",
+    "NJUD_1817_05-02-2026_INCOMPLETO.mp3",
+    "NJUD_1892_03-06-2026_INCOMPLETO.mp3",
+    "NJUD_1893_08-06-2026_INCOMPLETO.mp3",
+    "NJUD_1899_10-06-2026_INCOMPLETO.mp3",
+    "NJUD_1912_24-04-2026_INCOMPLETO.mp3"
+  ],
+  "destino_quarentena": "F:\\Projetos\\DIVISOR\\data\\output\\_quarentena_invalidos"
+}

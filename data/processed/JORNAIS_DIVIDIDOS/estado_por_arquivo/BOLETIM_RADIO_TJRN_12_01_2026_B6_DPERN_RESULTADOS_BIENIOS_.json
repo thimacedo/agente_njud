@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JANEIRO\\NJUD 1801\\BOLETIM_RADIO_TJRN_12_01_2026_B6_DPERN_RESULTADOS_BIENIOS_.mp3",
+  "njud": "NJUD 1801",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T12:49:31",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

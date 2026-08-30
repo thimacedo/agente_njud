@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\FEVEREIRO\\NJUD 1816\\BOLETIM_RADIO_TJRN_04_02_2026_B6_CONDENACAO_BANCO_GOLPE_VEICULO.mp3",
+  "njud": "NJUD 1816",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T11:01:58",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

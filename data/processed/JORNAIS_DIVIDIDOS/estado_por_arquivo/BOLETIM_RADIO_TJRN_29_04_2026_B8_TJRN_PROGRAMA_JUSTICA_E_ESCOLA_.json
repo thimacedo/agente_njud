@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1921\\BOLETIM_RADIO_TJRN_29_04_2026_B8_TJRN_PROGRAMA_JUSTICA_E_ESCOLA_.mp3",
+  "njud": "NJUD 1921",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:41:30",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

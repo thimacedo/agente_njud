@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\FEVEREIRO\\NJUD 1818\\BOLETIM_RADIO_TJRN_05_02_2026_B5_TJRN_REDE_SOCIAL_CONTA_PERFIL.mp3",
+  "njud": "NJUD 1818",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T11:08:18",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

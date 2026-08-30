@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1829\\BOLETIM_RADIO_TJRN_02_03_2026_B6_CONDENACAO_EXTRAVIO_BAGAGEM.mp3",
+  "njud": "NJUD 1829",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T15:26:42",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

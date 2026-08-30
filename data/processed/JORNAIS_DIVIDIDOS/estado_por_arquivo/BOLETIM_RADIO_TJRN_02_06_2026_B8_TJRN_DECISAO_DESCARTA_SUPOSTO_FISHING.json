@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JUNHO\\NJUD 1890\\BOLETIM_RADIO_TJRN_02_06_2026_B8_TJRN_DECISAO_DESCARTA_SUPOSTO_FISHING.mp3",
+  "njud": "NJUD 1890",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:48:31",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

@@ -255,14 +255,18 @@ def montar_jornal(
     m_njud = re.search(r"NJUD\s*_?\s*(\d+)", nome_jornal, re.IGNORECASE)
     indice_jornal = 0
     if m_njud:
-        njud_num = int(m_njud.group(1))
-        indice_jornal = njud_num - 1  # NJUD 1 → índice 0, NJUD 2 → índice 1, etc.
-    
+        # Quando a montagem é por pasta de NJUD, usamos índice 0 para não
+        # saltar blocos globais inexistentes; a intercalação, se houver,
+        # ocorre dentro do próprio subconjunto do NJUD.
+        pass
+
     if intercalar and len(todos_pares) >= 4:
         pares = intercalar_pares_para_jornal(todos_pares, indice_jornal, logger)
     else:
         # Sem intercalação ou menos de 4 pares: usa ordem numérica simples
         pares = todos_pares[:4] if len(todos_pares) >= 4 else todos_pares
+
+    print('[DEBUG] indice_jornal=', indice_jornal, 'pares=', len(pares), [c1.name for c1,c2 in pares])
     
     # VERIFICAÇÃO DE INTEGRIDADE: permite exceção de 3 boletins
     incompleto = False
@@ -279,7 +283,7 @@ def montar_jornal(
                 f"Jornal {nome_jornal} tem apenas {len(pares)} boletins (mínimo 3 necessário)",
             )
             return None
-    
+
     logger.info(
         etapa,
         "Pares: "

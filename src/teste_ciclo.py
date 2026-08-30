@@ -10,7 +10,7 @@ from pathlib import Path
 # Módulos locais (processo_unico etc.) vivem no mesmo diretório deste script.
 sys.path.insert(0, str(Path(__file__).parent))
 
-from processo_unico import ciclo_arquivo, EstadoArquivo, TentativaLog
+from pipeline.single_process import ciclo_arquivo, EstadoArquivo, TentativaLog
 from dataclasses import asdict
 
 
@@ -18,7 +18,7 @@ class EstadoArquivoUnico:
     """Mesmo contrato de EstadoProcesso, mas persistindo em um JSON por arquivo."""
 
     def __init__(self, caminho: Path, arquivo: str, njud: str):
-        from processo_unico import EstadoArquivo as EA, TentativaLog
+        from pipeline.single_process import EstadoArquivo as EA, TentativaLog
         self.caminho = caminho
         if caminho.exists():
             dados = json.loads(caminho.read_text(encoding="utf-8"))
@@ -53,7 +53,7 @@ def main():
     from faster_whisper import WhisperModel
     from divisor_boletins.audio import processar_arquivo
     from divisor_boletins.log import LogPipeline
-    from analisar_cortes_individuais import analisar_par
+    from audit.individual_cuts import analisar_par
 
     logger = LogPipeline(saida / "_logs")
     print("Carregando Whisper...")

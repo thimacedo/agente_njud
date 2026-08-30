@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1846\\BOLETIM_RADIO_TJRN_11_03_2026_B9_AFASTAMENTO_CURSO_FORMACAO.mp3",
+  "njud": "NJUD 1846",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T16:23:15",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

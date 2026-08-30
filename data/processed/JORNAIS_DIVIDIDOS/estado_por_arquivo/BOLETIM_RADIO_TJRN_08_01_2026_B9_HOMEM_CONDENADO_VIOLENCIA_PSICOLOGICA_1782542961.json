@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JANEIRO\\NJUD 1796\\BOLETIM_RADIO_TJRN_08_01_2026_B9_HOMEM_CONDENADO_VIOLENCIA_PSICOLOGICA_1782542961.mp3",
+  "njud": "NJUD 1796",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T12:34:39",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

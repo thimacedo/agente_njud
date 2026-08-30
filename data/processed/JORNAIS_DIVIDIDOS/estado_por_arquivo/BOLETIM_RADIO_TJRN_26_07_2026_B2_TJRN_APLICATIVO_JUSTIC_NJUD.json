@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1900\\BOLETIM_RADIO_TJRN_26_07_2026_B2_TJRN_APLICATIVO_JUSTIC_NJUD.mp3",
+  "njud": "NJUD 1900",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T13:31:11",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

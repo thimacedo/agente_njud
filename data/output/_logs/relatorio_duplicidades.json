@@ -1,0 +1,414 @@
+[
+  {
+    "data": "2026-01-07",
+    "arquivos": [
+      "NJUD_1792_07-01-2026.mp3",
+      "NJUD_1793_07-01-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1793_07-01-2026.mp3",
+    "remover": [
+      "NJUD_1792_07-01-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-01-08",
+    "arquivos": [
+      "NJUD_1794_08-01-2026.mp3",
+      "NJUD_1795_08-01-2026.mp3",
+      "NJUD_1796_08-01-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1796_08-01-2026.mp3",
+    "remover": [
+      "NJUD_1794_08-01-2026.mp3",
+      "NJUD_1795_08-01-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-01-09",
+    "arquivos": [
+      "NJUD_1797_09-01-2026.mp3",
+      "NJUD_1798_09-01-2026.mp3",
+      "NJUD_1799_09-01-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1799_09-01-2026.mp3",
+    "remover": [
+      "NJUD_1797_09-01-2026.mp3",
+      "NJUD_1798_09-01-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-01-12",
+    "arquivos": [
+      "NJUD_1800_12-01-2026.mp3",
+      "NJUD_1801_12-01-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1801_12-01-2026.mp3",
+    "remover": [
+      "NJUD_1800_12-01-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-01-13",
+    "arquivos": [
+      "NJUD_1802_13-01-2026.mp3",
+      "NJUD_1803_13-01-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1803_13-01-2026.mp3",
+    "remover": [
+      "NJUD_1802_13-01-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-01-14",
+    "arquivos": [
+      "NJUD_1804_14-01-2026.mp3",
+      "NJUD_1805_14-01-2026.mp3",
+      "NJUD_1806_14-01-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1806_14-01-2026.mp3",
+    "remover": [
+      "NJUD_1804_14-01-2026.mp3",
+      "NJUD_1805_14-01-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-01-15",
+    "arquivos": [
+      "NJUD_1807_15-01-2026.mp3",
+      "NJUD_1808_15-01-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1808_15-01-2026.mp3",
+    "remover": [
+      "NJUD_1807_15-01-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-02-03",
+    "arquivos": [
+      "NJUD_1812_03-02-2026.mp3",
+      "NJUD_1813_03-02-2026.mp3",
+      "NJUD_1814_03-02-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1814_03-02-2026.mp3",
+    "remover": [
+      "NJUD_1812_03-02-2026.mp3",
+      "NJUD_1813_03-02-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-02-04",
+    "arquivos": [
+      "NJUD_1815_04-02-2026.mp3",
+      "NJUD_1816_04-02-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1816_04-02-2026.mp3",
+    "remover": [
+      "NJUD_1815_04-02-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-02-05",
+    "arquivos": [
+      "NJUD_1818_05-02-2026.mp3",
+      "NJUD_1819_05-02-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1819_05-02-2026.mp3",
+    "remover": [
+      "NJUD_1818_05-02-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-02-06",
+    "arquivos": [
+      "NJUD_1820_06-02-2026.mp3",
+      "NJUD_1821_06-02-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1821_06-02-2026.mp3",
+    "remover": [
+      "NJUD_1820_06-02-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-02-09",
+    "arquivos": [
+      "NJUD_1822_09-02-2026.mp3",
+      "NJUD_1823_09-02-2026.mp3",
+      "NJUD_1824_09-02-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1824_09-02-2026.mp3",
+    "remover": [
+      "NJUD_1822_09-02-2026.mp3",
+      "NJUD_1823_09-02-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-02-10",
+    "arquivos": [
+      "NJUD_1825_10-02-2026.mp3",
+      "NJUD_1826_10-02-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1826_10-02-2026.mp3",
+    "remover": [
+      "NJUD_1825_10-02-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-03-02",
+    "arquivos": [
+      "NJUD_1827_02-03-2026.mp3",
+      "NJUD_1828_02-03-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1828_02-03-2026.mp3",
+    "remover": [
+      "NJUD_1827_02-03-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-03-03",
+    "arquivos": [
+      "NJUD_1829_03-03-2026.mp3",
+      "NJUD_1830_03-03-2026.mp3",
+      "NJUD_1831_03-03-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1831_03-03-2026.mp3",
+    "remover": [
+      "NJUD_1829_03-03-2026.mp3",
+      "NJUD_1830_03-03-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-03-04",
+    "arquivos": [
+      "NJUD_1832_04-03-2026.mp3",
+      "NJUD_1833_04-03-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1833_04-03-2026.mp3",
+    "remover": [
+      "NJUD_1832_04-03-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-03-05",
+    "arquivos": [
+      "NJUD_1834_05-03-2026.mp3",
+      "NJUD_1835_05-03-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1835_05-03-2026.mp3",
+    "remover": [
+      "NJUD_1834_05-03-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-03-06",
+    "arquivos": [
+      "NJUD_1836_06-03-2026.mp3",
+      "NJUD_1837_06-03-2026.mp3",
+      "NJUD_1838_06-03-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1838_06-03-2026.mp3",
+    "remover": [
+      "NJUD_1836_06-03-2026.mp3",
+      "NJUD_1837_06-03-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-03-09",
+    "arquivos": [
+      "NJUD_1839_09-03-2026.mp3",
+      "NJUD_1840_09-03-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1840_09-03-2026.mp3",
+    "remover": [
+      "NJUD_1839_09-03-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-03-10",
+    "arquivos": [
+      "NJUD_1841_10-03-2026.mp3",
+      "NJUD_1842_10-03-2026.mp3",
+      "NJUD_1843_10-03-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1843_10-03-2026.mp3",
+    "remover": [
+      "NJUD_1841_10-03-2026.mp3",
+      "NJUD_1842_10-03-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-03-11",
+    "arquivos": [
+      "NJUD_1844_11-03-2026.mp3",
+      "NJUD_1845_11-03-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1845_11-03-2026.mp3",
+    "remover": [
+      "NJUD_1844_11-03-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-03-12",
+    "arquivos": [
+      "NJUD_1846_12-03-2026.mp3",
+      "NJUD_1847_12-03-2026.mp3",
+      "NJUD_1848_12-03-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1848_12-03-2026.mp3",
+    "remover": [
+      "NJUD_1846_12-03-2026.mp3",
+      "NJUD_1847_12-03-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-04-17",
+    "arquivos": [
+      "NJUD_1903_17-04-2026.mp3",
+      "NJUD_1904_17-04-2026.mp3",
+      "NJUD_1905_17-04-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1905_17-04-2026.mp3",
+    "remover": [
+      "NJUD_1903_17-04-2026.mp3",
+      "NJUD_1904_17-04-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-04-22",
+    "arquivos": [
+      "NJUD_1906_22-04-2026.mp3",
+      "NJUD_1907_22-04-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1907_22-04-2026.mp3",
+    "remover": [
+      "NJUD_1906_22-04-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-04-23",
+    "arquivos": [
+      "NJUD_1908_23-04-2026.mp3",
+      "NJUD_1909_23-04-2026.mp3",
+      "NJUD_1910_23-04-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1910_23-04-2026.mp3",
+    "remover": [
+      "NJUD_1908_23-04-2026.mp3",
+      "NJUD_1909_23-04-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-04-26",
+    "arquivos": [
+      "NJUD_1913_26-04-2026.mp3",
+      "NJUD_1914_26-04-2026.mp3",
+      "NJUD_1915_26-04-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1915_26-04-2026.mp3",
+    "remover": [
+      "NJUD_1913_26-04-2026.mp3",
+      "NJUD_1914_26-04-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-04-27",
+    "arquivos": [
+      "NJUD_1916_27-04-2026.mp3",
+      "NJUD_1917_27-04-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1917_27-04-2026.mp3",
+    "remover": [
+      "NJUD_1916_27-04-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-04-28",
+    "arquivos": [
+      "NJUD_1918_28-04-2026.mp3",
+      "NJUD_1919_28-04-2026.mp3",
+      "NJUD_1920_28-04-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1920_28-04-2026.mp3",
+    "remover": [
+      "NJUD_1918_28-04-2026.mp3",
+      "NJUD_1919_28-04-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-04-29",
+    "arquivos": [
+      "NJUD_1921_29-04-2026.mp3",
+      "NJUD_1922_29-04-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1922_29-04-2026.mp3",
+    "remover": [
+      "NJUD_1921_29-04-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-06-02",
+    "arquivos": [
+      "NJUD_1889_02-06-2026.mp3",
+      "NJUD_1890_02-06-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1890_02-06-2026.mp3",
+    "remover": [
+      "NJUD_1889_02-06-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-06-09",
+    "arquivos": [
+      "NJUD_1896_09-06-2026.mp3",
+      "NJUD_1897_09-06-2026.mp3",
+      "NJUD_1898_09-06-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1898_09-06-2026.mp3",
+    "remover": [
+      "NJUD_1896_09-06-2026.mp3",
+      "NJUD_1897_09-06-2026.mp3"
+    ]
+  },
+  {
+    "data": "2026-07-26",
+    "arquivos": [
+      "NJUD_1900_26-07-2026.mp3",
+      "NJUD_1901_26-07-2026.mp3"
+    ],
+    "identicos": false,
+    "manter": "NJUD_1901_26-07-2026.mp3",
+    "remover": [
+      "NJUD_1900_26-07-2026.mp3"
+    ]
+  }
+]

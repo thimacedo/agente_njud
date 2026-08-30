@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1832\\BOLETIM_RADIO_TJRN_04_03_2026_B2_COSERN_DEVE_AUMENTAR_CARGA_ENERGETICA.mp3",
+  "njud": "NJUD 1832",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T15:37:14",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

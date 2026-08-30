@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1840\\BOLETIM_RADIO_TJRN_09_03_2026_B1_DESCREDENCIAMENTO_PLANO_SAUDE.mp3",
+  "njud": "NJUD 1840",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T16:02:03",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

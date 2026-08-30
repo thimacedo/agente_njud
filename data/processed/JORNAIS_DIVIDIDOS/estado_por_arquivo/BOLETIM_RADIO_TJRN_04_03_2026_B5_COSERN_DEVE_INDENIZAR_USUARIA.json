@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1833\\BOLETIM_RADIO_TJRN_04_03_2026_B5_COSERN_DEVE_INDENIZAR_USUARIA.mp3",
+  "njud": "NJUD 1833",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T15:39:43",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

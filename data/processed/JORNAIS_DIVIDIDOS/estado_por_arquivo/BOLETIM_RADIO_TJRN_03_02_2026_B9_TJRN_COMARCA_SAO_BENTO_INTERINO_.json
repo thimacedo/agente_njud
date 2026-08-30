@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\FEVEREIRO\\NJUD 1814\\BOLETIM_RADIO_TJRN_03_02_2026_B9_TJRN_COMARCA_SAO_BENTO_INTERINO_.mp3",
+  "njud": "NJUD 1814",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T08:45:25",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

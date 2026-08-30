@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JANEIRO\\NJUD 1798\\BOLETIM_RADIO_TJRN_09_01_2026_B5_PERICIA_DOCUMENTO_DIGITAL_CONSUMIDOR_.mp3",
+  "njud": "NJUD 1798",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T12:40:53",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

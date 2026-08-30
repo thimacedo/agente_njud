@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\FEVEREIRO\\NJUD 1817\\BOLETIM_RADIO_TJRN_05_02_2026_B2_TJRN_MORADOR_MOSSORO_TRATAMENTO_MEDICO_.mp3",
+  "njud": "NJUD 1817",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T11:06:25",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

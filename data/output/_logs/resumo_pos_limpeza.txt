@@ -1,0 +1,28 @@
+RESUMO PÓS-LIMPEZA - SINCRONIZAÇÃO DRIVE
+==================================================
+Data/hora: 2026-08-29T19:15:08.261731
+
+TOTAIS GERAIS
+  Total no Drive (todas pastas): 367
+  Total em JORNAIS_FINAL local: 97
+  Total no arquivo morto: 265
+
+DISTRIBUIÇÃO POR PASTA NO DRIVE
+  01 - JAN - 26: 23
+  02 - FEV - 26: 22
+  03 - MAR - 26: 18
+  04 - ABR - 26: 16
+  05 - MAI - 26: 5
+  06 - JUN - 26: 12
+  07 - JUL - 26: 3
+  08 - AGO - 26: 3
+  _arquivo_morto: 265
+
+VALIDAÇÃO
+  Arquivos locais ausentes no Drive: 0
+  Arquivos no Drive fora de JORNAIS_FINAL: 218
+
+STATUS FINAL
+  Sincronização local -> Drive: OK
+  Limpeza de órfãos: CONCLUÍDA
+  Consistência JORNAIS_FINAL: OK

@@ -1,0 +1,1 @@
+C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Scripts\python.exe: No module named divisor_boletins

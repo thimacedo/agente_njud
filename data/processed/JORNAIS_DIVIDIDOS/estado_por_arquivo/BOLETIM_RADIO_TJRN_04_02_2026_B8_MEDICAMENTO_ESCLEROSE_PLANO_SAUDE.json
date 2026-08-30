@@ -1,0 +1,49 @@
+{
+  "arquivo": "JORNAIS\\FEVEREIRO\\NJUD 1817\\BOLETIM_RADIO_TJRN_04_02_2026_B8_MEDICAMENTO_ESCLEROSE_PLANO_SAUDE.mp3",
+  "njud": "NJUD 1817",
+  "status": "ESGOTADO",
+  "estrategia_atual": "grade_fixa_locucao_estendida",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T11:03:24",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: texto bate com padrão de alucinação: 'Legendas pela comunidade de Amara.org'",
+        "CORPO: CORPO sem pontuação final (fraco, isolado — checar manualmente)",
+        "CABECA classificada como POSSIVEL_ALUCINACAO_WHISPER"
+      ]
+    },
+    {
+      "estrategia": "ancora_vad_forcado",
+      "timestamp": "2026-08-28T11:03:46",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: texto bate com padrão de alucinação: 'Legendas pela comunidade de Amara.org'",
+        "CORPO: CORPO sem pontuação final (fraco, isolado — checar manualmente)",
+        "CABECA classificada como POSSIVEL_ALUCINACAO_WHISPER"
+      ]
+    },
+    {
+      "estrategia": "janela_silencio_ampliada",
+      "timestamp": "2026-08-28T11:04:09",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: texto bate com padrão de alucinação: 'Legendas pela comunidade de Amara.org'",
+        "CORPO: CORPO sem pontuação final (fraco, isolado — checar manualmente)",
+        "CABECA classificada como POSSIVEL_ALUCINACAO_WHISPER"
+      ]
+    },
+    {
+      "estrategia": "grade_fixa_locucao_estendida",
+      "timestamp": "2026-08-28T11:04:32",
+      "resultado": "CORTADO",
+      "motivo": [
+        "CABECA: texto bate com padrão de alucinação: 'Legendas pela comunidade de Amara.org'",
+        "CORPO: CORPO sem pontuação final (fraco, isolado — checar manualmente)",
+        "CABECA classificada como POSSIVEL_ALUCINACAO_WHISPER"
+      ]
+    }
+  ],
+  "erro": ""
+}

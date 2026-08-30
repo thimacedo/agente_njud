@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1918\\BOLETIM_RADIO_TJRN_28_04_2026_B1_TJRN_CASO_POLLYANA_.mp3",
+  "njud": "NJUD 1918",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:31:34",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

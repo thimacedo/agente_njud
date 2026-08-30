@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JUNHO\\NJUD 1898\\BOLETIM_RADIO_TJRN_09_06_2026_B10_DPERN_DEFENSORES_MIRINS_.mp3",
+  "njud": "NJUD 1898",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T15:03:19",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

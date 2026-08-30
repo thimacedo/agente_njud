@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\FEVEREIRO\\NJUD 1818\\BOLETIM_RADIO_TJRN_05_02_2026_B4_TJRN_HOMEM_CONDENADO_ROUBO_.mp3",
+  "njud": "NJUD 1818",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T11:07:43",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

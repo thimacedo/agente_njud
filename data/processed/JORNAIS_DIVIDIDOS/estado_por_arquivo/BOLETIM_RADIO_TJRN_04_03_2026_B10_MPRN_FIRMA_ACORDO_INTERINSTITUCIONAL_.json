@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1834\\BOLETIM_RADIO_TJRN_04_03_2026_B10_MPRN_FIRMA_ACORDO_INTERINSTITUCIONAL_.mp3",
+  "njud": "NJUD 1834",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T15:43:12",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

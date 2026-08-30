@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JANEIRO\\NJUD 1807\\BOLETIM_RADIO_TJRN_15_01_2026_B5_REPOJURN_QUALIS_CAPES_.mp3",
+  "njud": "NJUD 1807",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T13:14:53",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

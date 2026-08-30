@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1903\\BOLETIM_RADIO_TJRN_16_04_2026_B7_MPRN_VERBAS_PECUNIARIAS_.mp3",
+  "njud": "NJUD 1903",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T13:40:25",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

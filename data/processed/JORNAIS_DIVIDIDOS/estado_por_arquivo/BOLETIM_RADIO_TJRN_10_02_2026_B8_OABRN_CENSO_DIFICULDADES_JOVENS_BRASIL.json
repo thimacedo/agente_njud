@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\FEVEREIRO\\NJUD 1826\\BOLETIM_RADIO_TJRN_10_02_2026_B8_OABRN_CENSO_DIFICULDADES_JOVENS_BRASIL.mp3",
+  "njud": "NJUD 1826",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T11:38:23",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

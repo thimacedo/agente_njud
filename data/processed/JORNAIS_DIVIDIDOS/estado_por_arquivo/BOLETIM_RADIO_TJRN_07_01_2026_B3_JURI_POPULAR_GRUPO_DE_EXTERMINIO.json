@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JANEIRO\\NJUD 1792\\BOLETIM_RADIO_TJRN_07_01_2026_B3_JURI_POPULAR_GRUPO_DE_EXTERMINIO.mp3",
+  "njud": "NJUD 1792",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T11:41:55",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

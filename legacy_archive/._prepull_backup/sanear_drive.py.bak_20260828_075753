@@ -1,0 +1,195 @@
+#!/usr/bin/env python3
+"""
+Sanear e organizar áudios baixados para a estrutura do Drive.
+- Aplica regra de 1 arquivo por dia útil.
+- Resolve conflitos: completa > _INCOMPLETO; em empate, maior NJUD.
+- Move fins de semana para segunda ou quarentena.
+- Gera manifesto de quarentena.
+"""
+
+import csv
+import re
+import shutil
+from datetime import datetime
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+
+from src.utils.logger import get_logger
+
+logger = get_logger(__name__)
+
+MESES = {
+    '01': 'JANEIRO', '02': 'FEVEREIRO', '03': 'MARÇO', '04': 'ABRIL',
+    '05': 'MAIO', '06': 'JUNHO', '07': 'JULHO', '08': 'AGOSTO',
+    '09': 'SETEMBRO', '10': 'OUTUBRO', '11': 'NOVEMBRO', '12': 'DEZEMBRO',
+}
+
+PRIORIDADE_COMPLETA = {
+    '_INCOMPLETO': -1,
+    '_INCOMPLETA': -1,
+    '_bak': 0,
+    '': 1,
+}
+
+
+def _nome_base(nome: str) -> str:
+    return Path(nome).stem
+
+
+def _extrair_njud(nome: str) -> Tuple[Optional[str], Optional[str]]:
+    base = _nome_base(nome)
+    m = re.search(r'(NJUD|njud)[_\s-]?(\d+)', base)
+    if not m:
+        return None, None
+    return m.group(2), m.group(0)
+
+
+def _extrair_data_nome(nome: str) -> Optional[str]:
+    base = _nome_base(nome)
+    m = re.search(r'(\d{2}-\d{2}-\d{4})', base)
+    if m:
+        try:
+            return datetime.strptime(m.group(1), '%d-%m-%Y').strftime('%Y-%m-%d')
+        except ValueError:
+            pass
+    m = re.search(r'(\d{4}-\d{2}-\d{2})', base)
+    if m:
+        return m.group(1)
+    return None
+
+
+def _dia_semana(data_yyyy_mm_dd: str) -> int:
+    return datetime.strptime(data_yyyy_mm_dd, '%Y-%m-%d').weekday()
+
+
+def _pasta_mes(data_yyyy_mm_dd: str) -> str:
+    dt = datetime.strptime(data_yyyy_mm_dd, '%Y-%m-%d')
+    return f"{dt.month:02d} - {MESES[f'{dt.month:02d}']} - {dt.strftime('%y')}"
+
+
+def _prioridade(nome: str) -> int:
+    base = _nome_base(nome).upper()
+    for chave, valor in PRIORIDADE_COMPLETA.items():
+        if chave and chave in base:
+            return valor
+    return 1
+
+
+def _escolher_melhor(arquivos: List[Path]) -> Path:
+    melhor = arquivos[0]
+    for arq in arquivos[1:]:
+        if _prioridade(arq.name) > _prioridade(melhor.name):
+            melhor = arq
+        elif _prioridade(arq.name) == _prioridade(melhor.name):
+            njud_a, _ = _extrair_njud(arq.name)
+            njud_b, _ = _extrair_njud(melhor.name)
+            try:
+                if njud_a and njud_b and int(njud_a) > int(njud_b):
+                    melhor = arq
+            except ValueError:
+                pass
+    return melhor
+
+
+def mapear_origem(origem: Path) -> Dict[str, List[Path]]:
+    mapa: Dict[str, List[Path]] = {}
+    for p in origem.rglob('*'):
+        if p.is_file() and p.suffix.lower() in {'.mp3', '.wav', '.m4a', '.aac', '.ogg'}:
+            data = _extrair_data_nome(p.name)
+            if not data:
+                continue
+            mapa.setdefault(data, []).append(p)
+    return mapa
+
+
+def processar(origem: Path, destino: Path, dry_run: bool = False) -> Tuple[List[str], List[Dict]]:
+    origem = origem.resolve()
+    destino = destino.resolve()
+    manifest: List[Dict] = []
+    movidos: List[str] = []
+
+    mapa = mapear_origem(origem)
+    logger.info(f"Arquivos de áudio mapeados: {sum(len(v) for v in mapa.values())}")
+
+    for data, arquivos in sorted(mapa.items()):
+        dia = _dia_semana(data)
+        data_ref = data if dia < 5 else None
+
+        melhor = _escolher_melhor(arquivos)
+
+        if data_ref:
+            pasta_destino = destino / _pasta_mes(data_ref) / data_ref
+            pasta_destino.mkdir(parents=True, exist_ok=True)
+            destino_final = pasta_destino / melhor.name
+            acao = 'MOVER'
+        else:
+            alvo = data
+            if dia == 5:
+                alvo = datetime.strptime(data, '%Y-%m-%d').replace(day=datetime.strptime(data, '%Y-%m-%d').day + 2).strftime('%Y-%m-%d')
+            pasta_quarentena = destino / '_QUARENTENA'
+            pasta_quarentena.mkdir(parents=True, exist_ok=True)
+            destino_final = pasta_quarentena / melhor.name
+            acao = 'QUARENTENA'
+
+        conflitos = [p for p in arquivos if p != melhor]
+        manifest.append({
+            'data': data,
+            'acao': acao,
+            'selecionado': str(melhor),
+            'destino': str(destino_final),
+            'conflitos': ';'.join(str(p) for p in conflitos),
+            'detalhe': 'fim de semana' if dia >= 5 else ('conflito resolvido' if conflitos else 'ok'),
+        })
+
+        if dry_run:
+            logger.info(f"[dry-run] {acao}: {melhor.name} -> {destino_final}")
+            continue
+
+        if destino_final.exists() and not data_ref:
+            destino_final = destino_final.with_name(destino_final.stem + '_dup_' + datetime.now().strftime('%H%M%S') + destino_final.suffix)
+
+        shutil.move(str(melhor), str(destino_final))
+        movidos.append(str(destino_final))
+
+        for p in conflitos:
+            alvo_sec = Path(pasta_quarentena / p.name) if not data_ref else Path(pasta_destino / (p.stem + '_rejeitado' + p.suffix))
+            shutil.move(str(p), str(alvo_sec))
+
+    manifesto_path = destino / '_manifesto_saneamento.csv'
+    with manifesto_path.open('w', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=['data','acao','selecionado','destino','conflitos','detalhe'])
+        writer.writeheader()
+        writer.writerows(manifest)
+
+    logger.info(f"Manifesto gerado: {manifesto_path}")
+    return movidos, manifest
+
+
+def main():
+    import argparse
+    parser = argparse.ArgumentParser(description='Sanear e organizar áudios para o Drive')
+    parser.add_argument('--origem', required=True, help='Pasta de origem dos arquivos baixados')
+    parser.add_argument('--destino', required=True, help='Pasta destino do Drive')
+    parser.add_argument('--dry-run', action='store_true', help='Apenas simular')
+    args = parser.parse_args()
+
+    origem = Path(args.origem)
+    destino = Path(args.destino)
+    if not origem.exists():
+        logger.error(f"Origem não existe: {origem}")
+        return 1
+
+    movidos, manifest = processar(origem, destino, dry_run=args.dry_run)
+    print('\n' + '=' * 60)
+    print('📊 SANEAMENTO')
+    print('=' * 60)
+    print(f"Itens processados: {len(manifest)}")
+    print(f"Arquivos movidos: {len(movidos)}")
+    print(f"Manifesto: {destino / '_manifesto_saneamento.csv'}")
+    print('\n✅ Concluído')
+    return 0
+
+
+if __name__ == '__main__':
+    import sys
+    sys.exit(main())

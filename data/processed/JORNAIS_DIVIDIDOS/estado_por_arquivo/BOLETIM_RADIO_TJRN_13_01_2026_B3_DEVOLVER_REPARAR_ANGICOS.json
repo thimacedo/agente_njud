@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JANEIRO\\NJUD 1802\\BOLETIM_RADIO_TJRN_13_01_2026_B3_DEVOLVER_REPARAR_ANGICOS.mp3",
+  "njud": "NJUD 1802",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T12:54:18",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

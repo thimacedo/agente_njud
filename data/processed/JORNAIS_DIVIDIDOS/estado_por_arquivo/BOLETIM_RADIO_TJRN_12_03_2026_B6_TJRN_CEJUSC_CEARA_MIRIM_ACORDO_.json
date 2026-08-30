@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1848\\BOLETIM_RADIO_TJRN_12_03_2026_B6_TJRN_CEJUSC_CEARA_MIRIM_ACORDO_.mp3",
+  "njud": "NJUD 1848",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T16:29:01",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

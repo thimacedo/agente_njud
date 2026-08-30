@@ -3,8 +3,8 @@
 
 REGRA DE OPERAÇÃO (2026-08-24): nunca deixar dois dispatchers ou dois
 monitores rodando. Este script mata qualquer instância anterior
-(dispatcher_paralelo.py / monitor_tempo_real.py / run_pipeline) antes de
-iniciar a nova. Uso:
+(pipeline/dispatcher.py / pipeline/monitor.py / orchestration/safe_runner.py)
+antes de iniciar a nova. Uso:
 
     python iniciar_ciclo.py <pasta_boletins> <pasta_saida> [--max-workers N]
     python iniciar_ciclo.py --so-monitor <pasta_saida>
@@ -17,8 +17,8 @@ import time
 
 import psutil
 
-ALVOS = ("dispatcher_paralelo.py", "monitor_tempo_real.py",
-         "run_pipeline_safe_v2.py")
+ALVOS = ("pipeline/dispatcher.py", "pipeline/monitor.py",
+         "orchestration/safe_runner.py")
 
 
 def matar_instancias_anteriores(matar_monitor: bool):
@@ -32,7 +32,7 @@ def matar_instancias_anteriores(matar_monitor: bool):
             cmd = " ".join(proc.info["cmdline"] or [])
             if not any(alvo in cmd for alvo in ALVOS):
                 continue
-            eh_monitor = "monitor_tempo_real" in cmd
+            eh_monitor = "pipeline/monitor.py" in cmd or "monitor_tempo_real.py" in cmd
             if eh_monitor and not matar_monitor:
                 continue
             proc.terminate()
@@ -44,7 +44,7 @@ def matar_instancias_anteriores(matar_monitor: bool):
             [psutil.Process(p) for p in mortos if psutil.pid_exists(p)], timeout=5)
         for p in vivos:
             p.kill()
-    return len([p for p in mortos if not psutil.pid_exists(p)]) if False else mortos
+    return mortos
 
 
 def main():
@@ -66,12 +66,12 @@ def main():
         time.sleep(2)
 
     if args.so_monitor:
-        subprocess.run([py, os.path.join(src, "monitor_tempo_real.py"),
+        subprocess.run([py, os.path.join(src, "pipeline", "monitor.py"),
                         args.pasta_saida])
         return
 
     subprocess.run([
-        py, os.path.join(src, "dispatcher_paralelo.py"),
+        py, os.path.join(src, "pipeline", "dispatcher.py"),
         args.pasta_boletins, args.pasta_saida,
     ] + (["--max-workers", str(args.max_workers)] if args.max_workers else []))
 

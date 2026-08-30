@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JANEIRO\\NJUD 1806\\BOLETIM_RADIO_TJRN_14_01_2026_B10_CARTILHA_ENTREGA_ADOCAO.mp3",
+  "njud": "NJUD 1806",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T13:10:07",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

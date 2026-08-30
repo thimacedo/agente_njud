@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\MARÇO\\NJUD 1828\\BOLETIM_RADIO_TJRN_02_03_2026_B4_CONDENACAO_SALARIO_SEM_EXERCER_FUNCAO.mp3",
+  "njud": "NJUD 1828",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T15:24:59",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

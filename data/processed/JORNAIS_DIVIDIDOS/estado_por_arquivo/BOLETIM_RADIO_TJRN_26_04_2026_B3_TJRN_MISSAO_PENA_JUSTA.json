@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1914\\BOLETIM_RADIO_TJRN_26_04_2026_B3_TJRN_MISSAO_PENA_JUSTA.mp3",
+  "njud": "NJUD 1914",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:16:34",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}

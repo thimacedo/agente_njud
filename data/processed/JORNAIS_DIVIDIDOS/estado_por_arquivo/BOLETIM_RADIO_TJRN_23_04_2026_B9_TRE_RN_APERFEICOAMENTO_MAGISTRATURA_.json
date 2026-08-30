@@ -1,0 +1,15 @@
+{
+  "arquivo": "JORNAIS\\JULHO\\NJUD 1910\\BOLETIM_RADIO_TJRN_23_04_2026_B9_TRE_RN_APERFEICOAMENTO_MAGISTRATURA_.mp3",
+  "njud": "NJUD 1910",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-08-28T14:05:05",
+      "resultado": "OK",
+      "motivo": []
+    }
+  ],
+  "erro": ""
+}
