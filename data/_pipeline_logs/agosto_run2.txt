@@ -1,1 +1,0 @@
-Using cache found in C:\Users\THIAGO/.cache\torch\hub\snakers4_silero-vad_master

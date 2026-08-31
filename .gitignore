@@ -1,44 +1,56 @@
-```python
-# Compiled Python files
+# Python
 *.pyc
 __pycache__/
 
-# Dependencies
+# Dependências / ambientes
 .venv/
 venv/
 pip-log.txt
 pip-selfcheck.json
 
-# Environment variables
+# Variáveis de ambiente
 .env
 .env.local
 *.env.*
 
-# IDE and editor files
+# IDE / editor
 .vscode/
 .idea/
 *.swp
 *.swo
 *.tmp
 
-# Logs
+# Logs (texto)
 *.log
+*.jsonl
 
-# Coverage reports
+# Áudio e artefatos gerados pelo pipeline (vivem no disco/Drive, não no git)
+*.mp3
+*.pkl
+!assets/**
+data/cache/
+data/output/
+data/processed/
+data/_debug_cortes/
+data/_debug_logs/
+data/_pipeline_logs/
+data/_substituidos_*/
+legacy_archive/
+downloads/
+
+# Scratch de experimentos
+audio_results_*.json
+listing_page_sample.html
+_memory_notes.json
+
+# Cobertura / builds
 .coverage
 coverage/
 htmlcov/
-
-# Distribution / packaging
 dist/
 build/
 *.egg-info/
 .installed.cfg
 *.egg
-
-# Pytest cache
 .pytest_cache/
-
-# MyPy cache
 .mypy_cache/
-```
