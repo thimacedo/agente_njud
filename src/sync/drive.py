@@ -18,7 +18,7 @@ except Exception:
     PASTA_ORIGEM_JORNAIS = Path("F:/Projetos/DIVISOR/data/output")
     PASTA_DESTINO_DRIVE_PAI = Path(r"H:\Meu Drive\RADIO TJRN CONTEÚDO\00_PRODUCAO_2026\02_JORNAIS_NJUD\03_AUDIOS_RADIO")
 
-PATTERN_NOME = re.compile(r"^NJUD_\d{4}_\d{2}-\d{2}-\d{4}\.mp3$")
+PATTERN_NOME = re.compile(r"^NJUD_\d{4}_\d{2}-\d{2}-\d{4}(_INCOMPLETO)?\.mp3$")
 
 # Mapeamento inclui ANO para evitar colisão entre anos diferentes (bug fix 2026-08-25)
 def obter_mapeamento_meses(ano: int = 26):

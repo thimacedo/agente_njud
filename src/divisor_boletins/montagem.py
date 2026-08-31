@@ -268,19 +268,19 @@ def montar_jornal(
 
     print('[DEBUG] indice_jornal=', indice_jornal, 'pares=', len(pares), [c1.name for c1,c2 in pares])
     
-    # VERIFICAÇÃO DE INTEGRIDADE: permite exceção de 3 boletins
+    # VERIFICAÇÃO DE INTEGRIDADE: permite exceção de 2+ boletins
     incompleto = False
     if len(pares) < 4:
-        if len(pares) == 3:
+        if len(pares) >= 2:
             logger.aviso(
                 etapa,
-                f"Jornal {nome_jornal} com apenas 3 boletins (EXCEÇÃO APLICADA)",
+                f"Jornal {nome_jornal} com apenas {len(pares)} boletins (EXCEÇÃO APLICADA)",
             )
             incompleto = True
         else:
             logger.erro(
                 etapa,
-                f"Jornal {nome_jornal} tem apenas {len(pares)} boletins (mínimo 3 necessário)",
+                f"Jornal {nome_jornal} tem apenas {len(pares)} boletins (mínimo 2 necessário)",
             )
             return None
 
