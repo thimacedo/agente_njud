@@ -32,7 +32,7 @@ boletim, e ele só está concluído quando a auditoria o aprova.
 ### Arquitetura
 
 ```
-pipeline/dispatcher.py → N workers persistentes (Whisper carregado 1x)
+dispatcher_paralelo.py → N workers persistentes (Whisper carregado 1x)
         │                        │
         ▼                        ▼
    fila de tarefas         ciclo por arquivo:
@@ -119,11 +119,11 @@ Revê-los após a primeira execução com workers ≥ 2:
 
 | Parâmetro | Valor inicial | Onde | Como ajustar |
 |---|---|---|---|
-| `THREADS_POR_WORKER` | 2 | pipeline/dispatcher.py | manter 2; Whisper small int8 escala mal acima disso |
-| `RAM_POR_WORKER_GB` | **2.5 (medido)** | pipeline/dispatcher.py | medido em 2026-08-24: 1.5 causou OOM (`mkl_malloc`) com 2 workers e 5.6GB livres |
-| `RAM_RESERVADA_GB` | **3.0 (medido)** | pipeline/dispatcher.py | elevado de 2.0 após OOM; aumentar se o PC travar com outros apps abertos |
-| `LIMIAR_CPU_PAUSA` | 85% | pipeline/dispatcher.py | dispatcher pausou corretamente a 90–100%; reduzir para 75 se o operador usar a máquina durante o lote |
-| `HEARTBEAT_ATRASADO_S` / `MORTO_S` | 15s / 60s | pipeline/monitor.py | se cortes legítimos aparecerem como ATRASADOS, subir ATRASADO para 30s |
+| `THREADS_POR_WORKER` | 2 | dispatcher_paralelo.py | manter 2; Whisper small int8 escala mal acima disso |
+| `RAM_POR_WORKER_GB` | **2.5 (medido)** | dispatcher_paralelo.py | medido em 2026-08-24: 1.5 causou OOM (`mkl_malloc`) com 2 workers e 5.6GB livres |
+| `RAM_RESERVADA_GB` | **3.0 (medido)** | dispatcher_paralelo.py | elevado de 2.0 após OOM; aumentar se o PC travar com outros apps abertos |
+| `LIMIAR_CPU_PAUSA` | 85% | dispatcher_paralelo.py | dispatcher pausou corretamente a 90–100%; reduzir para 75 se o operador usar a máquina durante o lote |
+| `HEARTBEAT_ATRASADO_S` / `MORTO_S` | 15s / 60s | monitor_tempo_real.py | se cortes legítimos aparecerem como ATRASADOS, subir ATRASADO para 30s |
 
 ---
 
@@ -152,7 +152,7 @@ Revê-los após a primeira execução com workers ≥ 2:
 | `inicio_cabeca=0.0` silencioso | DECISOES.md item 5; fallback âncora/VAD explícito |
 | Centenas de cópias `_old` no Drive | H: somente leitura exceto sync final; overwrite sem _old |
 | Reprocessar lote inteiro apagava histórico | Processo único: estado por arquivo, nunca repete estratégia |
-| Monitor contando .mp3 não distinguia status | pipeline/monitor.py lê os JSONs de estado |
+| Monitor contando .mp3 não distinguia status | monitor_tempo_real.py lê os JSONs de estado |
 | Mês definido pela pasta gerava lotes errados | Data do nome do arquivo é a fonte de verdade |
 
 *Versão 4 — 2026-08-24. v3 → v4: fluxo sequencial substituído pelo processo

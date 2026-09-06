@@ -24,7 +24,7 @@ O script lê diretamente o padrão `_(DD)_(MM)_(AAAA)_` nos nomes dos arquivos d
 
 ---
 
-## 3. `sync/copy.py` — validação do plano antes de qualquer alteração em disco
+## 3. `copiar_boletins.py` — validação do plano antes de qualquer alteração em disco
 
 **Motivo:**  
 Existiu uma versão anterior que executava `shutil.rmtree()` em todas as pastas de NJUD **antes** de validar `plano_alocacao.csv`. Se o CSV estivesse ausente, vazio ou malformado, a limpeza já tinha acontecido e não havia como reverter.
@@ -51,8 +51,8 @@ F:/Projetos/DIVISOR/
 ├── src/                      # código-fonte
 │   ├── divisor_boletins/
 │   ├── core/
-│   ├── sync/copy.py
-│   ├── sync/drive.py
+│   ├── copiar_boletins.py
+│   ├── sincronizar_drive.py
 │   └── ...
 ├── assets/
 │   └── vinhetas/
@@ -94,7 +94,7 @@ calibração por correlação normalmente.
 
 Não reverter para o default `0.0` silencioso.
 
-## 6. `pipeline/single_process.py` — ciclo fechado por arquivo substitui reprocessamento manual (2026-08-24)
+## 6. `processo_unico.py` — ciclo fechado por arquivo substitui reprocessamento manual (2026-08-24)
 
 **Mudança de modelo:** a unidade de conclusão não é mais o lote, é cada boletim
 individual. Um arquivo só está concluído quando a auditoria o classifica OK;
@@ -107,11 +107,11 @@ que já falhou para aquele arquivo.
 - Gate por-NJUD: montagem só roda quando TODOS os 4 boletins do NJUD estão
   OK ou ESGOTADO_ACEITO. Nenhum jornal sai com peça pendente.
 - `audio.py: processar_arquivo()` aceita `estrategia=` como parâmetro
-  explícito; `audit/individual_cuts.py` expõe `analisar_par()`.
+  explícito; `analisar_cortes_individuais.py` expõe `analisar_par()`.
 - Estratégias de escalonamento: calibracao_correlacao → ancora_vad_forcado →
   janela_silencio_ampliada (4000ms) → grade_fixa_locucao_estendida.
 
-Não reverter para "rodar orchestration/safe_runner.py várias vezes esperando que
+Não reverter para "rodar run_pipeline_safe_v2.py várias vezes esperando que
 dessa vez funcione": isso apaga o histórico de tentativas e permite regressões
 silenciosas.
 
@@ -143,9 +143,9 @@ ler a cópia errada de um CSV e de regressão via import da versão antiga.
   `data/`, com conteúdo divergente. A cópia da raiz era mais recente (23-24/08 vs 21-23/08)
   e era a lida pelos scripts → raiz venceu; cópias antigas preservadas em
   `data/_substituidos_20260824/*.bak`.
-- `_refatoracao_recebida/pipeline/dispatcher.py` diff contra `src/`: versão ANTIGA (sem
-  heartbeat, RAM_POR_WORKER=1.5GB pré-OOM). `audit/individual_cuts.py` e
-  `pipeline/single_process.py`: idênticos. `audio.py`: órfão (equivalente em divisor_boletins/audio.py).
+- `_refatoracao_recebida/dispatcher_paralelo.py` diff contra `src/`: versão ANTIGA (sem
+  heartbeat, RAM_POR_WORKER=1.5GB pré-OOM). `analisar_cortes_individuais.py` e
+  `processo_unico.py`: idênticos. `audio.py`: órfão (equivalente em divisor_boletins/audio.py).
   → pasta deletada inteira.
 - `entrada/`, `processamento/`, `saida/`: zero referências no código (grep duplo) → removidas.
 - `_backup_estado_antes_*.csv`: 13 arquivos gerados sem retenção; consolidados em
@@ -153,7 +153,7 @@ ler a cópia errada de um CSV e de regressão via import da versão antiga.
   e os originais apagados.
 
 **Movimentações:**
-- Raiz → src/: executar_reprocessamento.py, orchestration/safe_runner.py, iniciar_ciclo.py,
+- Raiz → src/: executar_reprocessamento.py, run_pipeline_safe_v2.py, iniciar_ciclo.py,
   teste_ciclo.py, reprocessar_agosto.sh.
 - Raiz → data/: plano_alocacao.csv, njuds_por_mes.csv, jornal_njuds.csv,
   njuds_faltantes.csv, alocacao_boletins.csv, plano_pendentes_sem_njud.csv,
@@ -163,14 +163,14 @@ ler a cópia errada de um CSV e de regressão via import da versão antiga.
 **Referências corrigidas (9 arquivos):**
 | Arquivo | Ajuste |
 |---|---|
-| sync/copy.py | PLAN_CSV, REPORT_CSV, NJUDS_POR_MES_CSV → data/ |
-| plan/fixer.py | PLANO_CSV, NJUDS_POR_MES_CSV → data/; LOG_DIR → logs/correcoes/ |
-| plan/generator.py | NJUDS_CSV, PLAN_CSV, REPORT_CSV, MISSING_CSV → data/ |
-| orchestration/safe_runner.py | PLAN_CSV, NJUDS_POR_MES_CSV, JOURNAL_NJUDS_CSV → PROJECT_ROOT/data |
+| copiar_boletins.py | PLAN_CSV, REPORT_CSV, NJUDS_POR_MES_CSV → data/ |
+| corrigir_plano.py | PLANO_CSV, NJUDS_POR_MES_CSV → data/; LOG_DIR → logs/correcoes/ |
+| gerar_plano.py | NJUDS_CSV, PLAN_CSV, REPORT_CSV, MISSING_CSV → data/ |
+| run_pipeline_safe_v2.py | PLAN_CSV, NJUDS_POR_MES_CSV, JOURNAL_NJUDS_CSV → PROJECT_ROOT/data |
 | divisor_boletins/calibracao.py | _CACHE_PATH de relativo ("_vinhetas_cache.pkl", dependia do CWD) para fixo F:/Projetos/DIVISOR/data/cache/_vinhetas_cache.pkl |
 | teste_ciclo.py | removido sys.path hack para _refatoracao_recebida (deletada); path local |
 | iniciar_ciclo.py | `src = dirname(__file__)` (antes: dirname/src, errado após mudança p/ src/) |
-| audit/integrity.py | saída → logs/relatorio_integridade_autonomo.json; pasta montados → data/output/JORNAIS_DIVIDIDOS_montados |
+| rodar_auditoria.py | saída → logs/relatorio_integridade_autonomo.json; pasta montados → data/output/JORNAIS_DIVIDIDOS_montados |
 | reprocessar_agosto.sh | cd → F:/Projetos/DIVISOR/src |
 
 **Deletados:** _refatoracao_recebida/, src/_backup_pre_refatoracao_20260824_084255/,
@@ -178,7 +178,7 @@ __pycache__/ (raiz e src/), _logs_correcao/, entrada/, processamento/, saida/,
 13x _backup_estado_antes_*.csv.
 
 **Validação executada:** py_compile em todos os módulos (28 OK / 0 erro);
-plan/generator.py --help lê plano de data/ (552 boletins); calibracao._CACHE_PATH resolve no
+gerar_plano.py --help lê plano de data/ (552 boletins); calibracao._CACHE_PATH resolve no
 novo caminho com cache existente. Pipeline completo ainda não exercitado com áudio real —
 primeiro iniciar_ciclo.py confirma o dispatcher.
 
@@ -244,20 +244,20 @@ de data/; não regenerar _backup_estado_* sem política de retenção (consolida
 2. montagem.py (`montar_todos`) espera <entrada>/<MÊS>/<NJUD>/, mas dispatcher grava
    direto em JORNAIS_DIVIDIDOS/<NJUD>/. Contorno: chamar montar_jornal(njud_pasta)
    diretamente. PENDENTE: alinhar árvore entre dispatcher e montagem.
-3. sync/drive.py lê mp3 de data/output/ raiz, não de data/output/JORNAIS_FINAL/.
+3. sincronizar_drive.py lê mp3 de data/output/ raiz, não de data/output/JORNAIS_FINAL/.
    Contorno aplicado: copiar o montado para a raiz antes do sync. PENDENTE: unificar.
 4. Atenção a artefatos stale: NJUD_1918_26-08-2026.mp3 antigo (07:13) sobreviveu na
    pasta de saída e passaria por produto novo. Sempre checar mtime antes de confiar.
 
 ## Item 6b (2026-08-24 — correções estruturais aplicadas)
-1. AUDITOR FÍSICO: audit/individual_cuts.py não usa mais timestamp do
+1. AUDITOR FÍSICO: analisar_cortes_individuais.py não usa mais timestamp do
    Whisper para bordas. Borda = RMS de janela 50ms vs piso de fala (percentil
    10 do RMS global); corte só se energia >= piso+12dB. Conectivo isolado só
    reprova se o arquivo não tiver fala real (artigos iniciam frases naturais).
    Validado: 4/4 pares NJUD 1918 agora OK sem intervenção.
 2. MONTAGEM: montar_todos() aceita <NJUD> direto em JORNAIS_DIVIDIDOS/ (formato
    do dispatcher) além de <MES>/<NJUD>/ — detectado por regex "NJUD <num>".
-3. SYNC: sync/drive.py lê de data/output/JORNAIS_FINAL/ (fallback:
+3. SYNC: sincronizar_drive.py lê de data/output/JORNAIS_FINAL/ (fallback:
    raiz data/output). Não precisa mais copiar manualmente antes do sync.
 
 ## 9. Estrutura imutável de BOLETIM e JORNAL + regra de limpeza de vinhetas (2026-08-24)
