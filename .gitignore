@@ -1,0 +1,34 @@
+# Data files - fuente y productos pesados
+data/
+JORNAIS/
+downloads/
+logs/
+legacy_archive/
+montagem_julago/
+projeto_etapa_final_2026/
+
+# Backups y temporales
+_backup_estado_*.csv
+*.lock
+nul
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Reportes grandes
+relatorio_exploracao_20260905.md
