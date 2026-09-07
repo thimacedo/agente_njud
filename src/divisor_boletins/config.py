@@ -9,12 +9,14 @@ from __future__ import annotations
 
 import re
 
+from config.njud import settings as _settings
+
 # ===========================================================================
 # MODELO WHISPER
 # ===========================================================================
 
-MODELO_WHISPER = "tiny"
-COMPUTE_TYPE = "int8"
+MODELO_WHISPER = _settings.MODELO_WHISPER
+COMPUTE_TYPE = _settings.COMPUTE_TYPE
 
 # ===========================================================================
 # THRESHOLDS DE DETECÇÃO

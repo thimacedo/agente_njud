@@ -71,6 +71,7 @@ VHT_ENCERRAMENTO_GIRO_NOME = _settings.VHT_ENCERRAMENTO_GIRO_NOME
 MODELO_WHISPER = _settings.MODELO_WHISPER
 COMPUTE_TYPE = _settings.COMPUTE_TYPE
 CACHE_TRANSCRICOES = _settings.CACHE_TRANSCRICOES
+LOGS_DIR_GIRO = _settings.LOGS_DIR_GIRO
 # INEGOCIÁVEL: excluir notícias de outros estados (fora RN).
 # AJUSTÁVEL: evitar notas sobre Natal.
 # ===========================================================================
@@ -157,5 +158,9 @@ __all__ = [
     "VHT_ABERTURA_GIRO_NOME",
     "VHT_PASSAGEM_GIRO_NOME",
     "VHT_ENCERRAMENTO_GIRO_NOME",
+    "MODELO_WHISPER",
+    "COMPUTE_TYPE",
+    "CACHE_TRANSCRICOES",
+    "LOGS_DIR_GIRO",
     "_PADRAO_ASSINATURA_GIRO",
 ]

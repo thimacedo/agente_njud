@@ -39,7 +39,7 @@ from .log import (
     log_info,
     log_programa_concluido,
 )
-from .config import DIR_PROCESSED, DIR_PLANOS
+from .config import DIR_PROCESSED, DIR_PLANOS, LOGS_DIR_GIRO
 from .filtro import ClassificacaoGiro, ResultadoFiltro, filtrar_nota
 from .utils import (
     gerar_plano,
@@ -81,7 +81,7 @@ def processar_giro(
     if saida is None:
         saida = DIR_PROCESSED
     if log_dir is None:
-        log_dir = Path("logs")
+        log_dir = LOGS_DIR_GIRO
 
     pasta_saida = saida
     pasta_saida.mkdir(parents=True, exist_ok=True)
@@ -236,7 +236,7 @@ def montar_giro(
         Lista de Paths dos programas montados
     """
     if log_dir is None:
-        log_dir = Path("logs")
+        log_dir = LOGS_DIR_GIRO
     log_dir.mkdir(parents=True, exist_ok=True)
 
     nivel = 10 if verbose else 20
