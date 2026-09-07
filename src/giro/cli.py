@@ -121,6 +121,7 @@ def processar_giro(
 
     # ---- Para cada programa, identificar notas nos boletins ----
     resultados = []
+    MIN_NOTAS = 4  # threshold: mínimo de notas por programa
 
     for plano in plano_selecionado:
         mmss = plano["mmss"]
@@ -156,7 +157,7 @@ def processar_giro(
             f"  {mmss}: {len(boletins_no_periodo)} boletins no período",
         )
 
-        # Para cada boletim: transcrever → extrair notas → filtrar → cortar
+        # ---- PASSO 1: Coletar notas evitando Natal ----
         idx_nota_global = 0
         notas_aceitas_total = []
         modelo_whisper = None
@@ -164,7 +165,7 @@ def processar_giro(
         for boletim_path, data_boletim in boletins_no_periodo:
             log_info(
                 "nota",
-                f"  Processando boletim {boletim_path.name} ({data_boletim})...",
+                f"  [Passo 1] Processando boletim {boletim_path.name} ({data_boletim})...",
             )
 
             try:
@@ -174,7 +175,7 @@ def processar_giro(
                     mmss=mmss,
                     idx_nota_global=idx_nota_global,
                     pasta_saida=pasta_saida / mmss,
-                    evitar_natal=evitar_natal,
+                    evitar_natal=True,
                     metodo_deteccao="assinatura",
                     modelo=modelo_whisper,
                 )
@@ -190,6 +191,57 @@ def processar_giro(
             except Exception as e:
                 log_erro("nota", f"  Erro ao processar boletim: {e}")
                 continue
+
+        # ---- PASSO 2: Se < MIN_NOTAS, complementar com notas de Natal ----
+        if len(notas_aceitas_total) < MIN_NOTAS:
+            faltam = MIN_NOTAS - len(notas_aceitas_total)
+            log_info(
+                "threshold",
+                f"  {mmss}: apenas {len(notas_aceitas_total)} nota(s) de outras cidades "
+                f"(mínimo={MIN_NOTAS}). Re-processando com evitar_natal=False para complementar...",
+            )
+
+            for boletim_path, data_boletim in boletins_no_periodo:
+                if len(notas_aceitas_total) >= MIN_NOTAS:
+                    break  # já atingiu o mínimo
+
+                log_info(
+                    "nota",
+                    f"  [Passo 2 - fallback] Re-processando {boletim_path.name} ({data_boletim})...",
+                )
+
+                try:
+                    from .transcricao import processar_boletim
+                    notas_natal, idx_nota_global, modelo_whisper = processar_boletim(
+                        caminho_boletim=boletim_path,
+                        mmss=mmss,
+                        idx_nota_global=idx_nota_global,
+                        pasta_saida=pasta_saida / mmss,
+                        evitar_natal=False,  # aceita notas de Natal
+                        metodo_deteccao="assinatura",
+                        modelo=modelo_whisper,
+                    )
+                    # Adiciona apenas notas que ainda não estão na lista
+                    existentes = {p.name for p in notas_aceitas_total}
+                    for n in notas_natal:
+                        if n.name not in existentes and len(notas_aceitas_total) < MIN_NOTAS:
+                            notas_aceitas_total.append(n)
+                            existentes.add(n.name)
+
+                except Exception as e:
+                    log_erro("nota", f"  Erro no fallback: {e}")
+                    continue
+
+            log_info(
+                "threshold",
+                f"  {mmss}: após fallback, {len(notas_aceitas_total)} nota(s) total(is).",
+            )
+        else:
+            log_info(
+                "threshold",
+                f"  {mmss}: {len(notas_aceitas_total)} nota(s) de outras cidades "
+                f"(≥{MIN_NOTAS}). Sem necessidade de fallback.",
+            )
 
         log_info(
             "seleção",
