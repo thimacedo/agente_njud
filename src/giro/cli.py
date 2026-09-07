@@ -275,9 +275,14 @@ def processar_giro(
 
             # Buscar programas anteriores do mesmo mês (mmss-1, mmss-2, ...)
             mmss_anterior = mmss_num - 1
+            # Limite: primeiro programa do mês OU último programa do mês anterior (cross-month)
+            limite_inferior = mes_atual * 100 + 1
+            if mmss_anterior < limite_inferior:
+                # Primeiro programa do mês: permitir buscar no último do mês anterior
+                limite_inferior = (mes_atual - 1) * 100 + 1 if mes_atual > 1 else 1201
             notas_copiadas = 0
 
-            while mmss_anterior >= (mes_atual * 100 + 1) and len(notas_aceitas_total) < MIN_NOTAS:
+            while mmss_anterior >= limite_inferior and len(notas_aceitas_total) < MIN_NOTAS:
                 mmss_str = f"{mmss_anterior:04d}"
                 pasta_anterior = pasta_saida / mmss_str
 
