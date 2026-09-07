@@ -133,12 +133,17 @@ def transcrever_boletim(
     t0 = time.time()
     log_info("transcricao", f"Iniciando transcrição: {caminho_str}")
 
-    segments, info = modelo.transcribe(
-        caminho_str,
-        beam_size=beam_size,
-        language="pt",
-        condition_on_previous_text=False,
-    )
+    try:
+        segments, info = modelo.transcribe(
+            caminho_str,
+            beam_size=beam_size,
+            language="pt",
+            condition_on_previous_text=False,
+        )
+    finally:
+        # Liberar memória alocada pelo MKL/Intel Math Kernel Library
+        import gc
+        gc.collect()
 
     lista_segments = []
     for seg in segments:
@@ -231,6 +236,12 @@ def _detectar_notas_por_assinatura(
 
     for i, seg in enumerate(segmentos):
         if i > 0 and PADRAO_ASSINATURA.search(seg["text"]):
+            # Verificar se há conteúdo substancial após a assinatura
+            # (pelo menos 10s de áudio até o fim — senão é só encerramento)
+            durante_restante = segmentos[-1]["end"] - seg["start"]
+            if durante_restante < 10.0:
+                # Assinatura final do boletim — ignorar como nova nota
+                continue
             notas.append((inicio_nota, i - 1))
             inicio_nota = i
 
@@ -241,39 +252,31 @@ def _detectar_notas_por_assinatura(
 def extrair_notas(
     segmentos: list[dict],
     texto_completo: str,
-    metodo: str = "assinatura",
+    metodo: str = "arquivo",
 ) -> list[NotaExtraida]:
     """Extrai notas individuais da transcrição de um boletim.
+
+    Cada arquivo de boletim TJRN (B1, B2, B3...) já é uma nota individual.
+    Não há necessidade de detectar limites internos — o arquivo inteiro é a nota.
 
     Args:
         segmentos: segmentos whisper
         texto_completo: texto completo da transcrição
-        metodo: "assinatura" (padrão) ou "silencio"
+        metodo: "arquivo" (padrão) — 1 nota por arquivo
 
     Returns:
-        Lista de NotaExtraida
+        Lista com 1 NotaExtraida (o arquivo inteiro)
     """
-    if metodo == "silencio":
-        ranges = _detectar_notas_por_silencio(segmentos)
-    else:
-        ranges = _detectar_notas_por_assinatura(segmentos)
+    if not segmentos:
+        return []
 
-    notas = []
-    for idx, (i_inicio, i_fim) in enumerate(ranges):
-        segs_nota = segmentos[i_inicio:i_fim + 1]
-        texto_nota = " ".join(s["text"] for s in segs_nota)
-        inicio_seg = segs_nota[0]["start"]
-        fim_seg = segs_nota[-1]["end"]
-
-        notas.append(NotaExtraida(
-            idx=idx + 1,
-            texto=texto_nota,
-            inicio_seg=inicio_seg,
-            fim_seg=fim_seg,
-            segmentos=segs_nota,
-        ))
-
-    return notas
+    return [NotaExtraida(
+        idx=1,
+        texto=texto_completo,
+        inicio_seg=segmentos[0]["start"],
+        fim_seg=segmentos[-1]["end"],
+        segmentos=segmentos,
+    )]
 
 
 # ===========================================================================

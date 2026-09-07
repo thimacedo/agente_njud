@@ -1,7 +1,20 @@
 #!/usr/bin/env python3
-"""Orquestrador do pipeline DIVISOR.
-Ciclo continuo: percebe -> planeja -> age -> adapta.
 """
+Orquestrador do pipeline DIVISOR (LEGACY — NJUD apenas).
+
+Versão original do orquestrador responsável pelo ciclo de produção
+de NJUDs. Mantido para compatibilidade com scripts existentes,
+mas o orquestrador ativo agora é `src/orchestration/safe_runner.py`
+(versão modularizada com settings namespaced).
+
+A diferença principal:
+- `orquestrador.py` (este): caminhos hardcoded, log em `logs/orquestrador.log`
+- `safe_runner.py` (ativo): settings namespaced, log em `logs/njud/orquestrador.log`
+
+Este arquivo pode ser removido quando a migração for completa.
+"""
+from __future__ import annotations
+
 import json, time, subprocess, os, sys
 from pathlib import Path
 from datetime import datetime
@@ -64,9 +77,9 @@ def obter_resultado_auditoria():
     
     return selo_ok, fila_refazer
 
-# Loop principal do orquestrador
+# Loop principal do orquestrador (LEGACY)
 with open(log_orq, "w") as log:
-    log.write("=== ORQUESTRADOR INICIADO ===\n")
+    log.write("=== ORQUESTRADOR INICIADO (LEGACY) ===\n")
     log.flush()
     
     ciclo = 0

@@ -37,7 +37,7 @@ from .log import LogPipeline, _serializar_dados
 from .texto import normalizar_texto
 from .calibracao import calibrar_boletim
 
-from config.settings import settings
+from config.njud import settings
 
 
 # ===========================================================================
@@ -80,7 +80,7 @@ _CACHE_MEM: dict[str, tuple[list[dict], str]] = {}
 def _cache_path(caminho_audio: str | Path) -> Path:
     p = Path(caminho_audio)
     nome = f"{p.parent.name}__{p.name}.json"
-    return settings.BASE_DIR / "data/cache/transcricoes" / nome
+    return settings.CACHE_TRANSCRICOES / nome
 
 
 def _carregar_cache_disco(caminho_audio: str | Path) -> tuple[list[dict], str] | None:

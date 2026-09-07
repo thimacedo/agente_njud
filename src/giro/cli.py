@@ -79,7 +79,7 @@ def processar_giro(
         dict com resumo do processamento
     """
     if saida is None:
-        saida = DIR_PROCESSED.parent / "output" / "GIRO_COMARCAS"
+        saida = DIR_PROCESSED
     if log_dir is None:
         log_dir = Path("logs")
 

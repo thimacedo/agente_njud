@@ -1,5 +1,4 @@
-"""
-Divisor de Boletins de Rádio — TJRN
+"""Divisor de Boletins de Rádio — TJRN
 ====================================
 
 Pipeline de transcrição, detecção de vinhetas, corte e montagem.

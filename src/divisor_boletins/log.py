@@ -1,13 +1,15 @@
-"""
-Sistema de log dual (TXT + JSONL) para o pipeline.
-"""
+"""Sistema de log dual (TXT + JSONL) para o pipeline NJUD.
 
+Logs namespaced: grava em logs/njud/ por padrão.
+"""
 from __future__ import annotations
 
 import json
 import time
 from dataclasses import dataclass, field
 from pathlib import Path
+
+from config.njud import settings
 
 
 @dataclass
@@ -41,7 +43,13 @@ def _serializar_dados(dados: dict | None) -> dict:
 class LogPipeline:
     NIVEIS = {"INFO", "AVISO", "ERRO"}
 
-    def __init__(self, log_dir: str | Path):
+    def __init__(
+        self,
+        log_dir: str | Path | None = None,
+    ):
+        # Default namespaced: logs/njud/
+        if log_dir is None:
+            log_dir = settings.LOGS_DIR_NJUD
         self.log_dir = Path(log_dir)
         self.log_dir.mkdir(parents=True, exist_ok=True)
         self._txt_path = self.log_dir / "divisor_log.txt"

@@ -1,8 +1,15 @@
-#!/usr/bin/env python3
+# coding: utf-8
 """
 Orquestrador unificado do pipeline de boletins/rádio (fire-and-forget).
-"""
+Versão modularizada: usa settings namespaced do NJUD (config.njud).
 
+Responsável por coordenar o ciclo completo do NJUD:
+    1. Preparar boletins (validar + copiar para estrutura namespaced)
+    2. Dividir em _CABECA/_CORPO
+    3. Montar jornais completos
+    4. Auditar integridade
+    5. Repetir até conclusão
+"""
 from __future__ import annotations
 
 import argparse
@@ -16,343 +23,276 @@ import time
 from datetime import datetime
 from pathlib import Path
 
-from config.settings import settings
+from config.njud import settings
 
 PROJECT_ROOT = settings.BASE_DIR
 RAW_ROOT = settings.BOLETINS_BRUTOS
 PROCESSED_ROOT = Path(settings.BOLETINS_CORTADOS)
 OUTPUT_ROOT = Path(settings.DIR_OUTPUT)
-LOG_DIR = OUTPUT_ROOT / "_logs"
-ASSETS_DIR = settings.BASE_DIR / "assets" / "vinhetas"
+LOG_DIR = settings.LOGS_DIR_NJUD  # logs/njud/
+ASSETS_DIR = settings.VINHETAS_DIR  # assets/vinhetas/njud/
 PLAN_CSV = settings.BASE_DIR / "data" / "plano_alocacao.csv"
 NJUDS_POR_MES_CSV = settings.BASE_DIR / "data" / "njuds_por_mes.csv"
 JOURNAL_NJUDS_CSV = settings.BASE_DIR / "data" / "jornal_njuds.csv"
 
-SRC_COPIAR = settings.BASE_DIR / "src" / "sync" / "copy.py"
-SRC_PLANEJADOR = settings.BASE_DIR / "src" / "plan" / "allocator.py"
-SRC_DIVIDIR = settings.BASE_DIR / "src" / "divisor_boletins"
-SRC_AUDITORIA = settings.BASE_DIR / "src" / "audit" / "integrity.py"
-SRC_SINCRONIZAR = settings.BASE_DIR / "src" / "sync" / "drive.py"
+# Caminhos derivados
+NJUD_STATE_DIR = PROCESSED_ROOT.parent / "estado_por_arquivo"
+AUDITORIA_SCRIPT = PROJECT_ROOT / "scripts_pipeline" / "etapa3_auditoria_montagem.py"
 
 
-def ensure_dirs() -> None:
-    for p in [RAW_ROOT, PROCESSED_ROOT, OUTPUT_ROOT, LOG_DIR]:
-        p.mkdir(parents=True, exist_ok=True)
+def log(msg: str) -> None:
+    """Log simples com timestamp no stdout e no arquivo de log do NJUD."""
+    ts = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    linha = f"[{ts}] {msg}"
+    print(linha)
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
+    with open(LOG_DIR / "orquestrador.log", "a", encoding="utf-8") as f:
+        f.write(linha + "\n")
 
 
-def check_assets() -> list[str]:
-    required = [
-        "VHT_ABERTURA_BOLETIM.mp3",
-        "VHT_PASSAGEM_BOLETIM.mp3",
-        "VHT_ENCERRAMENTO_BOLETIM.mp3",
-        "VHT_ABERTURA_NJUD.mp3",
-        "EFEITO_PASSAGEM_NJUD.mp3",
-        "VHT_ENCERRAMENTO_NJUD.mp3",
-        "TRILHA_ESCALADA_NJUD.mp3",
-    ]
-    missing = [x for x in required if not (ASSETS_DIR / x).exists()]
-    return missing
+def contar_estado(njuds_alvo: list[str]) -> dict[str, dict[str, int]]:
+    """Conta arquivos de estado por status para cada NJUD alvo."""
+    status: dict[str, dict[str, int]] = {
+        n: {"OK": 0, "ERRO": 0, "ESGOTADO": 0, "PENDENTE": 0}
+        for n in njuds_alvo
+    }
+    if not NJUD_STATE_DIR.exists():
+        return status
+    for f in NJUD_STATE_DIR.glob("*.json"):
+        try:
+            d = json.loads(f.read_text(encoding="utf-8"))
+            njud = d.get("njud", "").replace("NJUD ", "")
+            if njud in status:
+                s = d.get("status", "?")
+                if s in status[njud]:
+                    status[njud][s] += 1
+        except Exception:
+            pass
+    return status
 
 
-def disk_free_gb(path: Path) -> float:
+def verificar_serial() -> bool:
+    """Verifica se o serial processor está rodando."""
     try:
-        usage = shutil.disk_usage(str(path))
-        return usage.free / (1024 ** 3)
+        import subprocess
+        resultado = subprocess.run(
+            ["tasklist", "/FI", "IMAGENAME eq python.exe", "/FO", "CSV"],
+            capture_output=True, text=True, timeout=10,
+        )
+        for linha in resultado.stdout.splitlines():
+            if "serial" in linha.lower():
+                return True
     except Exception:
-        return -1.0
+        pass
+    return False
 
 
-def run_cmd(args: list[str], cwd: Path | None = None) -> tuple[int, str, str]:
-    proc = subprocess.run(
-        args,
-        cwd=str(cwd or PROJECT_ROOT),
-        capture_output=True,
-        text=True,
-        shell=False,
+def rodar_auditoria() -> bool:
+    """Roda a auditoria v2 de integridade dos jornais."""
+    log_dir = settings.LOGS_DIR_NJUD
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_file = log_dir / "auditoria_njud.log"
+
+    env = os.environ.copy()
+    env["PYTHONPATH"] = str(PROJECT_ROOT / "src")
+
+    script = AUDITORIA_SCRIPT
+    if not script.exists():
+        log(f"ERRO: script de auditoria não encontrado: {script}")
+        return False
+
+    try:
+        result = subprocess.run(
+            [sys.executable, str(script)],
+            cwd=str(PROJECT_ROOT),
+            env=env,
+            capture_output=True,
+            text=True,
+            timeout=300,
+        )
+        # Log do resultado
+        with open(log_file, "a", encoding="utf-8") as f:
+            f.write(f"[{datetime.now().isoformat()}] stdout: {result.stdout}\n")
+            f.write(f"[{datetime.now().isoformat()}] stderr: {result.stderr}\n")
+        return result.returncode == 0
+    except subprocess.TimeoutExpired:
+        log("ERRO: auditoria expirou (timeout 300s)")
+        return False
+    except Exception as e:
+        log(f"ERRO: falha ao rodar auditoria: {e}")
+        return False
+
+
+def obter_resultado_auditoria() -> tuple[list[str], list[str]]:
+    """Lê o resultado da auditoria do log e retorna (selo_ok, fila_refazer)."""
+    log_dir = settings.LOGS_DIR_NJUD
+    log_aud = log_dir / "auditoria_njud.log"
+    if not log_aud.exists():
+        return [], []
+
+    with open(log_aud, encoding="utf-8") as f:
+        content = f.read()
+
+    linhas = content.splitlines()
+    selo_ok: list[str] = []
+    fila_refazer: list[str] = []
+
+    for l in linhas:
+        if "SELLO OK" in l or "OK" in l:  # compat com logs antigos
+            partes = l.split(":")
+            if partes:
+                njud = partes[0].strip().replace("NJUD ", "")
+                if njud.isdigit():
+                    selo_ok.append(njud)
+        elif "NECESSITA REFAZER" in l or "REFAZER" in l:
+            partes = l.split(":")
+            if partes:
+                njud = partes[0].strip().replace("NJUD ", "")
+                if njud.isdigit():
+                    fila_refazer.append(njud)
+
+    return selo_ok, fila_refazer
+
+
+def verificar_progresso(njuds_alvo: list[str], status: dict) -> dict:
+    """Calcula métricas de progresso."""
+    total_ok = sum(1 for n in njuds_alvo if status[n]["OK"] >= 4)
+    total_erro = sum(
+        1 for n in njuds_alvo
+        if status[n]["OK"] == 0 and (status[n]["ERRO"] > 0 or status[n]["ESGOTADO"] > 0)
     )
-    return proc.returncode, proc.stdout, proc.stderr
-
-
-def map_months_from_batch(batch: str | None) -> list[str]:
-    seq = [
-        "01 - JAN - 26", "02 - FEV - 26", "03 - MAR - 26",
-        "04 - ABR - 26", "05 - MAI - 26", "06 - JUN - 26",
-        "07 - JUL - 26", "08 - AGO - 26",
-    ]
-    abbr_to_ext = {
-        "01": "JANEIRO", "02": "FEVEREIRO", "03": "MARÇO",
-        "04": "ABRIL", "05": "MAIO", "06": "JUNHO",
-        "07": "JULHO", "08": "AGOSTO",
+    total_parcial = sum(1 for n in njuds_alvo if 0 < status[n]["OK"] < 4)
+    total_com_estado = sum(1 for n in njuds_alvo if sum(status[n].values()) > 0)
+    return {
+        "ok": total_ok,
+        "erro": total_erro,
+        "parcial": total_parcial,
+        "com_estado": total_com_estado,
+        "total": len(njuds_alvo),
     }
 
-    if batch is None:
-        return [abbr_to_ext[m[:2]] for m in seq]
 
-    compact = batch.replace("-", "")
-    if len(compact) == 6:
-        start_month = compact[4:6]
-        end_month = start_month
-    elif len(compact) == 12:
-        start_month = compact[4:6]
-        end_month = compact[10:12]
-    else:
-        raise ValueError("Batch inválido. Use None, 'YYYY-MM' ou 'YYYY-MM-YYYY-MM'.")
-
-    try:
-        start_idx = next(i for i, m in enumerate(seq) if m.startswith(start_month))
-        end_idx = next(i for i, m in enumerate(seq) if m.startswith(end_month))
-    except StopIteration:
-        raise ValueError("Batch inválido ou fora do intervalo jan-ago/2026.")
-    if start_idx > end_idx:
-        raise ValueError("Batch inválido: mês inicial maior que final.")
-    return [abbr_to_ext[m[:2]] for m in seq[start_idx:end_idx + 1]]
-
-
-def dry_run_plan(months: list[str]) -> dict:
-    summary = {"months": {}, "total_files": 0}
-    if not PLAN_CSV.exists() or not NJUDS_POR_MES_CSV.exists():
-        return summary
-    with open(PLAN_CSV, newline="", encoding="utf-8") as f:
-        rows = list(csv.DictReader(f))
-    wanted = set(months)
-    for m in wanted:
-        count = sum(1 for r in rows if r.get("mes_destino") == m)
-        summary["months"][m] = count
-        summary["total_files"] += count
-    return summary
-
-
-def etapa_copiar(apply: bool, months: list[str]) -> bool:
-    missing = check_assets()
-    if missing:
-        print(f"✖ Vinhetas faltando: {missing}")
-        return False
-
-    print(f"=== [ORQUESTRADOR] 1. Planejamento/Workspace ({'apply' if apply else 'dry-run'}) ===")
-
-    if not PLAN_CSV.exists():
-        print(f"✖ Plano não encontrado: {PLAN_CSV}")
-        return False
-
-    with open(PLAN_CSV, newline="", encoding="utf-8") as f:
-        all_rows = list(csv.DictReader(f))
-
-    wanted = {m.upper() for m in months}
-    filtered = [r for r in all_rows if str(r.get("mes_destino", "")).strip().upper() in wanted]
-    if not filtered:
-        print("✖ Plano filtrado vazio para os meses solicitados.")
-        return False
-
-    tmp_plan = OUTPUT_ROOT / f"plano_alocacao_{'_'.join(months).replace(' ','_')}.csv"
-    with open(tmp_plan, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=list(filtered[0].keys()))
-        writer.writeheader()
-        writer.writerows(filtered)
-    print(f"Plano filtrado gerado: {tmp_plan} ({len(filtered)} linhas)")
-
-    json_plan = OUTPUT_ROOT / f"plano_{'_'.join(months).replace(' ','_')}.json"
-    workspace = OUTPUT_ROOT / "workspace_temp"
-    manifest_path = OUTPUT_ROOT / "workspace_temp_manifest.json"
-
-    cmd = [sys.executable, str(SRC_PLANEJADOR)]
-    cmd += ["--plan", str(tmp_plan), "--out-plan", str(json_plan)]
-    code, out, err = run_cmd(cmd, cwd=PROJECT_ROOT)
-    print(out.strip())
-    if err.strip():
-        print(err.strip())
-    if code != 0:
-        print("✖ Falha no planejador JSON")
-        return False
-
-    cmd = [sys.executable, str(SRC_PLANEJADOR)]
-    cmd += ["--exec-plan", str(json_plan), "--workspace", str(workspace)]
-    cmd += ["--apply"] if apply else []
-    code, out, err = run_cmd(cmd, cwd=PROJECT_ROOT)
-    print(out.strip())
-    if err.strip():
-        print(err.strip())
-    if code != 0:
-        print("✖ Falha na cópia seletiva para workspace")
-        return False
-
-    try:
-        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        total_itens = len(manifest.get("entradas", []))
-    except Exception:
-        total_itens = len(filtered)
-    print(f"✔ Workspace pronto: {workspace} ({total_itens} itens)")
-    return True
-
-
-def etapa_dividir(apply: bool, months: list[str]) -> bool:
-    print("=== [ORQUESTRADOR] 2. Divisão CABEÇA/CORPO ===")
-    if not RAW_ROOT.exists():
-        print(f"✖ Entrada não existe: {RAW_ROOT}")
-        return False
-
-    cmd = [
-        sys.executable, "-m", "divisor_boletins", "dividir",
-        str(RAW_ROOT), str(PROCESSED_ROOT),
-        "--log-dir", str(LOG_DIR),
-    ]
-    cmd += ["--apply"] if apply else ["--dry-run"]
-    print(f"• Processando todos os meses em: {RAW_ROOT}")
-    code, out, err = run_cmd(cmd, cwd=SRC_DIVIDIR.parent)
-    print(out.strip())
-    if err.strip():
-        print(err.strip())
-    return code == 0
-
-
-def etapa_auditoria() -> bool:
-    print("=== [ORQUESTRADOR] 3. Auditoria de cortes ===")
-    if not PROCESSED_ROOT.exists():
-        print("✖ Pasta de cortes não existe")
-        return False
-    relatorio = OUTPUT_ROOT / "relatorio_auditoria.csv"
-    cmd = [sys.executable, str(SRC_AUDITORIA), str(PROCESSED_ROOT), str(relatorio)]
-    code, out, err = run_cmd(cmd, cwd=PROJECT_ROOT)
-    print(out.strip())
-    if err.strip():
-        print(err.strip())
-    if code != 0:
-        print("✖ Falha na auditoria")
-        return False
-    taxa = taxa_corte(relatorio)
-    print(f"Taxa de CORTADO: {taxa:.2%}")
-    if taxa > 0.10:
-        print("ALERTA: taxa de CORTADO > 10%, montagem bloqueada.")
-        return False
-    return True
-
-
-def taxa_corte(relatorio: Path) -> float:
-    try:
-        with open(relatorio, newline="", encoding="utf-8") as f:
-            rows = list(csv.DictReader(f))
-        if not rows:
-            return 0.0
-        cortados = sum(1 for r in rows if str(r.get("classificacao", "")).strip().upper() == "CORTADO")
-        return cortados / len(rows)
-    except Exception:
-        return 0.0
-
-
-def etapa_montar() -> bool:
-    print("=== [ORQUESTRADOR] 4. Montagem dos jornais ===")
-    cmd = [
-        sys.executable, "-m", "divisor_boletins", "montar",
-        str(PROCESSED_ROOT), str(OUTPUT_ROOT),
-        "--log-dir", str(LOG_DIR),
-    ]
-    code, out, err = run_cmd(cmd, cwd=SRC_DIVIDIR.parent)
-    print(out.strip())
-    if err.strip():
-        print(err.strip())
-    return code == 0
-
-
-def etapa_sync() -> None:
-    print("=== [ORQUESTRADOR] 5. Sincronização com Drive ===")
-    if not SRC_SINCRONIZAR.exists():
-        print("⚠ Script de sincronização não encontrado; pulando.")
-        return
-    code, out, err = run_cmd([sys.executable, str(SRC_SINCRONIZAR)], cwd=PROJECT_ROOT)
-    print(out.strip())
-    if err.strip():
-        print(err.strip())
-    if code != 0:
-        print("⚠ Sincronização falhou; verifique o Drive/pendências.")
-
-
-def write_report(start: float, months: list[str], ok: bool) -> Path:
-    LOG_DIR.mkdir(parents=True, exist_ok=True)
-    path = LOG_DIR / "resumo_execucao.txt"
-    outputs = sorted([p for p in OUTPUT_ROOT.glob("*.mp3")])
-    pendentes = OUTPUT_ROOT / "pendentes_drive.json"
-    pendentes_list = []
-    if pendentes.exists():
-        try:
-            pendentes_list = json.loads(pendentes.read_text(encoding="utf-8"))
-        except Exception:
-            pendentes_list = []
-    lines = [
-        "RESUMO FINAL",
-        "=" * 50,
-        f"Data/hora: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
-        f"Lote: {months[0] if len(months)==1 else months[0]+' a '+months[-1]}",
-        f"Conclusão: {'OK' if ok else 'FALHA'}",
-        f"Tempo total: {time.time()-start:.2f}s",
-        "",
-        "Artefatos gerados:",
-        f"  - Jornais: {len(outputs)}",
-        "",
-        "Pendentes Drive:",
-        f"  - {len(pendentes_list)}",
-    ]
-    path.write_text("\n".join(lines), encoding="utf-8")
-    return path
-
-
-def parse_args() -> argparse.Namespace:
-    p = argparse.ArgumentParser(description="Orquestrador do pipeline de boletins/rádio")
-    p.add_argument("--batch", default=None, help="Mês (YYYY-MM) ou intervalo (YYYY-MM-YYYY-MM)")
-    p.add_argument("--dry-run", action="store_true", default=False, help="Apenas simula")
-    p.add_argument("--apply", action="store_true", default=False, help="Executa de fato")
-    return p.parse_args()
-
+# ===========================================================================
+# CLI
+# ===========================================================================
 
 def main() -> int:
-    args = parse_args()
-    if not args.dry_run and not args.apply:
-        args.dry_run = True
+    parser = argparse.ArgumentParser(
+        description="Orquestrador NJUD — ciclo completo de produção de jornais.",
+    )
+    parser.add_argument(
+        "--njuds",
+        type=str,
+        default=None,
+        help="NJUDs alvo (ex: '1909,1910,1911' ou '1909-1912'). "
+             "Default: intervalo configurado em settings ou range fixo.",
+    )
+    parser.add_argument(
+        "--intervalo",
+        type=str,
+        default="1909-1927,1936-1945",
+        help="Intervalos de NJUDs separados por vírgula "
+             "(ex: '1909-1927,1936-1945').",
+    )
+    parser.add_argument(
+        "--max-ciclos",
+        type=int,
+        default=0,
+        help="Número máximo de ciclos antes de encerrar (0 = ilimitado).",
+    )
+    parser.add_argument(
+        "--delay",
+        type=int,
+        default=300,
+        help="Delay entre ciclos em segundos (default: 300).",
+    )
+    parser.add_argument(
+        "--quiet",
+        action="store_true",
+        help="Suprime log detalhado (só resume).",
+    )
 
-    ensure_dirs()
-    months = map_months_from_batch(args.batch)
-    if not months:
-        print("✖ Batch inválido ou fora do intervalo jan-ago/2026.")
-        return 1
+    args = parser.parse_args()
 
-    pre = dry_run_plan(months)
-    print(f"Planejado: {pre['total_files']} arquivo(s) para {months}")
+    # Parse NJUDs alvo
+    njuds_alvo: list[str] = []
+    if args.njuds:
+        # Suporta listas: "1909,1910,1911" ou intervalos: "1909-1912"
+        for parte in args.njuds.split(","):
+            parte = parte.strip()
+            if "-" in parte:
+                inicio, fim = parte.split("-")
+                njuds_alvo.extend(str(n) for n in range(int(inicio), int(fim) + 1))
+            else:
+                njuds_alvo.append(parte)
+    else:
+        # Usa intervalos configurados
+        for intervalo in args.intervalo.split(","):
+            intervalo = intervalo.strip()
+            if "-" in intervalo:
+                inicio, fim = intervalo.split("-")
+                njuds_alvo.extend(str(n) for n in range(int(inicio), int(fim) + 1))
 
-    if args.dry_run:
-        print("=== MODO DRY-RUN ===")
-        etapa_copiar(False, months)
-        print("Dry-run finalizado. Rode com --apply para executar.")
-        return 0
+    njuds_alvo = sorted(set(njuds_alvo), key=int)
+    log(f"NJUDs alvo ({len(njuds_alvo)}): {', '.join(njuds_alvo[:10])}{'...' if len(njuds_alvo) > 10 else ''}")
 
-    start = time.time()
-    ok = True
-    ok = etapa_copiar(True, months) and ok
-    if not ok:
-        print("✖ Pipeline abortado na etapa de cópia.")
-        write_report(start, months, False)
-        return 2
+    # Garante diretório de logs
+    LOG_DIR.mkdir(parents=True, exist_ok=True)
 
-    ok = etapa_dividir(True, months) and ok
-    if not ok:
-        print("✖ Pipeline abortado na etapa de divisão.")
-        write_report(start, months, False)
-        return 3
+    ciclo = 0
+    log(f"{'=' * 60}")
+    log(f"ORQUESTRADOR NJUD INICIADO")
+    log(f"  NJUDs: {len(njuds_alvo)}")
+    log(f"  Delay: {args.delay}s")
+    log(f"  Max ciclos: {args.max_ciclos or 'ilimitado'}")
+    log(f"{'=' * 60}")
 
-    ok = etapa_auditoria() and ok
-    if not ok:
-        print("✖ Pipeline abortado pela auditoria.")
-        write_report(start, months, False)
-        return 4
+    while True:
+        ciclo += 1
+        agora = datetime.now().strftime("%H:%M:%S")
 
-    ok = etapa_montar() and ok
-    if not ok:
-        print("✖ Pipeline abortado na montagem.")
-        write_report(start, months, False)
-        return 5
+        # 1. PERCEBER — contar estado atual
+        status = contar_estado(njuds_alvo)
+        serial_rodando = verificar_serial()
+        progresso = verificar_progresso(njuds_alvo, status)
 
-    etapa_sync()
-    path = write_report(start, months, ok)
-    print(f"=== Pipeline finalizado. Relatório: {path} ===")
-    return 0 if ok else 6
+        log(f"\n[{agora}] CICLO {ciclo}")
+        log(f"  Serial: {'RODANDO' if serial_rodando else 'MORTO'}")
+        log(f"  Progresso: {progresso['ok']}/{progresso['total']} completos, "
+            f"{progresso['parcial']} parciais, {progresso['erro']} com erro")
+
+        # 2. PLANEJAR — decidir ação
+        if progresso["ok"] > 0:
+            log(f"  -> Rodando auditoria de integridade...")
+            if rodar_auditoria():
+                selo_ok, fila_refazer = obter_resultado_auditoria()
+                if selo_ok:
+                    log(f"  -> Selo OK ({len(selo_ok)}): {', '.join(selo_ok[:10])}{'...' if len(selo_ok) > 10 else ''}")
+                if fila_refazer:
+                    log(f"  -> Fila refazer ({len(fila_refazer)}): {', '.join(fila_refazer[:10])}{'...' if len(fila_refazer) > 10 else ''}")
+
+        # 3. AGIR — verificar se tudo concluído
+        total_com_estado = progresso["com_estado"]
+        if total_com_estado == len(njuds_alvo) and not serial_rodando:
+            log(f"\n{'=' * 60}")
+            log(f"TUDO CONCLUÍDO")
+            log(f"  Completos: {progresso['ok']}/{len(njuds_alvo)}")
+            log(f"  Parciais: {progresso['parcial']}")
+            log(f"  Com erro: {progresso['erro']}")
+            log(f"{'=' * 60}")
+            break
+
+        # 4. ADAPTAR — aguardar próximo ciclo
+        if args.max_ciclos and ciclo >= args.max_ciclos:
+            log(f"\nMax de ciclos ({args.max_ciclos}) atingido. Encerrando.")
+            break
+
+        log(f"  Aguardando {args.delay}s para próximo ciclo...")
+        time.sleep(args.delay)
+
+    log(f"\nOrquestrador NJUD concluído (ciclos: {ciclo})")
+    return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    sys.exit(main())

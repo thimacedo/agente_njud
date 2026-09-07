@@ -20,7 +20,7 @@ from pydub import AudioSegment
 
 from .log import LogPipeline
 
-from config.settings import settings
+from config.njud import settings
 
 
 def semana_dia_para_codigo(data_str: str) -> str:
@@ -44,7 +44,7 @@ PASTA_ENTRADA = Path("boletins_brutos")
 PASTA_DIVIDIDOS = Path("boletins_divididos")
 PASTA_MONTADOS = Path("jornais_montados")
 
-VINHETAS_DIR = settings.BASE_DIR / "assets/vinhetas"
+VINHETAS_DIR = settings.VINHETAS_DIR  # assets/vinhetas/njud
 TRILHA_ESCALADA_NOME = "TRILHA_ESCALADA_NJUD.mp3"
 PASSAGEM_NOME = "VHT_PASSAGEM_BOLETIM.mp3"
 VHT_ABERTURA_NOME = "VHT_ABERTURA_NJUD.mp3"

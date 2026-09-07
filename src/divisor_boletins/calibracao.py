@@ -17,10 +17,10 @@ import numpy as np
 from pydub import AudioSegment
 from scipy.signal import correlate, correlation_lags
 
-from config.settings import settings
+from config.njud import settings
 
-# Caminho local dos assets deste projeto
-VINHETAS_DIR = settings.BASE_DIR / "assets/vinhetas"
+# Caminho local dos assets deste projeto — usa subpasta namespaced
+VINHETAS_DIR = settings.VINHETAS_DIR  # assets/vinhetas/njud
 
 # Nomes específicos de boletim (separados dos assets de jornal)
 VINHETA_ABERTURA = "VHT_ABERTURA_BOLETIM.mp3"
@@ -28,7 +28,7 @@ VINHETA_PASSAGEM = "VHT_PASSAGEM_BOLETIM.mp3"
 VINHETA_ENCERRAMENTO = "VHT_ENCERRAMENTO_BOLETIM.mp3"
 
 _CACHE_VINHETAS: dict = {}
-_CACHE_PATH = settings.BASE_DIR / "data/cache" / "_vinhetas_cache.pkl"
+_CACHE_PATH = settings.CACHE_VAD / "_vinhetas_cache.pkl"  # data/cache/njud/vad
 
 
 def _carregar_vinheta_raw(nome_arquivo: str) -> Optional[tuple[np.ndarray, int]]:

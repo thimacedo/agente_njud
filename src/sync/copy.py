@@ -39,7 +39,7 @@ import sys
 from datetime import datetime
 from pathlib import Path
 
-from config.settings import settings
+from config.njud import settings
 
 DEST_ROOT = Path(settings.BOLETINS_BRUTOS)
 PLAN_CSV = settings.BASE_DIR / "data" / "plano_alocacao.csv"
