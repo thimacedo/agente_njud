@@ -121,7 +121,8 @@ def processar_giro(
 
     # ---- Para cada programa, identificar notas nos boletins ----
     resultados = []
-    MIN_NOTAS = 4  # threshold: mínimo de notas por programa
+    MIN_NOTAS = 4  # mínimo de notas por programa
+    MAX_NOTAS = 6  # máximo de notas por programa (para ao atingir)
 
     for plano in plano_selecionado:
         mmss = plano["mmss"]
@@ -163,6 +164,14 @@ def processar_giro(
         modelo_whisper = None
 
         for boletim_path, data_boletim in boletins_no_periodo:
+            # Parada antecipada: já atingiu o máximo de notas
+            if len(notas_aceitas_total) >= MAX_NOTAS:
+                log_info(
+                    "threshold",
+                    f"  {mmss}: Máximo de {MAX_NOTAS} notas atingido. Interrompendo Passo 1.",
+                )
+                break
+
             log_info(
                 "nota",
                 f"  [Passo 1] Processando boletim {boletim_path.name} ({data_boletim})...",
