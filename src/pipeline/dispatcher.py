@@ -53,6 +53,7 @@ import sys
 import time
 from pathlib import Path
 from queue import Empty
+from config.njud import settings as _settings
 
 import psutil
 
@@ -131,7 +132,7 @@ def worker_loop(
     from pipeline.single_process import ciclo_arquivo
 
     print(f"[worker {worker_id}] carregando modelo Whisper...")
-    modelo = WhisperModel("tiny", device="cpu", compute_type="int8",
+    modelo = WhisperModel(_settings.MODELO_WHISPER, device="cpu", compute_type=_settings.COMPUTE_TYPE,
                            cpu_threads=threads_por_worker)
     pasta_saida_cortes = pasta_estado.parent / "JORNAIS_DIVIDIDOS"
     logger_worker = LogPipeline(pasta_estado.parent / "_logs" / f"worker_{worker_id}")

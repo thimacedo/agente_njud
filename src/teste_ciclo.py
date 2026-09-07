@@ -58,7 +58,7 @@ def main():
 
     logger = LogPipeline(saida / "_logs")
     print("Carregando Whisper...")
-    modelo = WhisperModel("small", device="cpu", compute_type="int8", cpu_threads=2)
+    modelo = WhisperModel(_settings.MODELO_WHISPER, device="cpu", compute_type=_settings.COMPUTE_TYPE, cpu_threads=2)
 
     boletim = Path(args.boletim).resolve()
     njud = boletim.parent.name

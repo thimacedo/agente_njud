@@ -22,6 +22,8 @@ import torch
 torch.set_num_threads(1)
 torch.set_num_interop_threads(1)
 
+from config.njud import settings as _settings
+
 from faster_whisper import WhisperModel
 from divisor_boletins.audio import processar_arquivo
 from divisor_boletins.log import LogPipeline
@@ -86,7 +88,7 @@ def main():
 
     # Carregar modelo Whisper tiny (mais leve, nao trava com pouca RAM)
     print("[processamento] Carregando modelo Whisper (tiny, int8)...")
-    modelo = WhisperModel("tiny", device="cpu", compute_type="int8", cpu_threads=1)
+    modelo = WhisperModel(_settings.MODELO_WHISPER, device="cpu", compute_type=_settings.COMPUTE_TYPE, cpu_threads=1)
     print("[processamento] Modelo carregado.")
 
     tarefas = listar_tarefas_pendentes(pasta_boletins, pasta_estado)

@@ -18,6 +18,7 @@ os.environ["NUMEXPR_NUM_THREADS"] = "2"
 # Importa o pipeline do src estruturado
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # -> src/
 from config.settings import settings
+from config.njud import settings as _settings
 from divisor_boletins.audio import processar_recursivo
 from divisor_boletins.montagem import montar_todos_jornais
 from divisor_boletins.log import LogPipeline
@@ -143,7 +144,7 @@ def executar_pipeline_autonomo():
     
     print("\n=== [AGENTE] 3. AUDITORIA DE INTEGRIDADE TOTAL ===")
     # Whisper configurado para usar apenas 2 threads na CPU
-    modelo = WhisperModel("small", device="cpu", compute_type="int8", cpu_threads=2)
+    modelo = WhisperModel(_settings.MODELO_WHISPER, device="cpu", compute_type=_settings.COMPUTE_TYPE, cpu_threads=2)
     
     jornais = sorted([p for p in DESTINO_SAIDA.glob("*.mp3")])
     

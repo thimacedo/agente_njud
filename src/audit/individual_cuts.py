@@ -35,6 +35,12 @@ import subprocess
 import sys
 from pathlib import Path
 
+import numpy as np
+import torch
+
+from config.settings import settings
+from config.njud import settings as _settings
+
 from faster_whisper import WhisperModel
 from pydub import AudioSegment
 from pydub.silence import detect_leading_silence
@@ -192,7 +198,7 @@ CONECTIVOS_CURTOS = {
 
 def carregar_modelo() -> WhisperModel:
     # Mantido alinhado com o resto do pipeline: CPU + int8 + 2 threads.
-    return WhisperModel("small", device="cpu", compute_type="int8", cpu_threads=2)
+    return WhisperModel(_settings.MODELO_WHISPER, device="cpu", compute_type=_settings.COMPUTE_TYPE, cpu_threads=2)
 
 
 def eh_alucinacao(texto: str) -> bool:

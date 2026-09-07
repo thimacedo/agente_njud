@@ -21,22 +21,24 @@ PYTHON = sys.executable
 def processar_uma(arquivo, njud, stem):
     """Processa um arquivo em um subprocesso separado."""
     script = f'''
-import json, os, sys, traceback
-sys.path.insert(0, r"{str(PASTA_BASE / 'src')}")
+    import json, os, sys, traceback
+    sys.path.insert(0, r"{str(PASTA_BASE / 'src')}")
 
-os.environ["OMP_NUM_THREADS"] = "1"
-os.environ["MKL_NUM_THREADS"] = "1"
-os.environ["MKL_DISABLE_FAST_MM"] = "1"
+    from config.njud import settings as _settings
 
-import torch
-torch.set_num_threads(1)
-torch.set_num_interop_threads(1)
+    os.environ["OMP_NUM_THREADS"] = "1"
+    os.environ["MKL_NUM_THREADS"] = "1"
+    os.environ["MKL_DISABLE_FAST_MM"] = "1"
 
-from pathlib import Path
-from faster_whisper import WhisperModel
-from divisor_boletins.audio import processar_arquivo
-from divisor_boletins.log import LogPipeline
-from audit.individual_cuts import analisar_par
+    import torch
+    torch.set_num_threads(1)
+    torch.set_num_interop_threads(1)
+
+    from pathlib import Path
+    from faster_whisper import WhisperModel
+    from divisor_boletins.audio import processar_arquivo
+    from divisor_boletins.log import LogPipeline
+    from audit.individual_cuts import analisar_par
 
 arquivo = r"{arquivo}"
 njud = "{njud}"
@@ -55,7 +57,7 @@ if caminho_estado.exists():
         pass
 
 try:
-    modelo = WhisperModel("tiny", device="cpu", compute_type="int8", cpu_threads=1)
+    modelo = WhisperModel(_settings.MODELO_WHISPER, device="cpu", compute_type=_settings.COMPUTE_TYPE, cpu_threads=1)
     logger = LogPipeline(Path(pasta_saida) / "_logs")
     pasta_destino = pasta_cortes / njud
 

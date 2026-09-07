@@ -5,6 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))  # -> src/
 from config.settings import settings
+from config.njud import settings as _njud_settings
 
 from faster_whisper import WhisperModel
 
@@ -35,7 +36,7 @@ def analisar_integridade_arquivo(caminho, modelo_whisper):
 
 def executar_auditoria():
     print("=== [AGENTE] Iniciando Auditoria de Integridade de forma isolada ===")
-    modelo = WhisperModel("small", device="cpu", compute_type="int8")
+    modelo = WhisperModel(_njud_settings.MODELO_WHISPER, device="cpu", compute_type=_njud_settings.COMPUTE_TYPE)
     
     pasta_montados = Path(settings.DIR_OUTPUT) / "JORNAIS_DIVIDIDOS_montados"
     jornais = sorted([pasta_montados / f for f in os.listdir(pasta_montados) if f.endswith('.mp3')])

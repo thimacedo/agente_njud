@@ -70,7 +70,7 @@ class BoletimProcessado:
 def _carregar_cache_disco(caminho_str: str) -> Optional[tuple[list[dict], str]]:
     """Tenta carregar transcrição do cache em disco."""
     try:
-        cache_dir = settings.CACHE_TRANSCRICOES
+        cache_dir = CACHE_TRANSCRICOES
         if not cache_dir.exists():
             return None
         h = hashlib.md5(caminho_str.encode()).hexdigest()
@@ -86,7 +86,7 @@ def _carregar_cache_disco(caminho_str: str) -> Optional[tuple[list[dict], str]]:
 def _salvar_cache_disco(caminho_str: str, segmentos: list[dict], texto: str) -> None:
     """Salva transcrição no cache em disco."""
     try:
-        cache_dir = settings.CACHE_TRANSCRICOES
+        cache_dir = CACHE_TRANSCRICOES
         cache_dir.mkdir(parents=True, exist_ok=True)
         h = hashlib.md5(caminho_str.encode()).hexdigest()
         cache_file = cache_dir / f"{h}.json"
@@ -128,7 +128,7 @@ def transcrever_boletim(
     # Carregar modelo se necessário
     if modelo is None:
         from faster_whisper import WhisperModel
-        modelo = WhisperModel("tiny", device="cpu", compute_type="int8")
+        modelo = WhisperModel(MODELO_WHISPER, device="cpu", compute_type=COMPUTE_TYPE)
 
     t0 = time.time()
     log_info("transcricao", f"Iniciando transcrição: {caminho_str}")
