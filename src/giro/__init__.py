@@ -40,6 +40,7 @@ from .utils import nome_programa, nome_corte_nota
 # from . import montagem  # FLAKE8
 # from . import plano  # FLAKE8
 from . import utils  # Circular-safe: utils não importa nada de giro
+from . import transcricao  # Módulo de transcrição e corte
 
 # Importação tardia (embutida em funções, não aqui)
 _cli = None
@@ -76,6 +77,7 @@ __all__ = [
     "log",
     "montagem",
     "plano",
+    "transcricao",
     "utils",
     "nome_programa",
     "nome_corte_nota",

@@ -134,26 +134,9 @@ def processar_giro(
             f"({seg} → {dom})",
         )
 
-        # Procurar boletins no mês correspondente
-        pasta_mes = pasta_boletins / f"{mes_boletim:02d}"
-        if not pasta_mes.exists():
-            log_aviso(
-                "seleção",
-                f"Pasta de boletins {pasta_mes} não encontrada — "
-                f"programa {mmss} não terá boletins",
-            )
-            resultados.append({
-                "mmss": mmss,
-                "data_terça": plano["data_terça"],
-                "boletins": 0,
-                "notas": 0,
-                "status": "sem_boletins",
-            })
-            continue
-
-        # Listar boletins no período
+        # Procurar boletins no período (busca recursiva em subpastas)
         boletins_no_periodo = []
-        for boletim_path in pasta_mes.glob("BOLETIM_RADIO_TJRN_*.mp3"):
+        for boletim_path in pasta_boletins.rglob("BOLETIM_RADIO_TJRN_*.mp3"):
             m_data = re.match(
                 r"BOLETIM_RADIO_TJRN_(\d{2})_(\d{2})_(\d{4})_",
                 boletim_path.name,
@@ -173,41 +156,53 @@ def processar_giro(
             f"  {mmss}: {len(boletins_no_periodo)} boletins no período",
         )
 
-        # Para cada boletim, transcrever e extrair notas
-        # (Aqui, por enquanto, simulamos — a implementação real de
-        # transcrição/corte será adicionada com integração ao Whisper
-        # do NJUD.)
+        # Para cada boletim: transcrever → extrair notas → filtrar → cortar
         idx_nota_global = 0
+        notas_aceitas_total = []
+        modelo_whisper = None
+
         for boletim_path, data_boletim in boletins_no_periodo:
             log_info(
                 "nota",
-                f"  Boletim {boletim_path.name} ({data_boletim}) — "
-                f"transcrição pendente (Whisper)",
+                f"  Processando boletim {boletim_path.name} ({data_boletim})...",
             )
-            # Aqui, em versão futura:
-            # transcricao = transcribir_whisper(boletim_path)
-            # notas_extraidas = extrair_notas(transcricao)
-            # for nota_texto in notas_extraidas:
-            #     rf = filtrar_nota(nota_texto, evitar_natal, logger=logger)
-            #     if rf.aceita:
-            #         idx_nota_global += 1
-            #         salvar_nota_cortada(...)
-            #         registrar_estado(mmss, idx_nota_global, "OK")
 
-        n_notas_previstas = len(boletins_no_periodo) * 2  # estimativa
+            try:
+                from .transcricao import processar_boletim
+                notas_aceitas, idx_nota_global, modelo_whisper = processar_boletim(
+                    caminho_boletim=boletim_path,
+                    mmss=mmss,
+                    idx_nota_global=idx_nota_global,
+                    pasta_saida=pasta_saida / mmss,
+                    evitar_natal=evitar_natal,
+                    metodo_deteccao="assinatura",
+                    modelo=modelo_whisper,
+                )
+                notas_aceitas_total.extend(notas_aceitas)
+
+            except ImportError:
+                log_aviso(
+                    "nota",
+                    "  Transcrição não disponível — "
+                    "instale faster-whisper para processar",
+                )
+                break
+            except Exception as e:
+                log_erro("nota", f"  Erro ao processar boletim: {e}")
+                continue
+
         log_info(
             "seleção",
-            f"  {mmss}: estimativa ~{n_notas_previstas} notas "
-            f"(filtro geográfico aplicado após transcrição)",
+            f"  {mmss}: {len(notas_aceitas_total)} notas aceitas "
+            f"(de {len(boletins_no_periodo)} boletins processados)",
         )
 
         resultados.append({
             "mmss": mmss,
             "data_terça": plano["data_terça"],
             "boletins": len(boletins_no_periodo),
-            "notas_previstas": n_notas_previstas,
-            "notas_selecionadas": 0,  # ainda não processadas
-            "status": "planificado",
+            "notas_selecionadas": len(notas_aceitas_total),
+            "status": "processado" if notas_aceitas_total else "sem_notas",
         })
 
     return {
@@ -439,8 +434,6 @@ def main(argv: Optional[list[str]] = None) -> int:
         )
     print(f"\nSaída: {resultado['saida']}")
     print(f"Log:   {resultado['log']}")
-    print("\nAtenção: transcrição e filtragem ainda não implementadas.")
-    print("Execute novamente após integrar Whisper para processar as notas.")
     return 0
 
 

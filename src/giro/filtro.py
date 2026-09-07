@@ -275,6 +275,7 @@ def filtrar_nota(
             texto_origem=texto,
             cidades_rn_mencionadas=cidades_rn,
             motivo=f"Notícia do RN — cidades: {', '.join(cidades_rn)}",
+            aceita=True,
         )
 
     # ---- PASSO 4: detectar indicadores gerais do RN (TJRN, "Rio Grande do Norte") ----
@@ -283,6 +284,7 @@ def filtrar_nota(
             classificacao=ClassificacaoGiro.ACEITA,
             texto_origem=texto,
             motivo="Notícia do RN — menciona Tribunal de Justiça do RN / RJN diretamente",
+            aceita=True,
         )
 
     # ---- PASSO 5: ambígua ----
