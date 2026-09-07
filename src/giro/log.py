@@ -3,9 +3,8 @@
 Log do pipeline GIRO nas Comarcas.
 
 Logger estruturado para o processamento de notícias do Giro,
-com saída para arquivo + stdout.
+com saída para arquivo + stdout. Logs namespaced: logs/giro/.
 """
-
 from __future__ import annotations
 
 import logging
@@ -13,6 +12,13 @@ import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
+
+# Garantir que src/ está no path para importar config.giro
+_src_dir = Path(__file__).resolve().parents[1]
+if str(_src_dir) not in sys.path:
+    sys.path.insert(0, str(_src_dir))
+
+from config.giro import settings
 
 # ===========================================================================
 # Logger dedicado do GIRO
@@ -144,10 +150,8 @@ def registrar_estado(
         motivos: lista de motivos da reprovação (quando aplicável)
         pasta_estado: pasta onde salvar o JSON (default: DIR_PROCESSED/estado/)
     """
-    from .config import DIR_PROCESSED
-
     if pasta_estado is None:
-        pasta_estado = DIR_PROCESSED / "estado"
+        pasta_estado = settings.ESTADO_DIR
     pasta_estado.mkdir(parents=True, exist_ok=True)
 
     nome_arquivo = f"GNC_{mmss}_N{idx_nota:02d}_estado.json"
@@ -170,10 +174,8 @@ def registrar_estado(
 
 def ler_estado(mmss: str, idx_nota: int, pasta_estado: Optional[Path] = None) -> dict:
     """Lê o estado persistido de uma nota."""
-    from .config import DIR_PROCESSED
-
     if pasta_estado is None:
-        pasta_estado = DIR_PROCESSED / "estado"
+        pasta_estado = settings.ESTADO_DIR
 
     nome_arquivo = f"GNC_{mmss}_N{idx_nota:02d}_estado.json"
     caminho = pasta_estado / nome_arquivo
