@@ -101,7 +101,7 @@ RN_CIDADES = frozenset({
     # scripts/atualizar_cidades_rn.py para regenerar a partir do IBGE.
     "acari", "afonso bezerra", "alexandria", "almino afonso", "alto do rodrigues",
     "angicos", "antônio martins", "apodi", "areia branca", "arez", "assú",
-    "baraúna", "barcelona", "baía formosa", "bento fernandes", "bodó",
+    "baraúna", "barcelona", "baía formosa", "bento fernandes", "boa saúde", "bodó",
     "bom jesus", "brejinho", "caicó", "caiçara do norte", "caiçara do rio do vento",
     "campo grande", "campo redondo", "canguaretama", "caraúbas", "carnaubais",
     "carnaúba dos dantas", "ceará-mirim", "cerro corá", "coronel ezequiel",
