@@ -128,7 +128,7 @@ def transcrever_boletim(
     # Carregar modelo se necessário
     if modelo is None:
         from faster_whisper import WhisperModel
-        modelo = WhisperModel("small", device="cpu", compute_type="int8")
+        modelo = WhisperModel("tiny", device="cpu", compute_type="int8")
 
     t0 = time.time()
     log_info("transcricao", f"Iniciando transcrição: {caminho_str}")
