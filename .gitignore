@@ -1,5 +1,30 @@
-(docs/PLANO_PRODUCAO_GIRO_JANEIRO_2026.md is a markdown document, which is a source/config file, and there are no build artifacts, dependencies, or temp files in the changes)
+```
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-```markdown
+# Logs and temp files
+*.log
+*.tmp
 
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+
+# Dependencies
+.venv/
+venv/
+node_modules/
+
+# Build artifacts
+dist/
+build/
+target/
 ```
