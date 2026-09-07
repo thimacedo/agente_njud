@@ -260,6 +260,65 @@ def processar_giro(
                 f"(≥{MIN_NOTAS}). Sem necessidade de fallback.",
             )
 
+        # ---- PASSO 3: Fallback mensal — usar notas de programas anteriores do mesmo mês ----
+        if len(notas_aceitas_total) < MIN_NOTAS:
+            notas_faltantes = MIN_NOTAS - len(notas_aceitas_total)
+            log_info(
+                "fallback-mensal",
+                f"  📅 {mmss}: apenas {len(notas_aceitas_total)} nota(s). "
+                f"Buscando {notas_faltantes} nota(s) em programas anteriores do mês...",
+            )
+
+            # Extrair mês do mmss (ex: "0403" → mês=04)
+            mes_atual = int(mmss[:2])
+            mmss_num = int(mmss)
+
+            # Buscar programas anteriores do mesmo mês (mmss-1, mmss-2, ...)
+            mmss_anterior = mmss_num - 1
+            notas_copiadas = 0
+
+            while mmss_anterior >= (mes_atual * 100 + 1) and len(notas_aceitas_total) < MIN_NOTAS:
+                mmss_str = f"{mmss_anterior:04d}"
+                pasta_anterior = pasta_saida / mmss_str
+
+                if pasta_anterior.exists():
+                    log_info(
+                        "fallback-mensal",
+                        f"    Buscando em {mmss_str}...",
+                    )
+                    # Copiar notas da pasta anterior para a pasta atual
+                    pasta_atual = pasta_saida / mmss
+                    pasta_atual.mkdir(parents=True, exist_ok=True)
+
+                    notas_anteriores = sorted(pasta_anterior.glob("GNC_*.mp3"))
+                    for nota_orig in notas_anteriores:
+                        if len(notas_aceitas_total) >= MIN_NOTAS:
+                            break
+                        destino = pasta_atual / nota_orig.name
+                        if not destino.exists():
+                            import shutil
+                            shutil.copy2(str(nota_orig), str(destino))
+                            notas_aceitas_total.append(destino)
+                            notas_copiadas += 1
+                            log_info(
+                                "fallback-mensal",
+                                f"    ✓ Nota copiada: {nota_orig.name} ← {mmss_str}",
+                            )
+
+                mmss_anterior -= 1
+
+            if notas_copiadas > 0:
+                log_info(
+                    "fallback-mensal",
+                    f"  📅 {mmss}: {notas_copiadas} nota(s) recuperada(s) de semanas anteriores. "
+                    f"Total: {len(notas_aceitas_total)} nota(s).",
+                )
+            else:
+                log_aviso(
+                    "fallback-mensal",
+                    f"  📅 {mmss}: nenhum programa anterior disponível no mês.",
+                )
+
         log_info(
             "seleção",
             f"  {mmss}: {len(notas_aceitas_total)} notas aceitas "
