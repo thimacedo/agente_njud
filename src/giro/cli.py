@@ -63,6 +63,7 @@ def processar_giro(
     evitar_natal: bool = True,
     log_dir: Optional[Path] = None,
     verbose: bool = False,
+    min_notas_programa: int = 3,
 ) -> dict:
     """Processa o GIRO: gera plano, filtra boletins, transcreve, monta.
 
@@ -74,6 +75,7 @@ def processar_giro(
         evitar_natal: ativa filtro de evitar Natal (default: True)
         log_dir: diretório para log de auditoria (default: logs/)
         verbose: log detalhado
+        min_notas_programa: mínimo de notas desejadas por programa (default: 3)
 
     Returns:
         dict com resumo do processamento
@@ -196,6 +198,54 @@ def processar_giro(
             f"  {mmss}: {len(notas_aceitas_total)} notas aceitas "
             f"(de {len(boletins_no_periodo)} boletins processados)",
         )
+
+        # ---- Complementar com Natal se necessário ----
+        if len(notas_aceitas_total) < min_notas_programa and evitar_natal:
+            log_info(
+                "seleção",
+                f"  {mmss}: apenas {len(notas_aceitas_total)} notas aceitas "
+                f"(mínimo desejado: {min_notas_programa}). "
+                f"Reprocessando sem filtro de Natal...",
+            )
+            # Re-processar boletins já filtrados por Natal, agora aceitando
+            idx_nota_global = 0
+            notas_aceitas_total = []
+            modelo_whisper = None
+
+            for boletim_path, data_boletim in boletins_no_periodo:
+                log_info(
+                    "nota",
+                    f"  Re-processando boletim {boletim_path.name} ({data_boletim})...",
+                )
+
+                try:
+                    from .transcricao import processar_boletim
+                    notas_aceitas, idx_nota_global, modelo_whisper = processar_boletim(
+                        caminho_boletim=boletim_path,
+                        mmss=mmss,
+                        idx_nota_global=idx_nota_global,
+                        pasta_saida=pasta_saida / mmss,
+                        evitar_natal=False,  # Relaxar filtro de Natal
+                        metodo_deteccao="assinatura",
+                        modelo=modelo_whisper,
+                    )
+                    notas_aceitas_total.extend(notas_aceitas)
+
+                except ImportError:
+                    log_aviso(
+                        "nota",
+                        "  Transcrição não disponível — "
+                        "instale faster-whisper para processar",
+                    )
+                    break
+                except Exception as e:
+                    log_erro("nota", f"  Erro ao re-processar boletim: {e}")
+                    continue
+
+            log_info(
+                "seleção",
+                f"  {mmss}: {len(notas_aceitas_total)} notas aceitas após relaxar filtro de Natal",
+            )
 
         resultados.append({
             "mmss": mmss,
@@ -354,6 +404,13 @@ def main(argv: Optional[list[str]] = None) -> int:
         help="Log detalhado (DEBUG)",
     )
     parser.add_argument(
+        "--min-notas",
+        type=int,
+        default=3,
+        help="Mínimo de notas desejadas por programa (default: 3). "
+             "Se não atingir, reprocessa sem filtro de Natal.",
+    )
+    parser.add_argument(
         "--lista-plano",
         action="store_true",
         help="Lista o plano de programas e sai",
@@ -420,6 +477,7 @@ def main(argv: Optional[list[str]] = None) -> int:
         evitar_natal=not args.nao_evitar_natal,
         log_dir=args.log_dir,
         verbose=args.verbose,
+        min_notas_programa=args.min_notas,
     )
 
     if "error" in resultado:

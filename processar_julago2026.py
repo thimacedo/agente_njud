@@ -85,7 +85,7 @@ if caminho_estado.exists():
         pass
 
 try:
-    modelo = WhisperModel(_settings.MODELO_WHISPER, device="cpu", compute_type=_settings.COMPUTE_TYPE, cpu_threads=1)
+    modelo = WhisperModel("tiny", device="cpu", compute_type="int8", cpu_threads=1)
     logger = LogPipeline(Path(pasta_saida) / "_logs")
     pasta_destino = pasta_cortes / njud
 

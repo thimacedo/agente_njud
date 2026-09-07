@@ -10,22 +10,16 @@ Caminhos namespaced: assets/vinhetas/giro/ (separado do NJUD).
 from __future__ import annotations
 
 import re
-import sys
 from pathlib import Path
-
-# Garantir que src/ está no path para importar config.giro
-_src_dir = Path(__file__).resolve().parents[1]
-if str(_src_dir) not in sys.path:
-    sys.path.insert(0, str(_src_dir))
 
 from config.giro import settings as _settings
 
 # ===========================================================================
 # THRESHOLDS
 # ===========================================================================
-LIMIAR_ANCORA_GIRO = _settings.LIMIAR_ANCORA_GIRO
-LIMIAR_FIM_PASSAGEM_GIRO = _settings.LIMIAR_FIM_PASSAGEM_GIRO
-LIMIAR_INICIO_FALA_GIRO = _settings.LIMIAR_INICIO_FALA_GIRO
+LIMIAR_ANCORA_GIRO = 0.55
+LIMIAR_FIM_PASSAGEM_GIRO = 0.8
+LIMIAR_INICIO_FALA_GIRO = 0.3
 
 # ===========================================================================
 # ÂNCORAS DE TEXTO (vinhetas GIRO transcritas) — NORMALIZADAS
@@ -55,15 +49,15 @@ _PADRAO_ASSINATURA_GIRO = re.compile(
 # ===========================================================================
 # Caminhos (namespaced — assets/vinhetas/giro/)
 # ===========================================================================
-BASE_DIR = _settings.BASE_DIR
-DIR_PROCESSED = _settings.DIR_PROCESSED
-DIR_OUTPUT = _settings.DIR_OUTPUT
-DIR_PLANOS = _settings.DIR_PLANOS
-DIR_ASSETS_VINHETAS = _settings.VINHETAS_DIR
+BASE_DIR = Path(__file__).resolve().parents[2]
+DIR_PROCESSED = BASE_DIR / "data" / "processed" / "GIRO_COMARCAS"
+DIR_OUTPUT = BASE_DIR / "data" / "output" / "GIRO_COMARCAS"
+DIR_PLANOS = BASE_DIR / "data"
+DIR_ASSETS_VINHETAS = BASE_DIR / "assets" / "vinhetas" / "giro"
 
-VHT_ABERTURA_GIRO_NOME = _settings.VHT_ABERTURA_GIRO_NOME
-VHT_PASSAGEM_GIRO_NOME = _settings.VHT_PASSAGEM_GIRO_NOME
-VHT_ENCERRAMENTO_GIRO_NOME = _settings.VHT_ENCERRAMENTO_GIRO_NOME
+VHT_ABERTURA_GIRO_NOME = "VHT_ABERTURA_GIRO.mp3"
+VHT_PASSAGEM_GIRO_NOME = "VHT_PASSAGEM_GIRO.mp3"
+VHT_ENCERRAMENTO_GIRO_NOME = "VHT_ENCERRAMENTO_GIRO.mp3"
 
 # ===========================================================================
 # Whisper (herdado de BaseSettings via SettingsGiro)
@@ -72,6 +66,10 @@ MODELO_WHISPER = _settings.MODELO_WHISPER
 COMPUTE_TYPE = _settings.COMPUTE_TYPE
 CACHE_TRANSCRICOES = _settings.CACHE_TRANSCRICOES
 LOGS_DIR_GIRO = _settings.LOGS_DIR_GIRO
+
+# ===========================================================================
+# Filtro geográfico — bases de dados
+# ===========================================================================
 # INEGOCIÁVEL: excluir notícias de outros estados (fora RN).
 # AJUSTÁVEL: evitar notas sobre Natal.
 # ===========================================================================

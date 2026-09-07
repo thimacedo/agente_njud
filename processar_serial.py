@@ -16,8 +16,6 @@ os.environ["MKL_NUM_THREADS"] = "1"
 
 sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
-from config.njud import settings as _settings
-
 from faster_whisper import WhisperModel
 from divisor_boletins.audio import processar_arquivo
 from divisor_boletins.log import LogPipeline
@@ -83,7 +81,7 @@ def main():
 
     # Carregar modelo Whisper uma unica vez
     print("[processamento] Carregando modelo Whisper (small, int8)...")
-    modelo = WhisperModel(_settings.MODELO_WHISPER, device="cpu", compute_type=_settings.COMPUTE_TYPE, cpu_threads=1)
+    modelo = WhisperModel("small", device="cpu", compute_type="int8", cpu_threads=1)
     print("[processamento] Modelo carregado.")
 
     tarefas = listar_tarefas_pendentes(pasta_boletins, pasta_estado)

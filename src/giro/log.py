@@ -8,15 +8,9 @@ com saída para arquivo + stdout. Logs namespaced: logs/giro/.
 from __future__ import annotations
 
 import logging
-import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
-
-# Garantir que src/ está no path para importar config.giro
-_src_dir = Path(__file__).resolve().parents[1]
-if str(_src_dir) not in sys.path:
-    sys.path.insert(0, str(_src_dir))
 
 from config.giro import settings
 

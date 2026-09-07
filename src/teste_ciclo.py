@@ -55,10 +55,11 @@ def main():
     from divisor_boletins.audio import processar_arquivo
     from divisor_boletins.log import LogPipeline
     from audit.individual_cuts import analisar_par
+    from config.njud import settings
 
     logger = LogPipeline(saida / "_logs")
     print("Carregando Whisper...")
-    modelo = WhisperModel(_settings.MODELO_WHISPER, device="cpu", compute_type=_settings.COMPUTE_TYPE, cpu_threads=2)
+    modelo = WhisperModel(settings.MODELO_WHISPER, device="cpu", compute_type=settings.COMPUTE_TYPE, cpu_threads=2)
 
     boletim = Path(args.boletim).resolve()
     njud = boletim.parent.name

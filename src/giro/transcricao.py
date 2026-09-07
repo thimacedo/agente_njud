@@ -27,6 +27,9 @@ from .config import (
     LIMIAR_INICIO_FALA_GIRO,
     DIR_ASSETS_VINHETAS,
     VHT_PASSAGEM_GIRO_NOME,
+    CACHE_TRANSCRICOES,
+    MODELO_WHISPER,
+    COMPUTE_TYPE,
 )
 from .filtro import ResultadoFiltro, filtrar_nota
 from .log import get_logger, log_info, log_debug, log_aviso, log_erro
