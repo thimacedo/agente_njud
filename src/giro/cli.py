@@ -194,16 +194,17 @@ def processar_giro(
 
         # ---- PASSO 2: Se < MIN_NOTAS, complementar com notas de Natal ----
         if len(notas_aceitas_total) < MIN_NOTAS:
-            faltam = MIN_NOTAS - len(notas_aceitas_total)
+            notas_faltantes = MIN_NOTAS - len(notas_aceitas_total)
             log_info(
                 "threshold",
-                f"  {mmss}: apenas {len(notas_aceitas_total)} nota(s) de outras cidades "
-                f"(mínimo={MIN_NOTAS}). Re-processando com evitar_natal=False para complementar...",
+                f"  {mmss}: apenas {len(notas_aceitas_total)} nota(s) de outras cidades. "
+                f"Preciso de mais {notas_faltantes} nota(s) institucional(is) de Natal.",
             )
 
             for boletim_path, data_boletim in boletins_no_periodo:
                 if len(notas_aceitas_total) >= MIN_NOTAS:
-                    break  # já atingiu o mínimo
+                    log_info("threshold", f"  {mmss}: Meta atingida! Interrompendo busca.")
+                    break
 
                 log_info(
                     "nota",
@@ -227,6 +228,13 @@ def processar_giro(
                         if n.name not in existentes and len(notas_aceitas_total) < MIN_NOTAS:
                             notas_aceitas_total.append(n)
                             existentes.add(n.name)
+                    
+                    # Log de progresso: quantas ainda faltam
+                    if len(notas_aceitas_total) < MIN_NOTAS:
+                        ainda_faltam = MIN_NOTAS - len(notas_aceitas_total)
+                        log_info("threshold", f"  {mmss}: ainda faltam {ainda_faltam} nota(s).")
+                    else:
+                        log_info("threshold", f"  {mmss}: Meta atingida! Interrompendo busca.")
 
                 except Exception as e:
                     log_erro("nota", f"  Erro no fallback: {e}")
