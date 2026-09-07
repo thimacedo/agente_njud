@@ -179,7 +179,7 @@ def montar_programa(
         programa.export(str(caminho_saida), format="mp3")
         log_info(
             etapa,
-            f"Programa GIRO_{mmss} montado com sucesso",
+            f"Programa GNC_{mmss} montado com sucesso",
             duracao=len(programa)/1000,
             n_notas=len(notas_ordenadas),
             saida=str(caminho_saida),

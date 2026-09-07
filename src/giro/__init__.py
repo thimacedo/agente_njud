@@ -29,6 +29,9 @@ __descripcion__ = (
     "GIRO nas Comarcas (Rádio TJRN)."
 )
 
+# Nomes de arquivos de saída
+from .utils import nome_programa, nome_corte_nota
+
 # Submódulos (importados sob demanda para evitar circular import)
 # from . import cli  # FLAKE8
 # from . import config  # FLAKE8
@@ -74,4 +77,6 @@ __all__ = [
     "montagem",
     "plano",
     "utils",
+    "nome_programa",
+    "nome_corte_nota",
 ]

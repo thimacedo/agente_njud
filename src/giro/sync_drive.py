@@ -25,19 +25,19 @@ from typing import Optional
 # Exemplo:
 #   H:\Meu Drive\RADIO TJRN CONTEÚDO\00_PRODUCAO_2026\02_JORNAIS_GIRO\03_AUDIOS_RADIO
 #
-# Este valor pode vir de variável de ambiente GIRO_DRIVE_SYNC ou,
+# Este valor pode vir de variável de ambiente GNC_DRIVE_SYNC ou,
 # por padrão, aponta para uma pasta não-existente (obriga o usuário
 # a configurar antes de usar).
 # ===========================================================================
 
 import os
 
-_GIRO_DRIVE_SYNC = os.getenv(
-    "GIRO_DRIVE_SYNC",
+_GNC_DRIVE_SYNC = os.getenv(
+    "GNC_DRIVE_SYNC",
     r"H:\Meu Drive\RADIO TJRN CONTEÚDO\00_PRODUCAO_2026\02_JORNAIS_GIRO\03_AUDIOS_RADIO",
 )
 
-_GIRO_DRIVE_SYNC_PATH = Path(_GIRO_DRIVE_SYNC)
+_GNC_DRIVE_SYNC_PATH = Path(_GNC_DRIVE_SYNC)
 
 # ===========================================================================
 # FUNÇÕES DE SINCRONIZAÇÃO
@@ -52,15 +52,15 @@ def sincronizar_programa(
     """Sincroniza UM programa montado para o Drive.
 
     Args:
-        caminho_programa: Path do arquivo GIRO_mmss_DD-MM-AAAA.mp3
-        pasta_destino: pasta de destino no Drive (default: GIRO_DRIVE_SYNC)
+        caminho_programa: Path do arquivo GNC_mmss_DD-MM-AA.mp3
+        pasta_destino: pasta de destino no Drive (default: GNC_DRIVE_SYNC)
         logger: logger opcional
 
     Returns:
         Path do arquivo copiado no Drive, ou None se falhar
     """
     if pasta_destino is None:
-        pasta_destino = _GIRO_DRIVE_SYNC_PATH
+        pasta_destino = _GNC_DRIVE_SYNC_PATH
 
     if logger is None:
         from .log import get_logger
@@ -69,7 +69,7 @@ def sincronizar_programa(
     pasta_destino.mkdir(parents=True, exist_ok=True)
 
     # Valida nome do arquivo
-    if not re.match(r"GIRO_\d{4}_\d{2}-\d{2}-\d{4}\.mp3", caminho_programa.name):
+    if not re.match(r"GNC_\d{4}_\d{2}-\d{2}-\d{4}\.mp3", caminho_programa.name):
         logger.error(
             "sincronizacao",
             f"Nome de arquivo inválido: {caminho_programa.name}",
@@ -116,7 +116,7 @@ def sincronizar_todos(
     if pasta_origem is None:
         pasta_origem = DIR_OUTPUT
     if pasta_destino is None:
-        pasta_destino = _GIRO_DRIVE_SYNC_PATH
+        pasta_destino = _GNC_DRIVE_SYNC_PATH
     if logger is None:
         from .log import get_logger
         logger = get_logger()
@@ -129,25 +129,26 @@ def sincronizar_todos(
         )
         return []
 
-    # Encontrar todos os programas GIRO_ no diretório
+    # Encontrar todos os programas GNC_ no diretório
     programas = sorted(
-        p for p in pasta_origem.glob("GIRO_*.mp3")
-        if re.match(r"GIRO_\d{4}_\d{2}-\d{2}-\d{4}\.mp3", p.name)
+        p for p in pasta_origem.glob("GNC_*.mp3")
+        if re.match(r"GNC_\d{4}_\d{2}-\d{2}-\d{4}\.mp3", p.name)
     )
 
     if not programas:
         logger.warning(
             "sincronizacao",
-            f"Nenhum programa GIRO encontrado em {pasta_origem}",
+            f"Nenhum programa GNC encontrado em {pasta_origem}",
         )
         return []
 
     if mmss_list is not None:
         mmss_set = set(mmss_list)
-        programas = [p for p in programas if p.name[5:9] in mmss_set]
+        total_antes_filtro = len(programas)
+        programas = [p for p in programas if p.name[4:8] in mmss_set]
         logger.info(
             "sincronizacao",
-            f"Filtro mmss aplicado: {len(programas)} de {len(programas)} originais",
+            f"Filtro mmss aplicado: {len(programas)} de {total_antes_filtro} originais",
         )
 
     logger.info(
@@ -183,7 +184,7 @@ def status_drive(pasta_destino: Optional[Path] = None) -> dict:
         dict com estatísticas da pasta
     """
     if pasta_destino is None:
-        pasta_destino = _GIRO_DRIVE_SYNC_PATH
+        pasta_destino = _GNC_DRIVE_SYNC_PATH
 
     pasta_destino = Path(pasta_destino)
     if not pasta_destino.exists():
@@ -194,11 +195,11 @@ def status_drive(pasta_destino: Optional[Path] = None) -> dict:
             "mmss_list": [],
         }
 
-    programas = list(pasta_destino.glob("GIRO_*.mp3"))
+    programas = list(pasta_destino.glob("GNC_*.mp3"))
     total_bytes = sum(p.stat().st_size for p in programas)
     mmss_set = set()
     for p in programas:
-        m = re.match(r"GIRO_(\d{4})_", p.name)
+        m = re.match(r"GNC_(\d{4})_", p.name)
         if m:
             mmss_set.add(m.group(1))
 
@@ -219,14 +220,14 @@ def status_drive(pasta_destino: Optional[Path] = None) -> dict:
 if __name__ == "__main__":
     import sys
 
-    print("=== Sincronização GIRO ===")
-    print(f"Caminho no Drive: {_GIRO_DRIVE_SYNC_PATH}")
+    print("=== Sincronização GNC ===")
+    print(f"Caminho no Drive: {_GNC_DRIVE_SYNC_PATH}")
     print()
 
     status = status_drive()
     if not status["exists"]:
         print("Pasta de destino não existe no Drive.")
-        print("Configure GIRO_DRIVE_SYNC ou crie a pasta manualmente.")
+        print("Configure GNC_DRIVE_SYNC ou crie a pasta manualmente.")
         sys.exit(1)
 
     print(f"Programas no Drive: {status['total_programas']}")
