@@ -268,7 +268,7 @@ def montar_todos(
 def extrair_idx_nota(nome_arquivo: str) -> int:
     """Extrai o índice da nota (N{n}) do nome do arquivo.
 
-    Ex: GIRO_0101_N01_06-01-2026.mp3 -> 1
+    Ex: GNC_0101_N01_06-01-26.mp3 -> 1
     """
     m = re.search(r"N(\d+)", nome_arquivo)
     if m:
@@ -279,9 +279,9 @@ def extrair_idx_nota(nome_arquivo: str) -> int:
 def extrair_mmss(nome_arquivo: str) -> Optional[str]:
     """Extrai o mmss do nome do arquivo.
 
-    Ex: GIRO_0101_N01_06-01-2026.mp3 -> "0101"
+    Ex: GNC_0101_N01_06-01-26.mp3 -> "0101"
     """
-    m = re.match(r"GIRO_(\d{4})", nome_arquivo)
+    m = re.match(r"GNC_(\d{4})", nome_arquivo)
     if m:
         return m.group(1)
     return None
@@ -306,4 +306,4 @@ if __name__ == "__main__":
             print(f"  {r}")
     else:
         print("Uso: python montagem.py <pasta_notas>")
-        print("     pasta_notas contém subpastas com notas GIRO_N*.mp3")
+        print("     pasta_notas contém subpastas com notas GNC_N*.mp3")

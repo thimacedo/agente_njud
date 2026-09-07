@@ -232,7 +232,7 @@ def montar_giro(
     """Monta programas a partir de notas já processadas.
 
     Args:
-        pasta_notas: pasta contendo as notas processadas (GIRO_N*.mp3)
+        pasta_notas: pasta contendo as notas processadas (GNC_N*.mp3)
         mmss_list: lista opcional de mmss para montar (senão, todos)
         log_dir: diretório de log
         verbose: log detalhado
@@ -278,10 +278,10 @@ def montar_giro(
     for mmss in mmss_list:
         notas = sorted(notas_por_mmss.get(mmss, []))
         if not notas:
-            log_aviso("montagem", f"Nenhuma nota para GIRO_{mmss}")
+            log_aviso("montagem", f"Nenhuma nota para GNC_{mmss}")
             continue
 
-        log_info("montagem", f"Montando GIRO_{mmss} com {len(notas)} notas")
+        log_info("montagem", f"Montando GNC_{mmss} com {len(notas)} notas")
         caminho = montar_programa(mmss, notas, logger=logger)
         if caminho:
             resultados.append(caminho)
