@@ -1,18 +1,20 @@
 {
   "programa": "GIRO",
-  "codigo": "0101",
-  "data_base": "2026-01-07",
+  "codigo": "0102",
+  "data_base": "2026-01-14",
   "periodo_coleta": {
-    "inicio": "2026-01-05",
-    "fim": "2026-01-07"
+    "inicio": "2026-01-08",
+    "fim": "2026-01-14"
   },
   "parametros": {
-    "BOLETINS_POR_PROGRAMA": 3,
+    "BOLETINS_POR_PROGRAMA": 5,
     "FORMATO_CORTE": "SILENCIO",
     "DURACAO_SILENCIO_MINIMA": 1.0,
+    "REGRA_SEM_FALLBACK": true,
+    "PERMITIR_REMONTAGEM": false,
     "LIMIARES_AUDITORIA": {
-      "duracao_minima_cabeca": 2.0,
-      "duracao_minima_corpo": 5.0,
+      "duracao_minima_cabeca": 5.0,
+      "duracao_minima_corpo": 10.0,
       "duracao_maxima_total": 300.0,
       "tolerancia_silencio": 0.2
     }
