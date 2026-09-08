@@ -29,7 +29,7 @@ for p in pastas:
 print()
 print('=== Amostra de NJUDs com cortes (primeiros 5) ===')
 for p in pastas[:5]:
-    ce = glob.glob(os.path.join(p, '*_CABEGA.mp3'))
+    ce = glob.glob(os.path.join(p, '*_CABECA.mp3'))
     co = glob.glob(os.path.join(p, '*_CORPO.mp3'))
     orig = glob.glob(os.path.join(p, '*.mp3'))
     orig_sem_corte = [a for a in orig if '_CABECA' not in bn(a) and '_CORPO' not in bn(a)]

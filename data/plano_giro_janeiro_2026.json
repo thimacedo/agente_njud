@@ -1,0 +1,82 @@
+{
+  "programa": "GIRO",
+  "mes_referencia": "JANEIRO",
+  "ano": 2026,
+  "total_programas": 4,
+  "pasta_base_boletins": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\01 - JAN - 26",
+  "padrao_nomeclatura_saida": "GNC_mmss_DD-MM-AA.mp3",
+  "programas": [
+    {
+      "ordem": 1,
+      "mmss": "0102",
+      "data_exibicao": "2026-01-13",
+      "data_formatada": "13-01-26",
+      "periodo_noticias": {
+        "segunda": "2026-01-04",
+        "domingo": "2026-01-10",
+        "dias_uteis": 5
+      },
+      "nome_arquivo_saida": "GNC_0102_13-01-26.mp3",
+      "pasta_boletins": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\01 - JAN - 26",
+      "padrao_busca_boletins": "BOLETIM_RADIO_TJRN_*_2026-01-04_2026-01-10*.mp3",
+      "previsao_noticias": "4-6",
+      "status": "PENDENTE",
+      "observacoes": [
+        "Primeiro programa do ano - validar vinhetas de abertura/encerramento"
+      ]
+    },
+    {
+      "ordem": 2,
+      "mmss": "0103",
+      "data_exibicao": "2026-01-20",
+      "data_formatada": "20-01-26",
+      "periodo_noticias": {
+        "segunda": "2026-01-11",
+        "domingo": "2026-01-17",
+        "dias_uteis": 5
+      },
+      "nome_arquivo_saida": "GNC_0103_20-01-26.mp3",
+      "pasta_boletins": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\01 - JAN - 26",
+      "padrao_busca_boletins": "BOLETIM_RADIO_TJRN_*_2026-01-11_2026-01-17*.mp3",
+      "previsao_noticias": "4-6",
+      "status": "PENDENTE",
+      "observacoes": []
+    },
+    {
+      "ordem": 3,
+      "mmss": "0104",
+      "data_exibicao": "2026-01-27",
+      "data_formatada": "27-01-26",
+      "periodo_noticias": {
+        "segunda": "2026-01-18",
+        "domingo": "2026-01-24",
+        "dias_uteis": 5
+      },
+      "nome_arquivo_saida": "GNC_0104_27-01-26.mp3",
+      "pasta_boletins": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\01 - JAN - 26",
+      "padrao_busca_boletins": "BOLETIM_RADIO_TJRN_*_2026-01-18_2026-01-24*.mp3",
+      "previsao_noticias": "4-6",
+      "status": "PENDENTE",
+      "observacoes": []
+    },
+    {
+      "ordem": 4,
+      "mmss": "0201",
+      "data_exibicao": "2026-02-03",
+      "data_formatada": "03-02-26",
+      "periodo_noticias": {
+        "segunda": "2026-01-25",
+        "domingo": "2026-01-31",
+        "dias_uteis": 5
+      },
+      "nome_arquivo_saida": "GNC_0201_03-02-26.mp3",
+      "pasta_boletins": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\01 - JAN - 26",
+      "padrao_busca_boletins": "BOLETIM_RADIO_TJRN_*_2026-01-25_2026-01-31*.mp3",
+      "previsao_noticias": "4-6",
+      "status": "PENDENTE",
+      "observacoes": [
+        "Último programa com boletins de janeiro - atenção ao fechamento do mês"
+      ]
+    }
+  ]
+}
