@@ -64,6 +64,7 @@ torch.set_num_interop_threads(1)
 
 from pathlib import Path
 from faster_whisper import WhisperModel
+from config.njud import settings as _settings
 from divisor_boletins.audio import processar_arquivo
 from divisor_boletins.log import LogPipeline
 from audit.individual_cuts import analisar_par
