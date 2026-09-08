@@ -75,7 +75,26 @@ TOTAL                          → 545 MB
 - [ ] `data/processed/GIRO_COMARCAS/` — 257 MB (notas já montadas podem ser removidas)
 - [ ] `data/output/GIRO_COMARCAS/` — 171 MB (após sync com Drive)
 
-### Drive H: (verificar quando montado):
-- [ ] Arquivos fora do padrão canônico
-- [ ] Pastas `00_QUARENTENA` com duplicatas
-- [ ] Arquivos em `_arquivo_morto` que podem ser removidos
+### Drive H: — Status após verificação
+
+#### `01_BOLETINS_DIARIOS/03_AUDIOS_RADIO/` — 147 boletins MP3 (~220 MB)
+- **Não é sujeira do agente** — é pasta de sync do Google Drive Desktop
+- São baixados automaticamente de pasta compartilhada da Rádio TJRN
+- **Não mexer** — o Google Drive Desktop gerencia essa pasta
+- O pipeline GIRO lê boletins de `01_ROTEIROS/` (organizada), não de `03_AUDIOS_RADIO/`
+
+#### `03_GIRO_NAS_COMARCAS/02 - FEV - 26/` — 3 programas (~13 MB)
+- `GNC_0201_03-02-2026.mp3`, `GNC_0202_10-02-2026.mp3`, `GNC_0203_17-02-2026.mp3`
+- Gerados pelo pipeline GIRO (processos de teste)
+- **Seguro manter** — são programas válidos no padrão canônico
+
+#### `03_GIRO_NAS_COMARCAS/06 - JUN - 26/` — arquivos com nomenclatura antiga
+- `GNC PROG 103 - 09-06.mp3`, `GNC 104.mp3`, `GNC PROG XX2 16 06.mp3`, etc.
+- São programas antigos (feitos manualmente ou versão anterior do pipeline)
+- Fora do padrão canônico `GNC_mmss_DD-MM-AAAA.mp3`
+- **Avaliar com o usuário** se podem ser removidos
+
+#### Pastas `03_GIRO_NAS_COMARCAS/03` a `09` — programas gerados automaticamente
+- Padrão canônico `GNC_mmss_DD-MM-AAAA.mp3`
+- Gerados pelo pipeline durante testes
+- **Seguro manter** se forem programas válidos
