@@ -1,0 +1,29 @@
+{
+  "programa": "GIRO",
+  "codigo": "0101",
+  "data_base": "2026-01-07",
+  "periodo_coleta": {
+    "inicio": "2026-01-05",
+    "fim": "2026-01-07"
+  },
+  "parametros": {
+    "BOLETINS_POR_PROGRAMA": 3,
+    "FORMATO_CORTE": "SILENCIO",
+    "DURACAO_SILENCIO_MINIMA": 1.0,
+    "LIMIARES_AUDITORIA": {
+      "duracao_minima_cabeca": 2.0,
+      "duracao_minima_corpo": 5.0,
+      "duracao_maxima_total": 300.0,
+      "tolerancia_silencio": 0.2
+    }
+  },
+  "config_demucs": {
+    "habilitado": false,
+    "modelo": "htdemucs",
+    "stems": ["vocals", "other"]
+  },
+  "saida": {
+    "diretorio": "output/giro/2026-01",
+    "padrao_nome": "GIRO_{codigo}_{DD-MM-YYYY}.mp3"
+  }
+}
