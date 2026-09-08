@@ -205,10 +205,13 @@ def montar_jornal(
     logger.info(etapa, f"=== Iniciando montagem: {nome_jornal} ===")
 
     # 1. Carrega vinhetas
+    # Nota: abertura/encerramento/trilha ficam em vinhetas/njud/, mas a passagem
+    # de boletim fica em vinhetas/boletim/ (são assets distintos)
+    vinhetas_boletim_dir = VINHETAS_DIR.parent / "boletim"
     vht_abertura_path = VINHETAS_DIR / VHT_ABERTURA_NOME
     vht_encerramento_path = VINHETAS_DIR / VHT_ENCERRAMENTO_NOME
     trilha_escalada_path = VINHETAS_DIR / TRILHA_ESCALADA_NOME
-    passagem_path = VINHETAS_DIR / PASSAGEM_NOME
+    passagem_path = vinhetas_boletim_dir / PASSAGEM_NOME
 
     for v, nome in [
         (vht_abertura_path, "VHT_ABERTURA"),

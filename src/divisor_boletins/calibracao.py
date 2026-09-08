@@ -27,12 +27,19 @@ VINHETA_ABERTURA = "VHT_ABERTURA_BOLETIM.mp3"
 VINHETA_PASSAGEM = "VHT_PASSAGEM_BOLETIM.mp3"
 VINHETA_ENCERRAMENTO = "VHT_ENCERRAMENTO_BOLETIM.mp3"
 
+# Vinhetas de boletim ficam em vinhetas/boletim/, não em vinhetas/njud/
+_VINHETAS_BOLETIM_DIR = VINHETAS_DIR.parent / "boletim"
+
 _CACHE_VINHETAS: dict = {}
 _CACHE_PATH = settings.CACHE_VAD / "_vinhetas_cache.pkl"  # data/cache/njud/vad
 
 
 def _carregar_vinheta_raw(nome_arquivo: str) -> Optional[tuple[np.ndarray, int]]:
-    caminho = VINHETAS_DIR / nome_arquivo
+    # Vinhetas de boletim ficam em vinhetas/boletim/, assets de jornal em vinhetas/njud/
+    if nome_arquivo.startswith("VHT_ABERTURA_BOLETIM") or nome_arquivo.startswith("VHT_PASSAGEM_BOLETIM") or nome_arquivo.startswith("VHT_ENCERRAMENTO_BOLETIM"):
+        caminho = _VINHETAS_BOLETIM_DIR / nome_arquivo
+    else:
+        caminho = VINHETAS_DIR / nome_arquivo
     if not caminho.exists():
         return None
     try:
