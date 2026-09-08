@@ -1,0 +1,66 @@
+{
+  "programa": "GIRO",
+  "periodo": {},
+  "sucesso": false,
+  "boletins_processados": [
+    {
+      "index": 0,
+      "status": "FALHA",
+      "erros": [
+        "No module named 'soundfile'"
+      ]
+    },
+    {
+      "index": 1,
+      "status": "FALHA",
+      "erros": [
+        "No module named 'soundfile'"
+      ]
+    },
+    {
+      "index": 2,
+      "status": "FALHA",
+      "erros": [
+        "No module named 'soundfile'"
+      ]
+    },
+    {
+      "index": 3,
+      "status": "FALHA",
+      "erros": [
+        "No module named 'soundfile'"
+      ]
+    },
+    {
+      "index": 4,
+      "status": "FALHA",
+      "erros": [
+        "No module named 'soundfile'"
+      ]
+    },
+    {
+      "index": 5,
+      "status": "FALHA",
+      "erros": [
+        "No module named 'soundfile'"
+      ]
+    },
+    {
+      "index": 6,
+      "status": "FALHA",
+      "erros": [
+        "No module named 'soundfile'"
+      ]
+    }
+  ],
+  "erros": [
+    "No module named 'soundfile'",
+    "No module named 'soundfile'",
+    "No module named 'soundfile'",
+    "No module named 'soundfile'",
+    "No module named 'soundfile'",
+    "No module named 'soundfile'",
+    "No module named 'soundfile'"
+  ],
+  "avisos": []
+}
