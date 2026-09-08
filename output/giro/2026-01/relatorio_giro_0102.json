@@ -7,60 +7,75 @@
       "index": 0,
       "status": "FALHA",
       "erros": [
-        "No module named 'soundfile'"
+        "Cortes inválidos e regra sem fallback ativa - não promove áudio bruto"
       ]
     },
     {
       "index": 1,
       "status": "FALHA",
       "erros": [
-        "No module named 'soundfile'"
+        "Cortes inválidos e regra sem fallback ativa - não promove áudio bruto"
       ]
     },
     {
       "index": 2,
       "status": "FALHA",
       "erros": [
-        "No module named 'soundfile'"
+        "Cortes inválidos e regra sem fallback ativa - não promove áudio bruto"
       ]
     },
     {
       "index": 3,
       "status": "FALHA",
       "erros": [
-        "No module named 'soundfile'"
+        "Cortes inválidos e regra sem fallback ativa - não promove áudio bruto"
       ]
     },
     {
       "index": 4,
       "status": "FALHA",
       "erros": [
-        "No module named 'soundfile'"
+        "Cortes inválidos e regra sem fallback ativa - não promove áudio bruto"
       ]
     },
     {
       "index": 5,
       "status": "FALHA",
       "erros": [
-        "No module named 'soundfile'"
+        "Cortes inválidos e regra sem fallback ativa - não promove áudio bruto"
       ]
     },
     {
       "index": 6,
       "status": "FALHA",
       "erros": [
-        "No module named 'soundfile'"
+        "Cortes inválidos e regra sem fallback ativa - não promove áudio bruto"
       ]
     }
   ],
   "erros": [
-    "No module named 'soundfile'",
-    "No module named 'soundfile'",
-    "No module named 'soundfile'",
-    "No module named 'soundfile'",
-    "No module named 'soundfile'",
-    "No module named 'soundfile'",
-    "No module named 'soundfile'"
+    "Cortes inválidos e regra sem fallback ativa - não promove áudio bruto",
+    "Cortes inválidos e regra sem fallback ativa - não promove áudio bruto",
+    "Cortes inválidos e regra sem fallback ativa - não promove áudio bruto",
+    "Cortes inválidos e regra sem fallback ativa - não promove áudio bruto",
+    "Cortes inválidos e regra sem fallback ativa - não promove áudio bruto",
+    "Cortes inválidos e regra sem fallback ativa - não promove áudio bruto",
+    "Cortes inválidos e regra sem fallback ativa - não promove áudio bruto"
   ],
-  "avisos": []
+  "avisos": [
+    "Corte falhou: Erro ao cortar áudio: Error opening '/tmp/boletim_simulado_2026-01-08.mp3': System error.",
+    "Corte não retornou CABEÇA e CORPO válidos",
+    "Corte falhou: Erro ao cortar áudio: Error opening '/tmp/boletim_simulado_2026-01-09.mp3': System error.",
+    "Corte não retornou CABEÇA e CORPO válidos",
+    "Corte falhou: Erro ao cortar áudio: Error opening '/tmp/boletim_simulado_2026-01-10.mp3': System error.",
+    "Corte não retornou CABEÇA e CORPO válidos",
+    "Corte falhou: Erro ao cortar áudio: Error opening '/tmp/boletim_simulado_2026-01-11.mp3': System error.",
+    "Corte não retornou CABEÇA e CORPO válidos",
+    "Corte falhou: Erro ao cortar áudio: Error opening '/tmp/boletim_simulado_2026-01-12.mp3': System error.",
+    "Corte não retornou CABEÇA e CORPO válidos",
+    "Corte falhou: Erro ao cortar áudio: Error opening '/tmp/boletim_simulado_2026-01-13.mp3': System error.",
+    "Corte não retornou CABEÇA e CORPO válidos",
+    "Corte falhou: Erro ao cortar áudio: Error opening '/tmp/boletim_simulado_2026-01-14.mp3': System error.",
+    "Corte não retornou CABEÇA e CORPO válidos"
+  ]
 }

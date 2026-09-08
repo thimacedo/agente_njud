@@ -1,0 +1,18 @@
+{
+  "programa": "GIRO",
+  "codigo": "0304",
+  "data_exibicao": "2026-03-25",
+  "janela_coleta": {
+    "inicio": "2026-03-20",
+    "fim": "2026-03-25",
+    "dias_totais": 6
+  },
+  "parametros": {
+    "boletins_minimos": 4,
+    "corte_por_silencio": true,
+    "duracao_silencio_segundos": 1.0,
+    "fallback_audio_completo": false,
+    "usar_demucs": false
+  },
+  "status": "pendente"
+}
