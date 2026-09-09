@@ -145,14 +145,13 @@ def montar_programa(
     programa = AudioSegment.empty()
     programa += vht_abertura
 
-    # Adiciona cada nota com a passagem antes
+    # Adiciona cada nota com a passagem ANTES (exceto a primeira)
     for i, nota_path in enumerate(notas_ordenadas):
         log_debug(etapa, f"Adicionando nota {i+1}/{len(notas)}")
 
-        # Vinheta de passagem (antes de cada nota, inclusive a primeira)
-        # Nota: se quiser evitar passagem antes da primeira nota, comente
-        # esta linha e adicione passagem apenas entre notas (i > 0).
-        programa += vht_passagem
+        # Vinheta de passagem entre notas (não antes da primeira)
+        if i > 0:
+            programa += vht_passagem
 
         # Nota (manchete + corpo integrados)
         try:

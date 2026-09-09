@@ -61,7 +61,7 @@ def configurar_pipeline(json_config: dict, pasta_boletins: Path, pasta_saida: Pa
         compute_type="int8",
         roteiro_corte="GIRO_CABEÇA_CORPO" if nome_programa == "giro" else None,
         minimo_boletins_para_montar=json_config.get("parametros", {}).get("boletins_minimos", 4),
-        usar_separacao_stems=json_config.get("parametros", {}).get("usar_demucs", False),
+        usar_separacao_stems=json_config.get("parametros", {}).get("usar_separacao_stems", json_config.get("parametros", {}).get("usar_demucs", False)),
         # Janela de datas do plano (para filtragem no Giro)
         data_inicio_coleta=json_config.get("janela_coleta", {}).get("inicio"),
         data_fim_coleta=json_config.get("janela_coleta", {}).get("fim"),

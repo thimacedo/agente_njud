@@ -32,6 +32,22 @@ venv/
 .DS_Store
 Thumbs.db
 
+# Virtualenvs (subprojetos tipo gravador_inteligente/)
+.venv/
+venv/
+env/
+
+# Build artifacts
+*.egg-info/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Temp processing
+temp_processing/
+output_boletins/
+
 # Empty / placeholder dirs
 config/
 

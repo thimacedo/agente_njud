@@ -255,31 +255,58 @@ def _detectar_notas_por_assinatura(
 def extrair_notas(
     segmentos: list[dict],
     texto_completo: str,
-    metodo: str = "arquivo",
+    metodo: str = "assinatura",
+    audio_len_s: float = 0,
 ) -> list[NotaExtraida]:
     """Extrai notas individuais da transcrição de um boletim.
 
-    Cada arquivo de boletim TJRN (B1, B2, B3...) já é uma nota individual.
-    Não há necessidade de detectar limites internos — o arquivo inteiro é a nota.
+    No GIRO, cada boletim contém múltiplas notas separadas por
+    vinheta de passagem (~1.2s). Detecta essas divisões para extrair
+    notas individuais.
 
     Args:
         segmentos: segmentos whisper
         texto_completo: texto completo da transcrição
-        metodo: "arquivo" (padrão) — 1 nota por arquivo
+        metodo: "assinatura" (padrão) — detecta por LOC/OFF TJRN
+                "silencio" — detecta por gaps de silêncio
+        audio_len_s: duração total do áudio (para silencio method)
 
     Returns:
-        Lista com 1 NotaExtraida (o arquivo inteiro)
+        Lista de NotaExtraida (uma por nota no boletim)
     """
     if not segmentos:
         return []
 
-    return [NotaExtraida(
-        idx=1,
-        texto=texto_completo,
-        inicio_seg=segmentos[0]["start"],
-        fim_seg=segmentos[-1]["end"],
-        segmentos=segmentos,
-    )]
+    # Seleciona método de detecção
+    if metodo == "silencio":
+        notas_tuple = _detectar_notas_por_silencio(segmentos, audio_len_s)
+    else:
+        # Padrão: assinatura TJRN
+        notas_tuple = _detectar_notas_por_assinatura(segmentos)
+
+    if not notas_tuple:
+        return []
+
+    notas = []
+    for idx, (start_i, end_i) in enumerate(notas_tuple, 1):
+        # Texto da nota
+        texto_nota = " ".join(
+            segmentos[i]["text"] for i in range(start_i, min(end_i + 1, len(segmentos)))
+        )
+
+        # Timestamps
+        inicio_s = segmentos[start_i]["start"] if start_i < len(segmentos) else 0
+        fim_s = segmentos[end_i]["end"] if end_i < len(segmentos) else audio_len_s
+
+        notas.append(NotaExtraida(
+            idx=idx,
+            texto=texto_nota,
+            inicio_seg=inicio_s,
+            fim_seg=fim_s,
+            segmentos=segmentos[start_i:end_i + 1],
+        ))
+
+    return notas
 
 
 # ===========================================================================
@@ -503,3 +530,47 @@ def limpar_cache_transcricoes() -> None:
     """Limpa o cache de transcrições em memória."""
     global _CACHE_MEM
     _CACHE_MEM.clear()
+
+
+def _detetar_notas_por_silencio(
+    segmentos: list[dict],
+    gap_min_s: float = 2.5,
+) -> list[tuple[int, int]]:
+    """Detecta notas por gaps de silêncio entre segmentos.
+
+    No GIRO, cada nota é separada por uma vinheta de passagem (música).
+    A vinheta gera um gap de silêncio na transcrição (sem texto).
+    Também detecta assinaturas TJRN como marcador de nova nota.
+
+    Args:
+        segmentos: lista de segmentos whisper
+        gap_min_s: gap mínimo (s) entre fim de um segmento e início do próximo
+                   para considerar que é uma nova nota
+
+    Returns:
+        Lista de (idx_inicio, idx_fim) por nota
+    """
+    import re
+    PADRAO_ASSINATURA = re.compile(
+        r"tribunal de justi[çc]a do rio grande do norte",
+        re.IGNORECASE,
+    )
+
+    if not segmentos:
+        return []
+
+    notas = []
+    inicio_nota = 0
+
+    for i in range(1, len(segmentos)):
+        gap = segmentos[i]["start"] - segmentos[i - 1]["end"]
+        is_tjrn = PADRAO_ASSINATURA.search(segmentos[i]["text"]) is not None
+
+        if gap >= gap_min_s or is_tjrn:
+            notas.append((inicio_nota, i - 1))
+            inicio_nota = i
+
+    # Última nota
+    notas.append((inicio_nota, len(segmentos) - 1))
+    return notas
+
