@@ -65,6 +65,13 @@ class ResultadoSeparacao:
     chave_cache: str
     sucesso: bool
     erro: Optional[str] = None
+    # Pós-Demucs: resultado da verificação de vinhetas no stem vocal
+    vinheta_abertura_detectada: bool = False
+    vinheta_encerramento_detectada: bool = False
+    texto_inicio_stem: str = ""
+    texto_fim_stem: str = ""
+    match_abertura: Optional[str] = None
+    match_encerramento: Optional[str] = None
 
     def to_dict(self) -> dict:
         return asdict(self)
@@ -192,6 +199,14 @@ def separar_stems(
 
     duracao = time.time() - t0
 
+    # ------------------------------------------------------------------
+    # Pós-Demucs: verificar se vinhetas de abertura/encerramento
+    # ainda aparecem no stem vocal. Se sim, reportar via transcrição.
+    # ------------------------------------------------------------------
+    vinheta_info = _verificar_vinhetas_nos_stems(
+        caminho_entrada, vocal_cache, config, t0,
+    )
+
     # Move para cache definitivo
     vocal_cache.parent.mkdir(parents=True, exist_ok=True)
     shutil.move(str(vocal_bruto), str(vocal_cache))
@@ -205,12 +220,28 @@ def separar_stems(
         veio_do_cache=False,
         chave_cache=chave,
         sucesso=True,
+        vinheta_abertura_detectada=vinheta_info.get("vinheta_abertura_detectada", False),
+        vinheta_encerramento_detectada=vinheta_info.get("vinheta_encerramento_detectada", False),
+        texto_inicio_stem=vinheta_info.get("texto_inicio", ""),
+        texto_fim_stem=vinheta_info.get("texto_fim", ""),
+        match_abertura=vinheta_info.get("match_abertura"),
+        match_encerramento=vinheta_info.get("match_encerramento"),
     )
 
     meta_cache.write_text(
         json.dumps(resultado.to_dict(), indent=2, ensure_ascii=False),
         encoding="utf-8",
     )
+
+    if (vinheta_info.get("vinheta_abertura_detectada") or
+            vinheta_info.get("vinheta_encerramento_detectada")):
+        logger.warning(
+            "Pós-Demucs: vinheta(s) ainda presente(s) no stem vocal de %s → "
+            "abertura=%s encerramento=%s",
+            entrada.name,
+            vinheta_info.get("vinheta_abertura_detectada", False),
+            vinheta_info.get("vinheta_encerramento_detectada", False),
+        )
 
     if not config.manter_stems_brutos:
         shutil.rmtree(tmp_saida, ignore_errors=True)
@@ -219,6 +250,138 @@ def separar_stems(
         "Separação concluída para %s em %.1fs → %s",
         entrada.name, duracao, vocal_cache,
     )
+
+    return resultado
+
+
+def _verificar_vinhetas_nos_stems(
+    caminho_original: Path,
+    caminho_vocal: Path,
+    config: ConfigSeparacao,
+    t0: float,
+) -> dict:
+    """
+    Verifica se vinhetas de abertura ou encerramento ainda aparecem
+    no stem vocal após a separação via Demucs.
+
+    Como o Demucs (htdemucs, two-stems=vocals) não foi treinado para
+    remover vinhetas específicas de rádio, é comum que fragmentos da
+    vinheta sobrevivam no stem vocal — especialmente se a vinheta tiver
+    parte falada sobreposta à música de fundo.
+
+    A verificação é feita comparando o texto transcrito do início e do
+    fim do stem vocal com os textos conhecidos das vinhetas de referência
+    em assets/vinhetas/boletim/.
+
+    Retorna um dict com:
+        - 'vinheta_abertura detectada': bool
+        - 'vinheta_encerramento_detectada': bool
+        - 'texto_inicio': str (primeiros ~10s transcritos)
+        - 'texto_fim': str (últimos ~10s transcritos)
+        - 'match_abertura': str ou None (texto da vinheta que bateu)
+        - 'match_encerramento': str ou None
+    """
+    from faster_whisper import WhisperModel
+    from pathlib import Path
+
+    assets_dir = Path(__file__).resolve().parent.parent / "assets" / "vinhetas" / "boletim"
+    vinheta_abertura_path = assets_dir / "VHT_ABERTURA_BOLETIM.mp3"
+    vinheta_encerramento_path = assets_dir / "VHT_ENCERRAMENTO_BOLETIM.mp3"
+
+    resultado = {
+        "vinheta_abertura_detectada": False,
+        "vinheta_encerramento_detectada": False,
+        "texto_inicio": "",
+        "texto_fim": "",
+        "match_abertura": None,
+        "match_encerramento": None,
+    }
+
+    # Se não houver arquivos de referência, não faz nada
+    if not vinheta_abertura_path.exists() or not vinheta_encerramento_path.exists():
+        logger.debug(
+            "Arquivos de vinheta não encontrados em %s — pulando verificação",
+            assets_dir,
+        )
+        return resultado
+
+    # Transcreve trecho inicial (primeiros 12s) e final (últimos 12s) do stem
+    try:
+        modelo_whisper = WhisperModel("tiny", device="cpu", compute_type="int8")
+    except Exception as exc:
+        logger.debug("Não foi possível carregar Whisper para verificação de vinhetas: %s", exc)
+        return resultado
+
+    try:
+        import librosa  # type: ignore
+
+        y, sr = librosa.load(str(caminho_vocal), sr=None, duration=12.0)
+        duracao_real = len(y) / sr
+
+        # Início
+        segments_inicio, _ = modelo_whisper.transcribe(y=y, sr=sr)
+        texto_inicio = " ".join(
+            seg.text.strip() for seg in segments_inicio if seg.text.strip()
+        )
+        resultado["texto_inicio"] = texto_inicio
+
+        # Fim (se o arquivo tiver mais de 24s, pega os últimos 12s)
+        if duracao_real > 24.0:
+            y_fim, _ = librosa.load(str(caminho_vocal), sr=None, offset=duracao_real - 12.0)
+            segments_fim, _ = modelo_whisper.transcribe(y=y_fim, sr=sr)
+            texto_fim = " ".join(
+                seg.text.strip() for seg in segments_fim if seg.text.strip()
+            )
+        else:
+            texto_fim = ""
+        resultado["texto_fim"] = texto_fim
+
+        # Transcreve as vinhetas de referência para comparação
+        def transcrever_referencia(caminho: Path) -> str:
+            y_ref, sr_ref = librosa.load(str(caminho), sr=None)
+            segs, _ = modelo_whisper.transcribe(y=y_ref, sr=sr_ref)
+            return " ".join(s.text.strip() for s in segs if s.text.strip())
+
+        texto_ref_abertura = transcrever_referencia(vinheta_abertura_path)
+        texto_ref_encerramento = transcrever_referencia(vinheta_encerramento_path)
+
+        # Comparação frouxa: verifica se palavras-chave da vinheta aparecem
+        # no texto do stem (ignora pontuação e case)
+        def palavras_chave(texto: str) -> set[str]:
+            import re
+            return set(re.findall(r"[a-zA-Záàâãéèêíóôõúüç]+", texto.lower()))
+
+        chaves_abertura = palavras_chave(texto_ref_abertura)
+        chaves_encerramento = palavras_chave(texto_ref_encerramento)
+
+        inicio_chaves = palavras_chave(texto_inicio)
+        fim_chaves = palavras_chave(texto_fim)
+
+        # Interseção: se >= 3 palavras coincidentes, considera detecção
+        THRESH = 3
+
+        if len(inicio_chaves & chaves_abertura) >= THRESH:
+            resultado["vinheta_abertura_detectada"] = True
+            resultado["match_abertura"] = texto_inicio[:200]
+
+        if len(fim_chaves & chaves_encerramento) >= THRESH:
+            resultado["vinheta_encerramento_detectada"] = True
+            resultado["match_encerramento"] = texto_fim[:200]
+
+        if resultado["vinheta_abertura_detectada"] or resultado["vinheta_encerramento_detectada"]:
+            logger.warning(
+                "Pós-Demucs: vinheta ainda presente no stem vocal de %s → "
+                "abertura=%s encerramento=%s",
+                caminho_original.name,
+                resultado["vinheta_abertura_detectada"],
+                resultado["vinheta_encerramento_detectada"],
+            )
+
+    except Exception as exc:
+        logger.debug(
+            "Não foi possível verificar vinhetas no stem de %s: %s",
+            caminho_original.name, exc,
+        )
 
     return resultado
 

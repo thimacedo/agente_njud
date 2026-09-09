@@ -1,11 +1,19 @@
 # Data files - fuente y productos pesados
 data/
 JORNAIS/
+BOLETIM/
+GIRO/
+NJUD/
+orch/
 downloads/
 logs/
 legacy_archive/
 montagem_julago/
 projeto_etapa_final_2026/
+outros/
+irrul es_giro_2026.md
+regras_por_programa_2026.md
+orch_jan2026.md
 
 # Backups y temporales
 _backup_estado_*.csv
@@ -23,6 +31,9 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+# Empty / placeholder dirs
+config/
 
 # IDE
 .vscode/

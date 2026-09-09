@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programador — DIVISOR</title>
+<style>
+  :root{
+    --bg:#fafafa;--surface:#fff;--border:#e5e5e5;--border-strong:#cfcfcf;
+    --text:#1a1a1a;--muted:#6b6b6b;--faint:#9a9a9a;
+    --accent:#0066cc;--accent-hover:#0052a3;--accent-subtle:#eef5ff;
+    --danger:#c0392b;--danger-bg:#fdf2f2;--success:#1a7f4f;--success-bg:#f0f8f4;
+    --radius:6px;--radius-sm:4px;
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);color:var(--text);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
+  .app{max-width:960px;margin:0 auto;padding:24px 20px 60px}
+  .header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap}
+  .brand{font-size:15px;font-weight:500;color:var(--muted);letter-spacing:-0.01em}
+  .brand strong{color:var(--text);font-weight:600}
+  .badge{font-size:12px;color:var(--faint);font-family:var(--mono);background:var(--surface);border:1px solid var(--border);padding:4px 8px;border-radius:var(--radius-sm)}
+  .badge.ok{color:var(--success);border-color:var(--success-bg)}
+  .badge.err{color:var(--danger);border-color:var(--danger-bg)}
+  .modo-section{margin-bottom:24px}
+  .modo-label{font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--faint);margin-bottom:8px;font-weight:500}
+  .modo-tabs{display:flex;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;background:var(--surface)}
+  .modo-tab{flex:1;padding:10px 16px;font-size:14px;font-weight:500;background:transparent;border:none;cursor:pointer;color:var(--muted);transition:background .15s,color .15s;text-align:center;font-family:var(--font)}
+  .modo-tab:hover{background:#f5f5f5;color:var(--text)}
+  .modo-tab.active{background:var(--text);color:#fff}
+  .modo-tab .short{display:block;font-size:11px;font-weight:400;opacity:0.7;margin-top:2px}
+  .work-area{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:20px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .work-title{font-size:13px;font-weight:500;color:var(--muted);margin-bottom:10px}
+  .work-instruction{font-size:13px;color:var(--muted);margin-bottom:16px}
+  .grid{display:grid;gap:12px}
+  .grid.boletins{grid-template-columns:1fr}
+  .grid.njud{grid-template-columns:1fr 1fr}
+  .grid.giro{grid-template-columns:1fr 1fr}
+  .slot{border:2px dashed var(--border-strong);border-radius:var(--radius);padding:16px;background:#fafafa;transition:border-color .15s,background .15s;min-height:80px;display:flex;flex-direction:column;gap:8px}
+  .slot.filled{border-style:solid;border-color:var(--accent);background:var(--accent-subtle)}
+  .slot.drag-over{border-color:var(--accent);background:var(--accent-subtle);box-shadow:0 0 0 3px rgba(0,102,204,.15)}
+  .slot.has-error{border-color:var(--danger);background:var(--danger-bg)}
+  .slot-label{font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--faint);font-weight:500}
+  .drop{flex:1;border:1px dashed var(--border-strong);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;min-height:60px;cursor:pointer;transition:background .15s;color:var(--faint);font-size:13px;padding:8px}
+  .drop:hover{background:#f0f0f0;color:var(--muted)}
+  .drop.has-file{border-style:solid;border-color:var(--border);background:transparent;cursor:default;padding:8px 12px}
+  .file-row{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text)}
+  .file-row .name{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .file-row .size{font-family:var(--mono);font-size:11px;color:var(--faint)}
+  .btn-remove{background:none;border:none;color:var(--faint);cursor:pointer;padding:2px 6px;border-radius:var(--radius-sm);font-size:12px;font-family:var(--font);transition:background .1s,color .1s}
+  .btn-remove:hover{background:rgba(0,0,0,.06);color:var(--danger)}
+  .err-line{font-size:12px;color:var(--danger);background:var(--danger-bg);padding:4px 8px;border-radius:var(--radius-sm);display:none}
+  .has-error .err-line{display:block}
+  .add-slot{display:none;align-items:center;justify-content:center;gap:6px;width:100%;padding:10px;background:transparent;border:2px dashed var(--border);border-radius:var(--radius);color:var(--muted);font-size:13px;cursor:pointer;font-family:var(--font);transition:border-color .15s,color .15s,background .15s;min-height:60px}
+  .add-slot:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-subtle)}
+  .add-slot.show{display:flex}
+  .add-slot:disabled{opacity:.4;cursor:not-allowed}
+  .bar{display:flex;align-items:center;gap:12px;margin-top:16px;flex-wrap:wrap}
+  .btn{padding:9px 16px;font-size:13px;font-weight:500;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface);color:var(--text);cursor:pointer;font-family:var(--font);transition:background .1s,border-color .1s,color .1s}
+  .btn:hover{background:#f5f5f5}
+  .btn:disabled{opacity:.45;cursor:not-allowed;background:#fafafa}
+  .btn.primary{background:var(--text);color:#fff;border-color:var(--text)}
+  .btn.primary:hover{background:#333}
+  .btn.primary:disabled{background:#ccc;border-color:#ccc;color:#fff}
+  .hint{font-size:12px;color:var(--faint);margin-left:auto}
+  .jobs{margin-top:8px}
+  .jobs-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+  .jobs-title{font-size:13px;font-weight:500;color:var(--muted)}
+  .jobs-count{font-size:11px;color:var(--faint);font-family:var(--mono);background:var(--surface);border:1px solid var(--border);padding:2px 6px;border-radius:var(--radius-sm)}
+  .jobs-list{display:flex;flex-direction:column;gap:8px}
+  .empty{font-size:13px;color:var(--faint);padding:16px;text-align:center;border:1px dashed var(--border);border-radius:var(--radius);background:var(--surface)}
+  .job{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .job.running{border-color:var(--accent)}
+  .job.done{border-color:var(--success);background:var(--success-bg)}
+  .job.error{border-color:var(--danger);background:var(--danger-bg)}
+  .job-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+  .job-name{font-size:13px;font-weight:500;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .job-tag{font-size:11px;color:var(--faint);background:#f0f0f0;padding:2px 6px;border-radius:var(--radius-sm);font-weight:500;flex-shrink:0}
+  .job.running .job-tag{background:var(--accent-subtle);color:var(--accent)}
+  .job.done .job-tag{background:#e6f4ea;color:var(--success)}
+  .job.error .job-tag{background:var(--danger-bg);color:var(--danger)}
+  .job-status{font-size:12px;color:var(--muted)}
+  .job.done .job-status{color:var(--success)}
+  .job.error .job-status{color:var(--danger)}
+  .job-bar{height:3px;background:#e8e8e8;border-radius:2px;margin:6px 0 8px;overflow:hidden}
+  .job-bar > div{height:100%;background:var(--accent);border-radius:2px;transition:width .3s ease;width:0}
+  .job.done .job-bar > div,.job.error .job-bar > div{width:100%}
+  .job.done .job-bar > div{background:var(--success)}
+  .job.error .job-bar > div{background:var(--danger)}
+  .job-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .job-meta{font-size:11px;color:var(--faint);font-family:var(--mono)}
+  .job-actions{display:flex;gap:6px}
+  .job-btn{padding:4px 10px;font-size:12px;border:1px solid var(--border-strong);border-radius:var(--radius-sm);background:var(--surface);color:var(--muted);cursor:pointer;font-family:var(--font);transition:background .1s,color .1s}
+  .job-btn:hover{background:#f5f5f5;color:var(--text)}
+  .job-btn.download{color:var(--accent);border-color:var(--accent)}
+  .job-btn.download:hover{background:var(--accent-subtle)}
+  @media(max-width:640px){
+    .grid.njud,.grid.giro{grid-template-columns:1fr}
+    .app{padding:16px 12px 40px}
+    .work-area{padding:16px}
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="header">
+    <div class="brand"><strong>Programador</strong> — DIVISOR</div>
+    <div class="badge" id="backend-badge">backend: desconectado</div>
+  </div>
+  <div class="modo-section">
+    <div class="modo-label">Tipo de programa</div>
+    <div class="modo-tabs" id="modo-tabs">
+      <button class="modo-tab active" data-modo="boletins">Boletins<span class="short">1 áudio bruto → editado</span></button>
+      <button class="modo-tab" data-modo="njud">NJUD<span class="short">4 boletins → jornal</span></button>
+      <button class="modo-tab" data-modo="giro">Giro<span class="short">4+ boletins → programa</span></button>
+    </div>
+  </div>
+  <div class="work-area">
+    <div class="work-title" id="work-title">Edição de boletim</div>
+    <div class="work-instruction" id="work-instruction">Envie o áudio bruto (wav ou mp3) e o processo remove erros de locução automaticamente.</div>
+    <div class="grid boletins" id="grid"></div>
+    <div class="bar">
+      <button class="btn primary" id="btn-processar" disabled>Processar</button>
+      <button class="btn" id="btn-limpar">Limpar</button>
+      <span class="hint" id="hint"></span>
+    </div>
+  </div>
+  <div class="jobs">
+    <div class="jobs-head">
+      <div class="jobs-title">Processos</div>
+      <div class="jobs-count" id="jobs-count">0 ativos</div>
+    </div>
+    <div class="jobs-list" id="jobs-list"><div class="empty">Nenhum processo ainda.</div></div>
+  </div>
+</div>
+<script>
+(function(){
+  'use strict';
+  // ===================== CONFIG =====================
+  const BACKEND_URL = (window.__BACKEND_URL || '').replace(/\/+$/, '');
+  const API = {
+    upload:    BACKEND_URL + '/api/upload',
+    jobs:      BACKEND_URL + '/api/jobs',
+    job:       (id) => BACKEND_URL + '/api/jobs/' + id,
+    download:  (id) => BACKEND_URL + '/api/download/' + id,
+    cancel:    (id) => BACKEND_URL + '/api/jobs/' + id,
+  };
+  const EXTS = ['mp3','wav','m4a','ogg','flac'];
+  const MODOS = {
+    boletins:{label:'Edição de boletim', min:1, max:1, instruction:'Envie o áudio bruto (wav ou mp3) e o processo remove erros de locução automaticamente.'},
+    njud:    {label:'Montagem de NJUD',   min:4, max:4, instruction:'Envie 4 boletins prontos. O processo monta o jornal de uretra e dívida.'},
+    giro:    {label:'Montagem de Giro',    min:4, max:null, instruction:'Envie os boletins prontos. Acréscimos são possíveis quando todos os slots iniciais estiverem ocupados.'},
+  };
+  const ETAPAS = {
+    boletins:['Enviando áudio…','Transcrevendo…','Detectando erros…','Aplicando cortes…','Gerando áudio editado…'],
+    njud:    ['Enviando boletins…','Alinhando matrizes…','Ordenando por tribunal e assunto…','Montando jornal…','Gerando arquivo final…'],
+    giro:    ['Enviando boletins…','Verificando tempo e jurisdição…','Definindo ordem de trâmite…','Montando programa do giro…','Gerando arquivo final…'],
+  };
+
+  // ===================== STATE =====================
+  let state = {
+    modo:'boletins',
+    slots:[],
+    jobs:[],
+    nextJobId:1,
+    nextSlotId:1,
+    polling:null,
+  };
+
+  // ===================== DOM =====================
+  const $ = (s)=>document.querySelector(s);
+  const $$ = (s)=>Array.from(document.querySelectorAll(s));
+  const dom = {
+    grid:$('#grid'),
+    workTitle:$('#work-title'),
+    workInstruction:$('#work-instruction'),
+    btnProcessar:$('#btn-processar'),
+    btnLimpar:$('#btn-limpar'),
+    hint:$('#hint'),
+    jobsList:$('#jobs-list'),
+    jobsCount:$('#jobs-count'),
+    backendBadge:$('#backend-badge'),
+    modoTabs:$('#modo-tabs'),
+  };
+
+  // ===================== HELPERS =====================
+  const esc = (s)=>{const d=document.createElement('div');d.textContent=s;return d.innerHTML};
+  const fmtSize = (b)=>{if(b<1024)return b+' B';if(b<1048576)return (b/1024).toFixed(1)+' KB';return (b/1048576).toFixed(1)+' MB'};
+  const now = ()=>Date.now();
+
+  // ===================== RENDER =====================
+  function render(){
+    renderGrid();
+    renderJobs();
+  }
+  function renderGrid(){
+    const cfg = MODOS[state.modo];
+    const filled = state.slots.filter(s=>s.file).length;
+    const minOk = filled >= cfg.min;
+    const hasRunning = state.jobs.some(j=>j.status==='running');
+    dom.grid.className = 'grid ' + state.modo;
+
+    let html = '';
+    const count = cfg.max ? Math.max(state.slots.length, cfg.max) : state.slots.length;
+    for(let i=0;i<count;i++){
+      const s = state.slots[i] || null;
+      html += slotHTML(i, s, cfg.min, filled);
+    }
+    const canAdd = state.modo==='giro' && (!cfg.max || filled < cfg.max) && !hasRunning;
+    html += `<button class="add-slot${canAdd?' show':''}" id="btn-add" ${hasRunning?'disabled':''}><span style="font-size:16px;line-height:1">+</span>Adicionar slot</button>`;
+    dom.grid.innerHTML = html;
+
+    dom.btnProcessar.disabled = !minOk || hasRunning;
+    dom.btnProcessar.textContent = hasRunning ? 'Processando…' : 'Processar';
+    dom.btnProcessar.classList.toggle('primary', !hasRunning);
+
+    const hints=[];
+    if(!minOk) hints.push(`Envie ${cfg.min} áudio(s) para habilitar o processamento.`);
+    if(hasRunning) hints.push('Um processo está em andamento.');
+    dom.hint.textContent = hints.join(' ') || '';
+
+    $$('.drop-zone').forEach(z=>{
+      const idx = +z.dataset.idx;
+      z.addEventListener('click', ()=>pickFile(idx));
+      z.addEventListener('dragover', e=>{e.preventDefault();z.closest('.slot').classList.add('drag-over')});
+      z.addEventListener('dragleave', ()=>z.closest('.slot').classList.remove('drag-over'));
+      z.addEventListener('drop', e=>{e.preventDefault();z.closest('.slot').classList.remove('drag-over');const f=e.dataTransfer?.files?.[0];if(f)handleFile(idx,f)});
+    });
+    $$('.btn-remove').forEach(b=>b.addEventListener('click',(e)=>{e.stopPropagation();removeSlot(+b.dataset.id)}));
+    const addBtn = $('#btn-add');
+    if(addBtn) addBtn.addEventListener('click', addSlot);
+  }
+  function slotHTML(idx, slot, min, filled){
+    const filled_ = !!slot?.file;
+    const errCls = slot?.error ? ' has-error' : '';
+    const label = state.modo==='boletins' ? 'Áudio bruto' : `Boletim #${idx+1}`;
+    let body = '';
+    if(filled_){
+      body = `<div class="file-row"><span class="name">${esc(slot.filename)}</span><span class="size">${fmtSize(slot.size)}</span><button class="btn-remove" data-id="${slot.id}" title="Remover">✕</button></div>${slot.error?`<div class="err-line">${esc(slot.error)}</div>`:''}`;
+    }else{
+      body = `<div class="drop drop-zone" data-idx="${idx}">${idx<min?'Áudio obrigatório — clique ou arraste':'Áudio opcional — clique ou arraste'}</div>`;
+    }
+    return `<div class="slot${filled_?' filled':''}${errCls}" data-idx="${idx}"><div class="slot-label">${label}</div>${body}</div>`;
+  }
+  function renderJobs(){
+    const jobs = state.jobs;
+    dom.jobsCount.textContent = jobs.length ? `${jobs.length} ${jobs.length===1?'ativo':'ativos'}` : '0 ativos';
+    if(!jobs.length){dom.jobsList.innerHTML='<div class="empty">Nenhum processo ainda.</div>';return;}
+    const sorted = [...jobs].sort((a,b)=>{
+      if(a.status==='running'&&b.status!=='running')return -1;
+      if(b.status==='running'&&a.status!=='running')return 1;
+      return b.createdAt - a.createdAt;
+    });
+    let html='';
+    for(const j of sorted) html += jobHTML(j);
+    dom.jobsList.innerHTML = html;
+    $$('.jb-cancel').forEach(b=>b.addEventListener('click',()=>cancelJob(+b.dataset.id)));
+    $$('.jb-dismiss').forEach(b=>b.addEventListener('click',()=>dismissJob(+b.dataset.id)));
+    $$('.jb-download').forEach(b=>b.addEventListener('click',()=>downloadJob(+b.dataset.id)));
+  }
+  function jobHTML(j){
+    const run=j.status==='running', done=j.status==='done', err=j.status==='error' || j.status==='cancelled';
+    const cls=`job ${run?'running':''}${done?' done':''}${err?' error':''}`;
+    const st = run ? (j.etapa||'Processando…') : done ? 'Concluído' : err ? (j.error||'Erro') : j.status;
+    const pct = j.progress!=null ? j.progress : (run?0:100);
+    let foot='';
+    if(run){
+      foot=`<div class="job-meta">em andamento</div><div class="job-actions"><button class="job-btn jb-cancel" data-id="${j.id}">Cancelar</button></div>`;
+    }else if(done){
+      foot=`<div class="job-bar"><div></div></div><div class="job-foot"><div class="job-meta">${j.duration?(j.duration+'s'):''}</div><div class="job-actions"><button class="job-btn jb-download" data-id="${j.id}">Baixar</button><button class="job-btn jb-dismiss" data-id="${j.id}">Desprezar</button></div></div>`;
+    }else if(err){
+      foot=`<div class="job-bar"><div></div></div><div class="job-meta">falhou</div><div class="job-actions"><button class="job-btn jb-dismiss" data-id="${j.id}">Desprezar</button></div>`;
+    }
+    return `<div class="${cls}" data-id="${j.id}"><div class="job-head"><div class="job-name" title="${esc(j.name||'')}">${esc(j.name||'Sem nome')}</div><div class="job-tag">${esc(j.tipo)}</div></div><div class="job-status">${esc(st)}</div>${!done&&!err?`<div class="job-bar"><div></div></div>`:''}${foot}</div>`;
+  }
+
+  // ===================== MODO =====================
+  dom.modoTabs.addEventListener('click', e=>{
+    const t=e.target.closest('.modo-tab'); if(!t||t.dataset.modo===state.modo) return;
+    state.modo = t.dataset.modo;
+    $$('.modo-tab').forEach(x=>x.classList.toggle('active', x.dataset.modo===state.modo));
+    resetSlots();
+    render();
+  });
+  function resetSlots(){
+    const cfg = MODOS[state.modo];
+    while(state.slots.length < cfg.min) state.slots.push(newSlot());
+    if(cfg.max) while(state.slots.length > cfg.max) state.slots.pop();
+  }
+  function newSlot(){return {id:state.nextSlotId++, file:null, filename:'', size:0, error:null}}
+
+  // ===================== SLOTS =====================
+  function addSlot(){
+    if(state.jobs.some(j=>j.status==='running')) return;
+    const cfg=MODOS[state.modo];
+    if(cfg.max && state.slots.length>=cfg.max+10) return;
+    state.slots.push(newSlot());
+    render();
+    scrollLast();
+  }
+  function scrollLast(){
+    const el=dom.grid.lastElementChild; if(el&&el.classList.contains('slot')) el.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+  function removeSlot(id){
+    if(state.jobs.some(j=>j.status==='running')){dom.hint.textContent='Não é possível remover slots durante um processo ativo.';return;}
+    const i=state.slots.findIndex(s=>s.id===id); if(i===-1) return;
+    state.slots[i]=newSlot();
+    render();
+  }
+  $('#btn-limpar').addEventListener('click', ()=>{
+    if(state.jobs.some(j=>j.status==='running')){dom.hint.textContent='Aguarde o processo em andamento.';return;}
+    state.slots=state.slots.map(()=>newSlot());
+    render();
+  });
+
+  // ===================== UPLOAD =====================
+  function pickFile(idx){
+    if(state.jobs.some(j=>j.status==='running')){dom.hint.textContent='Aguarde o processo em andamento.';return;}
+    const input=document.createElement('input'); input.type='file'; input.accept=EXTS.join(',');
+    input.addEventListener('change', ()=>{const f=input.files?.[0]; if(f) handleFile(idx,f)});
+    input.click();
+  }
+  function handleFile(idx, file){
+    if(!EXTS.includes(file.name.split('.').pop().toLowerCase())){
+      const s=state.slots[idx]; if(s){s.error='Formato não suportado. Use wav, mp3, m4a, ogg ou flac.';s.file=null;render();} return;
+    }
+    const s=state.slots[idx]; if(s){s.file=file;s.filename=file.name;s.size=file.size;s.error=null;render();}
+  }
+
+  // ===================== PROCESSAR =====================
+  $('#btn-processar').addEventListener('click', startJob);
+
+  async function startJob(){
+    const cfg=MODOS[state.modo];
+    const filled=state.slots.filter(s=>s.file);
+    if(filled.length<cfg.min){dom.hint.textContent=`Envie ${cfg.min} áudio(s) primeiro.`;return;}
+
+    // upload files
+    const uploads = [];
+    for(const f of filled){
+      const body = new FormData();
+      body.append('file', f.file, f.file.name);
+      const res = await fetch(API.upload, {method:'POST', body});
+      if(!res.ok){
+        const txt = await res.text().catch(()=>'Erro no upload');
+        dom.hint.textContent = 'Erro no upload: ' + txt;
+        return;
+      }
+      const data = await res.json();
+      uploads.push({id:data.id, name:data.filename, size:data.size_bytes});
+    }
+    // create job
+    const res = await fetch(API.jobs, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({tipo:state.modo, inputs:uploads.map(u=>u.id)}),
+    });
+    if(!res.ok){
+      dom.hint.textContent='Falha ao criar job.';
+      return;
+    }
+    const jobData = await res.json();
+    const job = {
+      id:jobData.id,
+      tipo: jobData.tipo || state.modo,
+      name: uploads.length===1 ? uploads[0].name : `${jobData.tipo||state.modo} — ${uploads.length} arquivos`,
+      status:'running',
+      progress:0,
+      etapa:'Iniciado…',
+      error:null,
+      downloadUrl:null,
+      createdAt:now(),
+      files:uploads.map(u=>({name:u.name,size:u.size})),
+      _poll:null,
+    };
+    state.jobs.push(job);
+    render();
+    dom.hint.textContent='Processo iniciado. Acompanhe na lista abaixo.';
+    pollJob(job);
+  }
+
+  // ===================== POLLING =====================
+  function pollJob(job){
+    if(job._poll) clearInterval(job._poll);
+    job._poll = setInterval(async ()=>{
+      try{
+        const res = await fetch(API.job(job.id));
+        if(!res.ok){clearInterval(job._poll); return;}
+        const d = await res.json();
+        job.status = d.status;
+        job.etapa = d.etapa || job.etapa;
+        job.progress = d.progress!=null ? d.progress : job.progress;
+        job.error = d.error || null;
+        job.downloadUrl = d.download_url || null;
+        job.duration = d.duration ? d.duration : (j.duration?j.duration:Math.round((Date.now()-job.createdAt)/1000));
+        render();
+        if(d.status==='done' || d.status==='error' || d.status==='cancelled'){
+          clearInterval(job._poll);
+          job._poll=null;
+          render();
+        }
+      }catch(e){
+        // keep polling silently
+      }
+    }, 2000);
+  }
+
+  // ===================== JOB ACTIONS =====================
+  async function cancelJob(id){
+    const j=state.jobs.find(x=>x.id===id); if(!j||j.status!=='running') return;
+    try{
+      await fetch(API.cancel(id), {method:'DELETE'});
+    }catch(e){}
+    j.status='cancelled'; j.error='Cancelado'; j.progress=100;
+    render();
+  }
+  function dismissJob(id){
+    state.jobs = state.jobs.filter(j=>j.id!==id);
+    if(!state.jobs.length) dom.hint.textContent='';
+    render();
+  }
+  function downloadJob(id){
+    const j=state.jobs.find(x=>x.id===id); if(!j||j.status!=='done'||!j.downloadUrl) return;
+    window.open(j.downloadUrl, '_blank');
+  }
+
+  // ===================== BACKEND STATUS =====================
+  async function checkBackend(){
+    try{
+      const r = await fetch(BACKEND_URL + '/health', {method:'GET'});
+      if(r.ok){
+        const d = await r.json();
+        dom.backendBadge.textContent = `backend: ok (${d.version||''})`;
+        dom.backendBadge.className='badge ok';
+      }else{
+        dom.backendBadge.textContent='backend: erro';
+        dom.backendBadge.className='badge err';
+      }
+    }catch(e){
+      dom.backendBadge.textContent='backend: desconectado';
+      dom.backendBadge.className='badge';
+    }
+  }
+  setInterval(checkBackend, 8000);
+  checkBackend();
+
+  // ===================== INIT =====================
+  function init(){
+    resetSlots();
+    render();
+  }
+  init();
+
+  // Expose for debugging
+  window.__state = () => JSON.parse(JSON.stringify(state));
+})();
+</script>
+</body>
+</html>

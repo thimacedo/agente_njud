@@ -1,0 +1,169 @@
+#!/usr/bin/env python3
+"""
+Executor único do pipeline unificado.
+Lê um ou mais JSONs de planejamento e orquestra o processamento.
+
+Uso:
+    # Programa único
+    python scripts_pipeline/executar_programa.py config/planejamento_2026/giro_0102.json
+
+    # Todos os programas de um mês
+    python scripts_pipeline/executar_programa.py config/planejamento_2026/ --mes 01
+
+    # Todos os programas gerados
+    python scripts_pipeline/executar_programa.py config/planejamento_2026/
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import logging
+import sys
+from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# Paths — ajustados para a estrutura real do projeto DIVISOR
+# ---------------------------------------------------------------------------
+ROOT = Path(__file__).resolve().parent.parent  # /e/.../DIVISOR
+sys.path.insert(0, str(ROOT / "src"))
+
+from core.processamento.processar_boletim import ConfigPrograma, processar_lote
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
+log = logging.getLogger("executar_programa")
+
+
+def carregar_json(caminho: Path) -> dict:
+    if not caminho.exists():
+        log.error("Arquivo não encontrado: %s", caminho)
+        sys.exit(1)
+    with open(caminho, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def configurar_pipeline(json_config: dict, pasta_boletins: Path, pasta_saida: Path) -> ConfigPrograma:
+    """
+    Monta ConfigPrograma a partir do JSON de planejamento + pastas base.
+    """
+    codigo = json_config["codigo"]
+    nome_programa = json_config["programa"].lower()
+
+    return ConfigPrograma(
+        nome=nome_programa,
+        pasta_boletins=pasta_boletins,
+        pasta_saida=pasta_saida,
+        pasta_estado=pasta_saida / "estado_por_arquivo",
+        pasta_log=pasta_saida / "_logs",
+        modelo_whisper="tiny",
+        compute_type="int8",
+        roteiro_corte="GIRO_CABEÇA_CORPO" if nome_programa == "giro" else None,
+        minimo_boletins_para_montar=json_config.get("parametros", {}).get("boletins_minimos", 4),
+        usar_separacao_stems=json_config.get("parametros", {}).get("usar_demucs", False),
+        # Janela de datas do plano (para filtragem no Giro)
+        data_inicio_coleta=json_config.get("janela_coleta", {}).get("inicio"),
+        data_fim_coleta=json_config.get("janela_coleta", {}).get("fim"),
+    )
+
+
+def executar_single(json_path: Path, pasta_boletins: Path, pasta_saida: Path) -> dict:
+    """Processa um único programa a partir do seu JSON."""
+    log.info("=" * 60)
+    cfg_dict = carregar_json(json_path)
+
+    codigo = cfg_dict["codigo"]
+    data_exibicao = cfg_dict.get("data_exibicao", "?")
+    janela = cfg_dict.get("janela_coleta", {})
+    params = cfg_dict.get("parametros", {})
+
+    log.info("Programa: %s %s  |  Exibição: %s", cfg_dict["programa"], codigo, data_exibicao)
+    log.info("Janela coleta: %s → %s  (%d dias)",
+             janela.get("inicio", "?"), janela.get("fim", "?"),
+             janela.get("dias_totais", "?"))
+
+    # Gate de montagem: verifica se há dias suficientes
+    dias_disponiveis = janela.get("dias_totais", 0)
+    minimo = params.get("boletins_minimos", 4)
+    if dias_disponiveis < minimo:
+        log.warning("Gate de montagem: %d dias < %d mínimos — ajuste manual pode ser necessário",
+                     dias_disponiveis, minimo)
+
+    # Monta configuração
+    config = configurar_pipeline(cfg_dict, pasta_boletins, pasta_saida)
+
+    # Executa
+    log.info("Iniciando processamento (%d boletins esperados)...", dias_disponiveis)
+    resultado = processar_lote(config)
+
+    log.info("Concluído para %s %s: %s", cfg_dict["programa"], codigo, resultado.get("status", "OK"))
+    return resultado
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(
+        description="Executor único do pipeline unificado (NJUD e Giro)."
+    )
+    parser.add_argument(
+        "planejamento",
+        type=str,
+        help="Caminho para JSON de planejamento ou pasta config/planejamento_2026/",
+    )
+    parser.add_argument(
+        "--boletins",
+        type=str,
+        default="JORNAIS",
+        help="Pasta base dos boletins (padrão: JORNAIS)",
+    )
+    parser.add_argument(
+        "--saida",
+        type=str,
+        default="data/processed/PRODUCAO_2026",
+        help="Pasta de saída (padrão: data/processed/PRODUCAO_2026)",
+    )
+    parser.add_argument(
+        "--mes",
+        type=str,
+        help="Filtra por mês (ex: 01 para janeiro). Só usado com pasta.",
+    )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Log em nível DEBUG",
+    )
+
+    args = parser.parse_args()
+    if args.debug:
+        logging.getLogger().setLevel(logging.DEBUG)
+
+    pasta_boletins = Path(args.boletins)
+    pasta_saida = Path(args.saida)
+
+    plan_path = Path(args.planejamento)
+
+    # É pasta ou arquivo?
+    if plan_path.is_dir():
+        if args.mes:
+            padrao = f"giro_{args.mes}*.json"
+            jsons = sorted(plan_path.glob(padrao))
+            if not jsons:
+                log.error("Nenhum JSON encontrado para o mês %s em %s", args.mes, plan_path)
+                sys.exit(1)
+        else:
+            jsons = sorted(plan_path.glob("giro_*.json"))
+
+        if not jsons:
+            log.error("Nenhum arquivo giro_*.json encontrado em %s", plan_path)
+            sys.exit(1)
+
+        log.info("Encontrados %d programa(s) em %s", len(jsons), plan_path)
+        for j in jsons:
+            executar_single(j, pasta_boletins, pasta_saida)
+
+    else:
+        executar_single(plan_path, pasta_boletins, pasta_saida)
+
+
+if __name__ == "__main__":
+    main()

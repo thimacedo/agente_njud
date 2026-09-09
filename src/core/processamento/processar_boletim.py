@@ -51,6 +51,9 @@ class ConfigPrograma:
     minimo_boletins_para_montar: int = 4
     usar_separacao_stems: bool = False
     config_stems: ConfigSeparacao = field(default_factory=ConfigSeparacao)
+    # Janela de datas do plano (para filtragem por período no Giro)
+    data_inicio_coleta: Optional[str] = None  # "YYYY-MM-DD"
+    data_fim_coleta: Optional[str] = None  # "YYYY-MM-DD"
 
 
 @dataclass
@@ -105,9 +108,42 @@ def salvar_estado(estado: EstadoArquivo, pasta_estado: Path) -> None:
 
 
 def listar_tarefas_pendentes(config: ConfigPrograma) -> list[dict]:
-    """Lista arquivos MP3 sem estado OK/ESGOTADO_ACEITO."""
+    """Lista arquivos MP3 sem estado OK/ESGOTADO_ACEITO, filtrados pela janela de datas se configurada."""
+    import re
+    from datetime import date
     tarefas = []
+    data_inicio = None
+    data_fim = None
+    if config.data_inicio_coleta and config.data_fim_coleta:
+        data_inicio = date.fromisoformat(config.data_inicio_coleta)
+        data_fim = date.fromisoformat(config.data_fim_coleta)
+
     for arq in sorted(config.pasta_boletins.rglob("*.mp3")):
+        # Sem janela de datas configurada → lista tudo sem estado
+        if data_inicio is None or data_fim is None:
+            caminho_estado = config.pasta_estado / f"{arq.stem}.json"
+            if caminho_estado.exists():
+                try:
+                    status = json.loads(caminho_estado.read_text(encoding="utf-8")).get("status")
+                    if status in ("OK", "ESGOTADO_ACEITO"):
+                        continue
+                except Exception:
+                    pass
+            tarefas.append({"arquivo": str(arq), "stem": arq.stem})
+            continue
+
+        # Filtro de janela de datas (Giro): extrai data via regex
+        m = re.search(r'BOLETIM_RADIO_TJRN_(\d{2})_(\d{2})_(\d{4})_', arq.name)
+        if not m:
+            continue
+        try:
+            dia, mes, ano = int(m.group(1)), int(m.group(2)), int(m.group(3))
+            dt_arq = date(ano, mes, dia)
+            if not (data_inicio <= dt_arq <= data_fim):
+                continue
+        except ValueError:
+            continue
+
         caminho_estado = config.pasta_estado / f"{arq.stem}.json"
         if caminho_estado.exists():
             try:
@@ -293,7 +329,7 @@ def processar_lote(config: ConfigPrograma, gc_a_cada_n: int = 10) -> dict:
     logger = LogPipeline(config.pasta_log)
 
     print(f"[processamento] Carregando modelo Whisper ({config.modelo_whisper}, {config.compute_type})...")
-    modelo = carregar_modelo(config.modelo_whisper, config.compute_type)
+    modelo = carregar_modelo()
     print("[processamento] Modelo carregado.")
 
     tarefas = listar_tarefas_pendentes(config)
