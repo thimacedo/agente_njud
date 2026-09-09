@@ -106,7 +106,22 @@
 <div class="app">
   <div class="header">
     <div class="brand"><strong>Programador</strong> — DIVISOR</div>
-    <div class="badge" id="backend-badge">backend: desconectado</div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <button class="badge" id="btn-config" style="cursor:pointer;font-family:var(--font);border:1px solid var(--border);background:var(--surface);padding:4px 8px;border-radius:var(--radius-sm);font-size:12px;color:var(--muted)" title="Configurar URL do backend">⚙</button>
+      <div class="badge" id="backend-badge">backend: desconectado</div>
+    </div>
+  </div>
+  <!-- Config modal -->
+  <div id="config-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:100;align-items:center;justify-content:center">
+    <div style="background:#fff;border-radius:8px;padding:24px;max-width:420px;width:90%;box-shadow:0 4px 24px rgba(0,0,0,.15)">
+      <div style="font-size:14px;font-weight:500;margin-bottom:12px">Configuração do Backend</div>
+      <div style="font-size:12px;color:#6b6b6b;margin-bottom:8px">URL do servidor de processamento (ex: http://localhost:8001 ou https://meu-backend.app)</div>
+      <input id="config-url" type="text" placeholder="http://localhost:8001" style="width:100%;padding:8px 12px;border:1px solid #d0d0d0;border-radius:4px;font-size:13px;font-family:ui-monospace,monospace;box-sizing:border-box;margin-bottom:12px">
+      <div style="display:flex;gap:8px;justify-content:flex-end">
+        <button class="btn" id="btn-cancel" style="padding:6px 14px;font-size:12px">Cancelar</button>
+        <button class="btn primary" id="btn-save" style="padding:6px 14px;font-size:12px">Salvar</button>
+      </div>
+    </div>
   </div>
   <div class="modo-section">
     <div class="modo-label">Tipo de programa</div>
@@ -138,7 +153,15 @@
 (function(){
   'use strict';
   // ===================== CONFIG =====================
-  const BACKEND_URL = (window.__BACKEND_URL || '').replace(/\/+$/, '');
+  // BACKEND_URL: URL base do backend. Prioridade:
+  //   1. window.__BACKEND_URL (injetado por config.js ou servidor)
+  //   2. localStorage.getItem('BACKEND_URL') (salvo manualmente)
+  //   3. '' (mesmo host — versão local)
+  var _cfg = (window.__BACKEND_URL || localStorage.getItem('BACKEND_URL') || '').replace(/\/+$/, '');
+  // Permite override via query string: ?backend=https://meu-backend.com
+  var _qs = new URLSearchParams(location.search);
+  if (_qs.get('backend')) { _cfg = _qs.get('backend').replace(/\/+$/, ''); localStorage.setItem('BACKEND_URL', _cfg); }
+  var BACKEND_URL = _cfg;
   const API = {
     upload:    BACKEND_URL + '/api/upload',
     jobs:      BACKEND_URL + '/api/jobs',
@@ -442,6 +465,31 @@
       dom.backendBadge.className='badge';
     }
   }
+
+  // ===================== CONFIG MODAL =====================
+  function openConfig(){
+    $('#config-url').value = BACKEND_URL || localStorage.getItem('BACKEND_URL') || '';
+    $('#config-modal').style.display = 'flex';
+    $('#config-url').focus();
+  }
+  function closeConfig(){
+    $('#config-modal').style.display = 'none';
+  }
+  function saveConfig(){
+    var url = $('#config-url').value.trim().replace(/\/+$/, '');
+    if (url) {
+      localStorage.setItem('BACKEND_URL', url);
+    } else {
+      localStorage.removeItem('BACKEND_URL');
+    }
+    closeConfig();
+    // reload para aplicar nova URL
+    location.reload();
+  }
+  $('#btn-config').addEventListener('click', openConfig);
+  $('#btn-cancel').addEventListener('click', closeConfig);
+  $('#btn-save').addEventListener('click', saveConfig);
+  $('#config-modal').addEventListener('click', function(e){ if(e.target===this) closeConfig(); });
   setInterval(checkBackend, 8000);
   checkBackend();
 
