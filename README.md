@@ -51,12 +51,18 @@ DIVISOR/
 │   └── ...
 │
 ├── assets/vinhetas/          # VHT_ABERTURA_BOLETIM, VHT_ENCERRAMENTO_*, PASSAGEM_*, etc.
+├── BOLETIM/                # agente de produção (tratamento→edição→montagem)
+│   ├── 03_SET_B1_tratado.mp3
+│   ├── 03_SET_B1_editado.mp3
+│   ├── 03_SET_B1_FINAL.mp3
+│   └── pipeline_log.json
 ├── data/                     # dados derivados (não commitado inteiro — veja .gitignore)
 │   ├── plano_alocacao.csv, jornal_njuds.csv, njuds_por_mes.csv, ...
 │   ├── processed/            # cortes CABEÇA/CORPO, estado_por_arquivo/*.json
 │   └── output/               # jornais montados + relatórios
 │
 ├── JORNAIS/                  # entrada bruta copiada do Drive (leitura)
+├── BOLETIM/                  # agente de produção (pipeline tratamento→edição→montagem)
 ├── logs/                     # backups consolidados, correções, relatórios
 ├── docs/
 │   ├── PLANEJAMENTO_JUL_AGO_2026.md
@@ -125,6 +131,9 @@ Alternativas (processamento serial / por-NJUD / orquestração):
 - **Máximo 1 dispatcher + 1 monitor** ativos. `iniciar_ciclo.py` mata os antigos.
 - **Estado persistido** em `data/processed/PRODUCAO_2026/estado_por_arquivo/*.json` —
   é a fonte de verdade, não logs ou memória.
+- **Agente BOLETIM/**: etapa de pipeline (tratamento→edição→montagem) gravada
+  em `BOLETIM/`. O `gravador_inteligente` utiliza `DIVISOR_WORKSPACE` para apontar
+  para a raiz do DIVISOR. Não executar com CWD errado.
 - Boletins sem NJUD identificável vão para `plano_pendentes_sem_njud.csv` — nunca
   agrupados por dedução.
 - Corte nunca default 0.0 quando calibração parcial falha (âncora→VAD + log).

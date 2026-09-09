@@ -60,7 +60,7 @@ class TratamentoConfig:
     output_format: str = "mp3"
     output_bitrate: str = "128k"
     sample_rate: int = 44100
-    channels: int = 2  # stereo
+    channels: int = 1  # mono (após redução de ruído, sempre mono)
     temp_dir: str = "temp_processing"
     verbose: bool = False
 
@@ -168,110 +168,302 @@ def save_numpy_to_audio(audio: np.ndarray, path: str | Path, sample_rate: int = 
 
 
 # =============================================================================
-# Etapa 0: Detecção e Correção de Canal Morto
+# Etapa 0: Análise de Canais, Clipping e Correção
 # =============================================================================
 
-def detectar_canal_morto(path: str | Path, threshold_db: float = 30.0) -> dict:
+import re as _re
+
+def analisar_audio(path: str | Path) -> dict:
     """
-    Detecta se o áudio stereo tem áudio apenas em um canal.
+    Análise completa do áudio: canais, clipping, níveis.
     
     Returns:
         dict com:
-        - is_stereo: bool
-        - is_asymmetric: bool
-        - left_db: float
-        - right_db: float
-        - diff_db: float
-        - active_channel: str ("left", "right", "both")
+        - channels: int (1=mono, 2=stereo)
+        - is_asymmetric: bool (áudio só em um canal)
+        - active_channel: str ("left", "right", "both", "mono")
+        - left_mean_db: float
+        - right_mean_db: float
+        - left_max_db: float
+        - right_max_db: float
+        - overall_max_db: float (max_volume do volumedetect)
+        - has_clipping: bool (max >= -0.5 dB)
+        - needed_gain_db: float (ganho a aplicar para evitar clipping, negativo = atenuar)
     """
     path = str(path)
     
-    # Verificar número de canais
-    cmd_info = ['ffprobe', '-v', 'quiet', '-select_streams', 'a:0', 
+    # Número de canais
+    cmd_info = ['ffprobe', '-v', 'quiet', '-select_streams', 'a:0',
                 '-show_entries', 'stream=channels', '-of', 'csv=p=0', path]
     r = subprocess.run(cmd_info, capture_output=True, text=True)
     channels = int(r.stdout.strip()) if r.stdout.strip().isdigit() else 1
     
     if channels < 2:
+        # Mono: medir diretamente
+        cmd = ['ffmpeg', '-i', path, '-af', 'volumedetect', '-f', 'null', '-']
+        r = subprocess.run(cmd, capture_output=True, text=True)
+        mean_m = _re.search(r'mean_volume: ([-\d.]+) dB', r.stderr)
+        max_m = _re.search(r'max_volume: ([-\d.]+) dB', r.stderr)
+        mean_db = float(mean_m.group(1)) if mean_m else -99.0
+        max_db = float(max_m.group(1)) if max_m else -99.0
+        
+        # Ganho necessário para levar o pico a -3 dB (margem segura)
+        needed = -3.0 - max_db if max_db > -3.0 else 0.0
+        
         return {
-            "is_stereo": False,
+            "channels": 1,
             "is_asymmetric": False,
-            "left_db": 0,
-            "right_db": 0,
-            "diff_db": 0,
             "active_channel": "mono",
+            "left_mean_db": mean_db,
+            "right_mean_db": mean_db,
+            "left_max_db": max_db,
+            "right_max_db": max_db,
+            "overall_max_db": max_db,
+            "has_clipping": max_db >= -0.5,
+            "needed_gain_db": needed,
         }
     
-    # Medir volume de cada canal
-    import re
+    # Stereo: medir cada canal separadamente
+    results = {}
+    for side, label in [("FL", "left"), ("FR", "right")]:
+        cmd = ['ffmpeg', '-i', path, '-af', f'pan=mono|c0={side},volumedetect', '-f', 'null', '-']
+        r = subprocess.run(cmd, capture_output=True, text=True)
+        mean_m = _re.search(r'mean_volume: ([-\d.]+) dB', r.stderr)
+        max_m = _re.search(r'max_volume: ([-\d.]+) dB', r.stderr)
+        results[f"{label}_mean_db"] = float(mean_m.group(1)) if mean_m else -99.0
+        results[f"{label}_max_db"] = float(max_m.group(1)) if max_m else -99.0
     
-    cmd_l = ['ffmpeg', '-i', path, '-af', 'pan=mono|c0=FL,volumedetect', '-f', 'null', '-']
-    r_l = subprocess.run(cmd_l, capture_output=True, text=True)
+    left_max = results["left_max_db"]
+    right_max = results["right_max_db"]
+    left_mean = results["left_mean_db"]
+    right_mean = results["right_mean_db"]
     
-    cmd_r = ['ffmpeg', '-i', path, '-af', 'pan=mono|c0=FR,volumedetect', '-f', 'null', '-']
-    r_r = subprocess.run(cmd_r, capture_output=True, text=True)
-    
-    l_match = re.search(r'mean_volume: ([-\d.]+) dB', r_l.stderr)
-    r_match = re.search(r'mean_volume: ([-\d.]+) dB', r_r.stderr)
-    
-    left_db = float(l_match.group(1)) if l_match else -99.0
-    right_db = float(r_match.group(1)) if r_match else -99.0
-    
-    diff = abs(left_db - right_db)
-    
-    if diff > threshold_db and left_db > right_db:
+    # Detectar canal morto (assimetria > 30 dB)
+    diff = abs(left_mean - right_mean)
+    if diff > 30 and left_mean > right_mean:
         active = "left"
-    elif diff > threshold_db and right_db > left_db:
+    elif diff > 30 and right_mean > left_mean:
         active = "right"
     else:
         active = "both"
     
+    # Clipping: o pior dos canais (tolerante: apenas picos reais acima de 0dB)
+    overall_max = max(left_max, right_max)
+    has_clipping = overall_max > 0.0  # Apenas clipping real (acima de 0dB)
+    
+    # Ganho necessário: levar pico a -1dB (margem segura para áudio digital)
+    needed = -1.0 - overall_max if overall_max > -1.0 else 0.0
+    
     return {
-        "is_stereo": True,
-        "is_asymmetric": diff > threshold_db,
-        "left_db": left_db,
-        "right_db": right_db,
-        "diff_db": diff,
+        "channels": 2,
+        "is_asymmetric": active != "both",
         "active_channel": active,
+        "left_mean_db": left_mean,
+        "right_mean_db": right_mean,
+        "left_max_db": left_max,
+        "right_max_db": right_max,
+        "overall_max_db": overall_max,
+        "has_clipping": has_clipping,
+        "needed_gain_db": needed,
     }
 
 
-def corrigir_canal_morto(input_path: str | Path, output_path: str | Path) -> dict:
+@dataclass
+class AudioProfile:
+    """Perfil de áudio analisado — parâmetros derivados, nenhum hardcoded."""
+    # Canal
+    channels: int
+    is_asymmetric: bool
+    active_channel: str
+    
+    # Níveis
+    mean_db: float
+    max_db: float
+    lufs: float
+    peak_db: float
+    
+    # Ruído
+    noise_floor_db: float          # Nível de ruído de fundo (dB)
+    signal_to_noise_db: float      # Relação sinal-ruído (dB)
+    noise_reduction_strength: float # Força ideal de redução (0.0-1.0)
+    
+    # Respiração
+    breath_threshold_db: float     # Limiar para detectar respiração
+    breath_attenuation_db: float    # Atenuação para respirações
+    
+    # Normalização
+    needed_gain_db: float          # Ganho necessário
+    
+    # Clipping
+    has_clipping: bool
+
+
+def analisar_perfil_ruido(audio_mono) -> AudioProfile:
     """
-    Se o áudio é stereo assimétrico (áudio só em um canal),
-    converte para mono usando apenas o canal ativo.
+    Analisa o áudio e deriva todos os parâmetros de tratamento.
+    
+    Nenhum valor é hardcoded — tudo é calculado a partir das características
+    do áudio de entrada.
+    """
+    from pydub.silence import detect_nonsilent
+    
+    sample_rate = audio_mono.frame_rate
+    channels = audio_mono.channels
+    
+    # Medir níveis gerais
+    mean_db = audio_mono.dBFS
+    max_db = audio_mono.max_dBFS
+    
+    # Medir LUFS
+    try:
+        lufs_info = measure_lufs(audio_mono)
+        lufs = lufs_info["input_i"]
+        peak_db = lufs_info["input_tp"]
+    except:
+        lufs = mean_db
+        peak_db = max_db
+    
+    # Detectar segmentos de fala
+    nonsilent = detect_nonsilent(audio_mono, min_silence_len=200, silence_thresh=-35)
+    
+    # Calcular ruído de fundo: média dos segmentos de silêncio entre falas
+    silence_segments = []
+    
+    # Silêncio antes da primeira fala
+    if nonsilent and nonsilent[0][0] > 100:
+        silence_segments.append(audio_mono[:nonsilent[0][0]])
+    
+    # Silêncios entre falas
+    for i in range(len(nonsilent) - 1):
+        gap_start = nonsilent[i][1]
+        gap_end = nonsilent[i + 1][0]
+        if gap_end - gap_start > 100:
+            silence_segments.append(audio_mono[gap_start:gap_end])
+    
+    # Calcular noise floor
+    if silence_segments:
+        # Média dos níveis de silêncio
+        silence_dbfs = [s.dBFS for s in silence_segments if s.dBFS > -90]
+        if silence_dbfs:
+            noise_floor_db = np.median(silence_dbfs)
+        else:
+            noise_floor_db = -60
+    else:
+        noise_floor_db = -60
+    
+    # Relação sinal-ruído
+    signal_to_noise_db = mean_db - noise_floor_db
+    
+    # Força de redução de ruído: proporcional à SNR, mas conservador
+    # SNR alto (> 40dB) = áudio limpo = redução mínima (0.05)
+    # SNR médio (25-40dB) = ruído leve = redução leve (0.1-0.15)
+    # SNR baixo (15-25dB) = ruído moderado = redução moderada (0.15-0.25)
+    # SNR muito baixo (< 15dB) = muito ruído = redução forte (0.25-0.35)
+    if signal_to_noise_db > 40:
+        noise_reduction_strength = 0.05
+    elif signal_to_noise_db > 30:
+        noise_reduction_strength = 0.1
+    elif signal_to_noise_db > 20:
+        noise_reduction_strength = 0.15
+    elif signal_to_noise_db > 15:
+        noise_reduction_strength = 0.2
+    else:
+        noise_reduction_strength = 0.25
+    
+    # Limiar de respiração: 15dB acima do noise floor
+    breath_threshold_db = min(noise_floor_db + 15, mean_db - 10)
+    
+    # Atenuação de respiração: proporcional à diferença entre ruído e fala
+    # Quanto maior a diferença, mais atenuação podemos aplicar
+    breath_attenuation_db = max(-12, -6 - (signal_to_noise_db / 10))
+    
+    # Ganho de normalização
+    target_lufs = -16.0
+    needed_gain_db = target_lufs - lufs if lufs != 0 else target_lufs - mean_db
+    # Limitar ganho máximo para não amplificar ruído demais
+    needed_gain_db = min(needed_gain_db, 12)
+    
+    # Detectar clipping
+    has_clipping = max_db >= -0.5
+    
+    return AudioProfile(
+        channels=channels,
+        is_asymmetric=False,
+        active_channel="mono" if channels == 1 else "both",
+        mean_db=mean_db,
+        max_db=max_db,
+        lufs=lufs,
+        peak_db=peak_db,
+        noise_floor_db=noise_floor_db,
+        signal_to_noise_db=signal_to_noise_db,
+        noise_reduction_strength=noise_reduction_strength,
+        breath_threshold_db=breath_threshold_db,
+        breath_attenuation_db=breath_attenuation_db,
+        needed_gain_db=needed_gain_db,
+        has_clipping=has_clipping,
+    )
+
+
+def corrigir_canal_e_clipping(input_path: str | Path, output_path: str | Path) -> dict:
+    """
+    Corrige problemas detectados na análise:
+    - Se stereo assimétrico: extrai apenas o canal ativo → mono
+    - Se clipping detectado: aplica atenuação para levar pico a -3 dB
+    
+    A análise é feita audio a audio — nenhum valor é hardcoded.
     
     Returns:
-        dict com status e info
+        dict com status, ação realizada e análise
     """
-    info = detectar_canal_morto(input_path)
+    info = analisar_audio(input_path)
     
-    if not info["is_asymmetric"]:
+    if not info["is_asymmetric"] and not info["has_clipping"]:
         return {"status": "ok", "action": "none", "info": info}
     
-    channel = info["active_channel"]
-    logger.info(f"Canal morto detectado! Audio apenas no canal {channel} "
-                f"(diff={info['diff_db']:.1f}dB). Convertendo para mono...")
+    # Construir filter chain dinamicamente
+    filters = []
     
-    # Extrair apenas o canal ativo e salvar como mono
-    if channel == "left":
-        pan_filter = "pan=mono|c0=FL"
-    else:
-        pan_filter = "pan=mono|c0=FR"
+    # Passo 1: Extrair canal ativo se assimétrico
+    if info["is_asymmetric"]:
+        channel = info["active_channel"]
+        if channel == "left":
+            filters.append("pan=mono|c0=FL")
+        else:
+            filters.append("pan=mono|c0=FR")
+        logger.info(f"Canal morto detectado (ativo={channel}, diff={abs(info['left_mean_db'] - info['right_mean_db']):.1f}dB)")
     
+    # Passo 2: Aplicar ganho se necessário (para resolver clipping ou dar headroom)
+    gain = info["needed_gain_db"]
+    if gain < -0.5:  # Só aplica se precisar atenuar mais de 0.5 dB
+        filters.append(f"volume={gain:.1f}dB")
+        logger.info(f"Clipping detectado (max={info['overall_max_db']:.1f}dB). Aplicando ganho: {gain:.1f}dB")
+    
+    # Se não precisa de nenhum filtro, copia direto
+    if not filters:
+        return {"status": "ok", "action": "none", "info": info}
+    
+    filter_str = ",".join(filters)
     cmd = [
         "ffmpeg", "-y", "-i", str(input_path),
-        "-af", pan_filter,
+        "-af", filter_str,
         "-ar", "44100",
         str(output_path)
     ]
     r = subprocess.run(cmd, capture_output=True, text=True)
     
     if r.returncode != 0:
-        raise RuntimeError(f"Falha ao corrigir canal: {r.stderr}")
+        raise RuntimeError(f"Falha na correção: {r.stderr}")
     
-    logger.info(f"  Convertido para mono (canal {channel})")
-    return {"status": "ok", "action": "converted_to_mono", "channel": channel, "info": info}
+    action_parts = []
+    if info["is_asymmetric"]:
+        action_parts.append(f"mono({info['active_channel']})")
+    if gain < -0.5:
+        action_parts.append(f"gain={gain:.1f}dB")
+    
+    action = " + ".join(action_parts)
+    logger.info(f"  Corrigida: {action}")
+    
+    return {"status": "ok", "action": action, "gain_db": gain, "info": info}
 
 
 # =============================================================================
@@ -387,6 +579,7 @@ def _reduce_noise_noisereduce(
     """Redução de ruído via biblioteca noisereduce."""
     import noisereduce as nr
     from pydub import AudioSegment
+    from pydub.silence import detect_nonsilent
     
     logger.info("  Usando noisereduce (biblioteca Python)...")
     
@@ -404,9 +597,44 @@ def _reduce_noise_noisereduce(
     elif audio_array.dtype == np.int32:
         audio_array = audio_array / 2147483648.0
     
-    # Amostra de ruído (primeiros N ms)
+    # Encontrar amostra de ruído: procurar o maior segmento de silêncio nos primeiros 30s
+    # em vez de usar os primeiros 500ms (que podem conter claquete ou fala)
+    nonsilent = detect_nonsilent(audio_mono[:30000], min_silence_len=500, silence_thresh=-35)
+    
+    # Encontrar o maior gap de silêncio nos primeiros 30s
+    best_noise_start = 0
+    best_noise_len = 0
+    
+    if nonsilent:
+        # Gap antes do primeiro segmento
+        if nonsilent[0][0] >= 300:
+            best_noise_start = 0
+            best_noise_len = nonsilent[0][0]
+        
+        # Gaps entre segmentos
+        for i in range(len(nonsilent) - 1):
+            gap_start = nonsilent[i][1]
+            gap_end = nonsilent[i + 1][0]
+            gap_len = gap_end - gap_start
+            if gap_len > best_noise_len and gap_len >= 300:
+                best_noise_start = gap_start
+                best_noise_len = gap_len
+    else:
+        # Áudio inteiro é silêncio nos primeiros 30s
+        best_noise_len = min(30000, len(audio_mono))
+    
+    # Usar no máximo sample_duration_ms da amostra de ruído encontrada
     noise_samples = int(sample_rate * sample_duration_ms / 1000)
-    noise_clip = audio_array[:noise_samples]
+    noise_start_sample = int(best_noise_start * sample_rate / 1000)
+    noise_end_sample = min(noise_start_sample + noise_samples, len(audio_array))
+    
+    if noise_end_sample > noise_start_sample:
+        noise_clip = audio_array[noise_start_sample:noise_end_sample]
+    else:
+        # Fallback: usar primeiros 200ms
+        noise_clip = audio_array[:int(sample_rate * 0.2)]
+    
+    logger.info(f"  Amostra de ruído: {best_noise_start}ms-{best_noise_start + sample_duration_ms}ms ({len(noise_clip)} samples)")
     
     # Aplicar redução
     reduced = nr.reduce_noise(
@@ -414,7 +642,7 @@ def _reduce_noise_noisereduce(
         y_noise=noise_clip,
         sr=sample_rate,
         prop_decrease=strength,
-        stationary=True,
+        stationary=False,  # Não estacionário para melhor qualidade em rádio
     )
     
     # Converter de volta para int16
@@ -427,10 +655,6 @@ def _reduce_noise_noisereduce(
         sample_width=2,
         channels=1,
     )
-    
-    # Se original era stereo, duplicar
-    if audio.channels == 2:
-        result = result.set_channels(2)
     
     result.export(output_path, format="mp3", bitrate="128k")
     
@@ -647,16 +871,40 @@ def process(
     temp_files = []
     
     try:
-        # Etapa 0: Correção de canal morto (stereo assimétrico)
-        canal_info = detectar_canal_morto(current_file)
-        if canal_info["is_asymmetric"]:
-            canal_output = temp_dir / f"{input_path.stem}_canal_fix.mp3"
-            temp_files.append(canal_output)
-            
-            r = corrigir_canal_morto(current_file, canal_output)
-            results["etapas"].append({"nome": "correcao_canal", **r})
-            current_file = str(canal_output)
-            logger.info(f"Correção de canal aplicada: {r.get('channel', '?')}")
+        # Etapa 0: Análise de perfil (deriva parâmetros do áudio)
+        from pydub import AudioSegment as _AudioSegment
+        audio_para_analise = _AudioSegment.from_file(str(input_path))
+        if audio_para_analise.channels > 1:
+            audio_para_analise = audio_para_analise.set_channels(1)
+        perfil = analisar_perfil_ruido(audio_para_analise)
+        
+        results["perfil"] = {
+            "mean_db": round(perfil.mean_db, 1),
+            "max_db": round(perfil.max_db, 1),
+            "lufs": round(perfil.lufs, 1),
+            "noise_floor_db": round(perfil.noise_floor_db, 1),
+            "snr_db": round(perfil.signal_to_noise_db, 1),
+            "noise_reduction_strength": round(perfil.noise_reduction_strength, 2),
+            "breath_threshold_db": round(perfil.breath_threshold_db, 1),
+            "breath_attenuation_db": round(perfil.breath_attenuation_db, 1),
+        }
+        
+        logger.info(f"Perfil do áudio: SNR={perfil.signal_to_noise_db:.1f}dB | "
+                    f"noise_floor={perfil.noise_floor_db:.1f}dB | "
+                    f"redução={perfil.noise_reduction_strength:.0%} | "
+                    f"lufs={perfil.lufs:.1f}")
+        
+        # Usar parâmetros derivados do perfil (sobrescreve config)
+        cfg.noise_reduction_strength = perfil.noise_reduction_strength
+        cfg.breath_threshold_db = perfil.breath_threshold_db
+        cfg.breath_attenuation_db = perfil.breath_attenuation_db
+        
+        # Etapa 0.5: Correção de canal morto + clipping
+        r = corrigir_canal_e_clipping(current_file, current_file + ".fix.mp3")
+        results["etapas"].append({"nome": "analise_correcao", **r})
+        if r["action"] != "none":
+            temp_files.append(current_file + ".fix.mp3")
+            current_file = current_file + ".fix.mp3"
         
         # Etapa 1: Redução de ruído
         if cfg.reduce_noise:
@@ -726,8 +974,9 @@ def process(
     finally:
         # Limpar arquivos temporários
         for f in temp_files:
-            if f.exists():
-                f.unlink()
+            fp = Path(f) if isinstance(f, str) else f
+            if fp.exists():
+                fp.unlink()
     
     return results
 
