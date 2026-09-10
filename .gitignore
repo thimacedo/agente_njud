@@ -18,6 +18,8 @@ orch_jan2026.md
 # Backups y temporales
 _backup_estado_*.csv
 *.lock
+core_fase*.zip
+LEIA-ME_INTEGRACAO.md
 nul
 
 # Python
