@@ -113,8 +113,8 @@ def main() -> None:
     parser.add_argument(
         "--boletins",
         type=str,
-        default="JORNAIS",
-        help="Pasta base dos boletins (padrão: JORNAIS)",
+        default="data/processed/PRODUCAO_2026/JORNAIS_DIVIDIDOS",
+        help="Pasta base dos boletins (padrão: JORNAIS_DIVIDIDOS)",
     )
     parser.add_argument(
         "--saida",
