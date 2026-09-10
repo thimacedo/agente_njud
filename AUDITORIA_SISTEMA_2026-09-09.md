@@ -8,14 +8,15 @@ Auditoria de consistência técnica, regras de não-regressão e persistência d
 
 | Critério | Status |
 |---|---|
-| Persistência do código fonte | ✅ OK — 4 commits, remote configurado |
+| Persistência do código fonte | ✅ OK — 43 commits, remote configurado |
 | Regra DD-MM | ✅ Confirmada — `BOLETIM_RADIO_TJRN_DD_MM_YYYY` |
 | Não-regressão (test_edicao.py) | ✅ 24/24 passando após correção |
 | Scripts build_all_* (MM_DD) | 🔴 Bug de data — 13 scripts invertem dia/mês |
-| `produzir_njuds_jul_ago.ps1` | 🔴 Viola regra #1 (H: leitura) + NJUD duplicado |
-| `run_dispatcher.sh` | 🟠 Bug — ponto no lugar de barra |
+| `produzir_njuds_jul_ago.ps1` | 🔴 **BLOQUEADO** (exit 1 + header Regra #1) |
+| `run_dispatcher.sh` | ✅ Corrigido (pipeline/dispatcher.py) |
 | `limpar_producao_finalizada.ps1` | 🟠 Risco — Test-NjudFinalizado só por número |
-| `BOLETIM/` pasta | 🔴 Vazamento do gravador_inteligente |
+| `BOLETIM/` pasta | ✅ Agente oficial (documentado no README.md) |
+| max_boletins_por_programa | ✅ Adicionado (limite 10, Fase 1) |
 | Venv no DIVISOR | ⚠️ Funcional mas dependente de /e (lento) |
 
 ---
