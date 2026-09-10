@@ -54,6 +54,7 @@ class ConfigPrograma:
     compute_type: str = "int8"
     roteiro_corte: Optional[str] = None
     minimo_boletins_para_montar: int = 4
+    max_boletins_por_programa: int = 10  # Limite superior da janela de coleta
     usar_separacao_stems: bool = False
     config_stems: ConfigSeparacao = field(default_factory=ConfigSeparacao)
     # Janela de datas do plano (para filtragem por período no Giro)
@@ -113,7 +114,11 @@ def salvar_estado(estado: EstadoArquivo, pasta_estado: Path) -> None:
 
 
 def listar_tarefas_pendentes(config: ConfigPrograma) -> list[dict]:
-    """Lista arquivos MP3 sem estado OK/ESGOTADO_ACEITO, filtrados pela janela de datas se configurada."""
+    """Lista arquivos MP3 sem estado OK/ESGOTADO_ACEITO, filtrados pela janela de datas se configurada.
+    
+    Aplica max_boletins_por_programa para limitar a coleta e evitar supercoleta
+    que causa 10-41 notas por programa (Fase 1 do plano de correção).
+    """
     import re
     from datetime import date
     tarefas = []
@@ -158,6 +163,11 @@ def listar_tarefas_pendentes(config: ConfigPrograma) -> list[dict]:
             except Exception:
                 pass
         tarefas.append({"arquivo": str(arq), "stem": arq.stem})
+
+    # Aplicar limite máxima de boletins por programa (Fase 1)
+    if config.max_boletins_por_programa and len(tarefas) > config.max_boletins_por_programa:
+        tarefas = tarefas[:config.max_boletins_por_programa]
+
     return tarefas
 
 
