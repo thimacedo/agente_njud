@@ -75,7 +75,7 @@ class ConfigPrograma:
     compute_type: str = "int8"
     roteiro_corte: Optional[str] = None
     minimo_boletins_para_montar: int = 4
-    max_boletins_por_programa: int = 10  # Limite superior da janela de coleta
+    max_boletins_por_programa: int = 6  # Limite superior: máximo 6 boletins por programa
     modo_dual: bool = False  # Fase 3: roda auditoria síncrona E fila em paralelo
     analisador_ativo: bool = False  # Fase 5: usa Analisador em vez de JSON estático
     fila: Optional[FilaClient] = field(default=None)  # instância compartilhada
