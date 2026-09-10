@@ -37,8 +37,9 @@
   .grid.boletins{grid-template-columns:1fr}
   .grid.njud{grid-template-columns:1fr 1fr}
   .grid.giro{grid-template-columns:1fr 1fr}
-  .slot{border:2px dashed var(--border-strong);border-radius:var(--radius);padding:16px;background:#fafafa;transition:border-color .15s,background .15s;min-height:80px;display:flex;flex-direction:column;gap:8px}
-  .slot.filled{border-style:solid;border-color:var(--accent);background:var(--accent-subtle)}
+  .slot{border:2px dashed var(--border-strong);border-radius:var(--radius);padding:16px;background:#fafafa;transition:border-color .15s,background .15s,box-shadow .15s;min-height:80px;display:flex;flex-direction:column;gap:8px}
+  .slot.filled{border-style:solid;border-color:var(--border-strong);background:#fcfcfc}
+  .slot.has-file{border-color:var(--accent);background:var(--accent-subtle)}
   .slot.drag-over{border-color:var(--accent);background:var(--accent-subtle);box-shadow:0 0 0 3px rgba(0,102,204,.15)}
   .slot.has-error{border-color:var(--danger);background:var(--danger-bg)}
   .slot-label{font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--faint);font-weight:500}

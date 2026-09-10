@@ -36,6 +36,11 @@ from core.stems.separacao_stems import (
     SeparacaoStemsError,
 )
 
+# --- Remoção de vinheta de boletim (Camada A / Fase 2) ---
+from core.audio.remocao_vinheta import remover_vinheta_boletim
+
+import uuid
+
 
 @dataclass
 class ConfigPrograma:
@@ -221,6 +226,34 @@ def processar_um_arquivo(
                 f"Falha na separação para {Path(arquivo).name}: {exc}. "
                 f"Prosseguindo com áudio original.",
             )
+    else:
+        # Camada A: tenta remover apenas a vinheta de boletim via
+        # detecção por transcrição. Rede de segurança leve quando
+        # Demucs está desabilitado (caso atual de todos os giro_*.json).
+        try:
+            _project_root = Path(__file__).resolve().parents[3]
+            vinheta_ref = _project_root / "assets" / "vinhetas" / "boletim" / "VHT_ABERTURA_BOLETIM.mp3"
+            audio_limpo = remover_vinheta_boletim(Path(arquivo), vinheta_ref)
+            if audio_limpo is not None:
+                tmp_dir = Path("data/tmp")
+                tmp_dir.mkdir(parents=True, exist_ok=True)
+                arquivo_para_corte = tmp_dir / f"sem_vinheta_{uuid.uuid4().hex}.wav"
+                audio_limpo.export(str(arquivo_para_corte), format="wav")
+                logger.info(
+                    "Vinheta de boletim removida antes do corte: %s",
+                    Path(arquivo).name,
+                )
+            else:
+                # Não detectada (ou erro) — segue com o áudio original.
+                # RegraVinhetaBoletimAusente (Camada C) pega o caso residual.
+                arquivo_para_corte = arquivo
+        except Exception as exc:
+            logger.aviso(
+                "vinheta",
+                f"Falha ao tentar remover vinheta para {Path(arquivo).name}: {exc}. "
+                f"Prosseguindo com áudio original.",
+            )
+            arquivo_para_corte = arquivo
 
     estrategias = [
         "calibracao_correlacao",

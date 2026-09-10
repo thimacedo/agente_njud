@@ -61,6 +61,8 @@ class PipelineConfig:
     manter_intermediarios: bool = True  # Mantém arquivos de cada etapa
     verbose: bool = False
     prefixo: str = ""  # Prefixo para distinguir sets (ex: "03_SET_", "08_SET_")
+    auditoria_auto: bool = True  # Rodar auditoria automática após montagem
+    limiar_auditoria: float = 0.5  # Threshold para flag de repetições na auditoria
 
 
 # =============================================================================
@@ -292,7 +294,39 @@ class PipelineBoletins:
                         })
             
             # ================================================================
-            # Finalização
+            # ETAPA 5: Auditoria automática pós-montagem
+            # ================================================================
+            if self.config.auditoria_auto and resultado.boletins_gerados:
+                logger.info(f"\n{'='*70}")
+                logger.info("ETAPA 5: Auditoria de qualidade automática")
+                logger.info(f"{'='*70}")
+                
+                for boletim_path in resultado.boletins_gerados:
+                    boletim_nome = Path(boletim_path).stem
+                    logger.info(f"Auditoria: {boletim_nome}")
+                    
+                    try:
+                        from app.montagem_boletins import auditar_boletim
+                        res_auditoria = auditar_boletim(
+                            boletim_path,
+                            limiar=self.config.limiar_auditoria,
+                        )
+                        resultado.etapas.append({
+                            "nome": f"auditoria_{boletim_nome}",
+                            "status": "ok" if res_auditoria.get("status") == "ok" else "aviso",
+                            "arquivo": boletim_path,
+                            "detalhes": res_auditoria,
+                        })
+                        if res_auditoria.get("problemas"):
+                            for p in res_auditoria["problemas"]:
+                                logger.warning(f"  ⚠ {p}")
+                                resultado.erros.append(f"auditoria_{boletim_nome}: {p}")
+                        else:
+                            logger.info(f"  ✓ Sem problemas detectados")
+                    except Exception as e:
+                        logger.error(f"  ✗ Auditoria falhou: {e}")
+            # ================================================================
+            # Finalização e auditoria automática
             # ================================================================
             if resultado.erros:
                 resultado.status = "parcial" if resultado.boletins_gerados else "erro"
@@ -317,7 +351,6 @@ class PipelineBoletins:
                     logger.info(f"  ✓ {b}")
             logger.info(f"Log: {log_path}")
             logger.info(f"{'='*70}")
-            
         except Exception as e:
             resultado.status = "erro"
             resultado.erros.append(str(e))
@@ -326,6 +359,7 @@ class PipelineBoletins:
             raise
         
         return resultado
+
 
 
 # =============================================================================
@@ -348,7 +382,7 @@ def main_cli():
     parser.add_argument("--modelo", default="tiny", help="Modelo Whisper")
     parser.add_argument("--lufs", type=float, default=-16.0, help="Target LUFS")
     parser.add_argument("--noise-strength", type=float, default=0.5, help="Redução de ruído (0-1)")
-    parser.add_argument("--limiar", type=float, default=0.65, help="Limiar de similaridade")
+    parser.add_argument("--limiar", type=float, default=0.5, help="Limiar de similaridade (0-1)")
     parser.add_argument("--assets-dir", help="Diretório dos assets")
     parser.add_argument("--manter-intermediarios", action="store_true", help="Mantém arquivos intermediários")
     parser.add_argument("-v", "--verbose", action="store_true", help="Modo verboso")

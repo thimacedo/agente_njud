@@ -42,8 +42,8 @@ class EdicaoConfig:
     modelo_whisper: str = "tiny"
     
     # Limiar de similaridade para detectar repetições (0.0-1.0)
-    # 0.65 = 65% de similaridade já considera repetição
-    limiar_similaridade: float = 0.65
+    # 0.5 = 50% de similaridade já considera repetição (whisper tiny é impreciso, precisa ser mais baixo)
+    limiar_similaridade: float = 0.5
     
     # Janela temporal máxima para comparação de repetições (segundos)
     # Só compara com frases das últimas N segundos
@@ -55,7 +55,8 @@ class EdicaoConfig:
     )
     
     # Tempo padrão de retrocesso para gatilhos (ms)
-    tempo_retrocesso_padrao_ms: int = 8000
+    # Quanta memoria do áudio ANTES do gatilho vai ser cortada (padrão: 4s)
+    tempo_retrocesso_padrao_ms: int = 4000
     
     # Pausa mínima (ms) que indica início de erro antes do gatilho
     pausa_minima_para_corte_ms: int = 1000
@@ -258,7 +259,7 @@ def detectar_repeticoes(
             # Verifica limite temporal
             intervalo_seg = (frase_atual["inicio"] - frase_passada["fim"]) / 1000
             if intervalo_seg > tempo_max_retrocesso_seg:
-                break
+                continue
             
             texto_passado = normalizar_texto(frase_passada["texto"])
             

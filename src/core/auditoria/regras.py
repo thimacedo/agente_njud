@@ -261,6 +261,102 @@ class RegraSemAlucinacoesWhisper:
 
 # --- Auditoria principal ---
 
+class RegraVinhetaBoletimAusente:
+    """
+    Regra de auditoria que detecta se a vinheta de boletim
+    ainda está presente no arquivo CABEÇA gerado pelo corte.
+    
+    Se a vinheta de boletim for detectada no início do CABEÇA,
+    o corte falhou e o arquivo é rejeitado.
+    
+    Esta é a Camada C / Fase 3 do projeto de correção.
+    """
+    
+    nome = "vinheta_boletim_ausente"
+    
+    # Palavras-chave que aparecem na vinheta de abertura do boletim
+    PALAVRAS_CHAVE = frozenset({
+        "tribunal de justiça",
+        "ri grande do norte",
+        "boletim",
+        "rádio justiça",
+        "manhã",
+        "justiça",
+    })
+    
+    MIN_PALAVRAS_COINCIDENTES = 2
+    TAMANHO_MIN_PALAVRA = 3
+    MAX_PALAVRAS_CHAVE = 6
+    
+    _modelo = None
+    
+    def _get_modelo(self):
+        if RegraVinhetaBoletimAusente._modelo is None:
+            from faster_whisper import WhisperModel
+            RegraVinhetaBoletimAusente._modelo = WhisperModel(
+                "tiny", device="cpu", compute_type="int8"
+            )
+        return RegraVinhetaBoletimAusente._modelo
+    
+    def verificar(self, auditavel, **kwargs):
+        try:
+            cabeca_path = Path(auditavel.cabeca)
+            if not cabeca_path.exists():
+                return True, None
+            
+            if auditavel.duracao_cabeca is not None and auditavel.duracao_cabeca < 5.0:
+                return True, None
+            
+            modelo = self._get_modelo()
+            
+            import numpy as np
+            from pydub import AudioSegment
+            audio = AudioSegment.from_file(str(cabeca_path))
+            trecho = audio[:12000]
+            
+            seg = trecho.set_channels(1).set_frame_rate(16000)
+            amostras = np.array(seg.get_array_of_samples()).astype(np.float32)
+            amostras /= float(1 << (8 * seg.sample_width - 1))
+            
+            segmentos, _info = modelo.transcribe(amostras, language="pt", vad_filter=False)
+            texto_limpo = " ".join(s.text.strip().lower() for s in segmentos if s.text.strip())
+            
+            if not texto_limpo:
+                return True, None
+            
+            from pathlib import Path as _Path
+            vinheta_ref = _Path(__file__).resolve().parents[3] / "assets" / "vinhetas" / "boletim" / "VHT_ABERTURA_BOLETIM.mp3"
+            if not vinheta_ref.exists():
+                return True, None
+            
+            vinheta_audio = AudioSegment.from_file(str(vinheta_ref))
+            seg_vinheta = vinheta_audio.set_channels(1).set_frame_rate(16000)
+            amostras_vinheta = np.array(seg_vinheta.get_array_of_samples()).astype(np.float32)
+            amostras_vinheta /= float(1 << (8 * seg_vinheta.sample_width - 1))
+            
+            segmentos_vinheta, _info_vinheta = modelo.transcribe(amostras_vinheta, language="pt", vad_filter=False)
+            texto_vinheta = " ".join(s.text.strip().lower() for s in segmentos_vinheta if s.text.strip())
+            
+            if not texto_vinheta:
+                return True, None
+            
+            palavras_vinheta = [p for p in texto_vinheta.split() if len(p) > self.TAMANHO_MIN_PALAVRA]
+            palavras_chave = palavras_vinheta[:self.MAX_PALAVRAS_CHAVE]
+            coincidencias = [p for p in palavras_chave if p in texto_limpo]
+            
+            if len(coincidencias) >= self.MIN_PALAVRAS_COINCIDENTES:
+                return False, (
+                    f"VINHETA DE BOLETIM DETECTADA no CABEÇA: "
+                    f"coincidências {coincidencias}. "
+                    f"Corte falhou — vinheta de boletim não removida."
+                )
+            
+            return True, None
+            
+        except Exception as e:
+            return True, None
+
+
 class Auditor:
     """
     Executa todas as regras sobre um Auditavel e devolve ResultadoAuditoria.
@@ -278,6 +374,7 @@ class Auditor:
                 RegraDurationsValidas(),
                 RegraSemFallbackParaAudioCompleto(),  # OBRIGATÓRIA
                 RegraSemAlucinacoesWhisper(),
+                RegraVinhetaBoletimAusente(),  # Camada C / Fase 3
             ]
         else:
             self._regras = regras

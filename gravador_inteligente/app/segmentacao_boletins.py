@@ -47,7 +47,7 @@ def carregar_modelo_whisper(modelo_nome: str):
 
 
 def transcrever_audio(modelo, caminho_audio: str, idioma: str = DEFAULT_IDIOMA):
-    """Transcreve o áudio e retorna os segmentos."""
+    """Transcreve o áudio e retorna os segmentos com word timestamps."""
     logger.info("Iniciando transcrição...")
     print("Transcrevendo áudio... (pode levar alguns minutos)")
     
@@ -55,7 +55,8 @@ def transcrever_audio(modelo, caminho_audio: str, idioma: str = DEFAULT_IDIOMA):
         caminho_audio,
         language=idioma,
         fp16=False,
-        verbose=False
+        verbose=False,
+        word_timestamps=True,
     )
     
     transcricao = result["segments"]
@@ -68,7 +69,7 @@ def transcrever_audio(modelo, caminho_audio: str, idioma: str = DEFAULT_IDIOMA):
 
 
 def detectar_marcadores_boletim(transcricao, padrao: str = r"\bB(\d{1,2})\b"):
-    """Detecta marcadores B1, B2, B3... na transcrição."""
+    """Detecta marcadores B1, B2, B3... na transcrição com word timestamps."""
     regex_marcador = regex.compile(padrao, regex.IGNORECASE)
     
     marcadores_detectados = {}
@@ -85,10 +86,118 @@ def detectar_marcadores_boletim(transcricao, padrao: str = r"\bB(\d{1,2})\b"):
                     "fim": seg["end"],
                     "texto": texto
                 }
-                logger.info(f"Marcador B{numero} encontrado: {seg['start']:.1f}s")
-                print(f"  ✓ B{numero}: {seg['start']:.1f}s - '{texto}'")
+                logger.info(f"Marcador B{numero} encontrado: {seg['start']:.1f}s - '{texto}'")
     
     return marcadores_detectados
+
+
+def detectar_marcadores_por_palavras(
+    palavras: list[dict],
+) -> dict[int, dict]:
+    """
+    Detecta marcadores de boletim usando timestamps de palavra.
+    
+    Procura por palavras isoladas que correspondem a B1-B10,
+    com gaps significativos antes e depois (indicando claquete).
+    
+    Aceita variações do Whisper: B1, b1, bi, be, bé, bê, B2, etc.
+    
+    Args:
+        palavras: Lista de dicts com 'text', 'start', 'end'
+    
+    Returns:
+        Dict {numero_boletim: {inicio, fim, texto}}
+    """
+    # Padrões que o Whisper pode gerar para "B1", "B2", etc.
+    # B1, b1, B2, b2, bi, be, bé, bê, B, etc.
+    padroes_b = regex.compile(
+        r'^(?:b[eêéiíè]?\s*(\d{1,2})|b(\d{1,2}))$',
+        regex.IGNORECASE
+    )
+    
+    marcadores = {}
+    
+    for i, p in enumerate(palavras):
+        texto_limpo = p["text"].strip('.,!? ').lower()
+        match = padroes_b.match(texto_limpo)
+        
+        if not match:
+            continue
+        
+        numero = int(match.group(1) or match.group(2))
+        if numero < 1 or numero > 10:
+            continue
+        
+        # Verificar se é uma palavra isolada (gap antes ou depois)
+        gap_antes = p["start"] - palavras[i-1]["end"] if i > 0 else 0
+        gap_depois = palavras[i+1]["start"] - p["end"] if i+1 < len(palavras) else 0
+        
+        # Claquete: gap significativo (> 0.5s) em pelo menos um lado
+        if gap_antes > 0.5 or gap_depois > 0.5:
+            if numero not in marcadores:
+                marcadores[numero] = {
+                    "inicio": p["start"],
+                    "fim": p["end"],
+                    "texto": p["text"],
+                }
+                logger.info(
+                    f"Claquete B{numero} detectada: {p['start']:.1f}s-{p['end']:.1f}s "
+                    f"(gap_antes={gap_antes:.2f}s, gap_depois={gap_depois:.2f}s)"
+                )
+    
+    return marcadores
+
+
+def detectar_claquetes_por_audio(
+    audio,
+    min_silence_len: int = 200,
+    silence_thresh: int = -35,
+    max_claquete_dur_ms: int = 1500,
+    min_gap_ms: int = 1000,
+) -> list[dict]:
+    """
+    Detecta claquetes (segmentos curtos isolados) no áudio.
+    
+    Usa detect_nonsilent para encontrar segmentos de áudio curto
+    com gaps significativos antes e depois, que são característicos
+    de claquetes de boletim.
+    
+    Args:
+        audio: AudioSegment
+        min_silence_len: Mínimo de silêncio para separar segmentos
+        silence_thresh: Limiar de silêncio em dB
+        max_claquete_dur_ms: Duração máxima de uma claquete
+        min_gap_ms: Gap mínimo antes/depois para considerar claquete
+    
+    Returns:
+        Lista de dicts com 'inicio', 'fim', 'duracao' das claquetes
+    """
+    from pydub.silence import detect_nonsilent
+    
+    nonsilent = detect_nonsilent(
+        audio,
+        min_silence_len=min_silence_len,
+        silence_thresh=silence_thresh,
+    )
+    
+    claquetes = []
+    
+    for i, (start, end) in enumerate(nonsilent):
+        dur = end - start
+        gap_antes = start - nonsilent[i-1][1] if i > 0 else 0
+        gap_depois = nonsilent[i+1][0] - end if i+1 < len(nonsilent) else 0
+        
+        # Claquete: segmento curto com gaps significativos
+        if dur <= max_claquete_dur_ms and (gap_antes >= min_gap_ms or gap_depois >= min_gap_ms):
+            claquetes.append({
+                "inicio": start,
+                "fim": end,
+                "duracao": dur,
+                "gap_antes": gap_antes,
+                "gap_depois": gap_depois,
+            })
+    
+    return claquetes
 
 
 def construir_limites_boletins(
@@ -366,8 +475,58 @@ def segmentar_audio(
         modelo = carregar_modelo_whisper(cfg.modelo)
         transcricao, duracao_total = transcrever_audio(modelo, str(audio_path), cfg.idioma)
     
-    # Detectar marcadores
-    marcadores_detectados = detectar_marcadores_boletim(transcricao) if transcricao else {}
+    # Detectar marcadores combinando métodos
+    marcadores_detectados = {}
+    
+    if transcricao:
+        # Método 1: regex nos segmentos (funciona bem quando Whisper detecta B1, B2, etc)
+        marcadores_detectados = detectar_marcadores_boletim(transcricao)
+        
+        # Método 2: word timestamps (captura variações como "bi", "be")
+        palavras = []
+        for seg in transcricao:
+            for w in seg.get("words", []):
+                palavras.append({
+                    "text": w.get("word", ""),
+                    "start": w.get("start", 0),
+                    "end": w.get("end", 0),
+                })
+        
+        marcadores_palavras = detectar_marcadores_por_palavras(palavras)
+        
+        # Mesclar: priorizar detecção por palavras (mais precisa)
+        for num, info in marcadores_palavras.items():
+            if num not in marcadores_detectados:
+                marcadores_detectados[num] = info
+                logger.info(f"Marcador B{num} adicionado via word timestamps: {info['inicio']:.1f}s")
+    
+    # Método 3: detectar claquetes por estrutura de áudio (segmentos curtos isolados)
+    # Usado quando o Whisper não consegue transcrever a claquete
+    from pydub import AudioSegment as _AudioSegment
+    audio_full = _AudioSegment.from_file(str(audio_path))
+    claquetes_audio = detectar_claquetes_por_audio(audio_full)
+    
+    if claquetes_audio:
+        logger.info(f"Detectadas {len(claquetes_audio)} claquetes por estrutura de áudio")
+        for claq in claquetes_audio:
+            logger.info(f"  Claquete áudio: {claq['inicio']/1000:.1f}s-{claq['fim']/1000:.1f}s ({claq['duracao']}ms)")
+        
+        # Se não detectou nenhum marcador via Whisper, usar claquetes de áudio
+        # para inferir os números dos boletins
+        if len(marcadores_detectados) <= 1:
+            logger.info("Poucos marcadores via Whisper. Usando claquetes de áudio para segmentar.")
+            # Mapear claquetes para números de boletim sequenciais
+            # A primeira claquete após o início = B2 (B1 é o início)
+            for idx, claq in enumerate(claquetes_audio):
+                # Estimar número do boletim: primeira claquete = B2, segunda = B3, etc.
+                num_estimado = idx + 2  # B2, B3, B4...
+                if num_estimado <= cfg.numero_boletins and num_estimado not in marcadores_detectados:
+                    marcadores_detectados[num_estimado] = {
+                        "inicio": claq["inicio"] / 1000,  # Converter para segundos
+                        "fim": claq["fim"] / 1000,
+                        "texto": f"CLAQUETE_AUDIO_{num_estimado}",
+                    }
+                    logger.info(f"B{num_estimado} estimado via claquete de áudio: {claq['inicio']/1000:.1f}s")
     
     # Construir limites
     marcadores = construir_limites_boletins(

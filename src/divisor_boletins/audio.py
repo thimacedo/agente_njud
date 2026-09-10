@@ -35,7 +35,7 @@ from .deteccao import (
 )
 from .log import LogPipeline, _serializar_dados
 from .texto import normalizar_texto
-from .calibracao import calibrar_boletim
+from .calibracao import calibrar_boletim, carregar_todas_vinhetas
 
 from config.njud import settings
 
@@ -444,15 +444,62 @@ def _detectar_residuo_vinheta(audio: AudioSegment, inicio_ms: int, fim_ms: int) 
 # PROCESSAMENTO DE UM ARQUIVO
 # ===========================================================================
 
+def _duracao_vinheta_abertura_s() -> float:
+    """Duração (s) da vinheta de abertura de referência, se disponível.
+
+    Usada como piso mínimo por  para não confundir a
+    própria vinheta (que também é fala, não música) com o início da
+    CABEÇA. Retorna 0.0 se a vinheta de referência não existir/carregar —
+    nesse caso  volta ao comportamento anterior.
+    """
+    try:
+        vinhetas = carregar_todas_vinhetas()
+        abertura = vinhetas.get("abertura")
+        if abertura is None:
+            return 0.0
+        _dados, n_amostras = abertura
+        return n_amostras / 16000.0
+    except Exception:
+        return 0.0
+
+
 def _detectar_por_vad(caminho_entrada: str, segmentos: list[dict]) -> float:
     """Isola a lógica de VAD reutilizada por mais de uma estratégia:
-    localiza onde a voz humana começa dentro dos primeiros 12s."""
+    localiza onde a voz humana começa dentro dos primeiros 12s.
+
+    CORRIGIDO (2026-09-09): antes, retornava o primeiro bloco de fala do
+    VAD sem excluir a janela conhecida da vinheta de abertura. Como a
+    vinheta também é fala (não música), quando a correlação
+    (_estrategia_calibracao_correlacao) E a âncora de texto
+    (ancora_abertura) falham ao mesmo tempo — o único caso em que esta
+    função é chamada — o VAD cru marcava o INÍCIO DA PRÓPRIA VINHETA
+    como início da CABEÇA, reproduzindo o bug de vinheta de boletim no
+    último degrau do fallback. Agora blocos que começam dentro da janela
+    conhecida da vinheta (duração da vinheta de referência + margem de
+    300ms) são ignorados; só um bloco de fala APÓS essa janela conta como
+    início da CABEÇA.
+    """
+    piso_vinheta_s = _duracao_vinheta_abertura_s()
     try:
         modelo_vad, utils_vad = _carregar_silero_vad()
         get_speech = utils_vad[0]
         audio_vad = AudioSegment.from_file(str(caminho_entrada))[0:12000].set_frame_rate(16000).set_channels(1)
         dados_vad = np.array(audio_vad.get_array_of_samples(), dtype=np.float32) / 32768.0
         sp_blocks = get_speech(torch.from_numpy(dados_vad), modelo_vad, sampling_rate=16000, threshold=0.4)
+
+        if piso_vinheta_s > 0 and sp_blocks:
+            margem_s = 0.3
+            piso_amostras = (piso_vinheta_s - margem_s) * 16000.0
+            blocos_pos_vinheta = [b for b in sp_blocks if b["start"] >= piso_amostras]
+            if blocos_pos_vinheta:
+                return blocos_pos_vinheta[0]["start"] / 16000.0
+            # Nenhum bloco de fala além da janela da vinheta dentro dos 12s
+            # analisados — não há como confiar no VAD aqui. Cai para o
+            # primeiro bloco mesmo assim (comportamento anterior) em vez de
+            # travar o pipeline; RegraVinhetaBoletimAusente (Camada C) pega
+            # o resíduo na auditoria pós-corte caso isto esteja errado.
+            return sp_blocks[0]["start"] / 16000.0
+
         if sp_blocks:
             return sp_blocks[0]["start"] / 16000.0
         elif segmentos:
