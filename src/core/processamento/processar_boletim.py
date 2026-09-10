@@ -41,6 +41,27 @@ from core.audio.remocao_vinheta import remover_vinheta_boletim
 
 import uuid
 
+# --- Novos imports para fases 3-5 ---
+from typing import TYPE_CHECKING
+
+try:
+    from core.fila.queue_client import FilaClient
+    FILA_DISPONIVEL = True
+except ImportError:
+    FILA_DISPONIVEL = False
+
+try:
+    from core.aprendizado.knowledge_base import KnowledgeBase
+    KB_DISPONIVEL = True
+except ImportError:
+    KB_DISPONIVEL = False
+
+try:
+    from core.decisao.analisador import decidir_estrategia, PlanoDeProcessamento
+    ANALISADOR_DISPONIVEL = True
+except ImportError:
+    ANALISADOR_DISPONIVEL = False
+
 
 @dataclass
 class ConfigPrograma:
@@ -55,6 +76,9 @@ class ConfigPrograma:
     roteiro_corte: Optional[str] = None
     minimo_boletins_para_montar: int = 4
     max_boletins_por_programa: int = 10  # Limite superior da janela de coleta
+    modo_dual: bool = False  # Fase 3: roda auditoria síncrona E fila em paralelo
+    analisador_ativo: bool = False  # Fase 5: usa Analisador em vez de JSON estático
+    fila: Optional[FilaClient] = field(default=None)  # instância compartilhada
     usar_separacao_stems: bool = False
     config_stems: ConfigSeparacao = field(default_factory=ConfigSeparacao)
     # Janela de datas do plano (para filtragem por período no Giro)
@@ -265,6 +289,106 @@ def processar_um_arquivo(
             )
             arquivo_para_corte = arquivo
 
+    # --- Decisão adaptativa de estratégia (NOVO — Fase 5) ---
+    decisao_id = uuid.uuid4().hex
+    plano = None
+    features_decisao = {}
+    usou_analisador = False
+
+    if config.analisador_ativo and ANALISADOR_DISPONIVEL:
+        try:
+            kb = KnowledgeBase() if KB_DISPONIVEL else None
+            plano = decidir_estrategia(
+                caminho_audio=Path(arquivo),
+                programa=config.nome,
+                kb=kb,
+                tentativas_anteriores=estado.tentativas,
+            )
+            features_decisao = {
+                "duracao_s": plano.features.duracao_s,
+                "energia_inicio_db": plano.features.energia_media_inicio_db,
+                "energia_fim_db": plano.features.energia_media_fim_db,
+                "proporcao_silencio_inicio": plano.features.proporcao_silencio_inicio,
+            }
+            logger.info(
+                "analisador",
+                f"Decisão adaptativa para {Path(arquivo).name}: "
+                f"stems={plano.usar_stems}, estrategia={plano.estrategia_sugerida}. "
+                f"Motivo: {plano.justificativa}",
+            )
+            usou_analisador = True
+        except Exception as exc:
+            logger.aviso(
+                "analisador",
+                f"Erro ao decidir estratégia para {Path(arquivo).name}: {exc}. "
+                f"Voltando ao JSON estático.",
+            )
+            plano = None
+            usou_analisador = False
+
+    # Etapa 0 (opcional): separação de stems para remover trilha/vinheta
+    arquivo_para_corte = arquivo
+    usar_stems = False
+
+    # Se Analisador sugeriu stems, usa-o; senão usa o JSON config
+    if plano and plano.usar_stems:
+        usar_stems = True
+    elif config.usar_separacao_stems:
+        usar_stems = True
+
+    if usar_stems:
+        try:
+            resultado_stems = separar_stems(arquivo, config.config_stems)
+            if resultado_stems.sucesso:
+                arquivo_para_corte = resultado_stems.caminho_vocal
+                logger.info(
+                    "stems",
+                    f"Stems separados: {Path(arquivo).name} "
+                    f"(cache={'hit' if resultado_stems.veio_do_cache else 'miss'}, "
+                    f"{resultado_stems.tempo_processamento_s:.1f}s)",
+                )
+            else:
+                logger.aviso(
+                    "stems",
+                    f"Falha na separação para {Path(arquivo).name}: {resultado_stems.erro}. "
+                    f"Prosseguindo com áudio original.",
+                )
+        except SeparacaoStemsError as exc:
+            logger.aviso(
+                "stems",
+                f"Falha na separação para {Path(arquivo).name}: {exc}. "
+                f"Prosseguindo com áudio original.",
+            )
+    else:
+        # Camada A: tenta remover apenas a vinheta de boletim via
+        # detecção por transcrição. Rede de segurança leve quando
+        # Demucs está desabilitado (caso atual de todos os giro_*.json).
+        try:
+            _project_root = Path(__file__).resolve().parents[3]
+            vinheta_ref = _project_root / "assets" / "vinhetas" / "boletim" / "VHT_ABERTURA_BOLETIM.mp3"
+            audio_limpo = remover_vinheta_boletim(Path(arquivo), vinheta_ref)
+            if audio_limpo is not None:
+                tmp_dir = Path("data/tmp")
+                tmp_dir.mkdir(parents=True, exist_ok=True)
+                arquivo_para_corte = tmp_dir / f"sem_vinheta_{uuid.uuid4().hex}.wav"
+                audio_limpo.export(str(arquivo_para_corte), format="wav")
+                logger.info(
+                    "Vinheta de boletim removida antes do corte: %s",
+                    Path(arquivo).name,
+                )
+            else:
+                # Não detectada (ou erro) — segue com o áudio original.
+                # RegraVinhetaBoletimAusente (Camada C) pega o caso residual.
+                arquivo_para_corte = arquivo
+        except Exception as exc:
+            logger.aviso(
+                "vinheta",
+                f"Falha ao tentar remover vinheta para {Path(arquivo).name}: {exc}. "
+                f"Prosseguindo com áudio original.",
+            )
+            arquivo_para_corte = arquivo
+
+    # --- Escolha de estratégia (MODIFICADO — Fase 5) ---
     estrategias = [
         "calibracao_correlacao",
         "ancora_vad_forcado",
@@ -272,6 +396,14 @@ def processar_um_arquivo(
         "grade_fixa_locucao_estendida",
     ]
     max_tentativas = len(estrategias)
+
+    # Se Analisador sugeriu estratégia específica, começa por ela
+    if plano:
+        if plano.estrategia_sugerida in estrategias:
+            idx = estrategias.index(plano.estrategia_sugerida)
+            estrategias = estrategias[idx:] + estrategias[:idx]
+
+    # ========== LOOP DE ESTRATÉGIAS (código original mantido, só acrescenta auditoria à fila) ==========
 
     while len(estado.tentativas) < max_tentativas:
         estrategia = estado.estrategia_atual
@@ -290,18 +422,47 @@ def processar_um_arquivo(
 
             cabeca, corpo = resultado.arquivo_cabeca, resultado.arquivo_corpo
 
-            # Auditoria com fonte original para RegraSemFallback obrigatória
+            # Auditoria SÍNCRONA (código original) — permanece para não quebrar nada
             audit_status, audit_motivos = analisar_par_consolidado(
                 cabeca, corpo,
                 caminho_fonte_original=arquivo,
             )
 
-            estado.tentativas.append({
-                "estrategia": estrategia,
-                "timestamp": datetime.now().isoformat(timespec="seconds"),
-                "resultado": audit_status,
-                "motivo": audit_motivos,
-            })
+            # --- NOVO (Fase 3): Publicar na fila DE AUDITORIA EM PARALELO ---
+            if config.modo_dual and FILA_DISPONIVEL and config.fila:
+                try:
+                    config.fila.publicar(
+                        "pendente_auditoria",
+                        {
+                            "decisao_id": decisao_id,
+                            "programa": config.nome,
+                            "arquivo_original": arquivo,
+                            "cabeca": str(cabeca),
+                            "corpo": str(corpo),
+                            "estrategia_usada": estrategia,
+                            "usou_stems": usar_stems,
+                            "usou_analisador": usou_analisador,
+                            "features_audio": features_decisao,
+                            "resultado_auditoria_síncrona": audit_status,
+                            "motivos_síncronos": audit_motivos,
+                        },
+                    )
+                except Exception as exc:
+                    logger.aviso(
+                        "fila",
+                        f"Erro ao publicar em fila para {Path(arquivo).name}: {exc}",
+                    )
+
+            estado.tentativas.append(
+                {
+                    "estrategia": estrategia,
+                    "timestamp": datetime.now().isoformat(timespec="seconds"),
+                    "resultado": audit_status,
+                    "motivo": audit_motivos,
+                    "usou_analisador": usou_analisador,
+                    "decisao_id": decisao_id,
+                }
+            )
 
             if audit_status == "OK":
                 estado.status = "OK"
@@ -322,12 +483,16 @@ def processar_um_arquivo(
         except Exception as e:
             estado.status = "ERRO"
             estado.erro = str(e)
-            estado.tentativas.append({
-                "estrategia": estrategia,
-                "timestamp": datetime.now().isoformat(timespec="seconds"),
-                "resultado": "ERRO",
-                "motivo": [str(e)],
-            })
+            estado.tentativas.append(
+                {
+                    "estrategia": estrategia,
+                    "timestamp": datetime.now().isoformat(timespec="seconds"),
+                    "resultado": "ERRO",
+                    "motivo": [str(e)],
+                    "usou_analisador": usou_analisador,
+                    "decisao_id": decisao_id,
+                }
+            )
             salvar_estado(estado, config.pasta_estado)
             return estado
 
@@ -365,6 +530,10 @@ def processar_lote(config: ConfigPrograma, gc_a_cada_n: int = 10) -> dict:
     """Processa todas as tarefas pendentes."""
     config.pasta_estado.mkdir(parents=True, exist_ok=True)
     config.pasta_log.parent.mkdir(parents=True, exist_ok=True)
+
+    # Instanciar fila se modo_dual ativado (Fase 3)
+    if config.modo_dual and FILA_DISPONIVEL:
+        config.fila = FilaClient()
 
     os.environ.setdefault("OMP_NUM_THREADS", "1")
     os.environ.setdefault("MKL_NUM_THREADS", "1")
@@ -414,7 +583,11 @@ def main():
     import sys
 
     if len(sys.argv) < 2:
-        print("Uso: python -m core.processamento.processar_boletim <njud|giro> <pasta_boletins> <pasta_saida>")
+        print("Uso: python -m core.processamento.processar_boletim <njud|giro> <pasta_boletins> <pasta_saida> [flags]")
+        print("\nFlags:")
+        print("  --stems                  : habilita separação de stems (padrão: False)")
+        print("  --modo-dual              : roda auditoria síncrona E fila em paralelo (Fase 3)")
+        print("  --analisador-ativo       : usa Analisador adaptativo em vez de JSON (Fase 5)")
         sys.exit(1)
 
     programa = sys.argv[1].lower()
@@ -427,6 +600,8 @@ def main():
 
     # Flags opcionais
     usar_stems = "--stems" in sys.argv
+    modo_dual = "--modo-dual" in sys.argv
+    analisador_ativo = "--analisador-ativo" in sys.argv
     roteiro_corte = None
     minimo = 4 if programa == "njud" else 3
 
@@ -442,7 +617,14 @@ def main():
         roteiro_corte=roteiro_corte,
         minimo_boletins_para_montar=minimo,
         usar_separacao_stems=usar_stems,
+        modo_dual=modo_dual,
+        analisador_ativo=analisador_ativo,
     )
+
+    if modo_dual:
+        print("[config] Modo dual ativado — auditoria síncrona + fila em paralelo")
+    if analisador_ativo:
+        print("[config] Analisador adaptativo ativado")
 
     return processar_lote(config)
 
