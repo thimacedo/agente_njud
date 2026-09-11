@@ -65,8 +65,8 @@ except ImportError:
 
 @dataclass
 class ConfigPrograma:
-    """Configuração de um programa (NJUD ou Giro)."""
-    nome: str  # "njud" ou "giro"
+    """Configuração de um programa (NJUD, GIRO ou BOLETIM)."""
+    nome: str  # "njud", "giro" ou "boletim"
     pasta_boletins: Path
     pasta_saida: Path
     pasta_estado: Path
@@ -81,9 +81,12 @@ class ConfigPrograma:
     fila: Optional[FilaClient] = field(default=None)  # instância compartilhada
     usar_separacao_stems: bool = False
     config_stems: ConfigSeparacao = field(default_factory=ConfigSeparacao)
-    # Janela de datas do plano (para filtragem por período no Giro)
+    # Janela de dados do plano (para filtragem por período no Giro)
     data_inicio_coleta: Optional[str] = None  # "YYYY-MM-DD"
     data_fim_coleta: Optional[str] = None  # "YYYY-MM-DD"
+    # Fase 1-2: usa staging em vez de pastas fixas
+    usar_staging: bool = True  # Se True, monta pasta_boletins a partir de data/staging/PROGRAMA/data
+    data_programa: Optional[str] = None  # "YYYY-MM-DD" — data para staging
 
 
 @dataclass
@@ -188,9 +191,30 @@ def listar_tarefas_pendentes(config: ConfigPrograma) -> list[dict]:
                 pass
         tarefas.append({"arquivo": str(arq), "stem": arq.stem})
 
-    # Aplicar limite máxima de boletins por programa (Fase 1)
-    if config.max_boletins_por_programa and len(tarefas) > config.max_boletins_por_programa:
-        tarefas = tarefas[:config.max_boletins_por_programa]
+    # Aplicar limite máximo de boletins por programa (Fase 1)
+    # Filtra versões duplicadas e limita a N boletins (cada boletim = CABEÇA + CORPO = 2 arquivos)
+    if config.max_boletins_por_programa:
+        # Filtrar apenas boletins principais (sem _v2, _RESTORED, _1782542963, etc.)
+        boletins_principais = []
+        for t in tarefas:
+            nome = t["stem"]
+            if "_v2" in nome or "_RESTORED" in nome or "__" in nome:
+                continue
+            boletins_principais.append(t)
+        
+        # Ordenar por número de boletim (B1, B2, ... B10) para priorizar os primeiros
+        def num_boletim(t):
+            m = re.search(r'B(\d+)', t["stem"])
+            return int(m.group(1)) if m else 999
+        
+        boletins_principais.sort(key=num_boletim)
+        
+        # Cada boletim tem 2 arquivos (CABEÇA + CORPO), então limite = max_boletins * 2
+        limite_arquivos = config.max_boletins_por_programa * 2
+        if len(boletins_principais) > limite_arquivos:
+            boletins_principais = boletins_principais[:limite_arquivos]
+        
+        tarefas = boletins_principais
 
     return tarefas
 
@@ -232,8 +256,13 @@ def processar_um_arquivo(
     if estado.status in ("OK", "ESGOTADO_ACEITO"):
         return estado
 
-    pasta_cortes = config.pasta_saida / "JORNAIS_DIVIDIDOS"
+    pasta_cortes = config.pasta_saida / "cortes"
     pasta_cortes.mkdir(parents=True, exist_ok=True)
+
+    # Cria subdiretório por boletim para não sobrescrever arquivos
+    nome_boletim = Path(arquivo).stem
+    pasta_boletim = pasta_cortes / nome_boletim
+    pasta_boletim.mkdir(parents=True, exist_ok=True)
 
     # Etapa 0 (opcional): separação de stems para remover trilha/vinheta
     arquivo_para_corte = arquivo
@@ -411,7 +440,7 @@ def processar_um_arquivo(
         try:
             resultado = processar_arquivo(
                 arquivo_para_corte,
-                str(pasta_cortes),
+                str(pasta_boletim),
                 modelo,
                 logger,
                 apply=True,
@@ -579,34 +608,87 @@ def processar_lote(config: ConfigPrograma, gc_a_cada_n: int = 10) -> dict:
 
 
 def main():
-    """Entry point CLI."""
+    """Entry point CLI.
+
+    Uso:
+        python -m core.processamento.processar_boletim <njud|giro|boletim> [flags]
+
+    Flags:
+        --data DATA              : data do programa (YYYY-MM-DD) para staging
+        --pasta PASTA            : pasta de boletins (ignora se --data usado)
+        --saida PASTA            : pasta de saída (padrão: data/processed/PROGRAMA)
+        --stems                  : habilita separação de stems (padrão: False)
+        --modo-dual              : roda auditoria síncrona E fila em paralelo (Fase 3)
+        --analisador-ativo       : usa Analisador adaptativo em vez de JSON (Fase 5)
+        --no-staging             : desabilita staging, usa pasta diretamente
+    """
     import sys
 
     if len(sys.argv) < 2:
-        print("Uso: python -m core.processamento.processar_boletim <njud|giro> <pasta_boletins> <pasta_saida> [flags]")
+        print("Uso: python -m core.processamento.processar_boletim <njud|giro|boletim> [flags]")
         print("\nFlags:")
-        print("  --stems                  : habilita separação de stems (padrão: False)")
-        print("  --modo-dual              : roda auditoria síncrona E fila em paralelo (Fase 3)")
-        print("  --analisador-ativo       : usa Analisador adaptativo em vez de JSON (Fase 5)")
+        print("  --data DATA              : data do programa (YYYY-MM-DD) para staging")
+        print("  --pasta PASTA            : pasta de boletins (ignora se --data usado)")
+        print("  --saida PASTA            : pasta de saída")
+        print("  --stems                  : habilita separação de stems")
+        print("  --modo-dual              : roda auditoria síncrona E fila em paralelo")
+        print("  --analisador-ativo       : usa Analisador adaptativo")
+        print("  --no-staging             : desabilita staging, usa pasta diretamente")
         sys.exit(1)
 
     programa = sys.argv[1].lower()
-    if programa not in ("njud", "giro"):
-        print("Programa deve ser 'njud' ou 'giro'")
+    if programa not in ("njud", "giro", "boletim"):
+        print("Programa deve ser 'njud', 'giro' ou 'boletim'")
         sys.exit(1)
 
-    pasta_boletins = Path(sys.argv[2]) if len(sys.argv) > 2 else Path("JORNAIS")
-    pasta_saida = Path(sys.argv[3]) if len(sys.argv) > 3 else Path("data/processed/PRODUCAO_2026")
-
-    # Flags opcionais
+    # Parse de flags
     usar_stems = "--stems" in sys.argv
     modo_dual = "--modo-dual" in sys.argv
     analisador_ativo = "--analisador-ativo" in sys.argv
-    roteiro_corte = None
-    minimo = 4 if programa == "njud" else 3
+    usar_staging = "--no-staging" not in sys.argv
 
+    # Extrair --data
+    data_programa = None
+    if "--data" in sys.argv:
+        idx = sys.argv.index("--data")
+        if idx + 1 < len(sys.argv):
+            data_programa = sys.argv[idx + 1]
+
+    # Extrair --pasta
+    pasta_boletins = None
+    if "--pasta" in sys.argv:
+        idx = sys.argv.index("--pasta")
+        if idx + 1 < len(sys.argv):
+            pasta_boletins = Path(sys.argv[idx + 1])
+
+    # Extrair --saida
+    pasta_saida = None
+    if "--saida" in sys.argv:
+        idx = sys.argv.index("--saida")
+        if idx + 1 < len(sys.argv):
+            pasta_saida = Path(sys.argv[idx + 1])
+
+    # Determinar pasta de boletins
+    if usar_staging and data_programa:
+        # Fase 1-2: ler de data/staging/PROGRAMA/AAAA-MM-DD/
+        staging_dir = {"njud": "NJUD", "giro": "GIRO", "boletim": "BOLETIM"}
+        pasta_staging = Path("data/staging") / staging_dir[programa] / data_programa
+        pasta_boletins = pasta_staging
+        print(f"[config] Usando staging: {pasta_boletins}")
+    elif pasta_boletins is None:
+        pasta_boletins = Path("JORNAIS")
+
+    # Determinar pasta de saída
+    if pasta_saida is None:
+        pasta_saida = Path(f"data/processed/PRODUCAO_2026/{programa.upper()}")
+
+    # Roteiro de corte
+    roteiro_corte = None
     if programa == "giro":
         roteiro_corte = "GIRO_CABEÇA_CORPO"
+
+    # Mínimo de boletins
+    minimo = 4 if programa == "njud" else 3
 
     config = ConfigPrograma(
         nome=programa,
@@ -619,6 +701,8 @@ def main():
         usar_separacao_stems=usar_stems,
         modo_dual=modo_dual,
         analisador_ativo=analisador_ativo,
+        usar_staging=usar_staging,
+        data_programa=data_programa,
     )
 
     if modo_dual:
