@@ -94,7 +94,18 @@ def produzir(programa: str, data_exibicao: date, codigo: str | None = None) -> d
         if programa == "njud":
             selecao = selecionar_boletins_njud(data_exibicao, boletins_drive, codigo)
         elif programa == "giro":
-            selecao = selecionar_boletins_giro(data_exibicao, boletins_drive, codigo)
+            try:
+                selecao = selecionar_boletins_giro(data_exibicao, boletins_drive, codigo)
+            except ValueError as e:
+                # Fallback: se não há boletins na janela (início do ano),
+                # usa boletins do próprio dia
+                if "apenas 0 boletins na janela" in str(e):
+                    from regras.livro import JanelaColeta
+                    print(f"[regras] Janela vazia — usando boletins do dia {data_exibicao}")
+                    janela_fallback = JanelaColeta(data_inicio=data_exibicao, data_fim=data_exibicao)
+                    selecao = selecionar_boletins_giro(data_exibicao, boletins_drive, codigo, janela=janela_fallback)
+                else:
+                    raise
         elif programa == "boletim":
             selecao = processar_boletim_stems(data_exibicao, boletins_drive)
         else:

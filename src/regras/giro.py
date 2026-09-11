@@ -89,6 +89,7 @@ def selecionar_boletins_giro(
     janela_dias: int = 6,
     evitar_natal: bool = FILTRAR_NATAL_PADRAO,
     filtrar_institucional: bool = FILTRAR_INSTITUCIONAL_TJRN_PADRAO,
+    janela: Optional[JanelaColeta] = None,
 ) -> SelecaoBoletins:
     """
     Seleciona boletins para o GIRO com filtro geográfico.
@@ -118,7 +119,10 @@ def selecionar_boletins_giro(
     # Importação lazy para evitar circularidade
     from giro.filtro import ClassificacaoGiro, filtrar_nota
 
-    janela = calcular_janela_semana_anterior(data_exibicao, dias=janela_dias)
+    if janela is None:
+        janela = calcular_janela_semana_anterior(data_exibicao, dias=janela_dias)
+    else:
+        print(f"[giro] Usando janela customizada: {janela.data_inicio} – {janela.data_fim}")
 
     # Coletar boletins na janela
     boletins_na_janela: list[OrigemBoletim] = []
