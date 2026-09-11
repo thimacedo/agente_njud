@@ -191,7 +191,18 @@ def listar_tarefas_pendentes(config: ConfigPrograma) -> list[dict]:
                 pass
         tarefas.append({"arquivo": str(arq), "stem": arq.stem})
 
-    # Aplicar limite máximo de boletins por programa (Fase 1)
+        # Se os arquivos já foram selecionados (staging), processar todos
+        # sem aplicar limite de max_boletins_por_programa
+        if config.usar_staging and config.data_programa:
+            tarefas = []
+            for arq in sorted(config.pasta_boletins.rglob("*.mp3")):
+                nome = arq.name
+                if "_v2" in nome or "_RESTORED" in nome or "__" in nome:
+                    continue
+                tarefas.append({"arquivo": str(arq), "stem": arq.stem})
+            return tarefas
+    
+        # Aplicar limite máximo de boletins por programa (Fase 1)
     # Filtra versões duplicadas e limita a N boletins (cada boletim = CABEÇA + CORPO = 2 arquivos)
     if config.max_boletins_por_programa:
         # Filtrar apenas boletins principais (sem _v2, _RESTORED, _1782542963, etc.)
@@ -263,6 +274,22 @@ def processar_um_arquivo(
     nome_boletim = Path(arquivo).stem
     pasta_boletim = pasta_cortes / nome_boletim
     pasta_boletim.mkdir(parents=True, exist_ok=True)
+
+    # Se o arquivo JÁ é CABEÇA ou CORPO (de JORNAIS_DIVIDIDOS),
+    # copia diretamente sem tentar dividir novamente
+    nome_upper = Path(arquivo).name.upper()
+    if "_CABECA" in nome_upper or "_CORPO" in nome_upper:
+        import shutil
+        destino = pasta_boletim / Path(arquivo).name
+        shutil.copy2(arquivo, destino)
+        logger.info("skip_divisao", f"Arquivo já dividido, copiado: {Path(arquivo).name}")
+        # Marcar como OK no estado
+        from core.processamento.estado_arquivo import EstadoArquivo
+        estado.status = "OK"
+        estado.arquivo_cabeca = str(destino) if "_CABECA" in nome_upper else None
+        estado.arquivo_corpo = str(destino) if "_CORPO" in nome_upper else None
+        salvar_estado(estado, config.pasta_estado)
+        return estado
 
     # Etapa 0 (opcional): separação de stems para remover trilha/vinheta
     arquivo_para_corte = arquivo
