@@ -74,6 +74,7 @@ def executar_single(json_path: Path, pasta_boletins: Path, pasta_saida: Path) ->
     cfg_dict = carregar_json(json_path)
 
     codigo = cfg_dict["codigo"]
+    nome_programa = cfg_dict["programa"].lower()
     data_exibicao = cfg_dict.get("data_exibicao", "?")
     janela = cfg_dict.get("janela_coleta", {})
     params = cfg_dict.get("parametros", {})
@@ -90,8 +91,38 @@ def executar_single(json_path: Path, pasta_boletins: Path, pasta_saida: Path) ->
         log.warning("Gate de montagem: %d dias < %d mínimos — ajuste manual pode ser necessário",
                      dias_disponiveis, minimo)
 
-    # Monta configuração
-    config = configurar_pipeline(cfg_dict, pasta_boletins, pasta_saida)
+    # Detecta pasta base do programa na raiz (GIRO/, NJUD/, BOLETIM/)
+    pasta_programa = ROOT / nome_programa.upper()
+    pasta_programa.mkdir(parents=True, exist_ok=True)
+
+    # Subpastas operacionais dentro da pasta do programa
+    pasta_saida_prog = pasta_programa / "output" / codigo
+    pasta_estado_prog = pasta_programa / "state" / codigo
+    pasta_logs_prog = pasta_programa / "logs" / codigo
+    pasta_cache_prog = pasta_programa / "cache" / codigo
+    pasta_tmp_prog = pasta_programa / "tmp" / codigo
+
+    for p in [pasta_saida_prog, pasta_estado_prog, pasta_logs_prog, pasta_cache_prog, pasta_tmp_prog]:
+        p.mkdir(parents=True, exist_ok=True)
+
+    log.info("Pasta base: %s", pasta_programa)
+    log.info("Saída: %s", pasta_saida_prog)
+
+    # Monta configuração usando a pasta do programa como base
+    config = ConfigPrograma(
+        nome=nome_programa,
+        pasta_boletins=pasta_boletins,
+        pasta_saida=pasta_saida_prog,
+        pasta_estado=pasta_estado_prog,
+        pasta_log=pasta_logs_prog,
+        modelo_whisper="tiny",
+        compute_type="int8",
+        roteiro_corte="GIRO_CABEÇA_CORPO" if nome_programa == "giro" else None,
+        minimo_boletins_para_montar=params.get("boletins_minimos", 4),
+        usar_separacao_stems=params.get("usar_separacao_stems", params.get("usar_demucs", False)),
+        data_inicio_coleta=janela.get("inicio"),
+        data_fim_coleta=janela.get("fim"),
+    )
 
     # Executa
     log.info("Iniciando processamento (%d boletins esperados)...", dias_disponiveis)
@@ -101,26 +132,22 @@ def executar_single(json_path: Path, pasta_boletins: Path, pasta_saida: Path) ->
     return resultado
 
 
-def main() -> None:
+
+
+
+if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Executor único do pipeline unificado (NJUD e Giro)."
+        description="Executor único do pipeline unificado (NJUD, BOLETIM, GIRO)."
     )
     parser.add_argument(
         "planejamento",
         type=str,
-        help="Caminho para JSON de planejamento ou pasta config/planejamento_2026/",
+        help="Caminho para JSON de planejamento ou pasta GIRO/planejamento_2026/",
     )
     parser.add_argument(
         "--boletins",
         type=str,
-        default="data/processed/PRODUCAO_2026/JORNAIS_DIVIDIDOS",
-        help="Pasta base dos boletins (padrão: JORNAIS_DIVIDIDOS)",
-    )
-    parser.add_argument(
-        "--saida",
-        type=str,
-        default="data/processed/PRODUCAO_2026",
-        help="Pasta de saída (padrão: data/processed/PRODUCAO_2026)",
+        help="Pasta base dos boletins (padrão: H:/Meu Drive/RADIO TJRN CONTEUDO/00_PRODUCAO_2026/01_BOLETINS_DIARIOS/03_AUDIOS_RADIO/)",
     )
     parser.add_argument(
         "--mes",
@@ -137,33 +164,30 @@ def main() -> None:
     if args.debug:
         logging.getLogger().setLevel(logging.DEBUG)
 
-    pasta_boletins = Path(args.boletins)
-    pasta_saida = Path(args.saida)
+    # Pasta base dos boletins (cortes já processados localmente)
+    BOLETINS_BASE = ROOT / "data" / "processed" / "PRODUCAO_2026" / "JORNAIS_DIVIDIDOS"
+    pasta_boletins = Path(args.boletins) if args.boletins else BOLETINS_BASE
 
     plan_path = Path(args.planejamento)
 
     # É pasta ou arquivo?
     if plan_path.is_dir():
         if args.mes:
-            padrao = f"giro_{args.mes}*.json"
+            padrao = f"*_{args.mes}*.json"
             jsons = sorted(plan_path.glob(padrao))
             if not jsons:
                 log.error("Nenhum JSON encontrado para o mês %s em %s", args.mes, plan_path)
                 sys.exit(1)
         else:
-            jsons = sorted(plan_path.glob("giro_*.json"))
+            jsons = sorted(plan_path.glob("*.json"))
 
         if not jsons:
-            log.error("Nenhum arquivo giro_*.json encontrado em %s", plan_path)
+            log.error("Nenhum arquivo JSON encontrado em %s", plan_path)
             sys.exit(1)
 
         log.info("Encontrados %d programa(s) em %s", len(jsons), plan_path)
         for j in jsons:
-            executar_single(j, pasta_boletins, pasta_saida)
+            executar_single(j, pasta_boletins, ROOT)
 
     else:
-        executar_single(plan_path, pasta_boletins, pasta_saida)
-
-
-if __name__ == "__main__":
-    main()
+        executar_single(plan_path, pasta_boletins, ROOT)
