@@ -50,8 +50,7 @@ __pycache__/
 temp_processing/
 output_boletins/
 
-# Empty / placeholder dirs
-config/
+
 
 # IDE
 .vscode/
@@ -61,4 +60,13 @@ config/
 
 # Reportes grandes
 relatorio_exploracao_20260905.md
-config/
+
+# Subprojetos (não rastrear)
+gravador_inteligente/
+projeto_etapa_final_2026/
+
+# Drive H: (nunca rastrear)
+H/
+
+# Quarentena
+.trash/
