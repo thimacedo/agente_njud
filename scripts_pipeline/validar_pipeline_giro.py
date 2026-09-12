@@ -88,37 +88,52 @@ def main():
     try:
         resultado = processar_lote(config)
         
-        log.info(f"=== RESULTADO DO PROCESSAMENTO ===")
-        log.info(f"Status: {resultado.status}")
-        log.info(f"Arquivos gerados: {len(resultado.arquivos_gerados)}")
+        log.info("=== RESULTADO DO PROCESSAMENTO ===")
         
-        for arq in resultado.arquivos_gerados:
-            log.info(f"  - {arq.name}")
+        # resultado pode ser dict ou objeto
+        if isinstance(resultado, dict):
+            status_val = resultado.get("status", resultado.get("total", "?"))
+            ok_val = resultado.get("ok", 0)
+            total_val = resultado.get("total", len(resultado.get("arquivos_gerados", [])))
+            erros_lista = resultado.get("erros", [])
+            arquivos = resultado.get("arquivos_gerados", [])
+        else:
+            status_val = getattr(resultado, "status", "?")
+            ok_val = getattr(resultado, "ok", 0)
+            total_val = getattr(resultado, "total", len(getattr(resultado, "arquivos_gerados", [])) if hasattr(resultado, "arquivos_gerados") else "?")
+            erros_lista = getattr(resultado, "erros", [])
+            arquivos = getattr(resultado, "arquivos_gerados", [])
         
-        log.info(f"Erros: {len(resultado.erros)}")
-        for err in resultado.erros:
-            log.error(f"  - {err}")
+        log.info("Status: %s", status_val)
+        log.info("Total: %s | OK: %s | Erros: %d", total_val, ok_val, len(erros_lista))
         
-        if resultado.status == "ok":
-            log.info("✅ Pipeline processou com sucesso")
+        for arq in arquivos:
+            nome = arq.name if hasattr(arq, "name") else str(arq)
+            log.info("  - %s", nome)
+        
+        for err in erros_lista:
+            log.error("  - %s", err)
+        
+        if status_val not in ("erro", "falha"):
+            log.info("Pipeline processou com sucesso")
             
             corte_dir = pasta_saida_prog / "cortes"
             if corte_dir.exists():
                 cortes = list(corte_dir.glob("*/vocals_CABECA.wav"))
-                log.info(f"Cortes encontrados: {len(cortes)}")
+                log.info("Cortes encontrados: %d", len(cortes))
                 
                 for corte in cortes:
                     from pydub import AudioSegment
                     audio = AudioSegment.from_file(corte)
                     duracao = len(audio) / 1000.0
-                    log.info(f"  - {corte.parent.name}: {duracao:.2f}s")
+                    log.info("  - %s: %.2fs", corte.parent.name, duracao)
                     
                     if duracao < 10.0:
-                        log.info(f"    ✅ CABEÇA com duração plausível (vinheta provavelmente removida)")
+                        log.info("    OK: CABEÇA plausível (vinheta provavelmente removida)")
                     else:
-                        log.warning(f"    ⚠ CABEÇA com duração alta ({duracao:.2f}s) — verificar se vinheta foi removida")
+                        log.warning("    VERificar: CABEÇA %.2fs — pode ter vinheta", duracao)
         else:
-            log.warning(f"⚠ Pipeline terminou com status: {resultado.status}")
+            log.warning("Pipeline terminou com status: %s", status_val)
         
         return 0
         
