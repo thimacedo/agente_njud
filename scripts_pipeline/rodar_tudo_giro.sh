@@ -23,8 +23,9 @@ log "Fonte (H:): $FONTE_H"
 log "Saída:      $SAIDA"
 log "Planos:     $PLANOS"
 log ""
+mkdir -p "$SAIDA/_logs"
 
-log "Verificando plano de executação..."
+log "Verificando plano de execução..."
 
 total=0
 sucesso=0

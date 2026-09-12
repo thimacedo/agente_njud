@@ -155,6 +155,12 @@ if __name__ == "__main__":
         help="Filtra por mês (ex: 01 para janeiro). Só usado com pasta.",
     )
     parser.add_argument(
+        "--saida",
+        type=Path,
+        default=None,
+        help="Pasta base de saída (se omitido, usa data/processed/PRODUCAO_2026/)",
+    )
+    parser.add_argument(
         "--debug",
         action="store_true",
         help="Log em nível DEBUG",

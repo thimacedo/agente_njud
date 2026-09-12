@@ -12,7 +12,6 @@ Nenhum outro módulo deve acessar H: diretamente.
 """
 from __future__ import annotations
 
-import hashlib
 import logging
 import shutil
 from datetime import date
@@ -41,18 +40,6 @@ STAGING_DIR = {
 # ===========================================================================
 # FUNÇÕES AUXILIARES
 # ===========================================================================
-
-
-def _calcular_md5(caminho: Path, chunk_size: int = 8192) -> str:
-    """Calcula MD5 de um arquivo."""
-    h = hashlib.md5()
-    with open(caminho, "rb") as f:
-        while True:
-            chunk = f.read(chunk_size)
-            if not chunk:
-                break
-            h.update(chunk)
-    return h.hexdigest()
 
 
 def _diretorio_staging(programa: TipoPrograma, data: date) -> Path:
@@ -196,14 +183,13 @@ def verificar_integridade(
             origem = origens[nome].caminho_absoluto
             if origem.exists():
                 tamanho_origem = origem.stat().st_size
-                if tamanho_origem > 0:
-                    ratio = tamanho_destino / tamanho_origem
-                    if ratio < 0.99 or ratio > 1.01:
-                        logger.error(
-                            f"Integridade: tamanho divergente para {nome}: "
-                            f"origem={tamanho_origem}, destino={tamanho_destino}"
-                        )
-                        return False
+                if tamanho_destino != tamanho_origem:
+                    logger.error(
+                        f"Integridade: tamanho divergente para {nome}: "
+                        f"origem={tamanho_origem}, destino={tamanho_destino}"
+                    )
+                    return False
+                # Tamanho idêntico confirma integridade para este arquivo
 
     logger.info(f"Integridade OK: {len(arquivos)} arquivo(s) verificado(s)")
     return True
@@ -238,6 +224,13 @@ def limpar_staging(programa: TipoPrograma, data: date, confirmar: bool = True) -
     Returns:
         True se removeu com sucesso
     """
+    if data == date.today():
+        logger.warning(
+            f"Remoção de staging bloqueada: {programa.value}/{data} "
+            "é o dia corrente e não pode ser removido."
+        )
+        return False
+
     diretorio = _diretorio_staging(programa, data)
     if not diretorio.exists():
         return True

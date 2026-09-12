@@ -1,9 +1,9 @@
 # Data files - fuente y productos pesados
 data/
-JORNAIS/
-BOLETIM/
-GIRO/
-NJUD/
+/JORNAIS/
+/BOLETIM/
+/GIRO/
+/NJUD/
 orch/
 downloads/
 logs/
@@ -70,3 +70,4 @@ H/
 
 # Quarentena
 .trash/
+# Assets de áudio (binários, não versionar)
