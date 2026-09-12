@@ -38,6 +38,16 @@ from core.stems.separacao_stems import (
 
 # --- Remoção de vinheta de boletim (Camada A / Fase 2) ---
 from core.audio.remocao_vinheta import remover_vinheta_boletim
+from core.audio.deteccao_vinheta_espectral import (
+    vinheta_presente_por_correlacao,
+    LIMIAR_CORRELACAO as LIMIAR_CORRELACAO_VINHETA,
+)
+
+# Duração real medida (ffprobe, 2026-09-12) de
+# assets/vinhetas/boletim/VHT_ABERTURA_BOLETIM.mp3 = 6.6383s. Sem margem:
+# falso positivo aqui dispara retry de estratégia, não reprovação direta.
+# Se a vinheta de referência for trocada, remedir com ffprobe — não estimar.
+DURACAO_VINHETA_ABERTURA_S = 6.64
 
 import uuid
 
@@ -291,60 +301,6 @@ def processar_um_arquivo(
         salvar_estado(estado, config.pasta_estado)
         return estado
 
-    # Etapa 0 (opcional): separação de stems para remover trilha/vinheta
-    arquivo_para_corte = arquivo
-    if config.usar_separacao_stems:
-        try:
-            resultado_stems = separar_stems(arquivo, config.config_stems)
-            if resultado_stems.sucesso:
-                arquivo_para_corte = resultado_stems.caminho_vocal
-                logger.info(
-                    "stems",
-                    f"Stems separados: {Path(arquivo).name} "
-                    f"(cache={'hit' if resultado_stems.veio_do_cache else 'miss'}, "
-                    f"{resultado_stems.tempo_processamento_s:.1f}s)",
-                )
-            else:
-                logger.aviso(
-                    "stems",
-                    f"Falha na separação para {Path(arquivo).name}: {resultado_stems.erro}. "
-                    f"Prosseguindo com áudio original.",
-                )
-        except SeparacaoStemsError as exc:
-            logger.aviso(
-                "stems",
-                f"Falha na separação para {Path(arquivo).name}: {exc}. "
-                f"Prosseguindo com áudio original.",
-            )
-    else:
-        # Camada A: tenta remover apenas a vinheta de boletim via
-        # detecção por transcrição. Rede de segurança leve quando
-        # Demucs está desabilitado (caso atual de todos os giro_*.json).
-        try:
-            _project_root = Path(__file__).resolve().parents[3]
-            vinheta_ref = _project_root / "assets" / "vinhetas" / "boletim" / "VHT_ABERTURA_BOLETIM.mp3"
-            audio_limpo = remover_vinheta_boletim(Path(arquivo), vinheta_ref)
-            if audio_limpo is not None:
-                tmp_dir = Path("data/tmp")
-                tmp_dir.mkdir(parents=True, exist_ok=True)
-                arquivo_para_corte = tmp_dir / f"sem_vinheta_{uuid.uuid4().hex}.wav"
-                audio_limpo.export(str(arquivo_para_corte), format="wav")
-                logger.info(
-                    "Vinheta de boletim removida antes do corte: %s",
-                    Path(arquivo).name,
-                )
-            else:
-                # Não detectada (ou erro) — segue com o áudio original.
-                # RegraVinhetaBoletimAusente (Camada C) pega o caso residual.
-                arquivo_para_corte = arquivo
-        except Exception as exc:
-            logger.aviso(
-                "vinheta",
-                f"Falha ao tentar remover vinheta para {Path(arquivo).name}: {exc}. "
-                f"Prosseguindo com áudio original.",
-            )
-            arquivo_para_corte = arquivo
-
     # --- Decisão adaptativa de estratégia (NOVO — Fase 5) ---
     decisao_id = uuid.uuid4().hex
     plano = None
@@ -385,6 +341,7 @@ def processar_um_arquivo(
     # Etapa 0 (opcional): separação de stems para remover trilha/vinheta
     arquivo_para_corte = arquivo
     usar_stems = False
+    vinheta_removida = False  # rastreado para a Camada D (correlação) abaixo
 
     # Se Analisador sugeriu stems, usa-o; senão usa o JSON config
     if plano and plano.usar_stems:
@@ -397,6 +354,7 @@ def processar_um_arquivo(
             resultado_stems = separar_stems(arquivo, config.config_stems)
             if resultado_stems.sucesso:
                 arquivo_para_corte = resultado_stems.caminho_vocal
+                vinheta_removida = True  # stems removem a trilha inteira
                 logger.info(
                     "stems",
                     f"Stems separados: {Path(arquivo).name} "
@@ -428,6 +386,7 @@ def processar_um_arquivo(
                 tmp_dir.mkdir(parents=True, exist_ok=True)
                 arquivo_para_corte = tmp_dir / f"sem_vinheta_{uuid.uuid4().hex}.wav"
                 audio_limpo.export(str(arquivo_para_corte), format="wav")
+                vinheta_removida = True
                 logger.info(
                     "Vinheta de boletim removida antes do corte: %s",
                     Path(arquivo).name,
@@ -478,11 +437,54 @@ def processar_um_arquivo(
 
             cabeca, corpo = resultado.arquivo_cabeca, resultado.arquivo_corpo
 
+            # --- Camada D: correlação de forma de onda, só quando a Camada A
+            # não removeu a vinheta. Sinal independente de transcrição. Em
+            # caso de detecção, força escalonamento de estratégia (retry),
+            # não reprovação direta.
+            vinheta_residual_detectada = False
+            correlacao_vinheta = 0.0
+            if not vinheta_removida:
+                try:
+                    _vinheta_ref = (
+                        Path(__file__).resolve().parents[3]
+                        / "assets" / "vinhetas" / "boletim" / "VHT_ABERTURA_BOLETIM.mp3"
+                    )
+                    vinheta_residual_detectada, correlacao_vinheta = (
+                        vinheta_presente_por_correlacao(
+                            Path(cabeca), _vinheta_ref,
+                            duracao_vinheta_s=DURACAO_VINHETA_ABERTURA_S,
+                        )
+                    )
+                    if vinheta_residual_detectada:
+                        logger.aviso(
+                            "vinheta",
+                            f"Correlação indica vinheta residual em {Path(cabeca).name} "
+                            f"(correlação={correlacao_vinheta:.2f}, "
+                            f"limiar={LIMIAR_CORRELACAO_VINHETA:.2f}) — forçando "
+                            f"escalonamento de estratégia.",
+                        )
+                except Exception as exc:
+                    logger.aviso(
+                        "vinheta",
+                        f"Falha ao checar correlação de vinheta para "
+                        f"{Path(cabeca).name}: {exc}. Prosseguindo sem esse sinal.",
+                    )
+
             # Auditoria SÍNCRONA (código original) — permanece para não quebrar nada
             audit_status, audit_motivos = analisar_par_consolidado(
                 cabeca, corpo,
                 caminho_fonte_original=arquivo,
             )
+
+            # Camada D força reprovação desta tentativa mesmo que a auditoria
+            # por transcrição tenha aprovado — sem isso, seria só um log.
+            if vinheta_residual_detectada and audit_status == "OK":
+                audit_status = "CORTADO"
+                audit_motivos = list(audit_motivos) + [
+                    f"[correlacao_vinheta_residual] correlação={correlacao_vinheta:.2f} "
+                    f">= limiar={LIMIAR_CORRELACAO_VINHETA:.2f} nos primeiros "
+                    f"{DURACAO_VINHETA_ABERTURA_S:.2f}s do CABEÇA."
+                ]
 
             # --- NOVO (Fase 3): Publicar na fila DE AUDITORIA EM PARALELO ---
             if config.modo_dual and FILA_DISPONIVEL and config.fila:
