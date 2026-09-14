@@ -318,26 +318,43 @@ As pastas principais estão limpas e sem misturas entre boletins e jornais.
 
 ---
 
-## 14. Fallback cross-month do GIRO é comportamento intencional (2026-09-14)
+## 14. Fallback cross-month do GIRO existe no código mas NÃO está na cadeia de produção ativa
 
-**Decisão:** O pipeline GIRO nas Comarcas implementa 3 fases de fallback em
-`src/giro/cli.py::processar_giro()`:
+O pipeline GIRO nas Comarcas implementa 3 fases de fallback em
+`src/giro/cli.py::processar_giro()`. **Esta função não é chamada por
+nenhum outro módulo do repositório** (confirmado via
+`grep -rn "processar_giro("` — única ocorrência é a própria definição
+e a chamada em `cli.py::main()`, entry point não usado pelo
+orquestrador).
 
-1. Coleta evitando Natal (`evitar_natal=True`), até `MAX_NOTAS=6`
-2. Se `< MIN_NOTAS(4)`: reprocessa mesmo período aceitando Natal
-3. Se ainda `< 4`: fallback cross-month, copia `GNC_*.mp3` do programa anterior
+A cadeia real que gerou os 33 programas de produção é:
+`rodar_tudo_giro.sh → executar_programa.py →
+core/processamento/processar_boletim.py::processar_lote()`, que NÃO
+implementa fallback por contagem de notas — apenas escalonamento de
+estratégia de corte de áudio (`_proxima_estrategia()`), mecanismo
+diferente.
 
-Esse comportamento é **intencional** e foi introduzido nos commits
-`b9776c5` e `6449fbb`. **Não reverter** para bater com
-`RESUMO_GIRO_2026.md.obsoleto`, que descrevia uma versão anterior sem fallback.
+`docs/RELATORIO_PRODUCAO_GIRO_2026.md` descreve o comportamento de
+3 fases como se fosse o pipeline real — não é. Foi commitado em
+2026-09-07 (mesmo dia dos commits `b9776c5`/`6449fbb` que
+implementaram o fallback no `cli.py`) sem script gerador automático
+(nenhum `.py` referencia "RELATORIO_PRODUCAO_GIRO_2026") — tratá-lo
+com confiança baixa até sua origem ser confirmada. Pode estar
+narrando o comportamento pretendido do `cli.py` como se fosse
+produção real, sem ter verificado a cadeia efetiva.
 
-**Risco conhecido:** programas montados via Fase 3 contêm áudio de semanas
-anteriores sem marcação explícita no áudio final. Rastreabilidade via log
-`[fallback-cross-month]` em `logs/giro/giro_processamento.log`, que agora
-registra a lista real de mmss de origem (commit `93aa393`).
+**Não usar `src/giro/cli.py::processar_giro()` como referência de
+comportamento de produção até uma decisão explícita de migração ser
+tomada.** O log `[fallback-cross-month]` adicionado nesta função
+existe no código (commit `93aa393`) mas nunca será emitido em produção
+enquanto essa função não for chamada por algum orquestrador.
 
-**Motivo:** Garantir que todos os programas tenham 4 notas mínimas mesmo
-quando o período de coleta tem boletins insuficientes. Reverter causaria
-programas com menos de 4 notas e quebraria a regra de negócio do GIRO.
+Fases documentadas (para referência, caso a migração ocorra no futuro):
+ 1. Coleta evitando Natal (evitar_natal=True), até MAX_NOTAS=6
+ 2. Se < MIN_NOTAS(4): reprocessa mesmo período aceitando Natal
+ 3. Se ainda < 4: fallback cross-month, copia GNC_*.mp3 do programa anterior
 
-**Proibido reverter:** excluir a quarentena sem confirmação explícita do operador.
+Introduzido nos commits `b9776c5` e `6449fbb` em `src/giro/cli.py`.
+Se a cadeia de produção for migrada para usar `processar_giro()` no
+futuro, registrar a decisão de migração explicitamente antes — não
+assumir que o comportamento do `cli.py` é o mesmo do `processar_lote()`.

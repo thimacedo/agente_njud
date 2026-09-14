@@ -57,11 +57,18 @@ Estes três não aparecem em nenhum ponto da cadeia acima:
   corrigido nesta conversa (bug de contagem `// 2`, filtro de boletim
   incompleto). Não é importado por `executar_programa.py` nem por
   `processar_boletim.py`.
-- **`src/giro/*`** (`cli.py`, `transcricao.py`, `filtro.py`,
-  `montagem.py`, `plano.py`, `sync_drive.py`) — documentado inteiro em
-  `AGENTE_GIRO.md` como se fosse o pipeline real. `cli.py` importa
-  `from .transcricao import processar_boletim`, mas nada na cadeia real
-  chama `python -m giro` ou importa `src.giro`.
+- **`src/giro/cli.py::processar_giro()`** — CONFIRMADO não chamado por
+  nenhum outro módulo (`grep -rn "processar_giro("` retorna só a
+  definição e a chamada em `main()`, entry point morto). Contém o
+  fallback de 3 fases (Natal → cross-month) descrito em
+  `docs/RELATORIO_PRODUCAO_GIRO_2026.md`, mas essa lógica não roda em
+  produção. Correção de erro anterior deste documento: a versão
+  anterior desta seção afirmava "nada importa `src.giro`" — falso.
+  Outros módulos do pacote (`giro.utils`, `giro.montagem`, `giro.log`)
+  SÃO importados por `scripts_pipeline/gerar_programas_giro.py` e
+  `frontend/server.py`, mas apenas para geração de plano e montagem de
+  áudio já processado — não para a seleção/filtragem de notas com
+  fallback, que só existe dentro de `processar_giro()`.
 - **`sync/coletor.py`** — escrito e corrigido nesta conversa (tolerância
   de tamanho, proteção de staging do dia corrente). Não aparece na
   cadeia real; `executar_programa.py` recebe `--boletins <H:>`
