@@ -316,4 +316,28 @@ de origem/processamento. Isso quebrou a distinção fundamental do fluxo:
 Foram isolados **58** arquivos com ano `2027` encontrados nas pastas-alvo.
 As pastas principais estão limpas e sem misturas entre boletins e jornais.
 
+---
+
+## 14. Fallback cross-month do GIRO é comportamento intencional (2026-09-14)
+
+**Decisão:** O pipeline GIRO nas Comarcas implementa 3 fases de fallback em
+`src/giro/cli.py::processar_giro()`:
+
+1. Coleta evitando Natal (`evitar_natal=True`), até `MAX_NOTAS=6`
+2. Se `< MIN_NOTAS(4)`: reprocessa mesmo período aceitando Natal
+3. Se ainda `< 4`: fallback cross-month, copia `GNC_*.mp3` do programa anterior
+
+Esse comportamento é **intencional** e foi introduzido nos commits
+`b9776c5` e `6449fbb`. **Não reverter** para bater com
+`RESUMO_GIRO_2026.md.obsoleto`, que descrevia uma versão anterior sem fallback.
+
+**Risco conhecido:** programas montados via Fase 3 contêm áudio de semanas
+anteriores sem marcação explícita no áudio final. Rastreabilidade via log
+`[fallback-cross-month]` em `logs/giro/giro_processamento.log`, que agora
+registra a lista real de mmss de origem (commit `93aa393`).
+
+**Motivo:** Garantir que todos os programas tenham 4 notas mínimas mesmo
+quando o período de coleta tem boletins insuficientes. Reverter causaria
+programas com menos de 4 notas e quebraria a regra de negócio do GIRO.
+
 **Proibido reverter:** excluir a quarentena sem confirmação explícita do operador.
