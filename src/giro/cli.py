@@ -275,12 +275,13 @@ def processar_giro(
 
             # Buscar programas anteriores do mesmo mês (mmss-1, mmss-2, ...)
             mmss_anterior = mmss_num - 1
+            notas_copiadas = 0
+            origens_usadas = []
             # Limite: primeiro programa do mês OU último programa do mês anterior (cross-month)
             limite_inferior = mes_atual * 100 + 1
             if mmss_anterior < limite_inferior:
                 # Primeiro programa do mês: permitir buscar no último do mês anterior
                 limite_inferior = (mes_atual - 1) * 100 + 1 if mes_atual > 1 else 1201
-            notas_copiadas = 0
 
             while mmss_anterior >= limite_inferior and len(notas_aceitas_total) < MIN_NOTAS:
                 mmss_str = f"{mmss_anterior:04d}"
@@ -305,6 +306,7 @@ def processar_giro(
                             shutil.copy2(str(nota_orig), str(destino))
                             notas_aceitas_total.append(destino)
                             notas_copiadas += 1
+                            origens_usadas.append(mmss_str)
                             log_info(
                                 "fallback-mensal",
                                 f"    ✓ Nota copiada: {nota_orig.name} ← {mmss_str}",
@@ -313,6 +315,12 @@ def processar_giro(
                 mmss_anterior -= 1
 
             if notas_copiadas > 0:
+                origens_fmt = ",".join(sorted(set(origens_usadas)))
+                log_info(
+                    "fallback-cross-month",
+                    f"mmss={mmss} | notas_reaproveitadas_de={origens_fmt} | "
+                    f"qtd={notas_copiadas} | total_agora={len(notas_aceitas_total)}",
+                )
                 log_info(
                     "fallback-mensal",
                     f"  📅 {mmss}: {notas_copiadas} nota(s) recuperada(s) de semanas anteriores. "

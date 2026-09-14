@@ -74,6 +74,14 @@ uma decisão de projeto separada, não uma correção de bug.
 
 ## Ainda não verificado (INFERÊNCIA — verificar antes de confiar)
 
+- **Plano do GIRO nas Comarcas**: o plano é gerado em memória por
+  `src/giro/utils.py::gerar_plano(ano)` (52 programas/ano, 12 meses) e executado por
+  `src/giro/cli.py::processar_giro()`. Os JSONs em `config/planejamento_2026/` são
+  resquício do executor shell antigo (`scripts_pipeline/executar_programa.py`) e param
+  em agosto; não são usados pelo pipeline atual. O `RESUMO_GIRO_2026.md` foi gerado
+  por esse script shell com `MESES_FIM=8` e está desatualizado — renomeado para
+  `RESUMO_GIRO_2026.md.obsoleto`. Fonte de verdade: código-fonte `src/giro/`.
+
 - **Regras de negócio efetivas do GIRO em produção**: `gerar_planejamento_giro.py`
   gera os JSONs com `boletins_minimos: 4`, `corte_por_silencio: True`,
   `fallback_audio_completo: False` — isto é DIFERENTE do que
