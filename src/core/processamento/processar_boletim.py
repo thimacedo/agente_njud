@@ -150,11 +150,34 @@ def salvar_estado(estado: EstadoArquivo, pasta_estado: Path) -> None:
     )
 
 
+def _extrair_data_da_pasta(pasta: Path) -> date | None:
+    """Extrai data (dia, mês) a partir do nome da pasta pai.
+    Formato esperado: 'DD MM - DIA_DA_SEMANA' (ex: '03 07 - SEX', '26 06 - SEX').
+    Assume ano atual (2026 para este projeto). Retorna None se não conseguir.
+    """
+    import re
+    from datetime import date
+
+    m = re.match(r'(\d{2})\s+(\d{2})\s*[-–]', pasta.name)
+    if m:
+        dia, mes = int(m.group(1)), int(m.group(2))
+        ano = date.today().year
+        try:
+            return date(ano, mes, dia)
+        except ValueError:
+            pass
+    return None
+
+
 def listar_tarefas_pendentes(config: ConfigPrograma) -> list[dict]:
     """Lista arquivos MP3 sem estado OK/ESGOTADO_ACEITO, filtrados pela janela de datas se configurada.
-    
+
     Aplica max_boletins_por_programa para limitar a coleta e evitar supercoleta
     que causa 10-41 notas por programa (Fase 1 do plano de correção).
+
+    Para programas Giro com janela de datas, extrai a data do nome do arquivo
+    (formato DD_MM_YYYY). Se a data não bater na janela OU o regex falhar,
+    usa a pasta pai como fallback (formato 'DD MM - DIA_DA_SEMANA').
     """
     import re
     from datetime import date
@@ -179,17 +202,23 @@ def listar_tarefas_pendentes(config: ConfigPrograma) -> list[dict]:
             tarefas.append({"arquivo": str(arq), "stem": arq.stem})
             continue
 
-        # Filtro de janela de datas (Giro): extrai data via regex
+        # Filtro de janela de datas (Giro): extrai data via regex do nome
+        dt_arq = None
         m = re.search(r'BOLETIM_RADIO_TJRN_(\d{2})_(\d{2})_(\d{4})_', arq.name)
-        if not m:
-            continue
-        try:
-            dia, mes, ano = int(m.group(1)), int(m.group(2)), int(m.group(3))
-            dt_arq = date(ano, mes, dia)
-            if not (data_inicio <= dt_arq <= data_fim):
+        if m:
+            try:
+                dia, mes, ano = int(m.group(1)), int(m.group(2)), int(m.group(3))
+                dt_arq = date(ano, mes, dia)
+            except ValueError:
+                pass
+
+        # Se regex falhou ou data está fora da janela, tenta pela pasta pai
+        if dt_arq is None or not (data_inicio <= dt_arq <= data_fim):
+            dt_pasta = _extrair_data_da_pasta(arq.parent)
+            if dt_pasta is not None and data_inicio <= dt_pasta <= data_fim:
+                dt_arq = dt_pasta
+            else:
                 continue
-        except ValueError:
-            continue
 
         caminho_estado = config.pasta_estado / f"{arq.stem}.json"
         if caminho_estado.exists():
@@ -201,19 +230,18 @@ def listar_tarefas_pendentes(config: ConfigPrograma) -> list[dict]:
                 pass
         tarefas.append({"arquivo": str(arq), "stem": arq.stem})
 
-        # Se os arquivos já foram selecionados (staging), processar todos
-        # sem aplicar limite de max_boletins_por_programa
-        if config.usar_staging and config.data_programa:
-            tarefas = []
-            for arq in sorted(config.pasta_boletins.rglob("*.mp3")):
-                nome = arq.name
-                if "_v2" in nome or "_RESTORED" in nome or "__" in nome:
-                    continue
-                tarefas.append({"arquivo": str(arq), "stem": arq.stem})
-            return tarefas
-    
-        # Aplicar limite máximo de boletins por programa (Fase 1)
-    # Filtra versões duplicadas e limita a N boletins (cada boletim = CABEÇA + CORPO = 2 arquivos)
+    # Se os arquivos já foram selecionados (staging), processar todos
+    # sem aplicar limite de max_boletins_por_programa
+    if config.usar_staging and config.data_programa:
+        tarefas = []
+        for arq in sorted(config.pasta_boletins.rglob("*.mp3")):
+            nome = arq.name
+            if "_v2" in nome or "_RESTORED" in nome or "__" in nome:
+                continue
+            tarefas.append({"arquivo": str(arq), "stem": arq.stem})
+        return tarefas
+
+    # Aplica limite máximo de boletins por programa (Fase 1)
     if config.max_boletins_por_programa:
         # Filtrar apenas boletins principais (sem _v2, _RESTORED, _1782542963, etc.)
         boletins_principais = []
@@ -222,19 +250,19 @@ def listar_tarefas_pendentes(config: ConfigPrograma) -> list[dict]:
             if "_v2" in nome or "_RESTORED" in nome or "__" in nome:
                 continue
             boletins_principais.append(t)
-        
+
         # Ordenar por número de boletim (B1, B2, ... B10) para priorizar os primeiros
         def num_boletim(t):
             m = re.search(r'B(\d+)', t["stem"])
             return int(m.group(1)) if m else 999
-        
+
         boletins_principais.sort(key=num_boletim)
-        
+
         # Cada boletim tem 2 arquivos (CABEÇA + CORPO), então limite = max_boletins * 2
         limite_arquivos = config.max_boletins_por_programa * 2
         if len(boletins_principais) > limite_arquivos:
             boletins_principais = boletins_principais[:limite_arquivos]
-        
+
         tarefas = boletins_principais
 
     return tarefas
