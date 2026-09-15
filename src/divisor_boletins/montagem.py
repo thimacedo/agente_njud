@@ -18,6 +18,8 @@ from typing import Optional
 
 from pydub import AudioSegment
 
+from src.divisor_boletins.bgm_mixer import mix_bgm
+
 from .log import LogPipeline
 
 from config.njud import settings
@@ -199,6 +201,7 @@ def montar_jornal(
     logger: LogPipeline,
     nome_jornal: str = "jornal",
     intercalar: bool = True,
+    usar_ducking: bool = False,
 ) -> Optional[Path]:
     """Monta UM jornal a partir dos cortes _CABECA/_CORPO."""
     etapa = "montagem"
@@ -316,7 +319,14 @@ def montar_jornal(
     trilha_bg = trilha_bg[: len(bloco_cabecas)]
     trilha_bg = trilha_bg.fade_in(500).fade_out(FADE_OUT_TRILHA_MS)
 
-    jornal += bloco_cabecas.overlay(trilha_bg)
+    if usar_ducking:
+        # Auto-ducking dinâmico (RMS da voz): trilha desce durante a fala e
+        # sobe nas pausas, em vez do volume fixo em 20%. Portado de
+        # radioflow/backend/bgm_mixer.py — opt-in, comportamento padrão
+        # (usar_ducking=False) preserva o overlay de volume fixo original.
+        jornal += mix_bgm(bloco_cabecas, str(trilha_escalada_path))
+    else:
+        jornal += bloco_cabecas.overlay(trilha_bg)
 
     # PASSAGEM + CORPOS
     for _, corpo_path in pares:
