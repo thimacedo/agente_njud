@@ -22,6 +22,21 @@ Estrutura:
 
 from __future__ import annotations
 
+import warnings
+
+warnings.warn(
+    "src/giro/* (cli.py, transcricao.py, filtro.py, montagem.py, plano.py, "
+    "sync_drive.py) documentado em AGENTE_GIRO.md como se fosse o pipeline "
+    "real, mas NAO e importado pela cadeia de producao confirmada. O GIRO em "
+    "producao usa scripts_pipeline/executar_programa.py -> "
+    "core.processamento.processar_boletim -> divisor_boletins/audio.py "
+    "(mesmo nucleo do NJUD). Confirmado em ARQUITETURA_REAL.md. Se a intencao "
+    "e migrar para esta arquitetura, e uma decisao de projeto separada, nao "
+    "uma correcao de bug.",
+    DeprecationWarning,
+    stacklevel=2,
+)
+
 __version__ = "0.1.0"
 __project__ = "GIRO nas Comarcas"
 __descripcion__ = (
