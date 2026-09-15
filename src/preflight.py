@@ -80,6 +80,11 @@ def copiar_boletins_de_h(janela_inicio: date, janela_fim: date) -> list[Path]:
     return copiados
 
 
+def verificar_boletins_workspace() -> int:
+    """Conta boletins disponíveis no workspace."""
+    return len(list(WORKSPACE_BOLETINS.rglob("*.mp3")))
+
+
 def preflight_giro(janela_inicio: date, janela_fim: date) -> list[Path]:
     """
     Pré-flight check para o GIRO.
@@ -98,25 +103,31 @@ def preflight_giro(janela_inicio: date, janela_fim: date) -> list[Path]:
     logger.info("PRE-FLIGHT CHECK: GIRO")
     logger.info("Janela: %s a %s", janela_inicio, janela_fim)
     
-    # 1. Verificar H:
+    # 1. Verificar se já há dados no workspace
+    existentes = verificar_boletins_workspace()
+    if existentes > 0:
+        logger.info("✓ Workspace já tem %d boletins — skip sync", existentes)
+        
+        # Listar boletins no workspace na janela
+        boletins_janela = []
+        for mp3 in WORKSPACE_BOLETINS.rglob("*.mp3"):
+            m = re.search(r"BOLETIM_RADIO_TJRN_(\d{2})_(\d{2})_(\d{4})_", mp3.name)
+            if m:
+                dia, mes, ano = int(m.group(1)), int(m.group(2)), int(m.group(3))
+                data_boletim = date(ano, mes, dia)
+                if janela_inicio <= data_boletim <= janela_fim:
+                    boletins_janela.append(mp3)
+        
+        logger.info("✓ %d boletins na janela %s a %s", len(boletins_janela), janela_inicio, janela_fim)
+        logger.info("=" * 60)
+        return boletins_janela
+    
+    # 2. Verificar H:
     if not verificar_h_acessivel():
         raise FileNotFoundError(
             f"Drive H: não acessível. Conecte o Google Drive.\n"
             f"  Caminho esperado: {H_BOLETINS}"
         )
-    
-    # 2. Verificar datas disponíveis em H:
-    datas_h = listar_datas_boletins_h()
-    datas_janela = set()
-    atual = janela_inicio
-    while atual <= janela_fim:
-        datas_janela.add(atual)
-        atual += timedelta(days=1)
-    
-    datas_faltando = datas_janela - datas_h
-    
-    if datas_faltando:
-        logger.warning("Datas faltando em H:: %s", sorted(datas_faltando))
     
     # 3. Copiar boletins de H: para workspace
     logger.info("Copiando boletins de H: para workspace...")
@@ -143,8 +154,7 @@ def preflight_giro(janela_inicio: date, janela_fim: date) -> list[Path]:
         logger.warning(
             "Menos que 4 boletins na janela. "
             "Verifique se os boletins brutos estão em H: "
-            "para as datas %s",
-            sorted(datas_faltando) if datas_faltando else "desconhecidas"
+            "para as datas necessárias"
         )
     
     logger.info("=" * 60)
