@@ -317,3 +317,45 @@ Foram isolados **58** arquivos com ano `2027` encontrados nas pastas-alvo.
 As pastas principais estão limpas e sem misturas entre boletins e jornais.
 
 **Proibido reverter:** excluir a quarentena sem confirmação explícita do operador.
+
+---
+
+## Item 14. Scripts de sync para Drive H: canonia e deprecação (2026-09-15)
+
+**Motivo:**
+Existem 3 scripts de sincronização coexistindo sem marcação de qual é oficial.
+Isso cria risco de dupla escrita / sobrescrita silenciosa no Drive H: (único
+ponto de verdade externo do sistema).
+
+**Cadeia confirmada:**
+
+| Programa | Script canônico | Status dos concorrentes |
+|---|---|---|
+| NJUD | `src/sync/drive.py` (Python, testável) | `scripts_pipeline/sync_drive.sh` → deprecar |
+| GIRO | `src/giro/sync_drive.py` (GIRO-aware) | nenhum concorrente |
+
+**Decisão:**
+1. `src/sync/drive.py` é o sync oficial do NJUD.
+2. `scripts_pipeline/sync_drive.sh` está deprecado — manter como shim que
+   redireciona para `src/sync/drive.py` ou emitir `DeprecationWarning`.
+3. `src/giro/sync_drive.py` é o sync oficial do GIRO (único existente para GIRO).
+
+**Proibido reverter:** rodar `scripts_pipeline/sync_drive.sh` como sync primário
+do NJUD — ele usa regex legada e não é testável.
+
+---
+
+## Item 15. Centralização do modelo Whisper (2026-09-15)
+
+**Motivo:**
+`PLANO_MODULARIZACAO.md` identificou 6+ fontes de verdade divergentes para
+`WHISPER_MODEL`. A refatoração corrigiu 6 de 7 pontos, mas `pipeline/dispatcher.py`
+(linha 124) ficou com `"tiny"` hardcoded.
+
+**Decisão:**
+1. `pipeline/dispatcher.py` agora usa `_settings.MODELO_WHISPER` (importado de
+   `config.njud.settings`), alinhado com todos os outros 6 pontos.
+2. Qualquer mudança de modelo futuro é feita em `config.njud.settings.MODELO_WHISPER`
+   e propaga automaticamente para todo o sistema.
+
+**Proibido reverter:** voltar a hardcoded `"tiny"` em qualquer dispatcher/worker.

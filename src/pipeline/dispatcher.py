@@ -121,7 +121,7 @@ def worker_loop(
 
     if usar_whisper_timestamped:
         import whisper_timestamped as wt
-        modelo_wt = wt.load_model("tiny", device="cpu", compute_type="int8")
+        modelo_wt = wt.load_model(_settings.MODELO_WHISPER, device="cpu", compute_type="int8")
     else:
         modelo_wt = None
 
