@@ -6,8 +6,13 @@ Contratos:
 - Regras universais são imutáveis e aplicáveis a qualquer programa.
 - Este módulo NÃO importa regras específicas de nenhum programa.
 
+REGRAS DE VEICULAÇÃO (IMUTÁVEIS — SÓ MUDAM POR DECISÃO DO OPERADOR):
+- GIRO nas Comarcas: TERÇA-FEIRA (exibição semanal)
+- NJUD: Segunda a Sexta (diário)
+- BOLETIM: Segunda a Sexta (diário)
+
 Tipos definidos:
-- TipoPrograma: enum区分 NJUD / GIRO / BOLETIM
+- TipoPrograma: enum de NJUD / GIRO / BOLETIM
 - OrigemBoletim: identifica um boletim no Drive H:
 - SelecaoBoletins: resultado da seleção de boletins para um programa
 - ResultadoColeta: resultado da cópia para staging
@@ -22,6 +27,20 @@ from datetime import date, timedelta
 from enum import Enum
 from pathlib import Path
 from typing import Optional
+
+
+# ===========================================================================
+# CONSTANTES DE VEICULAÇÃO (IMUTÁVEIS — SÓ MUDAM POR DECISÃO DO OPERADOR)
+# ===========================================================================
+
+# GIRO nas Comarcas: TERÇA-FEIRA (exibição semanal)
+DIA_EXIBICAO_GIRO = 1  # Segunda=0, Terça=1, Quarta=2, ...
+
+# NJUD: Segunda a Sexta (diário)
+DIAS_EXIBICAO_NJUD = [0, 1, 2, 3, 4]  # Seg a Sex
+
+# BOLETIM: Segunda a Sexta (diário)
+DIAS_EXIBICAO_BOLETIM = [0, 1, 2, 3, 4]  # Seg a Sex
 
 
 # ===========================================================================

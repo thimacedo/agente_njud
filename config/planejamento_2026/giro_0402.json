@@ -1,10 +1,10 @@
 {
   "programa": "GIRO",
   "codigo": "0402",
-  "data_exibicao": "2026-04-08",
+  "data_exibicao": "2026-04-07",
   "janela_coleta": {
-    "inicio": "2026-04-02",
-    "fim": "2026-04-07",
+    "inicio": "2026-04-01",
+    "fim": "2026-04-06",
     "dias_totais": 6
   },
   "parametros": {

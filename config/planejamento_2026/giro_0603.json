@@ -1,10 +1,10 @@
 {
   "programa": "GIRO",
   "codigo": "0603",
-  "data_exibicao": "2026-06-17",
+  "data_exibicao": "2026-06-16",
   "janela_coleta": {
-    "inicio": "2026-06-11",
-    "fim": "2026-06-16",
+    "inicio": "2026-06-10",
+    "fim": "2026-06-15",
     "dias_totais": 6
   },
   "parametros": {

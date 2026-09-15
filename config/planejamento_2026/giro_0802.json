@@ -1,10 +1,10 @@
 {
   "programa": "GIRO",
   "codigo": "0802",
-  "data_exibicao": "2026-08-12",
+  "data_exibicao": "2026-08-11",
   "janela_coleta": {
-    "inicio": "2026-08-06",
-    "fim": "2026-08-11",
+    "inicio": "2026-08-05",
+    "fim": "2026-08-10",
     "dias_totais": 6
   },
   "parametros": {
