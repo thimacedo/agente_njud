@@ -1,66 +1,23 @@
 #!/usr/bin/env python3
-"""Processador serial com heartbeat - v2 com filtro correto."""
-import sys, os, json, time, gc
-from pathlib import Path
-from datetime import datetime
+"""DEPRECADO — não é mais um caminho de execução válido.
 
-E = Path("E:/02_Projetos_Trabalho/Projetos_Ativos/DIVISOR")
-sys.path.insert(0, str(E / "src"))
+Use: run_dispatcher.sh (src/pipeline/dispatcher.py)
 
-from divisor_boletins.audio import processar_arquivo, carregar_modelo
-from divisor_boletins.log import LogPipeline
+Motivo: Versão ad-hoc anterior à v3, mesma família de script de lote único.
+Não superado formalmente antes (v2 e v3 coexistiam).
 
-temp_pasta = E / "JORNAIS_JUL_AGO"
-saida = E / "data" / "processed" / "PRODUCAO_2026"
-estado_dir = saida / "estado_por_arquivo"
-heartbeat_file = E / "logs" / "heartbeat.json"
+Original arquivado em .trash/2026-09-14_deprecados_orquestradores/processor_v2.py
+para referência histórica. Ver ARQUITETURA_ALVO_2026-09-14.md, seção 1.1.
+"""
+import sys
 
-def heartbeat(status, progresso):
-    with open(heartbeat_file, "w") as f:
-        json.dump({"pid": os.getpid(), "status": status, "progresso": progresso, "timestamp": datetime.now().isoformat()}, f)
-
-heartbeat("carregando", "0/0")
-print("Carregando modelo Whisper tiny...")
-
-modelo = carregar_modelo()
-logger = LogPipeline(log_dir=str(E / "logs" / "proc_v2"))
-print("Modelo carregado.")
-
-# Listar mp3s
-mp3s = sorted(temp_pasta.rglob("*.mp3"))
-
-# Filtro: verificar por caminho completo OU nome do arquivo
-estados_ok = set()
-for f in estado_dir.glob("*.json"):
-    try:
-        d = json.loads(f.read_text())
-        if d.get("status") == "OK":
-            estados_ok.add(d.get("arquivo", ""))
-            estados_ok.add(Path(d.get("arquivo", "")).name)
-    except:
-        pass
-
-pendentes = [f for f in mp3s if str(f) not in estados_ok and f.name not in estados_ok]
-print(f"Pendentes: {len(pendentes)}")
-
-heartbeat("rodando", f"0/{len(pendentes)}")
-
-ok_count = 0
-erro_count = 0
-
-for i, mp3_path in enumerate(pendentes):
-    try:
-        result = processar_arquivo(str(mp3_path), str(saida), modelo, logger)
-        if result:
-            ok_count += 1
-        else:
-            erro_count += 1
-    except Exception as e:
-        erro_count += 1
-    
-    if (i + 1) % 5 == 0:
-        heartbeat("rodando", f"{ok_count}/{len(pendentes)}")
-        gc.collect()
-
-heartbeat("concluido", f"{ok_count}/{len(pendentes)}")
-print(f"FINAL: {ok_count} OK, {erro_count} ERRO")
+print(
+    "\n[DEPRECADO] processor_v2.py não é mais o caminho canônico de execução.\n"
+    "Use: run_dispatcher.sh (src/pipeline/dispatcher.py)\n"
+    "Motivo: Versão ad-hoc anterior à v3, mesma família de script de lote único. "
+    "Não superado formalmente antes (v2 e v3 coexistiam).\n"
+    "Original arquivado em .trash/2026-09-14_deprecados_orquestradores/\n"
+    "Ver ARQUITETURA_ALVO_2026-09-14.md, seção 1.1.\n",
+    file=sys.stderr,
+)
+sys.exit(1)

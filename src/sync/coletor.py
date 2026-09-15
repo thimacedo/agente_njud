@@ -10,13 +10,24 @@ Contratos:
 O coletor é o ÚNICO módulo que lê do Drive H: (read-only).
 Nenhum outro módulo deve acessar H: diretamente.
 """
+
 from __future__ import annotations
 
 import logging
 import shutil
+import warnings
 from datetime import date
 from pathlib import Path
 from typing import Optional
+
+warnings.warn(
+    "sync/coletor.py não é importado pela cadeia de produção real "
+    "(executar_programa.py recebe --boletins <H:> diretamente, sem etapa de "
+    "staging separada). Confirmado em ARQUITETURA_REAL.md. O script de sync "
+    "oficial por programa está documentado em DECISOES.md (Item 14).",
+    DeprecationWarning,
+    stacklevel=2,
+)
 
 from regras.livro import ResultadoColeta, SelecaoBoletins, TipoPrograma
 

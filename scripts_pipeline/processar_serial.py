@@ -1,102 +1,25 @@
 #!/usr/bin/env python3
-"""Processa 1 arquivo por vez, liberando memoria entre cada um."""
-import subprocess, sys, os, json, time, gc
-from pathlib import Path
+"""DEPRECADO — não é mais um caminho de execução válido.
 
-E = Path("E:/02_Projetos_Trabalho/Projetos_Ativos/DIVISOR")
-temp_pasta = E / "JORNAIS" / "_PARA_PROCESSAR"
-estado_dir = E / "data" / "processed" / "PRODUCAO_2026" / "estado_por_arquivo"
-log_file = E / "logs" / "processar_serial.log"
+Use: run_dispatcher.sh (src/pipeline/dispatcher.py)
 
-# Listar mp3s
-mp3s = sorted(temp_pasta.rglob("*.mp3"))
+Motivo: Script ad-hoc de um lote específico (JORNAIS/_PARA_PROCESSAR),
+caminhos E: hardcoded. dispatcher.py já resolve processamento serial/paralelo
+com estado persistido.
 
-# Verificar ja processados
-feitos = set()
-for f in estado_dir.glob("*.json"):
-    try:
-        d = json.loads(f.read_text())
-        if d.get("status") == "OK":
-            feitos.add(d.get("arquivo", ""))
-    except:
-        pass
-
-pendentes = [f for f in mp3s if f.name not in feitos]
-
-with open(log_file, "w") as log:
-    log.write(f"Total: {len(mp3s)}, Ja feitos: {len(feitos)}, Pendentes: {len(pendentes)}\n")
-    log.flush()
-
-    ok_count = 0
-    erro_count = 0
-
-    for i, mp3_path in enumerate(pendentes):
-        # Verificar se ja foi processado (verificacao fresca)
-        estado_file = estado_dir / f"{mp3_path.name}.json"
-        if estado_file.exists():
-            try:
-                d = json.loads(estado_file.read_text())
-                if d.get("status") == "OK":
-                    ok_count += 1
-                    continue
-            except:
-                pass
-
-        # Processar 1 arquivo via subprocess (processo morre apos terminar)
-        env = os.environ.copy()
-        env["PYTHONPATH"] = str(E / "src")
-        env["MKL_NUM_THREADS"] = "1"
-        env["OMP_NUM_THREADS"] = "1"
-        env["OPENBLAS_NUM_THREADS"] = "1"
-
-        cmd = [
-            sys.executable, "-c",
-            f"""
-import sys, json, gc
-sys.path.insert(0, 'src')
-from pathlib import Path
-from divisor_boletins.audio import processar_arquivo
-
-caminho = r'{mp3_path}'
-saida = r'{E / "data" / "processed" / "PRODUCAO_2026"}'
-
-try:
-    result = processar_arquivo(caminho, saida)
-    print('OK' if result else 'FAIL')
-    gc.collect()
-except Exception as e:
-    print(f'ERRO: {{e}}')
+Original arquivado em .trash/2026-09-14_deprecados_orquestradores/processar_serial.py
+para referência histórica. Ver ARQUITETURA_ALVO_2026-09-14.md, seção 1.1.
 """
-        ]
+import sys
 
-        try:
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=180, env=env)
-            output = result.stdout.strip()
-
-            if "OK" in output and "ERRO" not in output:
-                ok_count += 1
-                status = "OK"
-            else:
-                erro_count += 1
-                status = f"ERRO: {output[:100]}"
-
-            log.write(f"[{i+1}/{len(pendentes)}] {mp3_path.name}: {status}\n")
-            log.flush()
-
-        except subprocess.TimeoutExpired:
-            erro_count += 1
-            log.write(f"[{i+1}/{len(pendentes)}] {mp3_path.name}: TIMEOUT\n")
-            log.flush()
-        except Exception as e:
-            erro_count += 1
-            log.write(f"[{i+1}/{len(pendentes)}] {mp3_path.name}: ERRO: {e}\n")
-            log.flush()
-
-        # Progresso a cada 10 arquivos
-        if (i + 1) % 10 == 0:
-            log.write(f"--- PROGRESSO: {ok_count} OK, {erro_count} ERRO de {i+1} ---\n")
-            log.flush()
-
-    log.write(f"\n=== FINAL: {ok_count} OK, {erro_count} ERRO ===\n")
-
-print(f"Concluido: {ok_count} OK, {erro_count} ERRO")
+print(
+    "\n[DEPRECADO] processar_serial.py não é mais o caminho canônico de execução.\n"
+    "Use: run_dispatcher.sh (src/pipeline/dispatcher.py)\n"
+    "Motivo: Script ad-hoc de um lote específico (JORNAIS/_PARA_PROCESSAR), "
+    "caminhos E: hardcoded. dispatcher.py já resolve processamento serial/paralelo "
+    "com estado persistido.\n"
+    "Original arquivado em .trash/2026-09-14_deprecados_orquestradores/\n"
+    "Ver ARQUITETURA_ALVO_2026-09-14.md, seção 1.1.\n",
+    file=sys.stderr,
+)
+sys.exit(1)

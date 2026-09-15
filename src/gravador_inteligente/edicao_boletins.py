@@ -50,8 +50,20 @@ class EdicaoConfig:
     tempo_max_retrocesso_seg: float = 25.0
     
     # Palavras-gatilho que indicam correção imediata
+    # Lista expandida em 2026-09-14 a partir do retake_detector.py do radioflow,
+    # curada para excluir termos de alta colisão com vocabulário jurídico/jornalístico
+    # (ex.: "corte", "erro", "para", "espera", "calma", "segura", "tava" foram
+    # descartados por aparecerem legitimamente em boletins do TJRN).
     palavras_gatilho: tuple = (
         "repete", "novamente", "de novo", "volta", "refaça", "outra vez",
+        "vou repetir", "pode repetir", "vamos repetir", "denovo",
+        "mais uma vez", "uma vez mais",
+        "me enrolei", "travei", "enganchei", "emperrei",
+        "desculpa", "desculpe",
+        "perae", "peraí", "perai",
+        "recomeça", "recomeçando", "começa de novo",
+        "do começo", "do início", "desde o início", "desde o inicio",
+        "opa", "eita", "puts", "poxa", "caramba", "ih", "xi", "putz",
     )
     
     # Tempo padrão de retrocesso para gatilhos (ms)
@@ -605,7 +617,7 @@ def editar_boletins_diretorio(
         modelo_whisper=modelo,
         limiar_similaridade=limiar_similaridade,
         tempo_max_retrocesso_seg=tempo_janela_seg,
-        palavras_gatilho=palavras_gatilho or cfg.palavras_gatilho,
+        palavras_gatilho=palavras_gatilho or EdicaoConfig().palavras_gatilho,
         gerar_log_exclusoes=True,
         diretorio_logs=str(saida / "logs"),
     )
