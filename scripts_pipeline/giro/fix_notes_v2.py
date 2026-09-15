@@ -27,9 +27,12 @@ sys.path.insert(0, str(PROJECT / "src"))
 sys.path.insert(0, str(PROJECT / "regras"))
 
 from livro import (
-    JanelaColeta,
     calcular_janela_semana_anterior,
 )
+
+# Preflight H: → workspace
+sys.path.insert(0, str(PROJECT / "src"))
+from preflight import preflight_giro
 
 # ──────────────────────────────────────────────────────────────────────
 # CONSTANTES
@@ -295,6 +298,19 @@ def main():
         print(f"--- {cod} ---")
         if args.limpar:
             limpar_programa(cod)
+        
+        # PRE-FLIGHT CHECK: copiar boletins de H: para workspace
+        try:
+            planejamento = carregar_planejamento(cod)
+            if planejamento:
+                data_exib_str = planejamento.get("data_exibicao")
+                if data_exib_str:
+                    data_exib = datetime.strptime(data_exib_str, "%Y-%m-%d").date()
+                    janela = calcular_janela_semana_anterior(data_exib, dias=JANELA_DIAS)
+                    preflight_giro(janela.data_inicio, janela.data_fim)
+        except Exception as e:
+            print(f"  ⚠ Preflight check falhou: {e}")
+        
         gerados = processar_programa(cod, only_missing=args.apenas_faltantes)
         total_gerados += gerados
         if gerados > 0:
