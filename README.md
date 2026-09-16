@@ -113,14 +113,16 @@ python src/pipeline/dispatcher.py "F:\Projetos\DIVISOR\JORNAIS" ^
 python src/pipeline/monitor.py "F:\Projetos\DIVISOR\data\processed" --intervalo 5 --log
 ```
 
-Alternativas (processamento serial / por-NJUD / orquestração):
+## Alternativas deprecadas
 
-- `scripts_pipeline/processor_com_heartbeat.py` — serial com heartbeat
-- `scripts_pipeline/processor_v2.py` / `processor_v3.py` — serial com filtro/status
-- `scripts_pipeline/serial_jul_ago.py` / `serial_jul_ago_v2.py` — 1 arquivo por vez
-- `scripts_pipeline/processar_njud_por_njud.py` — 1 NJUD por processo separado
-- `scripts_pipeline/orquestrador.py` — ciclo continuo perceber→planejar→agir→adaptar
-- `scripts_pipeline/dispatcher_wrapper.py` — reinício automático do dispatcher (estado persisente)
+Os seguintes scripts foram deprecados em 2026-09-15 e substituídos por shims que emitem aviso em stderr + `exit 1`. Não utilizar em produção. Veja `CHANGELOG.md` e `DECISOES.md` (itens 3, 4, 14, 15) para detalhes.
+
+- `scripts_pipeline/orquestrador.py` → canônico: `src/orchestration/safe_runner.py`
+- `scripts_pipeline/orquestrador_giro_jan2026.py` → canônico: `scripts_pipeline/executar_programa.py`
+- `scripts_pipeline/processor_com_heartbeat.py`, `processor_v2.py`, `processor_v3.py`
+- `scripts_pipeline/processar_serial.py`, `processar_njud_por_njud.py`
+- `scripts_pipeline/dispatcher_wrapper.py`
+- `scripts_pipeline/sync_drive.sh` → canônico: `src/sync/drive.py`
 
 ## Regras inegociáveis
 
@@ -158,6 +160,7 @@ Ordem completa: `calibracao_correlacao` → `ancora_vad_forcado` → `janela_sil
 
 ## Documentação chave
 
+- `CHANGELOG.md` — histórico de mudanças relevantes do projeto (versões, adições, correções, depreciações)
 - `DECISOES.md` — decisões técnicas e regras para evitar reversões silenciosas
 - `PROCEDIMENTO_PADRAO.md` — fluxo oficial v4 (processo único com ciclo fechado)
 - `docs/REGRAS_ORQUESTRACAO.md` — princípios KISS/YAGNI/DRY e regras de orquestração

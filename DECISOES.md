@@ -359,3 +359,35 @@ do NJUD — ele usa regex legada e não é testável.
    e propaga automaticamente para todo o sistema.
 
 **Proibido reverter:** voltar a hardcoded `"tiny"` em qualquer dispatcher/worker.
+
+---
+
+## Item 16. Isolamento NJUD/GIRO/BOLETIM (2026-09-15)
+
+**Motivo:**
+O projeto acumula três domínios de produção (NJUD diário, GIRO semanal nas comarcas, e BOLETIM — agente de produção) que compartilham a mesma raiz. Sem isolamento explícito, correções em um domínio correm risco de serem aplicadas em código de outro domínio sem intenção.
+
+**Decisões:**
+1. `src/giro/*` é código morto confirmado (não importado pela cadeia real confirmada em ARQUITETURA_REAL.md). Não receber correções de bug a menos que a intenção seja explicitamente migrar arquitetura.
+2. `src/regras/*` e `src/sync/coletor.py` são mortos confirmados — só avisam em runtime via DeprecationWarning.
+3. `scripts_pipeline/*` é namespace compartilhado com scripts ativos e deprecados. Scripts canônicos são: `executar_programa.py` (GIRO), `rodar_tudo_giro.sh` (GIRO), `njud/orquestrador.sh` (NJUD).
+4. O pipeline NJUD não importa nada de GIRO e vice-versa (já era regra do PLANO_MODULARIZACAO.md, reforçada aqui).
+5. Código em `scripts_pipeline/` que não está listado como canônico ou deprecado deve ser tratado como órfão — verificar antes de executar.
+
+**Proibido reverter:** importar `src/giro/*` ou `src/regras/*` na cadeia NJUD/GIRO sem decisão explícita de migração documentada.
+
+---
+
+## Item 17. Correções nos 34 JSONs GIRO e 10 GNCs montados (2026-09-15)
+
+**Motivo:**
+Os 34 arquivos `config/planejamento_2026/giro_*.json` (jan–ago/2026) e 10 GNCs montados apresentavam inconsistências de datas, defaults incorretos e estrutura de parser incompatível com o executor canônico.
+
+**Correções aplicadas:**
+1. Datas dos 34 JSONs GIRO corrigidas para coincidir com boletins reais em H: (commit `04e0270`).
+2. Default `--boletins` corrigido para `JORNAIS_DIVIDIDOS` (GIRO nas comarcas) — commit `d53501a`.
+3. `max_boletins_por_programa` corrigido para 6 (mín 4, máx 6) — commit `3c93863`.
+4. `validar_pipeline_giro.py` corrigido para suportar dict e objeto — commit `a792d47`.
+5. `processar_boletim.py`: fix para pular divisão se arquivo já é CABECA/CORPO — commit `370fc72`.
+
+**Proibido reverter:** usar datas incorretas nos JSONs, default errado para `--boletins`, ou max_boletins fora do intervalo [4,6].
