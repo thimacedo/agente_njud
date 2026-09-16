@@ -57,12 +57,12 @@ def terça_do_programa(mmss: str, ano: int = 2026) -> date:
     ss = int(mmss[2:])
     if mm < 1 or mm > 12:
         raise ValueError(f"mm inválido: {mm:02d}")
-    if ss < 1 or ss > 4:
+    if ss < 1 or ss > 5:
         raise ValueError(f"ss inválido: {ss:02d}")
     if ano not in _TAR:
         _TAR[ano] = _primeira_terca_ano(ano)
     t0 = _TAR[ano]
-    offset_semanas = (mm - 1) * 4 + (ss - 1)
+    offset_semanas = (mm - 1) * 5 + (ss - 1)
     return t0 + timedelta(weeks=offset_semanas)
 
 

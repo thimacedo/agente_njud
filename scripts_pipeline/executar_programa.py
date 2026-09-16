@@ -147,7 +147,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--boletins",
         type=str,
-        help="Pasta base dos boletins (padrão: H:/Meu Drive/RADIO TJRN CONTEUDO/00_PRODUCAO_2026/01_BOLETINS_DIARIOS/03_AUDIOS_RADIO/)",
+        help="Pasta base dos boletins (padrão: H:/Meu Drive/RADIO TJRN CONTEÚDO/00_PRODUCAO_2026/01_BOLETINS_DIARIOS/03_AUDIOS_RADIO/)",
     )
     parser.add_argument(
         "--mes",

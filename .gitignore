@@ -2,7 +2,9 @@
 data/
 /JORNAIS/
 /BOLETIM/
-/GIRO/
++GIRO/
++# Exceção: planejamento do GIRO (doc obsoleto e JSONs de planejamento)
++!GIRO/planejamento_2026/
 /NJUD/
 orch/
 downloads/
