@@ -390,16 +390,18 @@ def detectar_fim_corpo(
     """
     Remove a assinatura do locutor do final do CORPO.
 
-    Estratégia:
-    1. Regex da assinatura nos últimos segmentos, somente se houver
-       vinheta de encerramento confirmada logo após.
-    2. Se a âncora de encerramento foi detectada com confiança alta,
+    Estratégia aprimorada (2026-08-24):
+    1. Regex primária da assinatura + timing (confirmação dupla)
+    2. Padrões alternativos de assinatura (nomes de locutores, "reportagem de")
+    3. Se a âncora de encerramento foi detectada com confiança alta,
        usa o INÍCIO dela como fim do CORPO.
-    3. Último recurso: início da âncora com margem de segurança.
+    4. Último recurso: início da âncora com margem de segurança.
     """
+    from .config import _PADROES_ASSINATURA_ALTERNATIVOS
+    
     inicio_enc = ancora_encerramento.timestamp_inicio
 
-    # 1. Regex da assinatura, com confirmação por timing
+    # 1. Regex primária da assinatura, com confirmação por timing
     vinheta_enc_inicio = (
         inicio_enc if ancora_encerramento.encontrada else duracao_total
     )
@@ -414,7 +416,7 @@ def detectar_fim_corpo(
             ):
                 logger.info(
                     "fim_corpo",
-                    f"Assinatura confirmada por regex+timing no segmento "
+                    f"Assinatura confirmada por regex primária+timing no segmento "
                     f"t={seg['start']:.1f}s: '{seg['text'].strip()}' "
                     f"(distância até VH enc.: {distancia_ate_enc:.1f}s)",
                 )
@@ -422,13 +424,47 @@ def detectar_fim_corpo(
                 return seg["start"]
             logger.aviso(
                 "fim_corpo",
-                f"Match de assinatura em t={seg['start']:.1f}s descartado: "
+                f"Match de assinatura (regex primária) em t={seg['start']:.1f}s descartado: "
                 f"sem VH de encerramento confirmada logo após "
                 f"(distância={distancia_ate_enc:.1f}s).",
             )
             break
 
-    # 2. Âncora de encerramento confirmada — só usamos o início da âncora
+    # 2. Padrões alternativos de assinatura (fallback)
+    if not assinatura_confirmada:
+        for padrao_alt in _PADROES_ASSINATURA_ALTERNATIVOS:
+            for seg in reversed(segmentos):
+                texto_norm = normalizar_texto(seg["text"])
+                if padrao_alt.search(texto_norm):
+                    distancia_ate_enc = vinheta_enc_inicio - seg["end"]
+                    if distancia_ate_enc <= 4.0 and seg["end"] <= vinheta_enc_inicio + 1.0:
+                        logger.info(
+                            "fim_corpo",
+                            f"Assinatura confirmada por padrão alternativo no segmento "
+                            f"t={seg['start']:.1f}s: '{seg['text'].strip()}' "
+                            f"(padrão={padrao_alt.pattern[:30]}...)",
+                        )
+                        assinatura_confirmada = True
+                        return seg["start"]
+    
+    # 3. Busca por nomes próprios no final (heurística simples)
+    if not assinatura_confirmada:
+        for i, seg in enumerate(reversed(segmentos[-8:])):
+            texto = seg["text"].strip()
+            palavras = texto.split()
+            if len(palavras) >= 2:
+                # Procura por padrão: palavra capitalizada + palavra capitalizada
+                if any(p[0].isupper() for p in palavras[-2:]):
+                    dist_tempo = duracao_total - seg["end"]
+                    if dist_tempo <= 5.0:
+                        logger.info(
+                            "fim_corpo",
+                            f"Possível assinatura por heurística de capitalização "
+                            f"em t={seg['start']:.1f}s: '{texto}'",
+                        )
+                        return seg["start"]
+
+    # 4. Âncora de encerramento confirmada — só usamos o início da âncora
     #    se a regex de assinatura não tiver confirmado corte exato antes.
     if not assinatura_confirmada:
         if ancora_encerramento.encontrada and not ancora_encerramento.usou_fallback:
@@ -438,12 +474,12 @@ def detectar_fim_corpo(
             )
             return inicio_enc
 
-    # 3. Último recurso: margem reduzida sobre a âncora para não comer conteúdo
+    # 5. Último recurso: margem reduzida sobre a âncora para não comer conteúdo
     margem = 0.5
     fim_corpo = max(inicio_enc - margem, 0.0)
     logger.aviso(
         "fim_corpo",
-        f"Assinatura não confirmada por regex; cortando CORPO em "
+        f"Assinatura não confirmada por nenhum método; cortando CORPO em "
         f"t={fim_corpo:.1f}s com margem {margem}s",
     )
     return fim_corpo

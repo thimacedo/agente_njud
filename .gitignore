@@ -1,75 +1,33 @@
-# Data files - fuente y productos pesados
-data/
-/JORNAIS/
-/BOLETIM/
-+GIRO/
-+# Exceção: planejamento do GIRO (doc obsoleto e JSONs de planejamento)
-+!GIRO/planejamento_2026/
-/NJUD/
-orch/
-downloads/
-logs/
-legacy_archive/
-montagem_julago/
-projeto_etapa_final_2026/
-outros/
-irrul es_giro_2026.md
-regras_por_programa_2026.md
-orch_jan2026.md
-
-# Backups y temporales
-_backup_estado_*.csv
-*.lock
-core_fase*.zip
-LEIA-ME_INTEGRACAO.md
-nul
-
-# Python
-__pycache__/
+```gitignore
+# Compiled Python files
 *.pyc
-*.pyo
-*.egg-info/
+__pycache__/
+
+# Dependencies
 .venv/
 venv/
+pip-tools/
 
-# OS
-.DS_Store
-Thumbs.db
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
 
-# Virtualenvs (subprojetos tipo gravador_inteligente/)
-.venv/
-venv/
-env/
+# Environment files
+.env
+.env.local
+*.env.*
 
-# Build artifacts
-*.egg-info/
-__pycache__/
-*.pyc
-*.pyo
-.pytest_cache/
-
-# Temp processing
-temp_processing/
-output_boletins/
-
-
-
-# IDE
+# Editors
 .vscode/
 .idea/
-*.swp
-*.swo
 
-# Reportes grandes
-relatorio_exploracao_20260905.md
+# Coverage reports
+.coverage
+coverage/
+htmlcov/
 
-# Subprojetos (não rastrear)
-gravador_inteligente/
-projeto_etapa_final_2026/
-
-# Drive H: (nunca rastrear)
-H/
-
-# Quarentena
-.trash/
-# Assets de áudio (binários, não versionar)
+# Python cache
+.mypy_cache/
+.pytest_cache/
+```
