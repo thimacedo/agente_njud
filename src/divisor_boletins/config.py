@@ -67,9 +67,18 @@ ANCORAS_ENCERRAMENTO = [
 # ===========================================================================
 
 # Detecta: "tribunal de justica do rio grande do norte" + nome do locutor
+# Versão ampliada (2026-08-24): captura variações comuns de assinatura
 _PADRAO_ASSINATURA_NORMALIZADA = re.compile(
-    r"tribunal de justica do rio grande do norte"
-    r"(?:\s+para a\s+radio justiça)?"
-    r"[\s,]+[A-Za-z]+(?:\s+[A-Za-z]+)*\s*$",
+    r"(?:tribunal de justica(?:\s+do)?\s+(?:rio grande do)?\s+norte|"
+    r"radio justica|justica FM|boletim informativo)"
+    r"(?:\s+para a\s+radio(?:\s+justica)?|\s+da\s+hora)?[\s,]+"
+    r"(?:[A-Za-z]+\s+)?[A-Za-z]+(?:\s+[A-Za-z]+)*\s*$",
     flags=re.IGNORECASE,
 )
+
+# Padrões alternativos de assinatura (fallback)
+_PADROES_ASSINATURA_ALTERNATIVOS = [
+    re.compile(r"\b(?:leonardo|samuel|marcos|ana|paula)\s+[A-Za-z]+\b", re.IGNORECASE),
+    re.compile(r"\breportagem\s+(?:de|:)\s*[A-Za-z]+\b", re.IGNORECASE),
+    re.compile(r"\blocucao\s+(?:de|:)\s*[A-Za-z]+\b", re.IGNORECASE),
+]

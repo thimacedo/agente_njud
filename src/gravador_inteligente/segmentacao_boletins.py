@@ -68,25 +68,90 @@ def transcrever_audio(modelo, caminho_audio: str, idioma: str = DEFAULT_IDIOMA):
 
 
 def detectar_marcadores_boletim(transcricao, padrao: str = r"\bB(\d{1,2})\b"):
-    """Detecta marcadores B1, B2, B3... na transcrição."""
+    """
+    Detecta marcadores B1, B2, B3... na transcrição com múltiplas estratégias.
+    
+    Estratégias (em ordem de prioridade):
+    1. Padrão exato "B1", "B2", etc.
+    2. Padrões alternativos: "boletim 1", "bulletin 1", "bloco 1"
+    3. Sequência numérica implícita (quando há quebras claras de silêncio)
+    """
     regex_marcador = regex.compile(padrao, regex.IGNORECASE)
     
-    marcadores_detectados = {}
+    # Padrões alternativos para marcadores
+    padroes_alternativos = [
+        regex.compile(r"\bboletim\s*(\d{1,2})\b", regex.IGNORECASE),
+        regex.compile(r"\bbulletin\s*(\d{1,2})\b", regex.IGNORECASE),
+        regex.compile(r"\bbloco\s*(\d{1,2})\b", regex.IGNORECASE),
+        regex.compile(r"\bparte\s*(\d{1,2})\b", regex.IGNORECASE),
+    ]
     
+    marcadores_detectados = {}
+    segmentos_analisados = []
+    
+    # Primeira passagem: buscar padrão principal
     for seg in transcricao:
         texto = seg["text"].strip()
         match = regex_marcador.search(texto)
         
         if match:
             numero = int(match.group(1))
-            if numero not in marcadores_detectados:
+            if numero not in marcadores_detectados or seg["start"] < marcadores_detectados[numero]["inicio"]:
                 marcadores_detectados[numero] = {
                     "inicio": seg["start"],
                     "fim": seg["end"],
-                    "texto": texto
+                    "texto": texto,
+                    "metodo": "padrao_Bn"
                 }
-                logger.info(f"Marcador B{numero} encontrado: {seg['start']:.1f}s")
+                logger.info(f"Marcador B{numero} encontrado (padrão Bn): {seg['start']:.1f}s")
                 print(f"  ✓ B{numero}: {seg['start']:.1f}s - '{texto}'")
+    
+    # Segunda passagem: buscar padrões alternativos (apenas se não detectado)
+    for seg in transcricao:
+        texto = seg["text"].strip().lower()
+        for padrao_alt in padroes_alternativos:
+            match = padrao_alt.search(texto)
+            if match:
+                numero = int(match.group(1))
+                if numero <= 10 and numero not in marcadores_detectados:
+                    marcadores_detectados[numero] = {
+                        "inicio": seg["start"],
+                        "fim": seg["end"],
+                        "texto": texto,
+                        "metodo": "alternativo"
+                    }
+                    logger.info(f"Marcador B{numero} encontrado (padrão alternativo): {seg['start']:.1f}s")
+                    print(f"  ~ B{numero}: {seg['start']:.1f}s - '{texto}' (alternativo)")
+                    break
+    
+    # Terceira passagem: inferir por gaps grandes de silêncio quando poucos marcadores foram encontrados
+    if len(marcadores_detectados) < 2 and len(transcricao) > 5:
+        logger.warning("Poucos marcadores detectados; tentando inferir por gaps de silêncio...")
+        gaps = []
+        for i in range(len(transcricao) - 1):
+            gap = transcricao[i + 1]["start"] - transcricao[i]["end"]
+            if gap >= 3.0:  # Gap significativo
+                gaps.append({
+                    "posicao": transcricao[i]["end"],
+                    "duracao": gap,
+                    "segmento_antes": transcricao[i],
+                    "segmento_depois": transcricao[i + 1]
+                })
+        
+        if gaps:
+            # Ordenar gaps por duração e usar os maiores como limites prováveis
+            gaps.sort(key=lambda g: g["duracao"], reverse=True)
+            for i, gap in enumerate(gaps[:4]):  # Máximo 4 gaps
+                numero_inferido = i + 2  # Começa do B2
+                if numero_inferido not in marcadores_detectados:
+                    marcadores_detectados[numero_inferido] = {
+                        "inicio": gap["posicao"],
+                        "fim": gap["posicao"] + gap["duracao"],
+                        "texto": f"[INFERIDO] gap de {gap['duracao']:.1f}s",
+                        "metodo": "inferido_silencio"
+                    }
+                    logger.info(f"Marcador B{numero_inferido} inferido por gap: {gap['posicao']:.1f}s")
+                    print(f"  ○ B{numero_inferido}: {gap['posicao']:.1f}s - gap={gap['duracao']:.1f}s (inferido)")
     
     return marcadores_detectados
 
