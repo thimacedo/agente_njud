@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\08 - AGO - 26\\11 08 - TER\\BOLETIM_RADIO_TJRN_26_11_2026_B2_TJRN_COMARCA_CAICO_RESPONSAVEL_INTERINO_.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T00:44:09",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "d225d543ca1f4bda84d90780d537abb6"
+    }
+  ],
+  "erro": ""
+}

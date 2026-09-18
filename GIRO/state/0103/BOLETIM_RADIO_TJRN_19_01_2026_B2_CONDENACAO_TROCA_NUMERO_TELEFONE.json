@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\01 - JAN - 26\\19 01 - SEG\\BOLETIM_RADIO_TJRN_19_01_2026_B2_CONDENACAO_TROCA_NUMERO_TELEFONE.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T15:30:36",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "4d5d443253a94d6487a64e50652bcf4f"
+    }
+  ],
+  "erro": ""
+}

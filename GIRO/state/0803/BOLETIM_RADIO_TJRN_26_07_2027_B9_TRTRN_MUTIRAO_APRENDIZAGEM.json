@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\08 - AGO - 26\\19 08 - QUA\\BOLETIM_RADIO_TJRN_26_07_2027_B9_TRTRN_MUTIRAO_APRENDIZAGEM.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T00:59:19",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "cdc4d03cffe04e5d94b1a92e06bd5ecc"
+    }
+  ],
+  "erro": ""
+}

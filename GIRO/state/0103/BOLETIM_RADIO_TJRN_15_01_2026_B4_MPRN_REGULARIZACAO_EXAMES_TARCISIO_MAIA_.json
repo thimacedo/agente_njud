@@ -1,0 +1,18 @@
+{
+  "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\data\\processed\\PRODUCAO_2026\\JORNAIS_DIVIDIDOS\\$dia $mes - QUA\\BOLETIM_RADIO_TJRN_15_01_2026_B4_MPRN_REGULARIZACAO_EXAMES_TARCISIO_MAIA_.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-15T20:04:44",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "371921106f7148e4afc65cb081bf02c7"
+    }
+  ],
+  "erro": ""
+}

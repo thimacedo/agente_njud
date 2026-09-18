@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\07 - JUL - 26\\13 07 - SEG\\BOLETIM_RADIO_TJRN_26_01_2026_B2_TJRN_ABSOLVE_EX_PREFEITO_.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T00:24:42",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "ed17e2926aa14624b771293508e22cb8"
+    }
+  ],
+  "erro": ""
+}

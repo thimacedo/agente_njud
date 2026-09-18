@@ -1,0 +1,54 @@
+{
+  "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\data\\processed\\PRODUCAO_2026\\JORNAIS_DIVIDIDOS\\BOLETIM_RADIO_TJRN_06_03_2026_B3_TJRN_CAMPESTRE_PROCESSO_SELETIVO__CABECA.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "ESGOTADO",
+  "estrategia_atual": "grade_fixa_locucao_estendida",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-11T08:17:31",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (1.1s < 5s) — possível corte que comeu o final ou arquivo corrompido",
+        "[sem_fallback_para_audio_completo] CRITICO: Proporção de corte 95.48% excede limite 95% — áudio original (6.7s) quase não foi cortado (CABECA=5.2s + CORPO=1.1s). Ver DECISOES.md: possível fallback para áudio completo."
+      ],
+      "usou_analisador": false,
+      "decisao_id": "1a5b4b4e6d974763a1be35c43f8f02e6"
+    },
+    {
+      "estrategia": "ancora_vad_forcado",
+      "timestamp": "2026-09-11T08:17:33",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (1.1s < 5s) — possível corte que comeu o final ou arquivo corrompido",
+        "[sem_fallback_para_audio_completo] CRITICO: Proporção de corte 95.48% excede limite 95% — áudio original (6.7s) quase não foi cortado (CABECA=5.2s + CORPO=1.1s). Ver DECISOES.md: possível fallback para áudio completo."
+      ],
+      "usou_analisador": false,
+      "decisao_id": "1a5b4b4e6d974763a1be35c43f8f02e6"
+    },
+    {
+      "estrategia": "janela_silencio_ampliada",
+      "timestamp": "2026-09-11T08:17:35",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (1.1s < 5s) — possível corte que comeu o final ou arquivo corrompido",
+        "[sem_fallback_para_audio_completo] CRITICO: Proporção de corte 95.48% excede limite 95% — áudio original (6.7s) quase não foi cortado (CABECA=5.2s + CORPO=1.1s). Ver DECISOES.md: possível fallback para áudio completo."
+      ],
+      "usou_analisador": false,
+      "decisao_id": "1a5b4b4e6d974763a1be35c43f8f02e6"
+    },
+    {
+      "estrategia": "grade_fixa_locucao_estendida",
+      "timestamp": "2026-09-11T08:17:39",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (1.1s < 5s) — possível corte que comeu o final ou arquivo corrompido",
+        "[sem_fallback_para_audio_completo] CRITICO: Proporção de corte 95.48% excede limite 95% — áudio original (6.7s) quase não foi cortado (CABECA=5.3s + CORPO=1.1s). Ver DECISOES.md: possível fallback para áudio completo."
+      ],
+      "usou_analisador": false,
+      "decisao_id": "1a5b4b4e6d974763a1be35c43f8f02e6"
+    }
+  ],
+  "erro": ""
+}

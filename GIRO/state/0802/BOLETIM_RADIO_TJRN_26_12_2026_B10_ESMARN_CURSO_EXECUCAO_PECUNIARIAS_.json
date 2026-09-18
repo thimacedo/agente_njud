@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\08 - AGO - 26\\12 08 - QUA\\BOLETIM_RADIO_TJRN_26_12_2026_B10_ESMARN_CURSO_EXECUCAO_PECUNIARIAS_.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T00:51:51",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "54e3f52941754dacadf42440d9d53c3d"
+    }
+  ],
+  "erro": ""
+}

@@ -1,0 +1,18 @@
+{
+  "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\data\\processed\\PRODUCAO_2026\\JORNAIS_DIVIDIDOS\\$dia $mes - QUA\\BOLETIM_RADIO_TJRN_12_01_2026_B1_JUIZADO_ESPECIAL_PARNAMIRIM_ESTAGIO_.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-15T19:29:40",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "9b9b12e45c9c4e369f515cfa0e28d27d"
+    }
+  ],
+  "erro": ""
+}

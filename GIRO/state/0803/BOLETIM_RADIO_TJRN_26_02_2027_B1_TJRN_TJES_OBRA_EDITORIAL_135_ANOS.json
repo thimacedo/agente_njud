@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\08 - AGO - 26\\14 08 - SEX\\BOLETIM_RADIO_TJRN_26_02_2027_B1_TJRN_TJES_OBRA_EDITORIAL_135_ANOS.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T00:48:58",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "a70bcf941b164dc3b39795a74aac3658"
+    }
+  ],
+  "erro": ""
+}

@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\08 - AGO - 26\\18 08 - TER\\BOLETIM_RADIO_TJRN_26_06_2027_B5_TJRN_DETERMINA_INCORPORACAO_APOSENTADORIA_.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T00:54:34",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "53489290467d49b3b692bc584032fa71"
+    }
+  ],
+  "erro": ""
+}

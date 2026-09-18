@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\04 - ABR - 26\\15 04 - QUA\\BOLETIM_RADIO_TJRN_15_04_2026_B1_TJRN_ADVOGADA_CONSTRANGIDA_.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T18:26:07",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "1ab94a9605e243b4bfc540618dca296e"
+    }
+  ],
+  "erro": ""
+}

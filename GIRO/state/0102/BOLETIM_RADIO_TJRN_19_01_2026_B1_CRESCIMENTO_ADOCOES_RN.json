@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\01 - JAN - 26\\19 01 - SEG\\BOLETIM_RADIO_TJRN_19_01_2026_B1_CRESCIMENTO_ADOCOES_RN.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T15:20:51",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "475885e4d62042e480f4ea571af85e04"
+    }
+  ],
+  "erro": ""
+}

@@ -1,0 +1,50 @@
+{
+  "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\data\\processed\\PRODUCAO_2026\\JORNAIS_DIVIDIDOS\\BOLETIM_RADIO_TJRN_20_02_2026_B10_MPRN_CAPACITACAO_PROMOCAO_GESTAO_MUNICIPAL__v2_CABECA.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "ESGOTADO",
+  "estrategia_atual": "grade_fixa_locucao_estendida",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-11T08:01:44",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (0.1s < 5s) — possível corte que comeu o final ou arquivo corrompido; Razão CABEÇA/CORPO extremamente desbalanceada (29.8x) — CABEÇA (3.5s) é muito maior que CORPO (0.1s)"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "1bb245d763de428a86c8cb24ada64f93"
+    },
+    {
+      "estrategia": "ancora_vad_forcado",
+      "timestamp": "2026-09-11T08:01:44",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (0.1s < 5s) — possível corte que comeu o final ou arquivo corrompido; Razão CABEÇA/CORPO extremamente desbalanceada (29.8x) — CABEÇA (3.5s) é muito maior que CORPO (0.1s)"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "1bb245d763de428a86c8cb24ada64f93"
+    },
+    {
+      "estrategia": "janela_silencio_ampliada",
+      "timestamp": "2026-09-11T08:01:45",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (0.1s < 5s) — possível corte que comeu o final ou arquivo corrompido; Razão CABEÇA/CORPO extremamente desbalanceada (18.3x) — CABEÇA (2.1s) é muito maior que CORPO (0.1s)"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "1bb245d763de428a86c8cb24ada64f93"
+    },
+    {
+      "estrategia": "grade_fixa_locucao_estendida",
+      "timestamp": "2026-09-11T08:01:45",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (0.1s < 5s) — possível corte que comeu o final ou arquivo corrompido; Razão CABEÇA/CORPO extremamente desbalanceada (29.8x) — CABEÇA (3.5s) é muito maior que CORPO (0.1s)"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "1bb245d763de428a86c8cb24ada64f93"
+    }
+  ],
+  "erro": ""
+}

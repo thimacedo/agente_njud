@@ -1,0 +1,50 @@
+{
+  "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\data\\processed\\PRODUCAO_2026\\JORNAIS_DIVIDIDOS\\BOLETIM_RADIO_TJRN_02_03_2026_B2_ACESSIBILIDADE_CAPS_PARNAMIRIM_CABECA.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "ESGOTADO",
+  "estrategia_atual": "grade_fixa_locucao_estendida",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-11T08:09:36",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (0.5s < 5s) — possível corte que comeu o final ou arquivo corrompido"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "c337d5cca79e49049850844d1196f3c5"
+    },
+    {
+      "estrategia": "ancora_vad_forcado",
+      "timestamp": "2026-09-11T08:09:37",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (0.5s < 5s) — possível corte que comeu o final ou arquivo corrompido"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "c337d5cca79e49049850844d1196f3c5"
+    },
+    {
+      "estrategia": "janela_silencio_ampliada",
+      "timestamp": "2026-09-11T08:09:37",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (1.0s < 5s) — possível corte que comeu o final ou arquivo corrompido"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "c337d5cca79e49049850844d1196f3c5"
+    },
+    {
+      "estrategia": "grade_fixa_locucao_estendida",
+      "timestamp": "2026-09-11T08:09:38",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (0.7s < 5s) — possível corte que comeu o final ou arquivo corrompido"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "c337d5cca79e49049850844d1196f3c5"
+    }
+  ],
+  "erro": ""
+}

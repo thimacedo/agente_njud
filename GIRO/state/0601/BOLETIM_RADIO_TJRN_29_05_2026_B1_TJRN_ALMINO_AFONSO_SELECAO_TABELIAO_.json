@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\05 - MAI - 26\\29 05 - SEX\\BOLETIM_RADIO_TJRN_29_05_2026_B1_TJRN_ALMINO_AFONSO_SELECAO_TABELIAO_.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T20:00:19",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "a0bc891e7ee34ea39a55b3424f236bc3"
+    }
+  ],
+  "erro": ""
+}

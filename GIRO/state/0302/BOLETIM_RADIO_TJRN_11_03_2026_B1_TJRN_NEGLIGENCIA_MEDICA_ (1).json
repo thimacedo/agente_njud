@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\03 - MAR - 26\\11 03 - QUA\\BOLETIM_RADIO_TJRN_11_03_2026_B1_TJRN_NEGLIGENCIA_MEDICA_ (1).mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T17:16:47",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "8a75ad870a404979b25adae132023922"
+    }
+  ],
+  "erro": ""
+}

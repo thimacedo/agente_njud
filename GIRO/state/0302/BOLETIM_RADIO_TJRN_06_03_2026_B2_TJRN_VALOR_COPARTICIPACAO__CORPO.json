@@ -1,0 +1,18 @@
+{
+  "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\data\\processed\\PRODUCAO_2026\\JORNAIS_DIVIDIDOS\\BOLETIM_RADIO_TJRN_06_03_2026_B2_TJRN_VALOR_COPARTICIPACAO__CORPO.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-11T08:17:06",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "6e5767cb45b0468cb554ebadca349ae1"
+    }
+  ],
+  "erro": ""
+}

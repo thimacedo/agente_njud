@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\07 - JUL - 26\\15 07 - QUA\\BOLETIM_RADIO_TJRN_26_03_2026_B1_INDENIZACAO_SERVICOS_TELEFONIA_NJUD_1915.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T00:24:10",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "4971f0cfaa4c4627a2d216859f16b57f"
+    }
+  ],
+  "erro": ""
+}

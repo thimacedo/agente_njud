@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\04 - ABR - 26\\22 04 - QUA\\BOLETIM_RADIO_TJRN_22_04_2026_B2_ENCERRAMENTO_REGISTRE_SE.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T18:39:47",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "6ab55aa417e54e70a9314679d92decc4"
+    }
+  ],
+  "erro": ""
+}

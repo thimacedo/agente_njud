@@ -1,0 +1,18 @@
+{
+  "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\data\\processed\\PRODUCAO_2026\\JORNAIS_DIVIDIDOS\\$dia $mes - QUA\\BOLETIM_RADIO_TJRN_08_01_2026_B2_TRTRN_RETOMA_ATIVIDADES (1).mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-15T19:29:53",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "4ba06d16b2b64c28b8a76d692f145dce"
+    }
+  ],
+  "erro": ""
+}

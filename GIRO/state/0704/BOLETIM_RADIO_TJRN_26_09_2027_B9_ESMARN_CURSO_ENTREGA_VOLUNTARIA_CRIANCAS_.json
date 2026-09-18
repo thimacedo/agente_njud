@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\07 - JUL - 26\\21 07 - TER\\BOLETIM_RADIO_TJRN_26_09_2027_B9_ESMARN_CURSO_ENTREGA_VOLUNTARIA_CRIANCAS_.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T00:46:45",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "6c0ebb0f4cec4ffa994085ba37887c61"
+    }
+  ],
+  "erro": ""
+}

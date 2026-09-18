@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\02 - FEV - 26\\27 02 - SEX\\BOLETIM_RADIO_TJRN_27_02_2026_B1_HOMICIDIO_DIVIDA_JURI.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T16:54:48",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "352dd5a6e84b4eae95bc29dd0b022609"
+    }
+  ],
+  "erro": ""
+}

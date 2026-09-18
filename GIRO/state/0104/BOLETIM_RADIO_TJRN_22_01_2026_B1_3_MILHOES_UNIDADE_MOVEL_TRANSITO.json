@@ -1,0 +1,18 @@
+{
+  "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\data\\processed\\PRODUCAO_2026\\JORNAIS_DIVIDIDOS\\$dia $mes - QUA\\BOLETIM_RADIO_TJRN_22_01_2026_B1_3_MILHOES_UNIDADE_MOVEL_TRANSITO.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-15T20:23:51",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "69ae84f3d0bf4f2e9ed970c08fc2fbae"
+    }
+  ],
+  "erro": ""
+}

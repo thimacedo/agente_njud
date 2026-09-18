@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\02 - FEV - 26\\06 02 - SEX\\BOLETIM_RADIO_TJRN_06_02_2026_B1_MPRN_CONDENACAO_EMPRESARIOS_.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T16:08:01",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "aa0466d45ca54766a22b13a75a7b61cb"
+    }
+  ],
+  "erro": ""
+}

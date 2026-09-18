@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\04 - ABR - 26\\17 04 - SEX\\BOLETIM_RADIO_TJRN_17_04_2026_B2_TJRN_RECONHECE_COMPETENCIA_IELMO_MARINHO_TAXA_.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T18:36:51",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "0c3835aeebef41c19bfd08289b4a270b"
+    }
+  ],
+  "erro": ""
+}

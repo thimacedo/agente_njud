@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\08 - AGO - 26\\03 08 - SEG\\BOLETIM_RADIO_TJRN_26_03_2026_B2_TJRN_PENAS_PECUNIARIAS_NISIA_FLORESTA_NJUD_1929.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T00:39:23",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "3bb674a0998842d68946192faf797ea0"
+    }
+  ],
+  "erro": ""
+}

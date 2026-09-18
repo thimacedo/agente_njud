@@ -10,9 +10,11 @@ from datetime import date
 from pydub import AudioSegment
 import whisper
 
-# Módulos locais
+import sys
+sys.path.insert(0, str(Path(__file__).parent.parent))  # adiciona scripts_pipeline/ ao path
+
 from corrigir_alucinacoes import corrigir_transcricao
-from bgm_mixer import mix_bgm
+from shared.bgm_mixer import mix_bgm
 
 VHT_DIR = Path(r"E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\assets\vinhetas\boletim")
 OUTPUT_BASE = Path(r"E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\boletins_edi")

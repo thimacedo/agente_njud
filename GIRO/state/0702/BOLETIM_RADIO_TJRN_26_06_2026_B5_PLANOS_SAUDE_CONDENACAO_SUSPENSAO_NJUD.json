@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\07 - JUL - 26\\06 07 - SEG\\BOLETIM_RADIO_TJRN_26_06_2026_B5_PLANOS_SAUDE_CONDENACAO_SUSPENSAO_NJUD.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T00:22:44",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "96d66423fa8a4eb79357047cd2f58bc1"
+    }
+  ],
+  "erro": ""
+}

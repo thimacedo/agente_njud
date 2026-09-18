@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\07 - JUL - 26\\22 07 - QUA\\BOLETIM_RADIO_TJRN_26_10_2027_B6_TJRN_BAGAGEM_DANIFICADA_VOO_NJUD_1920.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T00:38:24",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "4b7e650edbe74b5a8abe28c6d6e5f758"
+    }
+  ],
+  "erro": ""
+}

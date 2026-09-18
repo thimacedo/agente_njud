@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\04 - ABR - 26\\22 04 - QUA\\BOLETIM_RADIO_TJRN_22_04_2026_B1_FORUM_NACIONAL_MEDIACAO.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T18:34:20",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "ec406f2246aa426cad50851697a38115"
+    }
+  ],
+  "erro": ""
+}

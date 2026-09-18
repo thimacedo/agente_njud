@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\05 - MAI - 26\\05 05 - TER\\BOLETIM_RADIO_TJRN_05_05_2026_B1_ETAPA_HETEROIDENTIFICACAO_ENAM_1782542565.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T19:06:49",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "571489f9972743869f0c4cb512c2612f"
+    }
+  ],
+  "erro": ""
+}

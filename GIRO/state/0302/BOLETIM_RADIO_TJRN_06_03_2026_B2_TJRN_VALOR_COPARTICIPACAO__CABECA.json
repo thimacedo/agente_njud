@@ -1,0 +1,50 @@
+{
+  "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\data\\processed\\PRODUCAO_2026\\JORNAIS_DIVIDIDOS\\BOLETIM_RADIO_TJRN_06_03_2026_B2_TJRN_VALOR_COPARTICIPACAO__CABECA.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "ESGOTADO",
+  "estrategia_atual": "grade_fixa_locucao_estendida",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-11T08:15:12",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (0.6s < 5s) — possível corte que comeu o final ou arquivo corrompido"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "18d2cbf920d4444cb3e0a4a63d0c2ff0"
+    },
+    {
+      "estrategia": "ancora_vad_forcado",
+      "timestamp": "2026-09-11T08:15:14",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (0.6s < 5s) — possível corte que comeu o final ou arquivo corrompido"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "18d2cbf920d4444cb3e0a4a63d0c2ff0"
+    },
+    {
+      "estrategia": "janela_silencio_ampliada",
+      "timestamp": "2026-09-11T08:15:16",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (0.6s < 5s) — possível corte que comeu o final ou arquivo corrompido"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "18d2cbf920d4444cb3e0a4a63d0c2ff0"
+    },
+    {
+      "estrategia": "grade_fixa_locucao_estendida",
+      "timestamp": "2026-09-11T08:15:20",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (0.6s < 5s) — possível corte que comeu o final ou arquivo corrompido"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "18d2cbf920d4444cb3e0a4a63d0c2ff0"
+    }
+  ],
+  "erro": ""
+}

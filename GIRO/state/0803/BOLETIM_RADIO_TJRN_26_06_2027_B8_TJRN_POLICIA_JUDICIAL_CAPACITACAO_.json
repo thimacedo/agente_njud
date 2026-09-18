@@ -1,0 +1,50 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\08 - AGO - 26\\18 08 - TER\\BOLETIM_RADIO_TJRN_26_06_2027_B8_TJRN_POLICIA_JUDICIAL_CAPACITACAO_.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "ESGOTADO",
+  "estrategia_atual": "grade_fixa_locucao_estendida",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T00:58:02",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CABEÇA muito curto (1.6s < 2s) — possível corte que comeu o início do corpo"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "5a90cf15318c4109be7bbc2c73d8b2c1"
+    },
+    {
+      "estrategia": "ancora_vad_forcado",
+      "timestamp": "2026-09-13T00:58:03",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CABEÇA muito curto (1.6s < 2s) — possível corte que comeu o início do corpo"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "5a90cf15318c4109be7bbc2c73d8b2c1"
+    },
+    {
+      "estrategia": "janela_silencio_ampliada",
+      "timestamp": "2026-09-13T00:58:05",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CABEÇA muito curto (1.6s < 2s) — possível corte que comeu o início do corpo"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "5a90cf15318c4109be7bbc2c73d8b2c1"
+    },
+    {
+      "estrategia": "grade_fixa_locucao_estendida",
+      "timestamp": "2026-09-13T00:58:06",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CABEÇA muito curto (1.6s < 2s) — possível corte que comeu o início do corpo"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "5a90cf15318c4109be7bbc2c73d8b2c1"
+    }
+  ],
+  "erro": ""
+}

@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\01 - JAN - 26\\30 01 - SEX\\BOLETIM_RADIO_TJRN_30_01_2026_B1_TJRN_AMPLIA_PRODUTIVIDADE.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T15:58:39",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "c8c924decc3c4ae7b9d7e1b32ae55f86"
+    }
+  ],
+  "erro": ""
+}

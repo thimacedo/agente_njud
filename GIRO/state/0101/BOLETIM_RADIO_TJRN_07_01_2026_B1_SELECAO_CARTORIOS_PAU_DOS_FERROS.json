@@ -1,0 +1,18 @@
+{
+  "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\data\\staging\\GIRO\\2026-01-07\\BOLETIM_RADIO_TJRN_07_01_2026_B1_SELECAO_CARTORIOS_PAU_DOS_FERROS.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T14:49:32",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "b4188939bda74a3db3380f251f171ff0"
+    }
+  ],
+  "erro": ""
+}

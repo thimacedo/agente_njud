@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\01 - JAN - 26\\08 01 - QUI\\BOLETIM_RADIO_TJRN_08_01_2026_B1_RESPONSAVEL_INTERINO_AFONSO_BEZERRA.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T15:02:17",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "3c60cd8e07bc460d8785861c259483ec"
+    }
+  ],
+  "erro": ""
+}

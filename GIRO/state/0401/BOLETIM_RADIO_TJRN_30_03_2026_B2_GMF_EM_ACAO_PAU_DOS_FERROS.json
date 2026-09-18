@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\03 - MAR - 26\\30 03 - SEG\\BOLETIM_RADIO_TJRN_30_03_2026_B2_GMF_EM_ACAO_PAU_DOS_FERROS.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T17:54:46",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "e6ea774615ca46f6b1513f8f52a5fc8d"
+    }
+  ],
+  "erro": ""
+}

@@ -1,0 +1,50 @@
+{
+  "data": "18-09-2026",
+  "boletins": [
+    {
+      "boletim": "B6",
+      "reporter": "leonardo almeida",
+      "duracao_final": 133.28,
+      "tamanho_mb": 3.05,
+      "lufs": -15.9,
+      "peak": -1.2,
+      "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\boletins\\18-09-2026\\BOLETIM_RADIO_TJRN_18_09_2026_B6_TJRN_DISCUTE_SOLUCOES_PROCESSOS.mp3"
+    },
+    {
+      "boletim": "B7",
+      "reporter": "leonardo almeida",
+      "duracao_final": 107.25,
+      "tamanho_mb": 2.46,
+      "lufs": -15.7,
+      "peak": -1.0,
+      "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\boletins\\18-09-2026\\BOLETIM_RADIO_TJRN_18_09_2026_B7_ESMARN_FORMACAO_PRECEPTORES.mp3"
+    },
+    {
+      "boletim": "B8",
+      "reporter": "leonardo almeida",
+      "duracao_final": 85.4,
+      "tamanho_mb": 1.96,
+      "lufs": -15.6,
+      "peak": -0.9,
+      "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\boletins\\18-09-2026\\BOLETIM_RADIO_TJRN_18_09_2026_B8_DPERN_EVENTO_ANTIRRACISTA.mp3"
+    },
+    {
+      "boletim": "B9",
+      "reporter": "leonardo almeida",
+      "duracao_final": 121.67,
+      "tamanho_mb": 2.79,
+      "lufs": -15.8,
+      "peak": -1.0,
+      "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\boletins\\18-09-2026\\BOLETIM_RADIO_TJRN_18_09_2026_B9_MPRN_RECOMENDACOES_PM_ASSU.mp3"
+    },
+    {
+      "boletim": "B10",
+      "reporter": "leonardo almeida",
+      "duracao_final": 91.29,
+      "tamanho_mb": 2.09,
+      "lufs": -15.7,
+      "peak": -0.9,
+      "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\boletins\\18-09-2026\\BOLETIM_RADIO_TJRN_18_09_2026_B10_TRERN_CAPACITACAO_SERVIDORES_AUDITORIA_VOTACAO.mp3"
+    }
+  ]
+}

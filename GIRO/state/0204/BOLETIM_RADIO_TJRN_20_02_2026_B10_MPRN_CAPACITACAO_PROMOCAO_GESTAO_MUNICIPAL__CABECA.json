@@ -1,0 +1,50 @@
+{
+  "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\data\\processed\\PRODUCAO_2026\\JORNAIS_DIVIDIDOS\\BOLETIM_RADIO_TJRN_20_02_2026_B10_MPRN_CAPACITACAO_PROMOCAO_GESTAO_MUNICIPAL__CABECA.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "ESGOTADO",
+  "estrategia_atual": "grade_fixa_locucao_estendida",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-11T08:07:03",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (0.0s < 5s) — possível corte que comeu o final ou arquivo corrompido; Razão CABEÇA/CORPO extremamente desbalanceada (216.6x) — CABEÇA (4.1s) é muito maior que CORPO (0.0s)"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "b6673f17071f4727a218cd6e7993d62e"
+    },
+    {
+      "estrategia": "ancora_vad_forcado",
+      "timestamp": "2026-09-11T08:07:04",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (0.0s < 5s) — possível corte que comeu o final ou arquivo corrompido; Razão CABEÇA/CORPO extremamente desbalanceada (216.6x) — CABEÇA (4.1s) é muito maior que CORPO (0.0s)"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "b6673f17071f4727a218cd6e7993d62e"
+    },
+    {
+      "estrategia": "janela_silencio_ampliada",
+      "timestamp": "2026-09-11T08:07:04",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (1.4s < 5s) — possível corte que comeu o final ou arquivo corrompido"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "b6673f17071f4727a218cd6e7993d62e"
+    },
+    {
+      "estrategia": "grade_fixa_locucao_estendida",
+      "timestamp": "2026-09-11T08:07:05",
+      "resultado": "CORTADO",
+      "motivo": [
+        "[duracoes_validas] CORPO muito curto (0.0s < 5s) — possível corte que comeu o final ou arquivo corrompido; Razão CABEÇA/CORPO extremamente desbalanceada (216.6x) — CABEÇA (4.1s) é muito maior que CORPO (0.0s)"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "b6673f17071f4727a218cd6e7993d62e"
+    }
+  ],
+  "erro": ""
+}

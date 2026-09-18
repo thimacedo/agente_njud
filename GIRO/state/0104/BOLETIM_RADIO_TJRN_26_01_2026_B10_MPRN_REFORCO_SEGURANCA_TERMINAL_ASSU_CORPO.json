@@ -1,0 +1,18 @@
+{
+  "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\data\\processed\\PRODUCAO_2026\\JORNAIS_DIVIDIDOS\\01 07 - QUA\\BOLETIM_RADIO_TJRN_26_01_2026_B10_MPRN_REFORCO_SEGURANCA_TERMINAL_ASSU_CORPO.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-11T08:04:47",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "189892fd30d3430491355d31d422d627"
+    }
+  ],
+  "erro": ""
+}

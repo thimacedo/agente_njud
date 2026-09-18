@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\05 - MAI - 26\\18 05 - SEG\\BOLETIM_RADIO_TJRN_18_05_2026_B1_OBRIGATORIEDADE_AUTENTICACAO_MULTIFATOR.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T19:36:31",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "e29c82f4ba0441158effd5560957df21"
+    }
+  ],
+  "erro": ""
+}

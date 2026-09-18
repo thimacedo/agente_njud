@@ -1,0 +1,28 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\03 - MAR - 26\\13 03 - SEX\\BOLETIM_RADIO_TJRN_13_03_2026_B2_TJRN_DETERMINA_SUSPENSAO_COBRANCA_.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T17:26:05",
+      "resultado": "ERRO",
+      "motivo": [
+        "Expecting value: line 1 column 1 (char 0)"
+      ],
+      "usou_analisador": false,
+      "decisao_id": "02eaa060e92e458aaa1cb0af0cfaf3db"
+    },
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T07:13:06",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "0539f1dfaad2408bb66bd534a41bf7ab"
+    }
+  ],
+  "erro": "Expecting value: line 1 column 1 (char 0)"
+}

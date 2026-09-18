@@ -1,0 +1,18 @@
+{
+  "arquivo": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\data\\processed\\PRODUCAO_2026\\JORNAIS_DIVIDIDOS\\$dia $mes - QUA\\BOLETIM_RADIO_TJRN_08_01_2026_B3_CNJ_SISTEMA_NOVA_VERSAO_1782542960.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-15T19:47:49",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "426946da24154dcdbfc71261006bc3b8"
+    }
+  ],
+  "erro": ""
+}

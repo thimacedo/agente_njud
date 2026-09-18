@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\03 - MAR - 26\\30 03 - SEG\\BOLETIM_RADIO_TJRN_30_03_2026_B1_DANOS_MORAIS_NOME_NEGATIVADO.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T17:47:00",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "f583a20afe5149e68f5fae2cd48dca02"
+    }
+  ],
+  "erro": ""
+}

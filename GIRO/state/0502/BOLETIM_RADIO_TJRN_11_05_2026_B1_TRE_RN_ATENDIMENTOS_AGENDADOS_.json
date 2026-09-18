@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\05 - MAI - 26\\11 05 - SEG\\BOLETIM_RADIO_TJRN_11_05_2026_B1_TRE_RN_ATENDIMENTOS_AGENDADOS_.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-12T19:17:39",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "e59a9bec932d463bad19ac21aa8cde18"
+    }
+  ],
+  "erro": ""
+}

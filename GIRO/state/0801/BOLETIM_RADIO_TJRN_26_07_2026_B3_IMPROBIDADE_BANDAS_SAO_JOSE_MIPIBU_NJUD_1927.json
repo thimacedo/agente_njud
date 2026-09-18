@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\07 - JUL - 26\\31 07 - SEX\\BOLETIM_RADIO_TJRN_26_07_2026_B3_IMPROBIDADE_BANDAS_SAO_JOSE_MIPIBU_NJUD_1927.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T00:40:03",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "6214d0e31c9b4e009378c3277ad5603f"
+    }
+  ],
+  "erro": ""
+}

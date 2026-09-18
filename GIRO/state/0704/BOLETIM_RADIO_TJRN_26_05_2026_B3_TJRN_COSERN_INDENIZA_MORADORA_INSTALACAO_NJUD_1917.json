@@ -1,0 +1,18 @@
+{
+  "arquivo": "H:\\Meu Drive\\RADIO TJRN CONTEÚDO\\00_PRODUCAO_2026\\01_BOLETINS_DIARIOS\\03_AUDIOS_RADIO\\07 - JUL - 26\\17 07 - SEX\\BOLETIM_RADIO_TJRN_26_05_2026_B3_TJRN_COSERN_INDENIZA_MORADORA_INSTALACAO_NJUD_1917.mp3",
+  "programa": "giro",
+  "njud": "",
+  "status": "OK",
+  "estrategia_atual": "calibracao_correlacao",
+  "tentativas": [
+    {
+      "estrategia": "calibracao_correlacao",
+      "timestamp": "2026-09-13T00:34:46",
+      "resultado": "OK",
+      "motivo": [],
+      "usou_analisador": false,
+      "decisao_id": "4d2ef85926ea449e8b1aa22fdd728b61"
+    }
+  ],
+  "erro": ""
+}
