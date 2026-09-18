@@ -149,18 +149,38 @@ def carregar_roteiros(pasta_roteiros, data_str, b_ini, b_fim):
     if not pasta_roteiros or not pasta_roteiros.exists():
         return roteiros
 
-    for f in pasta_roteiros.glob("*.txt"):
+    # Extrair dia da data_str (ex: "17 SET" -> "17")
+    m_dia = re.search(r'(\d{1,2})', data_str)
+    dia_str = m_dia.group(1) if m_dia else None
+
+    # Priorizar arquivos com o dia no nome (ex: "roteiros_17_set.txt")
+    arquivos = list(pasta_roteiros.glob("*.txt"))
+    arquivos_ordenados = sorted(arquivos, key=lambda f: (
+        0 if dia_str and dia_str in f.name else 1,
+        len(f.name)  # arquivos menores primeiro (mais específicos)
+    ))
+
+    for f in arquivos_ordenados:
         texto = f.read_text(encoding="utf-8", errors="ignore")
+        encontrou_algo = False
         for linha in texto.splitlines():
             linha = linha.strip()
             if not linha:
                 continue
-            # Match no início da linha: B{N}-
-            m = re.match(r'B(\d{1,2})\s*[-–]\s*(.+)', linha)
+            # Match: B{N}- TITULO (formato compacto de roteiro)
+            m = re.match(r'B(\d{1,2})\s*[-–—]\s*(.+)', linha)
             if m:
                 n = int(m.group(1))
                 if b_ini <= n <= b_fim:
-                    roteiros[n] = m.group(2).strip()
+                    titulo = m.group(2).strip()
+                    # Só sobrescreve se ainda não tem título para esse boletim
+                    # ou se o arquivo tem o dia no nome (prioridade)
+                    if n not in roteiros or (dia_str and dia_str in f.name):
+                        roteiros[n] = titulo
+                        encontrou_algo = True
+        # Se encontrou todos os boletins neste arquivo, para
+        if encontrou_algo and len(roteiros) >= (b_fim - b_ini + 1):
+            break
 
     return roteiros
 
@@ -232,9 +252,10 @@ def detectar_estrutura(segmentos, b_ini, b_fim):
     marcadores = {}
     assinaturas = []
 
-    # Regex assinatura: "do/no Tribunal de Justiça do Rio Grande do Norte, [Nome]"
+    # Regex assinatura: "do/no Tribunal de Justiça do Rio Grande do Norte"
+    # Aceita variações: "Tribunal de Justiça, do Rio Grande" (com vírgula)
     padrao_ass = re.compile(
-        r'(?:do|no)\s+tribunal\s+de\s+justi[çc]a\s+do\s+rio\s+grande\s+do\s+norte',
+        r'tribunal\s+de\s+justi[çc]a\s*,?\s*do\s+rio\s+grande\s+do\s+norte',
         re.I
     )
 
