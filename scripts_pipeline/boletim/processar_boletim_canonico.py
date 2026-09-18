@@ -269,18 +269,23 @@ def detectar_estrutura(segmentos, b_ini, b_fim):
             assinaturas.append(t)
 
     # Cada assinatura marca o FIM de um boletim
-    # O próximo boletim começa um pouco depois da assinatura (~1s)
-    # B1 começa no início do áudio (após a claquete geral)
-    OFFSET_APOS_ASSINATURA = 1.5  # segundos após assinatura para iniciar próximo boletim
+    # O próximo boletim começa no PRÓXIMO SEGMENTO DE FALA após a assinatura
+    OFFSET_APOS_ASSINATURA = 0.3  # pequeno offset para evitar cortar a claquete
 
     if assinaturas:
-        # B1 começa no início (0s ou após claquete geral)
+        # B1 começa no início (0s)
         marcadores[b_ini] = 0.0
-        # Cada boletim subsequente começa após a assinatura do anterior
+        # Cada boletim subsequente começa no próximo segmento de fala após a assinatura
         for i, t_ass in enumerate(assinaturas):
             n_proximo = b_ini + i + 1
             if n_proximo <= b_fim:
-                marcadores[n_proximo] = t_ass + OFFSET_APOS_ASSINATURA
+                # Encontrar o primeiro segmento que COMEÇA após a assinatura
+                t_proximo = t_ass + 1.5  # fallback
+                for seg in segmentos:
+                    if seg["start"] > t_ass + 0.5:
+                        t_proximo = seg["start"]
+                        break
+                marcadores[n_proximo] = t_proximo
     else:
         # Sem assinaturas: interpolar igualmente
         for n in range(b_ini, b_fim + 1):
@@ -573,34 +578,22 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
     boletims_cortados = {}
 
     marcadores_ordenados = sorted(estrutura['marcadores'].items(), key=lambda x: x[1])
+    assinaturas_ordenadas = sorted([t for t, _, _ in estrutura['assinaturas']])
 
     for i, (n, t_ini) in enumerate(marcadores_ordenados):
         if n < b_ini or n > b_fim:
             continue
 
-        # Limite de início: marcação B{n} ou início do arquivo
-        t_start = max(0, t_ini - 1)
+        # Limite de início: marcação B{n} (claquete)
+        t_start = max(0, t_ini)
 
-        # Limite de fim: próxima assinatura (fim do boletim) ou próximo marcador, ou fim do arquivo
-        t_fim = len(audio) / 1000
-        for t_ass, _, _ in estrutura['assinaturas']:
-            if t_ass > t_start and t_ass < t_fim:
+        # Limite de fim: assinatura do boletim atual
+        # A assinatura é a primeira que vem DEPOIS do início do boletim
+        t_fim = len(audio) / 1000  # fallback: fim do áudio
+        for t_ass in assinaturas_ordenadas:
+            if t_ass > t_start + 2:  # pelo menos 2s de conteúdo
                 t_fim = t_ass
                 break
-        if i + 1 < len(marcadores_ordenados):
-            t_prox = marcadores_ordenados[i + 1][1]
-            if t_prox < t_fim:
-                t_fim = t_prox
-
-        # Se o próximo marcador é igual ou muito próximo (mesmo tempo ou within 0.5s)
-        # e este é o último boletim da faixa, usar o fim do áudio como limite
-        is_last = (i == len(marcadores_ordenados) - 1)
-        if is_last and i + 1 < len(marcadores_ordenados):
-            t_prox = marcadores_ordenados[i + 1][1]
-            if t_prox <= t_ini + 0.5:
-                # Marcadores iguais/muito próximos: usar fim do áudio para o último
-                if t_fim > len(audio) / 1000:
-                    t_fim = len(audio) / 1000
 
         # Recortar boletim crú
         t_start_ms = int(t_start * 1000)
