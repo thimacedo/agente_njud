@@ -10,6 +10,9 @@ from datetime import date
 from pydub import AudioSegment
 import whisper
 
+# Módulos locais
+from corrigir_alucinacoes import corrigir_transcricao
+
 VHT_DIR = Path(r"E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\assets\vinhetas\boletim")
 OUTPUT_BASE = Path(r"E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\boletins_edi")
 BG_PATH = VHT_DIR / "BG - BOLETIM.mp3"
@@ -513,6 +516,22 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
     with tempfile.NamedTemporaryFile(suffix='.wav', delete=False, dir=str(Path(r"C:/Users/THIAGO/AppData/Local/Temp"))) as tmp:
         tmp_path = tmp.name
     segmentos = transcrever(audio, tmp_path, modelo)
+
+    # ETAPA 1.5: Correção de alucinações do Whisper
+    print("\n── ETAPA 1.5: CORREÇÃO DE ALUCINAÇÕES ──")
+    # Extrair faixa do nome do arquivo para carregar roteiros
+    _, b_ini_f, b_fim_f, _ = extrair_info_nome(arquivo, None)
+    # Compilar texto completo dos roteiros para correção
+    texto_roteiro_completo = None
+    if pasta_roteiros:
+        roteiros_dict = carregar_roteiros(pasta_roteiros, "", b_ini_f, b_fim_f)
+        if roteiros_dict:
+            texto_roteiro_completo = " ".join(roteiros_dict.values())
+
+    segmentos_antes = len(segmentos)
+    segmentos = corrigir_transcricao(segmentos, texto_roteiro_completo)
+    removidos = segmentos_antes - len(segmentos)
+    print(f"  Segmentos antes: {segmentos_antes}, depois: {len(segmentos)}, removidos: {removidos}")
 
     print(f"  Transcrito: {len(segmentos)} segmentos")
     print("\n  Transcrição completa:")
