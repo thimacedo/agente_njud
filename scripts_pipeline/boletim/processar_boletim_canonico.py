@@ -12,6 +12,7 @@ import whisper
 
 # Módulos locais
 from corrigir_alucinacoes import corrigir_transcricao
+from bgm_mixer import mix_bgm
 
 VHT_DIR = Path(r"E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\assets\vinhetas\boletim")
 OUTPUT_BASE = Path(r"E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\boletins_edi")
@@ -459,15 +460,10 @@ def montar_boletim_com_vinhetas(segmento_audio, vht_abertura, vht_passagem, vht_
     if vht_p:
         partes.append(vht_p)
 
-    # OFF com BG em ducking (BG não ultrapassa o off)
+    # OFF com BG em ducking dinâmico (BG desce durante a fala, sobe no silêncio)
     if len(off) > 0 and bg is not None:
-        off_dur_ms = len(off)
-        # Cortar BG para não ultrapassar o off
-        bg_cortado = bg[:off_dur_ms] if len(bg) > off_dur_ms else bg
-        # Aplicar ducking (reduzir volume do BG)
-        bg_ducked = bg_cortado.apply_gain(BG_DUCKING_DB)
-        # Mixar OFF + BG duckado
-        off_com_bg = off.overlay(bg_ducked)
+        # Usa mix_bgm para ducking profissional baseado em RMS da voz
+        off_com_bg = mix_bgm(off, BG_PATH)
         partes.append(off_com_bg)
     elif len(off) > 0:
         partes.append(off)
