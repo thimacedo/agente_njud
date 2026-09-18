@@ -43,13 +43,16 @@ def nomear_boletim(data_str, numero, roteiro_texto=None, data_completa_str=None)
     # Extrair título do roteiro se disponível
     titulo = ""
     if roteiro_texto:
+        # Tenta formato "B{N}- TITULO"
         m_ret = re.search(rf'B{numero}\s*[-–]\s*(.+?)(?:\n|$)', roteiro_texto, re.I)
         if m_ret:
             titulo = m_ret.group(1).strip()
         else:
-            m_ret2 = re.search(rf'\bB{numero}\b(.+?)(?:\n|$)', roteiro_texto, re.I)
-            if m_ret2:
-                titulo = m_ret2.group(1).strip()
+            # Tenta formato só "TITULO" (já extraído pelo carregar_roteiros)
+            # Remove prefixos como "B{N}-" ou "B{N} " se existirem
+            limpo = re.sub(r'^B\d+\s*[-–]?\s*', '', roteiro_texto).strip()
+            if limpo:
+                titulo = limpo
     
     titulo_limpo = re.sub(r'[^A-Za-z0-_=]', '_', titulo.upper())
     titulo_limpo = re.sub(r'_+', '_', titulo_limpo).strip('_')
@@ -80,11 +83,18 @@ def extrair_info_nome(arquivo, transcricao_texto=None):
             dia_transcricao = m_comp.group(1).zfill(2)
             ano_transcricao = m_comp.group(2) or None
 
-    # Decidir qual usar: transcrição tem prioridade se tiver dia + ano
-    if dia_transcricao and ano_transcricao:
+    # Decidir qual usar: filename tem prioridade (mais confiável)
+    # A transcrição pode conter datas de notícias (ex: "30 de setembro" no texto)
+    if dia_filename:
+        data_str = f"{dia_filename} SET"
+        if ano_transcricao:
+            data_completa_str = f"{dia_filename}_SET_{ano_transcricao}"
+        else:
+            data_completa_str = f"{dia_filename}_SET_2026"
+    elif dia_transcricao and ano_transcricao:
         data_str = f"{dia_transcricao} SET"
         data_completa_str = f"{dia_transcricao}_SET_{ano_transcricao}"
-    elif dia_filename:
+    elif dia_transcricao:
         data_str = f"{dia_filename} SET"
         # Se a transcrição só tem dia sem ano, usar ano do filename se tiver, ou 2026
         if dia_transcricao and not ano_transcricao:
@@ -127,18 +137,30 @@ def extrair_info_nome(arquivo, transcricao_texto=None):
 
 
 def carregar_roteiros(pasta_roteiros, data_str, b_ini, b_fim):
-    """Se pasta_roteiros informado, busca roteiros .txt/.gdoc convertidos para cada boletim.
-    Retorna dict {Bnumero: texto_roteiro}"""
+    """Se pasta_roteiros informado, busca roteiros .txt para cada boletim.
+    Retorna dict {Bnumero: texto_roteiro}
+
+    Espera que cada linha do .txt tenha o formato:
+    B{N}- TITULO
+    ou
+    B{N}- RETRANCA
+    """
     roteiros = {}
     if not pasta_roteiros or not pasta_roteiros.exists():
         return roteiros
 
     for f in pasta_roteiros.glob("*.txt"):
         texto = f.read_text(encoding="utf-8", errors="ignore")
-        for n in range(b_ini, b_fim + 1):
-            if f"B{n}" in texto or f"B{n}-" in texto or f"B{n} " in texto:
-                roteiros[n] = texto
-                break
+        for linha in texto.splitlines():
+            linha = linha.strip()
+            if not linha:
+                continue
+            # Match no início da linha: B{N}-
+            m = re.match(r'B(\d{1,2})\s*[-–]\s*(.+)', linha)
+            if m:
+                n = int(m.group(1))
+                if b_ini <= n <= b_fim:
+                    roteiros[n] = m.group(2).strip()
 
     return roteiros
 
@@ -200,61 +222,51 @@ def transcrever(audio, tmp_path, modelo):
 
 
 def detectar_estrutura(segmentos, b_ini, b_fim):
-    """ETAPA 2: detectar marcações B{N}. e assinaturas.
+    """ETAPA 2: detectar estrutura dos boletins.
+    Usa assinaturas do locutor como delimitadores principais.
+    Cada assinatura finaliza um boletim; o próximo começa após a assinatura.
     Retorna dict:
       - marcadores: {n_boletim: tempo_segundo}
       - assinaturas: [(tempo, nome_reporter, texto_assinatura), ...]
       - falta: [numeros faltantes]"""
     marcadores = {}
     assinaturas = []
-    falta = list(range(b_ini, b_fim + 1))
 
-    # Regex marcação B{N}.
-    padrao_b = re.compile(r'\bB(\d{1,2})\.')
-
-    # Regex assinatura: "do Tribunal de Justiça do Rio Grande do Norte, [Nome]"
+    # Regex assinatura: "do/no Tribunal de Justiça do Rio Grande do Norte, [Nome]"
     padrao_ass = re.compile(
-        r'do\s+tribunal\s+de\s+justiça\s+do\s+rio\s+grande\s+do\s+norte,\s*(.+?)(?:\s\.\s|\s$)',
+        r'(?:do|no)\s+tribunal\s+de\s+justi[çc]a\s+do\s+rio\s+grande\s+do\s+norte',
         re.I
     )
 
+    # Coletar todas as assinaturas em ordem
     for seg in segmentos:
         texto = seg["text"]
-        tamanho = len(texto)
-
-        # Buscar B{N}.
-        for m in padrao_b.finditer(texto):
-            try:
-                n = int(m.group(1))
-            except ValueError:
-                continue
-            if n < b_ini or n > b_fim:
-                continue
-            pos_ratio = m.start() / tamanho if tamanho > 0 else 0
-            t = seg["start"] + (seg["end"] - seg["start"]) * pos_ratio
-            if n not in marcadores or t < marcadores[n]:
-                marcadores[n] = t
-                if n in falta:
-                    falta.remove(n)
-
-        # Buscar assinatura
         m_ass = padrao_ass.search(texto)
         if m_ass:
-            pos_ratio = m_ass.start() / tamanho if tamanho > 0 else 0
+            pos_ratio = m_ass.start() / len(texto) if len(texto) > 0 else 0
             t = seg["start"] + (seg["end"] - seg["start"]) * pos_ratio
-            nome = m_ass.group(1).strip()
-            assinaturas.append((t, nome, texto.strip()))
+            assinaturas.append(t)
 
-    # Interpolar faltantes por centro
-    if falta and marcadores:
-        nums_conhecidos = sorted(marcadores.keys())
-        for n_faltante in sorted(falta):
-            pos_relativa = (n_faltante - nums_conhecidos[0]) / (nums_conhecidos[-1] - nums_conhecidos[0] + 1)
-            t_estimado = pos_relativa * (marcadores[nums_conhecidos[-1]] - marcadores[nums_conhecidos[0]]) + marcadores[nums_conhecidos[0]]
-            marcadores[n_faltante] = t_estimado
+    # Cada assinatura marca o FIM de um boletim
+    # O próximo boletim começa um pouco depois da assinatura (~1s)
+    # B1 começa no início do áudio (após a claquete geral)
+    OFFSET_APOS_ASSINATURA = 1.5  # segundos após assinatura para iniciar próximo boletim
 
-    return {"marcadores": marcadores, "assinaturas": assinaturas, "falta": falta}
+    if assinaturas:
+        # B1 começa no início (0s ou após claquete geral)
+        marcadores[b_ini] = 0.0
+        # Cada boletim subsequente começa após a assinatura do anterior
+        for i, t_ass in enumerate(assinaturas):
+            n_proximo = b_ini + i + 1
+            if n_proximo <= b_fim:
+                marcadores[n_proximo] = t_ass + OFFSET_APOS_ASSINATURA
+    else:
+        # Sem assinaturas: interpolar igualmente
+        for n in range(b_ini, b_fim + 1):
+            pos = (n - b_ini) / (b_fim - b_ini + 1)
+            marcadores[n] = pos * duracao_estimada
 
+    return {"marcadores": marcadores, "assinaturas": [(t, "", "") for t in assinaturas], "falta": []}
 
 def detectar_repeticoes_confirmadas(segmentos, audio, threshold_similaridade=0.90):
     """ETAPA 3: detectar repetições confirmadas por análise de áudio.
