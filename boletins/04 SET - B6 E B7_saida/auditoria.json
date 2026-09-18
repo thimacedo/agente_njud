@@ -1,5 +1,5 @@
 {
-  "arquivo_entrada": "E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\boletins\\04 SET - B6 E B7.mp3",
+  "arquivo_entrada": "boletins\\04 SET - B6 E B7.mp3",
   "data_detectada": "04 SET",
   "faixa": [
     6,
@@ -70,8 +70,8 @@
     },
     {
       "arquivo": "BOLETIM_RADIO_TJRN_04_SET_2026_B7__.mp3",
-      "duracao_segundos": 208.06,
-      "tamanho_bytes": 3329517
+      "duracao_segundos": 207.06,
+      "tamanho_bytes": 3313773
     }
   ]
 }

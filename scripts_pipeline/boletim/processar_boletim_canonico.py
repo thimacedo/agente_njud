@@ -12,6 +12,8 @@ import whisper
 
 VHT_DIR = Path(r"E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\assets\vinhetas\boletim")
 OUTPUT_BASE = Path(r"E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\boletins_edi")
+BG_PATH = VHT_DIR / "BG - BOLETIM.mp3"
+BG_DUCKING_DB = -10  # reduzir BG em 10dB durante o off
 
 
 def nomear_boletim(data_str, numero, roteiro_texto=None, data_completa_str=None):
@@ -376,25 +378,26 @@ def detectar_claquetes_por_assinatura(segmentos, assinaturas, b_ini, b_fim):
     return claquetes
 
 
+def carregar_vht(nome):
+    """Carrega uma vinheta do diretório de assets."""
+    caminho = VHT_DIR / nome
+    if caminho.exists():
+        return AudioSegment.from_mp3(str(caminho))
+    return None
+
+
 def montar_boletim_com_vinhetas(segmento_audio, vht_abertura, vht_passagem, vht_encerramento, cabeça_duracao=20):
-    """ETAPA 6: monta a estrutura completa: ABERTURA + CABEÇA + PASSAGEM + OFF + ENCERRAMENTO.
-    cabeça_duracao: duração da cabeça (primeiros N segundos do conteúdo).
-    Retorna AudioSegment montado."""
-    # Carregar vinhetas se existirem
-    def carregar_vht(nome):
-        caminho = VHT_DIR / nome
-        if caminho.exists():
-            return AudioSegment.from_mp3(str(caminho))
-        return None
+    """ETAPA 6: monta estrutura completa: ABERTURA + CABEÇA + PASSAGEM + OFF(com BG ducking) + ENCERRAMENTO.
 
-    vht_a = carregar_vht("VHT_ABERTURA_BOLETIM.mp3")
-    vht_p = carregar_vht("VHT_PASSAMENTO_BOLETIM.mp3")
-    vht_e = carregar_vht("VHT_ENCERRAMENTO_BOLETIM.mp3")
-
-    partes = []
-
-    if vht_a:
-        partes.append(vht_a)
+    - BG (background music) toca durante o OFF com ducking (volume reduzido).
+    - BG nunca ultrapassa o fim do off.
+    - Se o off é mais curto que o BG, o BG é cortado.
+    - Se o off é mais longo, o BG termina antes do encerramento.
+    """
+    vht_a = vht_abertura or carregar_vht("VHT_ABERTURA_BOLETIM.mp3")
+    vht_p = vht_passagem or carregar_vht("VHT_PASSAMENTO_BOLETIM.mp3")
+    vht_e = vht_encerramento or carregar_vht("VHT_ENCERRAMENTO_BOLETIM.mp3")
+    bg = carregar_vht("BG - BOLETIM.mp3")
 
     # Dividir em cabeça e off
     duracao_total = len(segmento_audio) / 1000
@@ -405,18 +408,33 @@ def montar_boletim_com_vinhetas(segmento_audio, vht_abertura, vht_passagem, vht_
         cabeça = segmento_audio
         off = AudioSegment.silent(duration=0)
 
+    # Montar partes sem BG primeiro
+    partes = []
+    if vht_a:
+        partes.append(vht_a)
+
     partes.append(cabeça)
 
     if vht_p:
         partes.append(vht_p)
 
-    if len(off) > 0:
+    # OFF com BG em ducking (BG não ultrapassa o off)
+    if len(off) > 0 and bg is not None:
+        off_dur_ms = len(off)
+        # Cortar BG para não ultrapassar o off
+        bg_cortado = bg[:off_dur_ms] if len(bg) > off_dur_ms else bg
+        # Aplicar ducking (reduzir volume do BG)
+        bg_ducked = bg_cortado.apply_gain(BG_DUCKING_DB)
+        # Mixar OFF + BG duckado
+        off_com_bg = off.overlay(bg_ducked)
+        partes.append(off_com_bg)
+    elif len(off) > 0:
         partes.append(off)
 
     if vht_e:
         partes.append(vht_e)
 
-    return sum(partes, AudioSegment.silent())
+    return sum(partes[1:], partes[0]) if len(partes) > 1 else (partes[0] if partes else AudioSegment.silent(duration=1000))
 
 
 def processar_canonico(arquivo_entrada, pasta_roteiros=None):
