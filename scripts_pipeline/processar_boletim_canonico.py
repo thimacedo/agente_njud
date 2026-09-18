@@ -1,0 +1,687 @@
+#!/usr/bin/env python3
+"""
+Pipeline canônico de edição de boletins — processar_boletim_canonico.py
+Uso: processar_boletim_canonico.py <arquivo_entrada> [--roteiros <pasta_roteiros>]
+Saída: pasta <arquivo_entrada>_saida/ com boletins editados + auditoria.json
+"""
+import argparse, re, os, json, shutil, sys, tempfile
+from pathlib import Path
+from datetime import date
+from pydub import AudioSegment
+import whisper
+
+VHT_DIR = Path(r"E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\assets\vinhetas\boletim")
+OUTPUT_BASE = Path(r"E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\boletins_edi")
+
+
+def nomear_boletim(data_str, numero, roteiro_texto=None, data_completa_str=None):
+    """Gera nome canônico BOLETIM_RADIO_TJRN_DD_MM_AAAA_B{N}__TITULO.mp3
+    
+    data_completa_str: string DD_MM_AAAA (ex: "04_09_2026"). 
+    Se None, tenta extrair do data_str (ex: "04 SET" -> dia 04) e usa 2026 como padrão.
+    """
+    dd, mm, aaaa = "??", "??", "????"
+    
+    if data_completa_str:
+        partes = data_completa_str.split("_")
+        if len(partes) == 3:
+            dd, mm, aaaa = partes[0], partes[1], partes[2]
+        else:
+            dd, mm, aaaa = "??", "??", "????"
+    else:
+        # Extrair dia do data_str (ex: "04 SET" -> dia 04)
+        m_data = re.search(r'(\d{1,2})\s*[Ss][Ee][Tt]', data_str or "", re.I)
+        if m_data:
+            dd = m_data.group(1).zfill(2)
+            mm = "09"  # SET = setembro = 09
+            aaaa = "2026"  # padrão do DIVISOR
+        else:
+            dd, mm, aaaa = "??", "??", "????"
+    
+    # Extrair título do roteiro se disponível
+    titulo = ""
+    if roteiro_texto:
+        m_ret = re.search(rf'B{numero}\s*[-–]\s*(.+?)(?:\n|$)', roteiro_texto, re.I)
+        if m_ret:
+            titulo = m_ret.group(1).strip()
+        else:
+            m_ret2 = re.search(rf'\bB{numero}\b(.+?)(?:\n|$)', roteiro_texto, re.I)
+            if m_ret2:
+                titulo = m_ret2.group(1).strip()
+    
+    titulo_limpo = re.sub(r'[^A-Za-z0-_=]', '_', titulo.upper())
+    titulo_limpo = re.sub(r'_+', '_', titulo_limpo).strip('_')
+    return f"BOLETIM_RADIO_TJRN_{dd}_{mm}_{aaaa}_B{numero}__{titulo_limpo}.mp3"
+
+
+def extrair_info_nome(arquivo, transcricao_texto=None):
+    """Extrai data e faixa de boletins do nome do arquivo e (opcionalmente) da transcrição.
+    Retorna (data_str, B_ini, B_fim, data_completa_str)
+
+    Data completa: DD_SET_AAAA (ex: 04_SET_2026)
+    Se o filename tem "DD SET" e a transcrição tem "dia de setembro [de AAAA]", prefere a transcrição.
+    Se filename tem apenas "DD SET" sem contexto, extrai do filename e assume ano atual ou 2026.
+    """
+    stem = Path(arquivo).stem
+
+    # Extrair dia do filename: "18 SET", "04 SET", "17 SET", etc.
+    m_data = re.search(r'(\d{1,2})\s*[Ss][Ee][Tt]', stem)
+    dia_filename = m_data.group(1).zfill(2) if m_data else None
+
+    # Extrair dia e ano da transcrição: "18 de setembro", "18 de setembro de 2026"
+    dia_transcricao = None
+    ano_transcricao = None
+    if transcricao_texto:
+        texto_clean = re.sub(r'\s+', ' ', transcricao_texto).lower()
+        m_comp = re.search(r'(\d{1,2})\s*de\s+setembro\s*(?:de\s*(\d{4}))?', texto_clean)
+        if m_comp:
+            dia_transcricao = m_comp.group(1).zfill(2)
+            ano_transcricao = m_comp.group(2) or None
+
+    # Decidir qual usar: transcrição tem prioridade se tiver dia + ano
+    if dia_transcricao and ano_transcricao:
+        data_str = f"{dia_transcricao} SET"
+        data_completa_str = f"{dia_transcricao}_SET_{ano_transcricao}"
+    elif dia_filename:
+        data_str = f"{dia_filename} SET"
+        # Se a transcrição só tem dia sem ano, usar ano do filename se tiver, ou 2026
+        if dia_transcricao and not ano_transcricao:
+            data_completa_str = f"{dia_transcricao}_SET_2026"
+        else:
+            data_completa_str = None
+    else:
+        data_str = None
+        data_completa_str = None
+
+    # Se não consegui extrair data da transcrição e o filename tem um ano explícito
+    # (ex: "18-09-2026" ou "18_09_2026" no nome), usar isso como fallback
+    if data_completa_str is None:
+        m_ano = re.search(r'(\d{2})[_-](\d{2})[_-](\d{4})', stem)
+        if m_ano:
+            data_completa_str = f"{m_ano.group(1)}_{m_ano.group(2).upper()}_{m_ano.group(3)}"
+            if not data_str:
+                data_str = f"{m_ano.group(1)} {m_ano.group(2).upper()}"
+
+    # Fallback final: se ainda nada, usar o que tem
+    if not data_completa_str:
+        # Se só temos o dia do filename, assumir 2026
+        if dia_filename:
+            data_completa_str = f"{dia_filename}_SET_2026"
+        else:
+            data_completa_str = "??_SET_????"
+
+    # Faixa: "B6-B10", "B6 e B7", "B1 B5", "B1-B4", "B8-B10"...
+    m_faixa = re.search(r'B(\d{1,2})\s*(?:[-–eE])\s*B(\d{1,2})', stem)
+    if m_faixa:
+        b_ini, b_fim = int(m_faixa.group(1)), int(m_faixa.group(2))
+    else:
+        m_faixa2 = re.search(r'(B\d{1,2})(B\d{1,2})', stem)
+        if m_faixa2:
+            b_ini, b_fim = int(m_faixa2.group(1)[1:]), int(m_faixa2.group(2)[1:])
+        else:
+            b_ini, b_fim = 1, 10  # fallback
+
+    return data_str, b_ini, b_fim, data_completa_str
+
+
+def carregar_roteiros(pasta_roteiros, data_str, b_ini, b_fim):
+    """Se pasta_roteiros informado, busca roteiros .txt/.gdoc convertidos para cada boletim.
+    Retorna dict {Bnumero: texto_roteiro}"""
+    roteiros = {}
+    if not pasta_roteiros or not pasta_roteiros.exists():
+        return roteiros
+
+    for f in pasta_roteiros.glob("*.txt"):
+        texto = f.read_text(encoding="utf-8", errors="ignore")
+        for n in range(b_ini, b_fim + 1):
+            if f"B{n}" in texto or f"B{n}-" in texto or f"B{n} " in texto:
+                roteiros[n] = texto
+                break
+
+    return roteiros
+
+
+def triagem_audio(audio):
+    """ETAPA 0: triagem inicial. Retorna dict com análise e ações."""
+    duracao = len(audio) / 1000
+    canais = audio.channels
+    frame_rate = audio.frame_rate
+    sample_width = audio.sample_width
+
+    resultado = {
+        "duracao_segundos": duracao,
+        "canais": canais,
+        "frame_rate": frame_rate,
+        "sample_width": sample_width,
+        "acoes": []
+    }
+
+    # Canal morto: um canal com amplitude próxima de 0
+    if canais == 2:
+        monoEsq = audio.split_to_mono()[0]
+        monoDir = audio.split_to_mono()[1]
+
+        maxEsq = monoEsq.max
+        maxDir = monoDir.max
+
+        if maxEsq < 500 and maxDir > 5000:
+            resultado["canal_morto"] = "esquerdo"
+
+        if maxEsq < 100 and maxDir > 1000:
+            resultado["canal_morto"] = "esquerdo"
+            resultado["acoes"].append("CORRIGIR: substituir canal esquerdo pelo direito (multiplicar esquerdo por fator de escala do direito)")
+        elif maxDir < 100 and maxEsq > 1000:
+            resultado["canal_morto"] = "direito"
+            resultado["acoes"].append("CORRIGIR: substituir canal direito pelo esquerdo (multiplicar direito por fator de escala do esquerdo)")
+
+        # Estéreo duplicado
+        samplesEsq = list(monoEsq.get_array_of_samples())
+        samplesDir = list(monoDir.get_array_of_samples())
+        if samplesEsq == samplesDir:
+            resultado["estereo_duplicado"] = True
+            resultado["acoes"].append("CONVERTER: áudio estereo duplicado (L==R) → converter para mono")
+
+    # Clipping
+    if audio.max >= 32767 * 0.99:
+        resultado["clipping_detectado"] = True
+        resultado["acoes"].append("AVISO: possível clipping (pico próximo de 0dBFS)")
+
+    return resultado
+
+
+def transcrever(audio, tmp_path, modelo):
+    """ETAPA 1: transcrição com Whisper base."""
+    audio.export(tmp_path, format="wav")
+    result = modelo.transcribe(tmp_path, language="pt", fp16=False)
+    os.unlink(tmp_path)
+    return result["segments"]
+
+
+def detectar_estrutura(segmentos, b_ini, b_fim):
+    """ETAPA 2: detectar marcações B{N}. e assinaturas.
+    Retorna dict:
+      - marcadores: {n_boletim: tempo_segundo}
+      - assinaturas: [(tempo, nome_reporter, texto_assinatura), ...]
+      - falta: [numeros faltantes]"""
+    marcadores = {}
+    assinaturas = []
+    falta = list(range(b_ini, b_fim + 1))
+
+    # Regex marcação B{N}.
+    padrao_b = re.compile(r'\bB(\d{1,2})\.')
+
+    # Regex assinatura: "do Tribunal de Justiça do Rio Grande do Norte, [Nome]"
+    padrao_ass = re.compile(
+        r'do\s+tribunal\s+de\s+justiça\s+do\s+rio\s+grande\s+do\s+norte,\s*(.+?)(?:\s\.\s|\s$)',
+        re.I
+    )
+
+    for seg in segmentos:
+        texto = seg["text"]
+        tamanho = len(texto)
+
+        # Buscar B{N}.
+        for m in padrao_b.finditer(texto):
+            try:
+                n = int(m.group(1))
+            except ValueError:
+                continue
+            if n < b_ini or n > b_fim:
+                continue
+            pos_ratio = m.start() / tamanho if tamanho > 0 else 0
+            t = seg["start"] + (seg["end"] - seg["start"]) * pos_ratio
+            if n not in marcadores or t < marcadores[n]:
+                marcadores[n] = t
+                if n in falta:
+                    falta.remove(n)
+
+        # Buscar assinatura
+        m_ass = padrao_ass.search(texto)
+        if m_ass:
+            pos_ratio = m_ass.start() / tamanho if tamanho > 0 else 0
+            t = seg["start"] + (seg["end"] - seg["start"]) * pos_ratio
+            nome = m_ass.group(1).strip()
+            assinaturas.append((t, nome, texto.strip()))
+
+    # Interpolar faltantes por centro
+    if falta and marcadores:
+        nums_conhecidos = sorted(marcadores.keys())
+        for n_faltante in sorted(falta):
+            pos_relativa = (n_faltante - nums_conhecidos[0]) / (nums_conhecidos[-1] - nums_conhecidos[0] + 1)
+            t_estimado = pos_relativa * (marcadores[nums_conhecidos[-1]] - marcadores[nums_conhecidos[0]]) + marcadores[nums_conhecidos[0]]
+            marcadores[n_faltante] = t_estimado
+
+    return {"marcadores": marcadores, "assinaturas": assinaturas, "falta": falta}
+
+
+def detectar_repeticoes_confirmadas(segmentos, audio, threshold_similaridade=0.90):
+    """ETAPA 3: detectar repetições confirmadas por análise de áudio.
+    Somente mantém "Repete." se o áudio antes e depois tiver similaridade >= threshold.
+    Retorna: (repeticoes_confirmadas, repeticoes_rejeitadas)"""
+    confirmadas = []
+    rejeitadas = []
+
+    for i, seg in enumerate(segmentos[:-1]):
+        texto = seg["text"].strip()
+        if texto.lower() != "repete.":
+            continue
+
+        # Procurar próximo segmento com conteúdo (pular outros "Repete.")
+        seg_prox = None
+        for j in range(i + 1, min(i + 5, len(segmentos))):
+            if segmentos[j]["text"].strip().lower() != "repete.":
+                seg_prox = segmentos[j]
+                break
+
+        if not seg_prox:
+            rejeitadas.append({"posicao": seg["start"], "motivo": "sem segmento próximo com conteúdo"})
+            continue
+
+        # Comparar áudio antes e depois
+        t_antes_inicio = max(0, seg["start"] - 3)
+        t_antes_fim = seg["start"]
+        t_depois_inicio = seg_prox["start"]
+        t_depois_fim = min(len(audio)/1000, seg_prox["end"] + 3)
+
+        try:
+            audio_antes = audio[int(t_antes_inicio*1000):int(t_antes_fim*1000)]
+            audio_depois = audio[int(t_depois_inicio*1000):int(t_depois_fim*1000)]
+
+            if len(audio_antes) < 500 or len(audio_depois) < 500:
+                rejeitadas.append({"posicao": seg["start"], "motivo": "trecho muito curto para comparação"})
+                continue
+
+            # Similaridade por correlação cruzada simplificada
+            import numpy as np
+            samples_antes = np.array(audio_antes.get_array_of_samples(), dtype=np.float32)
+            samples_depois = np.array(audio_depois.get_array_of_samples(), dtype=np.float32)
+
+            if len(samples_antes) < 100 or len(samples_depois) < 100:
+                rejeitadas.append({"posicao": seg["start"], "motivo": "amostras insuficientes"})
+                continue
+
+            # Normalizar
+            s_antes = samples_antes - np.mean(samples_antes)
+            s_depois = samples_depois - np.mean(samples_depois)
+
+            if np.std(s_antes) < 1e-6 or np.std(s_depois) < 1e-6:
+                rejeitadas.append({"posicao": seg["start"], "motivo": "um dos trechos é silêncio"})
+                continue
+
+            corr = np.correlate(s_antes, s_depois, mode='valid')
+            similaridade = np.max(np.abs(corr)) / (np.linalg.norm(s_antes) * np.linalg.norm(s_depois))
+
+            if similaridade >= threshold_similaridade:
+                confirmadas.append({
+                    "inicio": seg_prox["start"],
+                    "fim": seg_prox["end"],
+                    "texto_repetido": seg_prox["text"].strip()[:80],
+                    "similaridade": float(similaridade)
+                })
+            else:
+                rejeitadas.append({"posicao": seg["start"], "motivo": f"similaridade {similaridade:.2f} < {threshold_similaridade}"})
+
+        except Exception as e:
+            rejeitadas.append({"posicao": seg["start"], "motivo": f"erro na análise: {str(e)}"})
+
+    return confirmadas, rejeitadas
+
+
+def detectar_claquetes_por_assinatura(segmentos, assinaturas, b_ini, b_fim):
+    """ETAPA 4: detectar claquetes após assinatura do locutor.
+    Para cada assinatura encontrada, busca nos próximos 5s a próxima claquete B{N}.
+    Retorna dict {n_boletim_claquete: {"inicio": t, "fim": t_estimado, "motivo": ...}}"""
+    claquetes = {}
+    marcadores_b = {}
+
+    for seg in segmentos:
+        m = re.search(r'\bB(\d{1,2})\.', seg["text"])
+        if m:
+            try:
+                n = int(m.group(1))
+                if b_ini <= n <= b_fim:
+                    if n not in marcadores_b:
+                        marcadores_b[n] = seg["start"]
+            except ValueError:
+                pass
+
+    for t_ass, nome, texto_ass in assinaturas:
+        # Buscar próximo B{N}. nos próximos 5s
+        t_max_busca = t_ass + 5
+        claquette_encontrada = None
+
+        for seg in segmentos:
+            if seg["start"] >= t_ass and seg["start"] <= t_max_busca:
+                m = re.search(r'\bB(\d{1,2})\.', seg["text"])
+                if m:
+                    try:
+                        n = int(m.group(1))
+                        if b_ini <= n <= b_fim and n != len(claquetes) + 1:
+                            claquette_encontrada = n
+                            # Estimar fim: até início do conteúdo útil ou próxima assinatura
+                            fim = seg["end"]
+                            for s2 in segmentos:
+                                if s2["start"] > seg["start"] and "Tribunal de Justiça" not in s2["text"]:
+                                    fim = s2["start"]
+                                    break
+                            claquetes[n] = {"inicio": seg["start"], "fim": fim, "numero": n}
+                            break
+                    except ValueError:
+                        pass
+
+        if not claquette_encontrada:
+            # Registrar para análise manual
+            claquetes["sem_deteccao"] = claquetes.get("sem_deteccao", []) + [{"tempo_assinatura": t_ass, "nome_reporter": nome}]
+
+    return claquetes
+
+
+def montar_boletim_com_vinhetas(segmento_audio, vht_abertura, vht_passagem, vht_encerramento, cabeça_duracao=20):
+    """ETAPA 6: monta a estrutura completa: ABERTURA + CABEÇA + PASSAGEM + OFF + ENCERRAMENTO.
+    cabeça_duracao: duração da cabeça (primeiros N segundos do conteúdo).
+    Retorna AudioSegment montado."""
+    # Carregar vinhetas se existirem
+    def carregar_vht(nome):
+        caminho = VHT_DIR / nome
+        if caminho.exists():
+            return AudioSegment.from_mp3(str(caminho))
+        return None
+
+    vht_a = carregar_vht("VHT_ABERTURA_BOLETIM.mp3")
+    vht_p = carregar_vht("VHT_PASSAMENTO_BOLETIM.mp3")
+    vht_e = carregar_vht("VHT_ENCERRAMENTO_BOLETIM.mp3")
+
+    partes = []
+
+    if vht_a:
+        partes.append(vht_a)
+
+    # Dividir em cabeça e off
+    duracao_total = len(segmento_audio) / 1000
+    if duracao_total > cabeça_duracao:
+        cabeça = segmento_audio[:int(cabeça_duracao * 1000)]
+        off = segmento_audio[int(cabeça_duracao * 1000):]
+    else:
+        cabeça = segmento_audio
+        off = AudioSegment.silent(duration=0)
+
+    partes.append(cabeça)
+
+    if vht_p:
+        partes.append(vht_p)
+
+    if len(off) > 0:
+        partes.append(off)
+
+    if vht_e:
+        partes.append(vht_e)
+
+    return sum(partes, AudioSegment.silent())
+
+
+def processar_canonico(arquivo_entrada, pasta_roteiros=None):
+    """Pipeline canônico completo. Retorna dict com resultados e estatísticas."""
+    arquivo = Path(arquivo_entrada)
+    if not arquivo.exists():
+        return {"erro": f"Arquivo não encontrado: {arquivo}"}
+
+    print(f"\n{'='*60}")
+    print(f"PROCESSAMENTO CANÔNICO: {arquivo.name}")
+    print(f"{'='*60}\n")
+
+    # Carregar modelo Whisper uma vez
+    print("Carregando Whisper 'base'...")
+    modelo = whisper.load_model("base")
+
+    # ETAPA 0: Triagem
+    print("\n── ETAPA 0: TRIAGEM INICIAL DO ÁUDIO ──")
+    audio = AudioSegment.from_mp3(str(arquivo))
+    triagem = triagem_audio(audio)
+    print(f"  Duração: {triagem['duracao_segundos']:.2f}s")
+    print(f"  Canais: {triagem['canais']}, Samplerate: {triagem['frame_rate']}Hz")
+    if triagem.get('acoes'):
+        print(f"  Ações de correção: {triagem['acoes']}")
+
+    # Aplicar correções de triagem
+    if triagem.get("canal_morto"):
+        print(f"  CORRIGINDO canal morto: {triagem['canal_morto']}")
+        mono_sadio = audio.split_to_mono()[0 if triagem['canal_morto'] == 'direito' else 1]
+        audio = mono_sadio.set_channels(1)
+
+    if triagem.get("estereo_duplicado"):
+        print("  CONVERTENDO para mono (estereo duplicado)")
+        audio = audio.set_channels(1)
+
+    # ETAPA 1: Transcrição
+    print("\n── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──")
+    with tempfile.NamedTemporaryFile(suffix='.wav', delete=False, dir=str(Path(r"C:/Users/THIAGO/AppData/Local/Temp"))) as tmp:
+        tmp_path = tmp.name
+    segmentos = transcrever(audio, tmp_path, modelo)
+
+    print(f"  Transcrito: {len(segmentos)} segmentos")
+    print("\n  Transcrição completa:")
+    for seg in segmentos:
+        print(f"    [{seg['start']:7.2f}s - {seg['end']:7.2f}s] {seg['text'].strip()}")
+
+    # ETAPA 2: Estrutura
+    print("\n── ETAPA 2: DETECÇÃO DE ESTRUTURA ──")
+    data_str, b_ini, b_fim, data_completa_str = extrair_info_nome(arquivo, " ".join(s["text"] for s in segmentos))
+    if not data_completa_str or data_completa_str.startswith("??"):
+        today = date.today()
+        data_completa_str = f"{today.day:02d}_SET_{today.year}"
+        data_str = f"{today.day} SET"
+    print(f"  Data detectada: {data_str} → {data_completa_str}")
+    print(f"  Faixa: B{b_ini} - B{b_fim}")
+
+    roteiros = {}
+    if pasta_roteiros:
+        print(f"  Buscando roteiros em: {pasta_roteiros}")
+        roteiros = carregar_roteiros(pasta_roteiros, data_str, b_ini, b_fim)
+        print(f"  Roteiros encontrados: {len(roteiros)} boletins")
+
+    estrutura = detectar_estrutura(segmentos, b_ini, b_fim)
+    print(f"  Marcadores B{{N}}. encontrados: {list(estrutura['marcadores'].keys())}")
+    print(f"  Assinaturas detectadas: {len(estrutura['assinaturas'])}")
+    for t, nome, txt in estrutura['assinaturas']:
+        print(f"    [{t:.2f}s] {nome} — {txt[:60]}")
+    if estrutura['falta']:
+        print(f"  Faltantes (interpolação): {estrutura['falta']}")
+
+    # ETAPA 3: Repetições confirmadas
+    print("\n── ETAPA 3: DETECÇÃO DE REPETIÇÕES (confirmação por áudio) ──")
+    rep_confirmadas, rep_rejeitadas = detectar_repeticoes_confirmadas(segmentos, audio)
+    print(f"  Repetições confirmadas: {len(rep_confirmadas)}")
+    for r in rep_confirmadas:
+        print(f"    [{r['inicio']:.2f}s - {r['fim']:.2f}s] similaridade={r['similaridade']:.2f} — '{r['texto_repetido'][:50]}'")
+    print(f"  Repetições rejeitadas: {len(rep_rejeitadas)}")
+    for r in rep_rejeitadas[:5]:
+        print(f"    [{r['posicao']:.2f}s] {r['motivo'][:50]}")
+    if len(rep_rejeitadas) > 5:
+        print(f"    ... +{len(rep_rejeitadas)-5} mais")
+
+    # ETAPA 4: Claquetes por assinatura
+    print("\n── ETAPA 4: DETECÇÃO DE CLAKETES (gatilho por assinatura) ──")
+    claquetes = detectar_claquetes_por_assinatura(segmentos, estrutura['assinaturas'], b_ini, b_fim)
+    if "sem_deteccao" in claquetes:
+        print(f"  Assinaturas sem claquete detectada nos próximos 5s: {len(claquetes['sem_deteccao'])}")
+        for item in claquetes['sem_deteccao']:
+            print(f"    [{item['tempo_assinatura']:.2f}s] {item['nome_reporter']}")
+        del claquetes["sem_deteccao"]
+    print(f"  Claquetes detectadas: {len([k for k in claquetes if isinstance(k, int)])}")
+    for n, info in claquetes.items():
+        if isinstance(n, int):
+            print(f"    B{n}: [{info['inicio']:.2f}s - {info['fim']:.2f}s]")
+
+    # ETAPA 5: Corte e remoção
+    print("\n── ETAPA 5: CORTE + REMOÇÃO ──")
+    # Criar pasta de saída
+    saida = arquivo.parent / f"{arquivo.stem}_saida"
+    saida.mkdir(exist_ok=True)
+
+    # Gerar corte_limpo para cada boletim
+    boletims_cortados = {}
+
+    marcadores_ordenados = sorted(estrutura['marcadores'].items(), key=lambda x: x[1])
+
+    for i, (n, t_ini) in enumerate(marcadores_ordenados):
+        if n < b_ini or n > b_fim:
+            continue
+
+        # Limite de início: marcação B{n} ou início do arquivo
+        t_start = max(0, t_ini - 1)
+
+        # Limite de fim: próxima assinatura (fim do boletim) ou próximo marcador, ou fim do arquivo
+        t_fim = len(audio) / 1000
+        for t_ass, _, _ in estrutura['assinaturas']:
+            if t_ass > t_start and t_ass < t_fim:
+                t_fim = t_ass
+                break
+        if i + 1 < len(marcadores_ordenados):
+            t_prox = marcadores_ordenados[i + 1][1]
+            if t_prox < t_fim:
+                t_fim = t_prox
+
+        # Se o próximo marcador é igual ou muito próximo (mesmo tempo ou within 0.5s)
+        # e este é o último boletim da faixa, usar o fim do áudio como limite
+        is_last = (i == len(marcadores_ordenados) - 1)
+        if is_last and i + 1 < len(marcadores_ordenados):
+            t_prox = marcadores_ordenados[i + 1][1]
+            if t_prox <= t_ini + 0.5:
+                # Marcadores iguais/muito próximos: usar fim do áudio para o último
+                if t_fim > len(audio) / 1000:
+                    t_fim = len(audio) / 1000
+
+        # Recortar boletim crú
+        t_start_ms = int(t_start * 1000)
+        t_fim_ms = int(t_fim * 1000)
+        if t_fim_ms <= t_start_ms:
+            t_fim_ms = t_start_ms + 1000  # mínimo 1s
+        segmento = audio[t_start_ms:t_fim_ms]
+
+        # Remover repetições confirmadas dentro do boletim
+        cortes_repeticao = [r for r in rep_confirmadas if r['inicio'] >= t_start and r['fim'] <= t_fim]
+        if cortes_repeticao:
+            print(f"  B{n}: removendo {len(cortes_repeticao)} repetição(ões) confirmada(s)")
+
+        # Remover claquetes detectadas dentro do boletim
+        cortes_claquette = [info for n2, info in claquetes.items() if isinstance(n2, int) and info['inicio'] >= t_start and info['fim'] <= t_fim]
+        if cortes_claquette:
+            print(f"  B{n}: removendo {len(cortes_claquette)} claquete(s)")
+
+        # Aplicar cortes sequencialmente (do fim para o início para manter timestamps)
+        segmento_limpo = segmento
+        for corte in sorted(cortes_repeticao, key=lambda x: x['fim'], reverse=True) + \
+                       sorted(cortes_claquette, key=lambda x: x['fim'], reverse=True):
+            t_inicio_seg = max(0, corte['inicio'] - t_start)
+            t_fim_seg = min(len(segmento)/1000, corte['fim'] - t_start)
+            if t_fim_seg > t_inicio_seg:
+                segmento_limpo = segmento_limpo[:int(t_inicio_seg*1000)] + segmento_limpo[int(t_fim_seg*1000):]
+
+        boletims_cortados[n] = {
+            "audio": segmento_limpo,
+            "inicio_original": t_start,
+            "fim_original": t_fim,
+            "duracao_cortada": len(segmento_limpo)/1000,
+            "repeticoes_removidas": len(cortes_repeticao),
+            "claquetes_removidas": len(cortes_claquette)
+        }
+
+        nome_arquivo = nomear_boletim(data_str, n, roteiros.get(n, "") if roteiros else None, data_completa_str)
+        print(f"  B{n}: [{t_start:.2f}s → {t_fim:.2f}s] = {boletims_cortados[n]['duracao_cortada']:.2f}s → {nome_arquivo}")
+
+    # ETAPA 6: Montagem com vinhetas
+    print("\n── ETAPA 6: MONTAGEM COM VINHETAS ──")
+    for n, info in boletims_cortados.items():
+        if info['duracao_cortada'] < 3:
+            print(f"  B{n}: skipping montagem (duração muito curta: {info['duracao_cortada']:.2f}s)")
+            continue
+
+        nome_arquivo = nomear_boletim(data_str, n, roteiros.get(n, "") if roteiros else None, data_completa_str)
+        info['nome'] = nome_arquivo
+        montado = montar_boletim_com_vinhetas(
+            info['audio'],
+            None, None, None  # VHTs carregadas dentro da função
+        )
+
+        caminho_saida = saida / nome_arquivo
+        montado.export(str(caminho_saida), format="mp3")
+        print(f"  ✓ B{n}: montado → {nome_arquivo} ({len(montado)/1000:.2f}s)")
+
+    # ETAPA 7: Auditoria
+    print("\n── ETAPA 7: AUDITORIA ──")
+    auditoria = {
+        "arquivo_entrada": str(arquivo),
+        "data_detectada": data_str,
+        "faixa": [b_ini, b_fim],
+        "duracao_original": triagem['duracao_segundos'],
+        "triagem": triagem,
+        "transcricao": {
+            "segmentos": len(segmentos),
+            "texto_completo": " ".join(s["text"].strip() for s in segmentos)
+        },
+        "estrutura": estrutura,
+        "repeticoes": {
+            "confirmadas": rep_confirmadas,
+            "rejeitadas": rep_rejeitadas[:10]
+        },
+        "claquetes": {str(k): v for k, v in claquetes.items()},
+        "boletims_gerados": []
+    }
+
+    for n in sorted(boletims_cortados.keys()):
+        info = boletims_cortados[n]
+        if 'nome' not in info:
+            info['nome'] = nomear_boletim(data_str, n, roteiros.get(n, "") if roteiros else None, data_completa_str)
+        caminho = saida / info['nome']
+        try:
+            if not caminho.exists():
+                info['audio'].export(str(caminho), format="mp3")
+            if caminho.exists():
+                audio_b = AudioSegment.from_mp3(str(caminho))
+                auditoria["boletims_gerados"].append({
+                    "arquivo": info['nome'],
+                    "duracao_segundos": round(len(audio_b)/1000, 2),
+                    "tamanho_bytes": caminho.stat().st_size
+                })
+                print(f"  ✓ {info['nome']} — {len(audio_b)/1000:.2f}s, {caminho.stat().st_size/1024:.1f} KB")
+            else:
+                print(f"  ✗ ARQUIVO NÃO EXISTE: {caminho.name}")
+        except Exception as e:
+            print(f"  ✗ ERRO ao processar {info['nome']}: {e}")
+            import traceback
+            traceback.print_exc()
+            # Garante que a chave exista mesmo em caso de erro
+            if "boletims_gerados" not in auditoria:
+                auditoria["boletims_gerados"] = []
+
+    # Salvar auditoria
+    auditoria_path = saida / "auditoria.json"
+    with open(auditoria_path, "w", encoding="utf-8") as f:
+        json.dump(auditoria, f, indent=2, ensure_ascii=False)
+    print(f"\n  Auditoria salva: {auditoria_path}")
+
+    print(f"\n{'='*60}")
+    print(f"PROCESSAMENTO COMPLETO: {len(auditoria['boletims_gerados'])} boletins gerados")
+    print(f"Saída: {saida}")
+    print(f"{'='*60}\n")
+
+    return auditoria
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Pipeline canônico de edição de boletins")
+    parser.add_argument("arquivo", help="Arquivo MP3 de entrada")
+    parser.add_argument("--roteiros", help="Pasta com roteiros em texto (opcional)", default=None)
+    args = parser.parse_args()
+
+    pasta_roteiros = Path(args.roteiros) if args.roteiros else None
+    resultado = processar_canonico(args.arquivo, pasta_roteiros)
+
+    if "erro" in resultado:
+        print(f"ERRO: {resultado['erro']}")
+        sys.exit(1)
+    
+    # Garantir que a auditoria tenha a chave boletims_gerados para impressão final
+    if "boletims_gerados" not in resultado:
+        resultado["boletims_gerados"] = []
+    print(f"PROCESSAMENTO COMPLETO: {len(resultado['boletims_gerados'])} boletins gerados")

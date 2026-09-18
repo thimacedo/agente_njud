@@ -1,0 +1,140 @@
+
+============================================================
+PROCESSAMENTO CANÔNICO: 04 SET - B6 E B7.mp3
+============================================================
+
+Carregando Whisper 'base'...
+
+── ETAPA 0: TRIAGEM INICIAL DO ÁUDIO ──
+  Duração: 328.34s
+  Canais: 2, Samplerate: 48000Hz
+  Ações de correção: ['CONVERTER: áudio estereo duplicado (L==R) → converter para mono', 'AVISO: possível clipping (pico próximo de 0dBFS)']
+  CONVERTENDO para mono (estereo duplicado)
+
+── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──
+  Transcrito: 83 segmentos
+
+  Transcrição completa:
+    [   0.00s -    2.94s] B5, 4 de setembro.
+    [   2.94s -    4.92s] Social Educação.
+    [   4.92s -    6.72s] MEPR-EIN para a mo...
+    [   6.72s -   10.92s] Repete.
+    [  10.92s -   13.36s] Social Educação.
+    [  13.36s -   18.76s] MEPR-EIN para a mova sensibilização sobre prechação de serviços por adolescentes e jovens
+    [  18.76s -   21.16s] em comprimento de medida social educativa.
+    [  21.16s -   24.96s] Eu hein.
+    [  24.96s -   28.80s] O Ministério Público do Rio Grande do Norte, em conjunto com a secretaria municipal de
+    [  28.80s -   33.72s] trabalho e assistência social, promovou uma formação para instituições voltadas a prechação
+    [  33.72s -   39.88s] de serviços por adolescentes e jovens em comprimento de medida social educativas em meio aberto.
+    [  39.88s -   45.16s] A ação aconteceu nessa sexta-feira, 4 de setembro, e teve como objetivo formalizar
+    [  45.16s -   50.04s] e estruturar parcerias voltadas ao acolhimento na modalidade de prechação de serviço
+    [  50.04s -   54.88s] a comunidade.
+    [  54.88s -   61.60s] A capacitação interisitucional...
+    [  61.60s -   67.68s] A capacitação interisitucional foi direcionada a instituições públicas como equipamentos
+    [  67.68s -   68.68s] que integram...
+    [  68.68s -   72.68s] Meu Deus!
+    [  72.68s -   75.68s] Repete.
+    [  75.68s -   78.88s] Não agora vai dar certo.
+    [  78.88s -   82.88s] Repete.
+    [  82.88s -   86.88s] A capacitação interisitucional PSC.
+    [  86.88s -   93.60s] A capacitação interisitucional PSC conecta parcerias que transformam foi direcionada a instituições
+    [  93.60s -   97.84s] públicas como equipamentos que integram a rede municipal de atendimento na área da
+    [  97.84s -  100.68s] educação, da saúde e da assistência.
+    [ 100.68s -  103.68s] E a entidade de não governamentais para a fórmula...
+    [ 103.68s -  105.68s] Repete.
+    [ 105.68s -  111.36s] E a entidade de não governamentais para a formalização do termo de parceria relativo ao acompanhamento
+    [ 111.36s -  113.28s] da medida social educativa.
+    [ 113.28s -  116.60s] A atividade foi coordenada pela oitava...
+    [ 116.60s -  122.88s] Repete.
+    [ 122.88s -  128.20s] A atividade foi coordenada pela octagésima primeira promotoria de justiça de natal, especializada
+    [ 128.20s -  132.64s] na promoção de direitos da infância e da juventude, com o apoio do centro de estudos
+    [ 132.64s -  134.64s] e aperfeiçoamento funcionar.
+    [ 134.64s -  139.60s] O encontro abordou procedimentos para o recebimento dos jovens nas instituições e execução
+    [ 139.60s -  141.60s] das atividades previstas.
+    [ 141.60s -  145.44s] Do Tribunal de Justiça do Rio Grande do Norte, livre a Rodrigues.
+    [ 145.44s -  147.44s] B6.
+    [ 147.44s -  152.08s] Té jota a reira e divulga essa leção para estagear o remunerado depois de graduação em
+    [ 152.08s -  154.24s] ciências contáveis.
+    [ 154.24s -  157.96s] A presidência do Tribunal de Justiça do Rio Grande do Norte divulgou a abertura de
+    [ 157.96s -  162.44s] processos eletivos voltados para estagear o remunerado depois de graduação em ciências
+    [ 162.44s -  163.44s] contáveis.
+    [ 163.44s -  168.76s] São oferecidas duas vagas, havendo classificação até o nono colocado para a efeita de cadastro
+    [ 168.76s -  169.76s] de reserva.
+    [ 169.76s -  174.16s] O estage terá duração máxima de um ano, para rogar ver por igual período, desde que
+    [ 174.16s -  177.52s] compravado o vínculo com entidade de ensino.
+    [ 177.52s -  182.12s] A duração do estage não poderá aceler 2 anos, excepta as pessoas com deficiência que
+    [ 182.12s -  186.76s] poderão exercer as atividades até a conclusão do curso, respeitando o suincerramento do
+    [ 186.76s -  192.60s] calendário acadêmico, a jornada de estage de 6 horas de diárias e 30 horas semanas.
+    [ 192.60s -  197.24s] O estageiro depois de graduação receberem mensalmente bolsa ao cilho, atualmente no valor de
+    [ 197.24s -  203.44s] R$2.60, bem como ao cilho transporte na quantia de R$1.70.
+    [ 203.44s -  207.28s] As inscrições podem ser realizadas até o dia 10 de setembro.
+    [ 207.28s -  211.92s] No Tribunal de Justiça do Rio Grande do Norte, livre a Rodrigues.
+    [ 211.92s -  212.92s] B7
+    [ 212.92s -  218.40s] Justiça da Termina Reativação de Perfil Em Redes Sociéal Suspensso Sem Motivação
+    [ 218.40s -  219.40s] Específica
+    [ 219.40s -  225.00s] O nono juizado especial cível da comarca de Natal, determinou que uma plataforma de
+    [ 225.00s -  229.72s] redessociar o reativo no prazo de 10 dias, o perfil de um usuário que havia sido
+    [ 229.72s -  231.72s] suspensio permanentemente.
+    [ 231.72s -  236.52s] De acordo com o processo, o usuário alegou que a conta foi desativada sobre justificativa
+    [ 236.56s -  240.84s] genérica de comprimento, repete.
+    [ 240.84s -  245.36s] O usuário alegou que a conta foi desativada sobre justificativa genérica de descomprimento
+    [ 245.36s -  250.60s] das direitreis de da comunidade, sem indicação da conduta que teria motivado a medida e sem
+    [ 250.60s -  253.44s] possibilidade efetiva de contastação.
+    [ 253.44s -  258.92s] Ele informou ainda que utilizava o perfil para armazenar fotografias, vídeos e outros registros
+    [ 258.92s -  259.92s] pessoais.
+    [ 259.92s -  265.60s] Em sua defesa, a empresa sustentou que a desadivação resultou na aplicação do extermos de uso
+    [ 265.60s -  270.72s] e das direitreis de da plataforma, aceitos pelo usuário no momento do cadastro.
+    [ 270.72s -  275.16s] Também alegou que essas regras são necessárias para garantir a segurança e a convivência
+    [ 275.16s -  276.96s] entre os participantes.
+    [ 276.96s -  281.52s] A juiz é o analisar o caso, considerou que a empresa não apresentou elementos técnicos
+    [ 281.52s -  287.36s] suficientes para demonstrar de maneira específica e objetiva, qual a infração teria sido praticada
+    [ 287.36s -  289.36s] pelo usuário.
+    [ 289.36s -  293.48s] A sentença destacou que as plataformas possuem autonomia para aplicar suas políticas
+    [ 293.48s -  298.56s] internas, mas essa para a rogativa deve observar os deveres de transparência, informação
+    [ 298.56s -  299.88s] e boa fé.
+    [ 299.88s -  304.52s] Conforme a decisão, a suspensão ou a exclusão de uma conta sem motivação concreta
+    [ 304.52s -  309.28s] e sem possibilidade efetiva de revisão caracteriza a falha na...
+    [ 309.28s -  311.48s] Repete.
+    [ 311.48s -  316.20s] Conforme a decisão, a suspensão ou a exclusão de uma conta sem motivação concreta
+    [ 316.20s -  321.48s] e sem possibilidade efetiva de revisão caracteriza a falha na precheação do serviço.
+    [ 321.48s -  324.76s] Tudo tribunado e justiça do Rio Grande do Norte, livre e roderia isso.
+
+── ETAPA 2: DETECÇÃO DE ESTRUTURA ──
+  Data detectada: 04 SET
+  Faixa: B6 - B7
+  Marcadores B{N}. encontrados: [6, 7]
+  Assinaturas detectadas: 0
+  Faltantes (interpolação): [7]
+
+── ETAPA 3: DETECÇÃO DE REPETIÇÕES (confirmação por áudio) ──
+  Repetições confirmadas: 0
+  Repetições rejeitadas: 6
+    [6.72s] similaridade 0.09 < 0.9
+    [72.68s] similaridade 0.07 < 0.9
+    [78.88s] similaridade 0.04 < 0.9
+    [103.68s] similaridade 0.07 < 0.9
+    [116.60s] similaridade 0.04 < 0.9
+    ... +1 mais
+
+── ETAPA 4: DETECÇÃO DE CLAKETES (gatilho por assinatura) ──
+  Claquetes detectadas: 0
+
+── ETAPA 5: CORTE + REMOÇÃO ──
+  B6: [144.94s → 145.94s] = 1.00s → BOLETIM_RADIO_TJRN_??_??_????_B6__.mp3
+  B7: [144.94s → 328.34s] = 183.40s → BOLETIM_RADIO_TJRN_??_??_????_B7__.mp3
+
+── ETAPA 6: MONTAGEM COM VINHETAS ──
+  B6: skipping montagem (duração muito curta: 1.00s)
+Traceback (most recent call last):
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\processar_boletim_canonico.py", line 581, in <module>
+    resultado = processar_canonico(args.arquivo, pasta_roteiros)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\processar_boletim_canonico.py", line 525, in processar_canonico
+    montado.export(str(caminho_saida), format="mp3")
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\pydub\audio_segment.py", line 867, in export
+    out_f, _ = _fd_or_path_or_tempfile(out_f, 'wb+')
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\pydub\utils.py", line 60, in _fd_or_path_or_tempfile
+    fd = open(fd, mode=mode)
+         ^^^^^^^^^^^^^^^^^^^
+OSError: [Errno 22] Invalid argument: 'E:\\02_Projetos_Trabalho\\Projetos_Ativos\\DIVISOR\\boletins\\04 SET - B6 E B7_saida\\BOLETIM_RADIO_TJRN_??_??_????_B7__.mp3'
