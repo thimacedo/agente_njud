@@ -8,10 +8,17 @@ import argparse, re, os, json, shutil, sys, tempfile
 from pathlib import Path
 from datetime import date
 from pydub import AudioSegment
-import whisper
 
 import sys
-sys.path.insert(0, str(Path(__file__).parent.parent))  # adiciona scripts_pipeline/ ao path
+sys.path.insert(0, str(Path(__file__).parent.parent))  # adiciona scripts_pipeline/ao path
+
+# Usar faster-whisper (CTranslate2) — 1.3-3x mais rápido em CPU (validado spike 002)
+try:
+    from faster_whisper import WhisperModel
+    USE_FASTER = True
+except ImportError:
+    import whisper
+    USE_FASTER = False
 
 from corrigir_alucinacoes import corrigir_transcricao
 from shared.bgm_mixer import mix_bgm
@@ -267,12 +274,35 @@ def triagem_audio(audio):
     return resultado
 
 
+def carregar_modelo():
+    """Carrega modelo Whisper (faster-whisper se disponível, senão openai-whisper)."""
+    if USE_FASTER:
+        print("  Usando faster-whisper (int8, CPU)...")
+        return WhisperModel("base", device="cpu", compute_type="int8")
+    else:
+        print("  Usando openai-whisper (fallback)...")
+        return whisper.load_model("base")
+
+
 def transcrever(audio, tmp_path, modelo):
-    """ETAPA 1: transcrição com Whisper base."""
+    """ETAPA 1: transcrição com Whisper. Compatível com faster-whisper e openai-whisper."""
     audio.export(tmp_path, format="wav")
-    result = modelo.transcribe(tmp_path, language="pt", fp16=False)
-    os.unlink(tmp_path)
-    return result["segments"]
+    
+    if USE_FASTER:
+        segments_iter, info = modelo.transcribe(tmp_path, language="pt")
+        segmentos = []
+        for seg in segments_iter:
+            segmentos.append({
+                "start": seg.start,
+                "end": seg.end,
+                "text": seg.text
+            })
+        os.unlink(tmp_path)
+        return segmentos
+    else:
+        result = modelo.transcribe(tmp_path, language="pt", fp16=False)
+        os.unlink(tmp_path)
+        return result["segments"]
 
 
 def detectar_estrutura(segmentos, b_ini, b_fim):
@@ -288,19 +318,47 @@ def detectar_estrutura(segmentos, b_ini, b_fim):
 
     # Regex assinatura: "do/no Tribunal de Justiça do Rio Grande do Norte"
     # Aceita variações: "Tribunal de Justiça, do Rio Grande" (com vírgula)
-    padrao_ass = re.compile(
+    # Regex para assinatura do locutor — pode estar dividida em 2 segmentos
+    # faster-whisper divide "No Tribunal de Justiça do Rio Grande" / "do Norte, Nome"
+    # openai-whisper junta tudo em um segmento só
+    padrao_ass_parcial = re.compile(
+        r'tribunal\s+de\s+justi[çc]a\s*,?\s*do\s+rio\s+grande\s*$',
+        re.I
+    )
+    padrao_ass_completo = re.compile(
         r'tribunal\s+de\s+justi[çc]a\s*,?\s*do\s+rio\s+grande\s+do\s+norte',
         re.I
     )
 
     # Coletar todas as assinaturas em ordem
-    for seg in segmentos:
+    # Assinatura pode estar completa em 1 segmento ou dividida em 2 (faster-whisper)
+    i = 0
+    while i < len(segmentos):
+        seg = segmentos[i]
         texto = seg["text"]
-        m_ass = padrao_ass.search(texto)
-        if m_ass:
-            pos_ratio = m_ass.start() / len(texto) if len(texto) > 0 else 0
+        
+        # Tentar match completo primeiro
+        m_completo = padrao_ass_completo.search(texto)
+        if m_completo:
+            pos_ratio = m_completo.start() / len(texto) if len(texto) > 0 else 0
             t = seg["start"] + (seg["end"] - seg["start"]) * pos_ratio
             assinaturas.append(t)
+            i += 1
+            continue
+        
+        # Tentar match parcial (faster-whisper divide em 2 segmentos)
+        m_parcial = padrao_ass_parcial.search(texto)
+        if m_parcial:
+            # Verificar se próximo segmento continua com "do Norte"
+            if i + 1 < len(segmentos):
+                texto_seguinte = segmentos[i + 1]["text"].strip()
+                if re.match(r'^do\s+norte', texto_seguinte, re.I):
+                    # Assinatura confirmada — timestamp no fim deste segmento
+                    assinaturas.append(seg["end"])
+                    i += 2
+                    continue
+        
+        i += 1
 
     # Cada assinatura marca o FIM de um boletim
     # O próximo boletim começa no PRÓXIMO SEGMENTO DE FALA após a assinatura
@@ -566,9 +624,9 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
     print(f"PROCESSAMENTO CANÔNICO: {arquivo.name}")
     print(f"{'='*60}\n")
 
-    # Carregar modelo Whisper uma vez
-    print("Carregando Whisper 'base'...")
-    modelo = whisper.load_model("base")
+    # Carregar modelo Whisper uma vez (faster-whisper se disponível)
+    print("Carregando modelo de transcrição...")
+    modelo = carregar_modelo()
 
     # ETAPA 0: Triagem
     print("\n── ETAPA 0: TRIAGEM INICIAL DO ÁUDIO ──")
@@ -579,15 +637,10 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
     if triagem.get('acoes'):
         print(f"  Ações de correção: {triagem['acoes']}")
 
-    # Aplicar correções de triagem
-    if triagem.get("canal_morto"):
-        print(f"  CORRIGINDO canal morto: {triagem['canal_morto']}")
-        mono_sadio = audio.split_to_mono()[0 if triagem['canal_morto'] == 'direito' else 1]
-        audio = mono_sadio.set_channels(1)
-
-    if triagem.get("estereo_duplicado"):
-        print("  CONVERTENDO para mono (estereo duplicado)")
-        audio = audio.set_channels(1)
+    # Aplicar correções de triagem (após transcrição, não antes)
+    # NOTA: converter para mono ANTES da transcrição causa perda de qualidade
+    # no Whisper (transcrições incompletas). Converter apenas para montagem.
+    precisa_mono = triagem.get("canal_morto") or triagem.get("estereo_duplicado")
 
     # ETAPA 1: Transcrição
     print("\n── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──")
@@ -683,6 +736,13 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
     saida = arquivo.parent / f"{arquivo.stem}_saida"
     saida.mkdir(exist_ok=True)
 
+    # Converter para mono se necessário (após transcrição, antes do corte)
+    if precisa_mono:
+        print(f"  Convertendo para mono (canal morto: {triagem.get('canal_morto')})")
+        audio_corte = audio.set_channels(1) if triagem.get("estereo_duplicado") else audio.split_to_mono()[0 if triagem['canal_morto'] == 'direito' else 1].set_channels(1)
+    else:
+        audio_corte = audio
+
     # Gerar corte_limpo para cada boletim
     boletims_cortados = {}
 
@@ -709,7 +769,7 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
         t_fim_ms = int(t_fim * 1000)
         if t_fim_ms <= t_start_ms:
             t_fim_ms = t_start_ms + 1000  # mínimo 1s
-        segmento = audio[t_start_ms:t_fim_ms]
+        segmento = audio_corte[t_start_ms:t_fim_ms]
 
         # Remover repetições confirmadas dentro do boletim
         cortes_repeticao = [r for r in rep_confirmadas if r['inicio'] >= t_start and r['fim'] <= t_fim]
@@ -876,12 +936,10 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
             
             # Transcrever boletim editado
             tmp = tempfile.mktemp(suffix='.wav', dir=str(Path(r'C:/Users/THIAGO/AppData/Local/Temp')))
-            AudioSegment.from_mp3(str(caminho)).export(tmp, format='wav')
-            resultado = modelo.transcribe(tmp, language='pt', fp16=False)
-            os.unlink(tmp)
+            audio_b = AudioSegment.from_mp3(str(caminho))
+            segmentos_transcritos = transcrever(audio_b, tmp, modelo)
             
-            texto_transcrito = resultado['text'].strip()
-            segmentos_transcritos = resultado['segments']
+            texto_transcrito = " ".join(s["text"] for s in segmentos_transcritos)
             
             # Obter texto do roteiro para este boletim (usar OFF)
             rot_n = roteiros.get(n, {}) if roteiros else {}
