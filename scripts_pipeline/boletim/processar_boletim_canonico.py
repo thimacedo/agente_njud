@@ -144,12 +144,11 @@ def extrair_info_nome(arquivo, transcricao_texto=None):
 
 def carregar_roteiros(pasta_roteiros, data_str, b_ini, b_fim):
     """Se pasta_roteiros informado, busca roteiros .txt para cada boletim.
-    Retorna dict {Bnumero: texto_roteiro}
-
-    Espera que cada linha do .txt tenha o formato:
-    B{N}- TITULO
-    ou
-    B{N}- RETRANCA
+    Retorna dict {Bnumero: {"titulo": str, "off": str}}
+    
+    Formatos suportados:
+    1. "B{N}- TITULO" por linha (formato compacto)
+    2. "B{N}- TITULO\nCABEÇA: ...\nOFF: ..." (roteiro completo)
     """
     roteiros = {}
     if not pasta_roteiros or not pasta_roteiros.exists():
@@ -181,26 +180,41 @@ def carregar_roteiros(pasta_roteiros, data_str, b_ini, b_fim):
                 if b_ini <= n <= b_fim:
                     titulo = m.group(2).strip()
                     if n not in roteiros or (dia_str and dia_str in f.name):
-                        roteiros[n] = titulo
+                        roteiros[n] = {"titulo": titulo, "off": ""}
                         encontrou_algo = True
         
         # Formato 2: "B{N}- TITULO\nCABEÇA: ...\nOFF: ..." (roteiro completo)
-        # Busca blocos "B{N}- TITULO" seguidos de CABEÇA:
         blocos = re.split(r'={20,}|DOCUMENTO\s+\[\d+/\d+\]', texto)
         for bloco in blocos:
             m_b = re.search(r'B(\d{1,2})\s*[-–—]\s*(.+?)(?:\n|$)', bloco, re.I)
             m_cab = re.search(r'CABEÇA:\s*(.+?)(?:\n|$)', bloco, re.I)
-            if m_b and m_cab:
+            m_off = re.search(r'OFF:\s*(.+?)(?:\r?\n\r?\n|\Z)', bloco, re.I | re.DOTALL)
+            if m_b:
                 n = int(m_b.group(1))
                 if b_ini <= n <= b_fim:
                     titulo = m_b.group(2).strip()
-                    if n not in roteiros or (dia_str and dia_str in f.name):
-                        roteiros[n] = titulo
+                    off_texto = m_off.group(1).strip() if m_off else ""
+                    # Sobrescrever se:
+                    # - ainda não tem registro para este boletim, OU
+                    # - o arquivo tem o dia no nome (prioridade), OU
+                    # - o registro anterior não tinha OFF e este tem (mais completo)
+                    deve_sobrescrever = (
+                        n not in roteiros or
+                        (dia_str and dia_str in f.name) or
+                        (off_texto and not roteiros.get(n, {}).get("off"))
+                    )
+                    if deve_sobrescrever:
+                        roteiros[n] = {"titulo": titulo, "off": off_texto}
                         encontrou_algo = True
         
-        # Se encontrou todos os boletins neste arquivo, para
+        # Se encontrou todos os boletins neste arquivo E todos têm OFF, para
+        # Caso contrário, continua procurando em outros arquivos (podem ter OFF)
         if encontrou_algo and len(roteiros) >= (b_fim - b_ini + 1):
-            break
+            todos_tem_off = all(
+                isinstance(v, dict) and v.get("off") for v in roteiros.values()
+            )
+            if todos_tem_off:
+                break
 
     return roteiros
 
@@ -387,6 +401,58 @@ def detectar_repeticoes_confirmadas(segmentos, audio, threshold_similaridade=0.9
     return confirmadas, rejeitadas
 
 
+def detectar_claquete_geral(segmentos, b_ini, b_fim):
+    """Detecta claquete geral introdutória no início do áudio.
+    
+    Formatos conhecidos (variam conforme data e faixa):
+    - "Boletins 17 do 9 do B1O5" (dia 17, setembro, B1 a B5)
+    - "Boletins 4 do 9 do B6O7" (dia 4, setembro, B6 a B7)
+    - "Boletins 18 do 9 do B1O10" (dia 18, setembro, B1 a B10)
+    
+    Retorna (inicio, fim) da claquete geral ou None se não encontrada.
+    """
+    # Padrão 1: Claquete geral "B{digito} O{digito}" ou "B{digito}0{digito}" (ex: "B1O5", "B6O7")
+    # Tolerante a alucinações: "B1 O5", "B105", "B1 05", etc.
+    padrao_faixa = re.compile(r'B\d+\s*[O0]\s*\d+', re.I)
+    
+    # Padrão 2: "Boletins" (qualquer variação) + números (anúncio da faixa)
+    padrao_boletins = re.compile(
+        r'b[oó]?l?e?t[ií]n?s?\s+\d+',
+        re.I
+    )
+    
+    # NOTA: Vinheta de abertura ("No ar, notícias da hora...") NÃO é lixo — faz parte do boletim final
+    
+    for seg in segmentos:
+        if seg["start"] > 15:
+            break
+        texto = seg["text"]
+        if padrao_faixa.search(texto) or padrao_boletins.search(texto):
+            # Encontrou início da claquete geral
+            # Agora encontrar o FIM da introdução (primeiro segmento com conteúdo real)
+            # O conteúdo real começa após "B1," ou após padrões de claquete
+            fim_intro = seg["end"]
+            for seg2 in segmentos:
+                if seg2["start"] <= seg["start"]:
+                    continue
+                if seg2["start"] > seg["start"] + 15:
+                    break
+                texto2 = seg2["text"].strip()
+                # Fim da introdução: primeiro segmento que começa com "B1," (claquete individual do primeiro boletim)
+                # ou que é significativamente longo (conteúdo real)
+                if re.match(r'^B\d+[\.\s,]', texto2, re.I) and len(texto2) < 80:
+                    fim_intro = seg2["start"]
+                    break
+                # Ou se o segmento tem mais de 8 palavras (é conteúdo, não claquete)
+                palavras = texto2.split()
+                if len(palavras) > 8:
+                    fim_intro = seg2["start"]
+                    break
+            return (seg["start"], fim_intro)
+    
+    return None
+
+
 def detectar_claquetes_por_assinatura(segmentos, assinaturas, b_ini, b_fim):
     """ETAPA 4: detectar claquetes após assinatura do locutor.
     Para cada assinatura encontrada, busca nos próximos 5s a próxima claquete B{N}.
@@ -538,7 +604,10 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
     if pasta_roteiros:
         roteiros_dict = carregar_roteiros(pasta_roteiros, "", b_ini_f, b_fim_f)
         if roteiros_dict:
-            texto_roteiro_completo = " ".join(roteiros_dict.values())
+            texto_roteiro_completo = " ".join(
+                v["titulo"] + " " + v["off"] if isinstance(v, dict) else v
+                for v in roteiros_dict.values()
+            )
 
     segmentos_antes = len(segmentos)
     segmentos = corrigir_transcricao(segmentos, texto_roteiro_completo)
@@ -599,6 +668,15 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
         if isinstance(n, int):
             print(f"    B{n}: [{info['inicio']:.2f}s - {info['fim']:.2f}s]")
 
+    # ETAPA 4.5: Detectar claquete geral introdutória (B1)
+    claquete_geral = detectar_claquete_geral(segmentos, b_ini, b_fim)
+    if claquete_geral:
+        print(f"\n── ETAPA 4.5: CLAQUETE GERAL DETECTADA ──")
+        print(f"  Claquete geral: [{claquete_geral[0]:.2f}s - {claquete_geral[1]:.2f}s]")
+        print(f"  Será removida do B1")
+    else:
+        print(f"\n── ETAPA 4.5: Claquete geral não detectada ──")
+
     # ETAPA 5: Corte e remoção
     print("\n── ETAPA 5: CORTE + REMOÇÃO ──")
     # Criar pasta de saída
@@ -643,6 +721,55 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
         if cortes_claquette:
             print(f"  B{n}: removendo {len(cortes_claquette)} claquete(s)")
 
+        # Remover claquete introdutória do primeiro boletim (B1 ou equivalente)
+        # Inclui: claquete geral, claquete individual, e data de referência
+        # Tudo que vier ANTES do conteúdo real (primeira frase do OFF) deve ser cortado
+        if n == b_ini and claquete_geral:
+            cg_inicio, cg_fim = claquete_geral
+            if cg_inicio >= t_start - 1 and cg_fim <= t_fim:
+                cortes_claquette.append({"inicio": cg_inicio, "fim": cg_fim})
+                print(f"  B{n}: removendo claquete geral [{cg_inicio:.2f}s - {cg_fim:.2f}s]")
+        
+        # Para TODOS os boletins: remover claquete individual + data de referência
+        # que aparecem nos primeiros ~8s (antes do conteúdo real)
+        for seg in segmentos:
+            if seg["start"] < t_start or seg["start"] >= t_start + 8:
+                continue
+            if seg["start"] >= t_fim:
+                break
+            texto_seg = seg["text"].strip()
+            eh_claquete = False
+            motivo = ""
+            
+            # Padrão 1: Claquete individual "B{N}." ou "B{N}, título" (curta, sem conteúdo)
+            if re.match(r'^B\d+[\.\s,]', texto_seg, re.I) and len(texto_seg) < 60:
+                if "tribunal" not in texto_seg.lower() and "justiça" not in texto_seg.lower():
+                    eh_claquete = True
+                    motivo = "claquete individual"
+            
+            # Padrão 2: Data de referência "Natal, 17 de setembro de 2026"
+            if re.search(r'\d{1,2}\s+de\s+\w+\s+de\s+\d{4}', texto_seg) and len(texto_seg) < 80:
+                # Verificar se é só a data (não é conteúdo)
+                palavras_significativas = [w for w in texto_seg.split() if w.lower() not in (
+                    'natal', 'de', 'do', 'da', 'em', 'no', 'na', 'e', 'rn', 'rio', 'grande', 'norte',
+                    'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado', 'domingo',
+                    'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho',
+                    'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
+                ) and not re.match(r'^\d+$', w) and not re.match(r'^\d{1,2}h\d{2}$', w)]
+                if len(palavras_significativas) <= 2:
+                    eh_claquete = True
+                    motivo = "data de referência"
+            
+            if eh_claquete:
+                # Estimar fim: próximo segmento ou +2s
+                fim_claquete = seg["end"]
+                for seg2 in segmentos:
+                    if seg2["start"] > seg["start"] and seg2["start"] < seg["start"] + 5:
+                        fim_claquete = seg2["start"]
+                        break
+                cortes_claquette.append({"inicio": seg["start"], "fim": fim_claquete})
+                print(f"  B{n}: removendo {motivo} [{seg['start']:.2f}s - {fim_claquete:.2f}s]")
+
         # Aplicar cortes sequencialmente (do fim para o início para manter timestamps)
         segmento_limpo = segmento
         for corte in sorted(cortes_repeticao, key=lambda x: x['fim'], reverse=True) + \
@@ -661,7 +788,9 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
             "claquetes_removidas": len(cortes_claquette)
         }
 
-        nome_arquivo = nomear_boletim(data_str, n, roteiros.get(n, "") if roteiros else None, data_completa_str)
+        rot_n = roteiros.get(n, {}) if roteiros else {}
+        titulo_rot = rot_n.get("titulo", "") if isinstance(rot_n, dict) else rot_n
+        nome_arquivo = nomear_boletim(data_str, n, titulo_rot, data_completa_str)
         print(f"  B{n}: [{t_start:.2f}s → {t_fim:.2f}s] = {boletims_cortados[n]['duracao_cortada']:.2f}s → {nome_arquivo}")
 
     # ETAPA 6: Montagem com vinhetas
@@ -671,7 +800,9 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
             print(f"  B{n}: skipping montagem (duração muito curta: {info['duracao_cortada']:.2f}s)")
             continue
 
-        nome_arquivo = nomear_boletim(data_str, n, roteiros.get(n, "") if roteiros else None, data_completa_str)
+        rot_n = roteiros.get(n, {}) if roteiros else {}
+        titulo_rot = rot_n.get("titulo", "") if isinstance(rot_n, dict) else rot_n
+        nome_arquivo = nomear_boletim(data_str, n, titulo_rot, data_completa_str)
         info['nome'] = nome_arquivo
         montado = montar_boletim_com_vinhetas(
             info['audio'],
@@ -706,7 +837,9 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
     for n in sorted(boletims_cortados.keys()):
         info = boletims_cortados[n]
         if 'nome' not in info:
-            info['nome'] = nomear_boletim(data_str, n, roteiros.get(n, "") if roteiros else None, data_completa_str)
+            rot_n = roteiros.get(n, {}) if roteiros else {}
+            titulo_rot = rot_n.get("titulo", "") if isinstance(rot_n, dict) else rot_n
+            info['nome'] = nomear_boletim(data_str, n, titulo_rot, data_completa_str)
         caminho = saida / info['nome']
         try:
             if not caminho.exists():
@@ -728,6 +861,91 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
             # Garante que a chave exista mesmo em caso de erro
             if "boletims_gerados" not in auditoria:
                 auditoria["boletims_gerados"] = []
+
+    # ETAPA 7.5: Validação de qualidade da transcrição vs roteiro
+    if roteiros:
+        print(f"\n── ETAPA 7.5: VALIDAÇÃO DE QUALIDADE (transcrição vs roteiro) ──")
+        from corrigir_alucinacoes import corrigir_transcricao as corrige_aluc, normalizar_texto
+        from difflib import SequenceMatcher
+        
+        for n in sorted(boletims_cortados.keys()):
+            info = boletims_cortados[n]
+            caminho = saida / info['nome']
+            if not caminho.exists() or caminho.stat().st_size < 1000:
+                continue
+            
+            # Transcrever boletim editado
+            tmp = tempfile.mktemp(suffix='.wav', dir=str(Path(r'C:/Users/THIAGO/AppData/Local/Temp')))
+            AudioSegment.from_mp3(str(caminho)).export(tmp, format='wav')
+            resultado = modelo.transcribe(tmp, language='pt', fp16=False)
+            os.unlink(tmp)
+            
+            texto_transcrito = resultado['text'].strip()
+            segmentos_transcritos = resultado['segments']
+            
+            # Obter texto do roteiro para este boletim (usar OFF)
+            rot_n = roteiros.get(n, {}) if roteiros else {}
+            if isinstance(rot_n, dict):
+                roteiro_b = rot_n.get("off", "") or rot_n.get("titulo", "")
+            else:
+                roteiro_b = rot_n
+            if not roteiro_b:
+                continue
+            
+            # Calcular similaridade (usando cobertura do roteiro)
+            texto_norm = normalizar_texto(texto_transcrito)
+            roteiro_norm = normalizar_texto(roteiro_b)
+            
+            palavras_roteiro = set(roteiro_norm.split())
+            palavras_transcrito = set(texto_norm.split())
+            
+            if palavras_roteiro:
+                # Cobertura: % das palavras do roteiro que aparecem na transcrição
+                cobertura = len(palavras_roteiro & palavras_transcrito) / len(palavras_roteiro)
+            else:
+                cobertura = 0.0
+            
+            sim_original = cobertura
+            
+            print(f"  B{n}: cobertura original = {sim_original:.2%}")
+            
+            # Se cobertura baixa (< 70%), aplicar correções e retranscrever
+            if sim_original < 0.7:
+                print(f"  B{n}: cobertura baixa — aplicando correções de alucinações...")
+                
+                # Aplicar correções na transcrição
+                segmentos_corrigidos = corrige_aluc(segmentos_transcritos, roteiro_b)
+                texto_corrigido = " ".join(s.get("text", s.get("text_corrigido", "")).strip() for s in segmentos_corrigidos)
+                texto_corrigido_norm = normalizar_texto(texto_corrigido)
+                
+                palavras_corrigido = set(texto_corrigido_norm.split())
+                if palavras_roteiro:
+                    cobertura_corrigida = len(palavras_roteiro & palavras_corrigido) / len(palavras_roteiro)
+                else:
+                    cobertura_corrigida = 0.0
+                
+                sim_corrigido = cobertura_corrigida
+                
+                print(f"  B{n}: cobertura corrigida = {sim_corrigido:.2%}")
+                
+                # Adicionar info na auditoria
+                for bg in auditoria["boletims_gerados"]:
+                    if f"_B{n}__" in bg["arquivo"]:
+                        bg["qualidade"] = {
+                            "similaridade_original": round(sim_original, 3),
+                            "similaridade_corrigida": round(sim_corrigido, 3),
+                            "correcoes_aplicadas": True,
+                            "texto_corrigido": texto_corrigido[:500]
+                        }
+                        break
+            else:
+                for bg in auditoria["boletims_gerados"]:
+                    if f"_B{n}__" in bg["arquivo"]:
+                        bg["qualidade"] = {
+                            "similaridade_original": round(sim_original, 3),
+                            "correcoes_aplicadas": False
+                        }
+                        break
 
     # Salvar auditoria
     auditoria_path = saida / "auditoria.json"
