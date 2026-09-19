@@ -169,21 +169,35 @@ def carregar_roteiros(pasta_roteiros, data_str, b_ini, b_fim):
     for f in arquivos_ordenados:
         texto = f.read_text(encoding="utf-8", errors="ignore")
         encontrou_algo = False
+        
+        # Formato 1: "B{N}- TITULO" por linha (formato compacto)
         for linha in texto.splitlines():
             linha = linha.strip()
             if not linha:
                 continue
-            # Match: B{N}- TITULO (formato compacto de roteiro)
             m = re.match(r'B(\d{1,2})\s*[-–—]\s*(.+)', linha)
             if m:
                 n = int(m.group(1))
                 if b_ini <= n <= b_fim:
                     titulo = m.group(2).strip()
-                    # Só sobrescreve se ainda não tem título para esse boletim
-                    # ou se o arquivo tem o dia no nome (prioridade)
                     if n not in roteiros or (dia_str and dia_str in f.name):
                         roteiros[n] = titulo
                         encontrou_algo = True
+        
+        # Formato 2: "B{N}- TITULO\nCABEÇA: ...\nOFF: ..." (roteiro completo)
+        # Busca blocos "B{N}- TITULO" seguidos de CABEÇA:
+        blocos = re.split(r'={20,}|DOCUMENTO\s+\[\d+/\d+\]', texto)
+        for bloco in blocos:
+            m_b = re.search(r'B(\d{1,2})\s*[-–—]\s*(.+?)(?:\n|$)', bloco, re.I)
+            m_cab = re.search(r'CABEÇA:\s*(.+?)(?:\n|$)', bloco, re.I)
+            if m_b and m_cab:
+                n = int(m_b.group(1))
+                if b_ini <= n <= b_fim:
+                    titulo = m_b.group(2).strip()
+                    if n not in roteiros or (dia_str and dia_str in f.name):
+                        roteiros[n] = titulo
+                        encontrou_algo = True
+        
         # Se encontrou todos os boletins neste arquivo, para
         if encontrou_algo and len(roteiros) >= (b_fim - b_ini + 1):
             break
@@ -736,6 +750,9 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     pasta_roteiros = Path(args.roteiros) if args.roteiros else None
+    # Se --roteiros for um arquivo, usar o diretório pai
+    if pasta_roteiros and pasta_roteiros.is_file():
+        pasta_roteiros = pasta_roteiros.parent
     resultado = processar_canonico(args.arquivo, pasta_roteiros)
 
     if "erro" in resultado:
