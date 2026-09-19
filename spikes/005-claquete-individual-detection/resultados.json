@@ -1,0 +1,252 @@
+[
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B1__TJRN_EMPRESA_DEVOLVER_VALORES_FALHA_COMPRA",
+    "segmento_idx": 0,
+    "inicio": 0.0,
+    "fim": 9.0,
+    "duracao": 9.0,
+    "texto": "No ar, notícias da hora, o voletinho informativo do Tribunal de justiça do Rio Grande do Norte.",
+    "eh_claquete": false,
+    "motivo": "vinheta_abertura"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B1__TJRN_EMPRESA_DEVOLVER_VALORES_FALHA_COMPRA",
+    "segmento_idx": 1,
+    "inicio": 11.0,
+    "fim": 20.0,
+    "duracao": 9.0,
+    "texto": "Em compras online, uma empresa de tecnologia e varia junto online, terá que restituir valores pagos ",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B1__TJRN_EMPRESA_DEVOLVER_VALORES_FALHA_COMPRA",
+    "segmento_idx": 2,
+    "inicio": 20.0,
+    "fim": 24.0,
+    "duracao": 4.0,
+    "texto": "após ela comprar produtos na plataforma e não recebe-lo.",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B1__TJRN_EMPRESA_DEVOLVER_VALORES_FALHA_COMPRA",
+    "segmento_idx": 3,
+    "inicio": 25.0,
+    "fim": 32.0,
+    "duracao": 7.0,
+    "texto": "E não recebe-los. Como está na sentença que a mulher de queria um notebook no valor de R$1.199,",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B1__TJRN_EMPRESA_DEVOLVER_VALORES_FALHA_COMPRA",
+    "segmento_idx": 4,
+    "inicio": 32.0,
+    "fim": 40.0,
+    "duracao": 8.0,
+    "texto": "e um GIP infantil elétrico por R$949,90. Entretanto, mesmo custando como entregue no sistema da REP,",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B2__TJRN_REFORMA_DECIS_O_MEGA_REMI_O_PENA",
+    "segmento_idx": 0,
+    "inicio": 0.0,
+    "fim": 9.0,
+    "duracao": 9.0,
+    "texto": "No ar, notícias da hora, o voletinho informativo do Tribunal de Justiça do Rio Grande do Norte.",
+    "eh_claquete": false,
+    "motivo": "vinheta_abertura"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B2__TJRN_REFORMA_DECIS_O_MEGA_REMI_O_PENA",
+    "segmento_idx": 1,
+    "inicio": 11.0,
+    "fim": 13.0,
+    "duracao": 2.0,
+    "texto": "Em convenio, o Consistimento Prisional.",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B2__TJRN_REFORMA_DECIS_O_MEGA_REMI_O_PENA",
+    "segmento_idx": 2,
+    "inicio": 14.0,
+    "fim": 20.0,
+    "duracao": 6.0,
+    "texto": "A câmara criminal do Tejota Rene reformou decisão da terceira vara regional de execução penal de Mos",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B2__TJRN_REFORMA_DECIS_O_MEGA_REMI_O_PENA",
+    "segmento_idx": 3,
+    "inicio": 20.0,
+    "fim": 28.0,
+    "duracao": 8.0,
+    "texto": "e negou a remissão de 9 dias de pena concedida a um apenado pela realização de um curso na modalidad",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B2__TJRN_REFORMA_DECIS_O_MEGA_REMI_O_PENA",
+    "segmento_idx": 4,
+    "inicio": 28.0,
+    "fim": 34.0,
+    "duracao": 6.0,
+    "texto": "Ao acolher o recurso do Ministério Público, o colégiado entendeu que a instituição responsável pelo ",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B3__TJRN_DONA_LAVA_JATO_CONDENADA",
+    "segmento_idx": 0,
+    "inicio": 0.0,
+    "fim": 9.0,
+    "duracao": 9.0,
+    "texto": "No ar, notícias da hora, o voletinho informativo do Tribunal de justiça é do Rio Grande do Norte.",
+    "eh_claquete": false,
+    "motivo": "vinheta_abertura"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B3__TJRN_DONA_LAVA_JATO_CONDENADA",
+    "segmento_idx": 1,
+    "inicio": 11.0,
+    "fim": 12.0,
+    "duracao": 1.0,
+    "texto": "Então, nada ou merda.",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B3__TJRN_DONA_LAVA_JATO_CONDENADA",
+    "segmento_idx": 2,
+    "inicio": 14.0,
+    "fim": 15.0,
+    "duracao": 1.0,
+    "texto": "M3.",
+    "eh_claquete": true,
+    "motivo": "claquete_B{MNV}"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B3__TJRN_DONA_LAVA_JATO_CONDENADA",
+    "segmento_idx": 3,
+    "inicio": 18.0,
+    "fim": 24.0,
+    "duracao": 6.0,
+    "texto": "Dona de Lava Jato é condenada, após polícia localizar carros roubados em estabelecimento, de Natal.",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B3__TJRN_DONA_LAVA_JATO_CONDENADA",
+    "segmento_idx": 4,
+    "inicio": 25.0,
+    "fim": 38.0,
+    "duracao": 13.0,
+    "texto": "A décima vara criminal da comarca de Natal, condenou a propriedade de Lava Jato, localizado no barbã",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B4__TJRN_MANT_M_DECIS_O_REGRESS_O_REGIME",
+    "segmento_idx": 0,
+    "inicio": 0.0,
+    "fim": 9.0,
+    "duracao": 9.0,
+    "texto": "No ar, notícias da hora, o voletinho informativo do Tribunal de justiça é do Rio Grande do Norte.",
+    "eh_claquete": false,
+    "motivo": "vinheta_abertura"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B4__TJRN_MANT_M_DECIS_O_REGRESS_O_REGIME",
+    "segmento_idx": 1,
+    "inicio": 11.0,
+    "fim": 16.0,
+    "duracao": 5.0,
+    "texto": "O que afastou a regressão de regime após rompimento de tornozeleira eletrônica.",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B4__TJRN_MANT_M_DECIS_O_REGRESS_O_REGIME",
+    "segmento_idx": 2,
+    "inicio": 16.0,
+    "fim": 25.0,
+    "duracao": 9.0,
+    "texto": "A Câmara Creminal do Tejota Rino manteva decisão que deixou de reconhecer falta grave em um apenado ",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B4__TJRN_MANT_M_DECIS_O_REGRESS_O_REGIME",
+    "segmento_idx": 3,
+    "inicio": 25.0,
+    "fim": 36.0,
+    "duracao": 11.0,
+    "texto": "O colegiado negou o recurso do Ministério Público e entendeu que o desse comprimento das condições e",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B4__TJRN_MANT_M_DECIS_O_REGRESS_O_REGIME",
+    "segmento_idx": 4,
+    "inicio": 36.0,
+    "fim": 44.0,
+    "duracao": 8.0,
+    "texto": "O recurso questionava a decisão da terceira vara regional de execução penal demossorou que aplicou a",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B5__TJRN_COMIT_GESTOR_PENAS_PECUNI_RIAS",
+    "segmento_idx": 0,
+    "inicio": 0.0,
+    "fim": 9.0,
+    "duracao": 9.0,
+    "texto": "No ar, notícias da hora, o voletinho informativo do Tribunal de Justiça do Rio Grande do Norte.",
+    "eh_claquete": false,
+    "motivo": "vinheta_abertura"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B5__TJRN_COMIT_GESTOR_PENAS_PECUNI_RIAS",
+    "segmento_idx": 1,
+    "inicio": 11.0,
+    "fim": 17.0,
+    "duracao": 6.0,
+    "texto": "Acheu de Penas Pecuniárias de Natal, publica novo e digital para cada estramento de projetos sociais",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B5__TJRN_COMIT_GESTOR_PENAS_PECUNI_RIAS",
+    "segmento_idx": 2,
+    "inicio": 19.0,
+    "fim": 28.0,
+    "duracao": 9.0,
+    "texto": "O Comiteje Acheu de Penas Pecuniárias já com marca de Natal, publico edital destinado ao quadastrame",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B5__TJRN_COMIT_GESTOR_PENAS_PECUNI_RIAS",
+    "segmento_idx": 3,
+    "inicio": 28.0,
+    "fim": 39.0,
+    "duracao": 11.0,
+    "texto": "O valor é de 900 mil reais e será distribuído para 20 repete, e será distribuído para 27 projetos qu",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  },
+  {
+    "boletim": "BOLETIM_RADIO_TJRN_17_SET_2026_B5__TJRN_COMIT_GESTOR_PENAS_PECUNI_RIAS",
+    "segmento_idx": 4,
+    "inicio": 40.0,
+    "fim": 43.0,
+    "duracao": 3.0,
+    "texto": "compre dominância nas temáticas apresentadas no item 8 do edital.",
+    "eh_claquete": false,
+    "motivo": "nao_match"
+  }
+]
