@@ -1,0 +1,14 @@
+{
+  "sem_prompt": {
+    "cobertura": 0.8503937007874016,
+    "texto": "No ar, notícias da hora, o voletinho informativo do Tribunal de Justiça do Rio Grande do Lorte. Em compras online, uma empresa de tecnologia e varia em João Laine terá que restituir valores pagos por "
+  },
+  "prompt_curto": {
+    "cobertura": 0.8346456692913385,
+    "texto": "No ar, notícias da hora, o Boletim informativo do Tribunal de Justiça do Rio Grande do Norte. Em compras um line, uma empresa de tecnologia e varia em João Laine terá que restituir valores pagos por u"
+  },
+  "prompt_expandido": {
+    "cobertura": 0.6692913385826772,
+    "texto": "No ar, notícias da hora, o voletinho informativo do Tribunal de Justiça do Rio Grande do Lorte. O Tribunal de Justiça do Rio Grande do Lorte, com um número de cento e noventa e nove reais, e um GIP in"
+  }
+}

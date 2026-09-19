@@ -1,0 +1,12 @@
+{
+  "openai_whisper": {
+    "tempo_s": 12.270580530166626,
+    "cobertura": 0.8503937007874016,
+    "texto_inicio": "No ar, notícias da hora, o voletinho informativo do Tribunal de Justiça do Rio Grande do Lorte. Em compras online, uma empresa de tecnologia e varia e"
+  },
+  "faster_whisper_int8": {
+    "tempo_s": 9.215638875961304,
+    "cobertura": 0.8582677165354331,
+    "texto_inicio": "No ar, notícias da hora, o voletinho informativo do Tribunal de Justiça do Rio Grande do Lorte.  Em compras online, uma empresa de tecnologia e varia "
+  }
+}
