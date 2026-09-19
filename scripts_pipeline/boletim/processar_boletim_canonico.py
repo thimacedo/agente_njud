@@ -928,22 +928,24 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
                 
                 print(f"  B{n}: cobertura corrigida = {sim_corrigido:.2%}")
                 
-                # Adicionar info na auditoria
+                # Adicionar info na auditoria (cobertura = % do roteiro presente na transcrição)
                 for bg in auditoria["boletims_gerados"]:
                     if f"_B{n}__" in bg["arquivo"]:
                         bg["qualidade"] = {
-                            "similaridade_original": round(sim_original, 3),
-                            "similaridade_corrigida": round(sim_corrigido, 3),
+                            "cobertura_roteiro_original": round(sim_original, 3),
+                            "cobertura_roteiro_corrigida": round(sim_corrigido, 3),
                             "correcoes_aplicadas": True,
-                            "texto_corrigido": texto_corrigido[:500]
+                            "texto_corrigido": texto_corrigido[:500],
+                            "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
                         }
                         break
             else:
                 for bg in auditoria["boletims_gerados"]:
                     if f"_B{n}__" in bg["arquivo"]:
                         bg["qualidade"] = {
-                            "similaridade_original": round(sim_original, 3),
-                            "correcoes_aplicadas": False
+                            "cobertura_roteiro_original": round(sim_original, 3),
+                            "correcoes_aplicadas": False,
+                            "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
                         }
                         break
 
@@ -956,6 +958,12 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
     print(f"\n{'='*60}")
     print(f"PROCESSAMENTO COMPLETO: {len(auditoria['boletims_gerados'])} boletins gerados")
     print(f"Saída: {saida}")
+    print(f"{'='*60}")
+    print(f"\n⚠️  AUDITORIA HUMANA OBRIGATÓRIA ANTES DE ENTREGAR:")
+    print(f"   1. Ouvir cada boletim gerado")
+    print(f"   2. Verificar: sem repetições, sem claquetes, conteúdo faz sentido")
+    print(f"   3. Cobertura de palavras NÃO substitui audição")
+    print(f"   4. Se reprovações: ajustar pipeline e reprocessar")
     print(f"{'='*60}\n")
 
     return auditoria
