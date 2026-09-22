@@ -469,7 +469,6 @@ Arquivos atualizados: `.env.example` (BASE_DIR), `_legado/src/audit/individual_c
 2. Reprocessar 17 SET B1-B5.
 3. Processar 18 SET B1-B5 (áudio+roteiro prontos, não processado).
 4. Vinheta de passagem (~1.5s): NCC não detecta (curta demais) — limitação conhecida, RMS sugere presente.
-5. Commit pendente: 17 arquivos modificados/não commitados (ver `git status`).
 
 **Proibido reverter:**
 - `BGM_FULL_DB=12`/`BGM_DUCK_DB=6` como GANHO sobre BG original (não nível alvo).
