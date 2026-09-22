@@ -22,6 +22,9 @@ except ImportError:
 
 from corrigir_alucinacoes import corrigir_transcricao
 from shared.bgm_mixer import mix_bgm
+from shared.transcricao_cache import TranscricaoCache, calcular_hash_audio, get_cache
+from shared.text_utils import normalizar_texto
+from shared.logging_config import setup_logging, get_logger
 
 # ── Configuração (todas as variáveis antes hardcoded) ─────────────────────────
 # Overrides via variáveis de ambiente (opcional): DIVISOR_ASSETS, DIVISOR_TMP,
@@ -1192,7 +1195,7 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
     # ETAPA 7.5: Validação de qualidade da transcrição vs roteiro
     if roteiros:
         print(f"\n── ETAPA 7.5: VALIDAÇÃO DE QUALIDADE (transcrição vs roteiro) ──")
-        from corrigir_alucinacoes import corrigir_transcricao as corrige_aluc, normalizar_texto
+        from corrigir_alucinacoes import corrigir_transcricao as corrige_aluc
         from difflib import SequenceMatcher
         
         for n in sorted(boletims_cortados.keys()):

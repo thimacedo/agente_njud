@@ -30,7 +30,7 @@ from pydub import AudioSegment
 
 # Adicionar scripts_pipeline ao path
 sys.path.insert(0, str(Path(__file__).parent.parent))
-from boletim.processar_boletim_canonico import carregar_roteiros
+from processar_boletim_canonico import carregar_roteiros
 
 
 def verificar_claquetes(segments, limite=20):
@@ -215,8 +215,9 @@ def verificar_cobertura_roteiro(texto_transcrito, texto_roteiro):
     if not texto_roteiro:
         return 0.0, 0, 0
     
-    texto_norm = re.sub(r'[^\w\s]', '', texto_transcrito.lower())
-    roteiro_norm = re.sub(r'[^\w\s]', '', texto_roteiro.lower())
+    from shared.text_utils import normalizar_texto as _norm
+    texto_norm = _norm(texto_transcrito)
+    roteiro_norm = _norm(texto_roteiro)
     
     palavras_roteiro = set(roteiro_norm.split())
     palavras_texto = set(texto_norm.split())
