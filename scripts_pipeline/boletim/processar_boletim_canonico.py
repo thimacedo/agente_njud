@@ -151,7 +151,7 @@ def extrair_info_nome(arquivo, transcricao_texto=None):
 
 def carregar_roteiros(pasta_roteiros, data_str, b_ini, b_fim):
     """Se pasta_roteiros informado, busca roteiros .txt para cada boletim.
-    Retorna dict {Bnumero: {"titulo": str, "off": str}}
+    Retorna dict {Bnumero: {"titulo": str, "cabeca": str, "off": str}}
     
     Formatos suportados:
     1. "B{N}- TITULO" por linha (formato compacto)
@@ -187,7 +187,7 @@ def carregar_roteiros(pasta_roteiros, data_str, b_ini, b_fim):
                 if b_ini <= n <= b_fim:
                     titulo = m.group(2).strip()
                     if n not in roteiros or (dia_str and dia_str in f.name):
-                        roteiros[n] = {"titulo": titulo, "off": ""}
+                        roteiros[n] = {"titulo": titulo, "cabeca": "", "off": ""}
                         encontrou_algo = True
         
         # Formato 2: "B{N}- TITULO\nCABEÇA: ...\nOFF: ..." (roteiro completo)
@@ -200,6 +200,7 @@ def carregar_roteiros(pasta_roteiros, data_str, b_ini, b_fim):
                 n = int(m_b.group(1))
                 if b_ini <= n <= b_fim:
                     titulo = m_b.group(2).strip()
+                    cabeca_texto = m_cab.group(1).strip() if m_cab else ""
                     off_texto = m_off.group(1).strip() if m_off else ""
                     # Sobrescrever se:
                     # - ainda não tem registro para este boletim, OU
@@ -211,7 +212,7 @@ def carregar_roteiros(pasta_roteiros, data_str, b_ini, b_fim):
                         (off_texto and not roteiros.get(n, {}).get("off"))
                     )
                     if deve_sobrescrever:
-                        roteiros[n] = {"titulo": titulo, "off": off_texto}
+                        roteiros[n] = {"titulo": titulo, "cabeca": cabeca_texto, "off": off_texto}
                         encontrou_algo = True
         
         # Se encontrou todos os boletins neste arquivo E todos têm OFF, para
@@ -285,22 +286,30 @@ def carregar_modelo():
 
 
 def transcrever(audio, tmp_path, modelo):
-    """ETAPA 1: transcrição com Whisper. Compatível com faster-whisper e openai-whisper."""
+    """ETAPA 1: transcrição com Whisper. Compatível com faster-whisper e openai-whisper.
+    Usa word_timestamps=True para permitir cortes finos (claquete vs cabeça no mesmo segmento)."""
     audio.export(tmp_path, format="wav")
     
     if USE_FASTER:
-        segments_iter, info = modelo.transcribe(tmp_path, language="pt")
+        segments_iter, info = modelo.transcribe(tmp_path, language="pt", word_timestamps=True)
         segmentos = []
         for seg in segments_iter:
-            segmentos.append({
+            entry = {
                 "start": seg.start,
                 "end": seg.end,
                 "text": seg.text
-            })
+            }
+            # Preservar word timestamps para corte fino de claquetes
+            if hasattr(seg, "words") and seg.words:
+                entry["words"] = [
+                    {"word": w.word, "start": w.start, "end": w.end}
+                    for w in seg.words
+                ]
+            segmentos.append(entry)
         os.unlink(tmp_path)
         return segmentos
     else:
-        result = modelo.transcribe(tmp_path, language="pt", fp16=False)
+        result = modelo.transcribe(tmp_path, language="pt", fp16=False, word_timestamps=True)
         os.unlink(tmp_path)
         return result["segments"]
 
@@ -377,7 +386,83 @@ def detectar_estrutura(segmentos, b_ini, b_fim):
                     if seg["start"] > t_ass + 0.5:
                         t_proximo = seg["start"]
                         break
+                
+                # CORTE FINO: o segmento pode conter assinatura + claquete + CABEÇA juntos
+                # (ex: "do Norte, Leonardo Meida, M2, TJRN reforma decisão e nega...")
+                # Nesse caso, o marcador deve apontar para o INÍCIO DA CABEÇA
+                # (palavra seguinte à claquete individual "M2,"/"B2,"), não para o segmento seguinte.
+                seg_marcador = None
+                for seg in segmentos:
+                    if abs(seg["start"] - t_proximo) < 0.1:
+                        seg_marcador = seg
+                        break
+                
+                if seg_marcador and "words" in seg_marcador and seg_marcador["words"]:
+                    palavras_seg = seg_marcador["words"]
+                    # Procurar claquete individual (B2, M2, B-10...) dentro do segmento
+                    for idx_w in range(len(palavras_seg) - 1):
+                        w = palavras_seg[idx_w]
+                        w_norm = w["word"].strip().strip('.,;: ').lower()
+                        # Claquete individual: letra+numero — mas não a data (17, 2026)
+                        if re.match(r'^[a-z][\-\s]?\d{1,2}$', w_norm) and len(w_norm) <= 4:
+                            # A palavra seguinte deve ser conteúdo (não número, não claquete)
+                            w_prox = palavras_seg[idx_w + 1]["word"].strip().strip('.,;: ').lower()
+                            if not re.match(r'^[a-z]?[\-\s]?\d+$', w_prox) and len(w_prox) > 2:
+                                # Verificar que a claquete não é o PRIMEIRO conteúdo do segmento
+                                # (a assinatura vem antes: "do Norte, Leonardo Meida, M2, ...")
+                                # A claquete individual só é válida se houver assinatura antes dela
+                                # (palavras como "norte", "leonardo", "meida", "justiça")
+                                texto_antes = ' '.join(
+                                    palavras_seg[k]["word"] for k in range(max(0, idx_w - 6), idx_w)
+                                ).lower()
+                                if re.search(r'(norte|nardo|leonardo|justi[çc]a|meida|almeida)', texto_antes):
+                                    t_proximo = palavras_seg[idx_w + 1]["start"]
+                                    print(f"    [corte fino] cabeça de B{n_proximo} inicia em {t_proximo:.2f}s (após claquete '{w_norm}')")
+                                    break
+                
                 marcadores[n_proximo] = t_proximo
+
+        # Ajuste anti-vazamento: o Whisper pode juntar a última frase do off
+        # com a assinatura do locutor no mesmo segmento.
+        # Dois cenários:
+        # 1. Assinatura no segmento ANTERIOR ao marcador (fim do boletim anterior)
+        # 2. Assinatura no segmento NO marcador (início do boletim seguinte)
+        for i, t_ass in enumerate(assinaturas):
+            n_proximo = b_ini + i + 1
+            if n_proximo > b_fim:
+                continue
+            t_marc = marcadores.get(n_proximo)
+            if t_marc is None:
+                continue
+            
+            # Cenário 1: segmento anterior contém assinatura
+            for seg in segmentos:
+                if abs(seg["end"] - t_marc) < 0.5:
+                    texto_seg = seg["text"].strip()
+                    if padrao_ass_completo.search(texto_seg) or texto_seg.lower().endswith("norte"):
+                        for seg2 in segmentos:
+                            if seg2["start"] >= seg["end"] - 0.1:
+                                marcadores[n_proximo] = seg2["start"]
+                                break
+                        break
+            
+            # Cenário 2: segmento no marcador (início do próximo boletim) contém assinatura
+            # Ex: "ele é o Nardo Aumeda. De sete, formação..." — "Nardo Aumeda" é assinatura
+            t_marc = marcadores.get(n_proximo)  # recalcular após cenário 1
+            for seg in segmentos:
+                if abs(seg["start"] - t_marc) < 0.5:
+                    texto_seg = seg["text"].strip()
+                    # Verificar se o INÍCIO do segmento contém assinatura
+                    if re.search(r'tribunal\s+de\s+justi[cç]a', texto_seg, re.I) or \
+                       re.search(r'(nardo|leonardo)\s+(almeida|amida|umeda)', texto_seg, re.I) or \
+                       re.search(r'(é|o)\s+(nardo|leonardo)', texto_seg, re.I):
+                        # Avançar para o próximo segmento com conteúdo real
+                        for seg2 in segmentos:
+                            if seg2["start"] > seg["end"] and seg2["end"] - seg2["start"] > 1.5:
+                                marcadores[n_proximo] = seg2["start"]
+                                break
+                        break
+
     else:
         # Sem assinaturas: interpolar igualmente
         for n in range(b_ini, b_fim + 1):
@@ -466,48 +551,90 @@ def detectar_claquete_geral(segmentos, b_ini, b_fim):
     - "Boletins 17 do 9 do B1O5" (dia 17, setembro, B1 a B5)
     - "Boletins 4 do 9 do B6O7" (dia 4, setembro, B6 a B7)
     - "Boletins 18 do 9 do B1O10" (dia 18, setembro, B1 a B10)
+    - "Bolitinhos 18 de setembro do B6-LB10" (com hífen, L antes do número)
     
     Retorna (inicio, fim) da claquete geral ou None se não encontrada.
+    O fim inclui eventuais claquetes individuais introdutórias (ex: "B6.").
     """
-    # Padrão 1: Claquete geral "B{digito} O{digito}" ou "B{digito}0{digito}" (ex: "B1O5", "B6O7")
-    # Tolerante a alucinações: "B1 O5", "B105", "B1 05", etc.
-    padrao_faixa = re.compile(r'B\d+\s*[O0]\s*\d+', re.I)
-    
+    # Padrão 1: Faixa de boletins — tolerante a alucinações do Whisper
+    # "B1O5", "B1 O5", "B6-LB10", "B105", "B1 05", "B6 B10"
+    padrao_faixa = re.compile(r'B\d+\s*[O0\-]\s*L?\d+', re.I)
+
     # Padrão 2: "Boletins" (qualquer variação) + números (anúncio da faixa)
+    # Tolerante a alucinações: "Bolitinhos", "Boleteins", "boletins", "Bolitins", etc.
     padrao_boletins = re.compile(
-        r'b[oó]?l?e?t[ií]n?s?\s+\d+',
+        r'b\w*?t[ií]nh?o?s\s+\d+',
         re.I
     )
-    
+
     # NOTA: Vinheta de abertura ("No ar, notícias da hora...") NÃO é lixo — faz parte do boletim final
-    
+
     for seg in segmentos:
         if seg["start"] > 15:
             break
         texto = seg["text"]
         if padrao_faixa.search(texto) or padrao_boletins.search(texto):
             # Encontrou início da claquete geral
-            # Agora encontrar o FIM da introdução (primeiro segmento com conteúdo real)
-            # O conteúdo real começa após "B1," ou após padrões de claquete
+            # Agora encontrar o FIM da introdução: primeiro segmento com conteúdo real
+            # O conteúdo real começa APÓS todas as claquetes introdutórias
+            
+            # CORTE FINO: se o segmento contém claquete + cabeça juntos
+            # (ex: "Bolitens 17 do 9 do B1O5, B1, empresa terá que devolver..."), 
+            # usar word timestamps para cortar apenas após a claquete individual
+            # e preservar a cabeça que vem na sequência
             fim_intro = seg["end"]
+            
+            # Buscar claquete individual dentro do próprio segmento usando words
+            # Ex: "Bolitens 17 do 9 do B1O5, B1," → cortar após "B1,"
+            if "words" in seg and seg["words"]:
+                palavras = seg["words"]
+                # Procurar o padrão claquete individual: "B1," / "B6." / "B-10."
+                # seguido de conteúdo (palavra não-claquete)
+                for idx_w in range(len(palavras) - 1):
+                    w = palavras[idx_w]
+                    w_norm = w["word"].strip().strip('.,;: ').lower()
+                    # Claquete individual: letra+numero (b1, b6, b-10, m-10)
+                    if re.match(r'^[a-z][\-\s]?\d+$', w_norm):
+                        # Verificar se a palavra seguinte NÃO é outra claquete
+                        # (é o início da cabeça/conteúdo)
+                        w_prox = palavras[idx_w + 1]["word"].strip().strip('.,;: ').lower()
+                        if not re.match(r'^[a-z]?\d+$', w_prox) and not re.match(r'^[a-z][\-\s]?\d+$', w_prox):
+                            # Corte fino: manter a partir da palavra seguinte (cabeça)
+                            fim_intro = palavras[idx_w + 1]["start"]
+                            return (seg["start"], fim_intro)
+            
             for seg2 in segmentos:
                 if seg2["start"] <= seg["start"]:
                     continue
                 if seg2["start"] > seg["start"] + 15:
                     break
                 texto2 = seg2["text"].strip()
-                # Fim da introdução: primeiro segmento que começa com "B1," (claquete individual do primeiro boletim)
-                # ou que é significativamente longo (conteúdo real)
-                if re.match(r'^B\d+[\.\s,]', texto2, re.I) and len(texto2) < 80:
-                    fim_intro = seg2["start"]
-                    break
-                # Ou se o segmento tem mais de 8 palavras (é conteúdo, não claquete)
+
+                # Claquete individual do primeiro boletim: "B1.", "B1,", "B6.", "B-10."
+                # O Whisper pode transcrever com hífen: "B-10" ou letra errada: "M-10"
+                if re.match(r'^[A-Z][\-\s]?\d+[\.\s,]', texto2, re.I) and len(texto2) < 80:
+                    # NÃO parar aqui — a claquete individual também deve ser removida
+                    # Continuar procurando o verdadeiro início do conteúdo
+                    fim_intro = seg2["end"]
+                    continue
+
+                # Se o segmento tem mais de 8 palavras, é conteúdo real
                 palavras = texto2.split()
                 if len(palavras) > 8:
                     fim_intro = seg2["start"]
                     break
+
+                # Se é um segmento curto mas não é claquete, pode ser continuação da intro
+                if len(texto2) < 40:
+                    fim_intro = seg2["end"]
+                    continue
+
+                # Segmento médio — provavelmente conteúdo
+                fim_intro = seg2["start"]
+                break
+
             return (seg["start"], fim_intro)
-    
+
     return None
 
 
@@ -568,6 +695,89 @@ def carregar_vht(nome):
     return None
 
 
+def calcular_duracao_cabeca(segmento_audio, texto_cabeca, modelo):
+    """Calcula a duração da cabeça no áudio com base no texto do roteiro.
+    
+    Usa word-level timestamps do Whisper para encontrar onde cada palavra
+    do roteiro aparece no áudio. A cabeça termina na última palavra encontrada.
+    
+    Retorna a duração em segundos.
+    Se não encontrar correspondência, retorna 20s como fallback.
+    """
+    if not texto_cabeca:
+        return 20  # fallback
+    
+    # Transcrever com word timestamps
+    tmp = tempfile.mktemp(suffix='.wav', dir=str(Path(r"C:/Users/THIAGO/AppData/Local/Temp")))
+    segmento_audio.export(tmp, format="wav")
+    
+    if USE_FASTER:
+        segments_iter, info = modelo.transcribe(tmp, language="pt", word_timestamps=True)
+        segmentos_boletim = [{"start": s.start, "end": s.end, "text": s.text, "words": s.words} for s in segments_iter]
+    else:
+        result = modelo.transcribe(tmp, language="pt", word_timestamps=True)
+        segmentos_boletim = result["segments"]
+    
+    os.unlink(tmp)
+    
+    # Normalizar texto da cabeça para comparação
+    cabeca_norm = re.sub(r'[^\w\s]', '', texto_cabeca.lower()).strip()
+    palavras_cabeca = cabeca_norm.split()
+    
+    if not palavras_cabeca:
+        return 20
+    
+    # Coletar todas as palavras com timestamps
+    todas_palavras = []
+    for seg in segmentos_boletim:
+        if "words" in seg:
+            for w in seg["words"]:
+                todas_palavras.append({"word": w.word, "start": w.start, "end": w.end})
+        else:
+            # Fallback: estimar timestamps
+            todas_palavras.append({"word": seg["text"], "start": seg["start"], "end": seg["end"]})
+    
+    # Procurar palavras da cabeça em ordem no áudio
+    # A cabeça termina quando encontramos uma palavra que NÃO pertence à cabeça
+    palavras_encontradas = []
+    idx_palavra = 0
+    
+    for palavra_audio in todas_palavras:
+        if idx_palavra >= len(palavras_cabeca):
+            break
+        
+        palavra_cabeca = palavras_cabeca[idx_palavra]
+        palavra_norm = re.sub(r'[^\w]', '', palavra_cabeca.lower())
+        palavra_audio_norm = re.sub(r'[^\w]', '', palavra_audio["word"].lower())
+        
+        if not palavra_norm or not palavra_audio_norm:
+            continue
+        
+        # Verificar se a palavra do áudio corresponde à palavra da cabeça
+        if palavra_norm in palavra_audio_norm or palavra_audio_norm in palavra_norm:
+            score = len(set(palavra_norm) & set(palavra_audio_norm)) / max(len(palavra_norm), len(palavra_audio_norm))
+            if score >= 0.5:
+                palavras_encontradas.append({
+                    "palavra": palavra_cabeca,
+                    "timestamp": palavra_audio["end"],
+                    "score": score
+                })
+                idx_palavra += 1
+    
+    if palavras_encontradas:
+        # A cabeça termina na última palavra encontrada em ordem
+        ultima_palavra = palavras_encontradas[-1]
+        duracao = ultima_palavra["timestamp"]
+        print(f"  [DEBUG] cabeça termina em {duracao:.1f}s ({len(palavras_encontradas)}/{len(palavras_cabeca)} palavras encontradas)")
+        return duracao
+    
+    # Fallback: 20% do boletim
+    duracao_total = len(segmento_audio) / 1000
+    fallback = min(max(duracao_total * 0.20, 10), 30)
+    print(f"  [DEBUG] FALLBACK: {fallback:.1f}s (duracao_total={duracao_total:.1f}s)")
+    return fallback
+
+
 def montar_boletim_com_vinhetas(segmento_audio, vht_abertura, vht_passagem, vht_encerramento, cabeça_duracao=20):
     """ETAPA 6: monta estrutura completa: ABERTURA + CABEÇA + PASSAGEM + OFF(com BG ducking) + ENCERRAMENTO.
 
@@ -575,9 +785,10 @@ def montar_boletim_com_vinhetas(segmento_audio, vht_abertura, vht_passagem, vht_
     - BG nunca ultrapassa o fim do off.
     - Se o off é mais curto que o BG, o BG é cortado.
     - Se o off é mais longo, o BG termina antes do encerramento.
+    - A vinheta de passagem é inserida entre a cabeça e o OFF.
     """
     vht_a = vht_abertura or carregar_vht("VHT_ABERTURA_BOLETIM.mp3")
-    vht_p = vht_passagem or carregar_vht("VHT_PASSAMENTO_BOLETIM.mp3")
+    vht_p = vht_passagem or carregar_vht("VHT_PASSAGEM_BOLETIM.mp3")
     vht_e = vht_encerramento or carregar_vht("VHT_ENCERRAMENTO_BOLETIM.mp3")
     bg = carregar_vht("BG - BOLETIM.mp3")
 
@@ -597,6 +808,7 @@ def montar_boletim_com_vinhetas(segmento_audio, vht_abertura, vht_passagem, vht_
 
     partes.append(cabeça)
 
+    # Inserir vinheta de passagem entre cabeça e OFF
     if vht_p:
         partes.append(vht_p)
 
@@ -611,7 +823,29 @@ def montar_boletim_com_vinhetas(segmento_audio, vht_abertura, vht_passagem, vht_
     if vht_e:
         partes.append(vht_e)
 
-    return sum(partes[1:], partes[0]) if len(partes) > 1 else (partes[0] if partes else AudioSegment.silent(duration=1000))
+    if len(partes) > 1:
+        montado = sum(partes[1:], partes[0])
+    elif partes:
+        montado = partes[0]
+    else:
+        montado = AudioSegment.silent(duration=1000)
+    
+    # Normalizar loudness para -16 LUFS (padrão rádio), TP=-1.5, LRA=11
+    # Vinhetas estão em ~-19.6 dBFS; voz em ~-10 dBFS (estourando)
+    # loudnorm equaliza para que voz e vinhetas fiquem no mesmo nível percebido
+    import subprocess
+    tmp_in = tempfile.mktemp(suffix='.wav', dir=str(Path(r"C:/Users/THIAGO/AppData/Local/Temp")))
+    tmp_out = tempfile.mktemp(suffix='.wav', dir=str(Path(r"C:/Users/THIAGO/AppData/Local/Temp")))
+    montado.export(tmp_in, format="wav")
+    subprocess.run([
+        "ffmpeg", "-y", "-i", tmp_in,
+        "-af", "loudnorm=I=-16:TP=-1.5:LRA=11",
+        tmp_out
+    ], check=True, capture_output=True)
+    os.unlink(tmp_in)
+    resultado = AudioSegment.from_wav(tmp_out)
+    os.unlink(tmp_out)
+    return resultado
 
 
 def processar_canonico(arquivo_entrada, pasta_roteiros=None):
@@ -761,7 +995,14 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
         t_fim = len(audio) / 1000  # fallback: fim do áudio
         for t_ass in assinaturas_ordenadas:
             if t_ass > t_start + 2:  # pelo menos 2s de conteúdo
-                t_fim = t_ass
+                # Usar o INÍCIO do segmento que contém a assinatura
+                # (não o timestamp exato da assinatura, que pode estar no meio do segmento)
+                for seg in segmentos:
+                    if seg["start"] <= t_ass <= seg["end"]:
+                        t_fim = seg["start"]
+                        break
+                else:
+                    t_fim = t_ass
                 break
 
         # Recortar boletim crú
@@ -862,11 +1103,22 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
 
         rot_n = roteiros.get(n, {}) if roteiros else {}
         titulo_rot = rot_n.get("titulo", "") if isinstance(rot_n, dict) else rot_n
+        cabeca_rot = rot_n.get("cabeca", "") if isinstance(rot_n, dict) else ""
         nome_arquivo = nomear_boletim(data_str, n, titulo_rot, data_completa_str)
         info['nome'] = nome_arquivo
+        
+        # Calcular duração da cabeça baseada no roteiro (se disponível)
+        # Usar o áudio original (com vinheta de abertura) para detectar a cabeça
+        if cabeca_rot:
+            duracao_cabeca = calcular_duracao_cabeca(audio, cabeca_rot, modelo)
+            print(f"  B{n}: cabeça do roteiro = {duracao_cabeca:.1f}s")
+        else:
+            duracao_cabeca = 20  # fallback
+        
         montado = montar_boletim_com_vinhetas(
             info['audio'],
-            None, None, None  # VHTs carregadas dentro da função
+            None, None, None,  # VHTs carregadas dentro da função
+            duracao_cabeca
         )
 
         caminho_saida = saida / nome_arquivo
@@ -967,8 +1219,9 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
             
             print(f"  B{n}: cobertura original = {sim_original:.2%}")
             
-            # Se cobertura baixa (< 70%), aplicar correções e retranscrever
-            if sim_original < 0.7:
+            # Se cobertura baixa (< 60%), aplicar correções e retranscrever
+            # Threshold 60%: Whisper alucina nomes próprios (ex: "Tejota Reino" em vez de "TJRN")
+            if sim_original < 0.6:
                 print(f"  B{n}: cobertura baixa — aplicando correções de alucinações...")
                 
                 # Aplicar correções na transcrição

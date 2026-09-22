@@ -17,12 +17,18 @@ from pydub import AudioSegment
 
 
 # ── Constantes de Duck ─────────────────────────────────────────────────────────
+# NOTA: estes valores são GANHO (dB) aplicados sobre o nível original do BG.
+# BG - BOLETIM.mp3 tem RMS de -21.5 dBFS.
+# Para que o BG fique a -14 dBFS em silêncio: ganho = -14 - (-21.5) = +7.5 dB
+# Para que o BG fique a -20 dBFS durante voz: ganho = -20 - (-21.5) = +1.5 dB
 
 # Volume da BGM em silêncio (fundo de abertura / fechamento)
-BGM_FULL_DB: float = -14.0
+# Ganho sobre BG original (-21.5 dBFS). +12 = BG a -9.5 dBFS (bem audível)
+BGM_FULL_DB: float = 12.0
 
 # Volume da BGM quando o locutor está falando
-BGM_DUCK_DB: float = -28.0
+# +6 = BG a -15.5 dBFS (audível sob voz, não compete)
+BGM_DUCK_DB: float = 6.0
 
 # Limiar de energia RMS (float normalizado) para detectar presença de voz.
 # Abaixo deste valor → silêncio; acima → voz ativa.

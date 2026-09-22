@@ -407,7 +407,7 @@ def main() -> None:
     )
     parser.add_argument(
         "pasta_jornais_divididos",
-        help="Pasta com os cortes (ex: F:/Projetos/DIVISOR/data/processed/JORNAIS_DIVIDIDOS)",
+        help="Pasta com os cortes (ex: E:/02_Projetos_Trabalho/Projetos_Ativos/DIVISOR/data/processed/JORNAIS_DIVIDIDOS)",
     )
     parser.add_argument("relatorio_csv", help="Caminho de saída do relatório CSV")
     parser.add_argument("--limit", type=int, default=None, help="Processa apenas os N primeiros arquivos")

@@ -111,7 +111,7 @@ Três sistemas de logging coexistem: `src/utils/logger.py` (RotatingFileHandler 
 
 ### 3.2 Caminhos hardcoded (fora de settings.py)
 ~40 ocorrências, destaque:
-- `F:/Projetos/DIVISOR` literal em 11 scripts de `src/tools/` (`BASE = Path("F:/Projetos/DIVISOR")`): auditar_passado_presente:18, auditar_pastas_alvo:20, organizar_boletins_por_data:17, padronizar_passado_presente:18, remover_duplicatas:17, renomear_boletins_mapeaveis:18, resolver_conflitos_boletins:18, tratar_sem_num_csv:18, standardize_njud_names:9, standardize_njud_names_alvo:9, standardize_programas_projetados:9.
+- `E:/02_Projetos_Trabalho/Projetos_Ativos/DIVISOR` literal em 11 scripts de `src/tools/` (`BASE = Path("E:/02_Projetos_Trabalho/Projetos_Ativos/DIVISOR")`): auditar_passado_presente:18, auditar_pastas_alvo:20, organizar_boletins_por_data:17, padronizar_passado_presente:18, remover_duplicatas:17, renomear_boletins_mapeaveis:18, resolver_conflitos_boletins:18, tratar_sem_num_csv:18, standardize_njud_names:9, standardize_njud_names_alvo:9, standardize_programas_projetados:9.
 - `H:\Meu Drive\…` duplicado em 7 arquivos: settings.py:52, sync/drive.py:19, tools/executar_reprocessamento.py:26, tools/gerar_relatorio_orfaos_drive.py:20, tools/mover_orfaos_drive.py:11,13, tools/sanear_drive.py:271.
 - Import quebrado `from src.utils.logger` (só funciona rodando fora de `src/`): tools/downloader_tjrn.py:34, tools/gerar_relatorio_pos_download.py:13, tools/sanear_drive.py:22.
 - Ação: tudo passa a usar `from config.settings import settings`; caminho do Drive vira constante única.

@@ -47,7 +47,7 @@ A raiz do projeto estava poluída com pastas redundantes (`JORNAIS`, `JORNAIS_DI
 
 **Estrutura adotada:**
 ```
-F:/Projetos/DIVISOR/
+E:/02_Projetos_Trabalho/Projetos_Ativos/DIVISOR/
 ├── src/                      # código-fonte
 │   ├── divisor_boletins/
 │   ├── core/
@@ -167,11 +167,11 @@ ler a cópia errada de um CSV e de regressão via import da versão antiga.
 | corrigir_plano.py | PLANO_CSV, NJUDS_POR_MES_CSV → data/; LOG_DIR → logs/correcoes/ |
 | gerar_plano.py | NJUDS_CSV, PLAN_CSV, REPORT_CSV, MISSING_CSV → data/ |
 | run_pipeline_safe_v2.py | PLAN_CSV, NJUDS_POR_MES_CSV, JOURNAL_NJUDS_CSV → PROJECT_ROOT/data |
-| divisor_boletins/calibracao.py | _CACHE_PATH de relativo ("_vinhetas_cache.pkl", dependia do CWD) para fixo F:/Projetos/DIVISOR/data/cache/_vinhetas_cache.pkl |
+| divisor_boletins/calibracao.py | _CACHE_PATH de relativo ("_vinhetas_cache.pkl", dependia do CWD) para fixo E:/02_Projetos_Trabalho/Projetos_Ativos/DIVISOR/data/cache/_vinhetas_cache.pkl |
 | teste_ciclo.py | removido sys.path hack para _refatoracao_recebida (deletada); path local |
 | iniciar_ciclo.py | `src = dirname(__file__)` (antes: dirname/src, errado após mudança p/ src/) |
 | rodar_auditoria.py | saída → logs/relatorio_integridade_autonomo.json; pasta montados → data/output/JORNAIS_DIVIDIDOS_montados |
-| reprocessar_agosto.sh | cd → F:/Projetos/DIVISOR/src |
+| reprocessar_agosto.sh | cd → E:/02_Projetos_Trabalho/Projetos_Ativos/DIVISOR/src |
 
 **Deletados:** _refatoracao_recebida/, src/_backup_pre_refatoracao_20260824_084255/,
 __pycache__/ (raiz e src/), _logs_correcao/, entrada/, processamento/, saida/,
@@ -226,7 +226,7 @@ de data/; não regenerar _backup_estado_* sem política de retenção (consolida
 **Regras de migração e compatibilidade:**
 - Wrappers `DeprecationWarning` foram deixados na raiz para imports antigos, mas o caminho canônico é sempre o pacote.
 - Entry points devem usar os caminhos de pacote. `iniciar_ciclo.py` importa `pipeline/dispatcher.py` e `pipeline/monitor.py` diretamente.
-- Nenhum caminho hardcoded de projeto (`F:/Projetos/DIVISOR`, `C:/Users/THIAGO`) é permitido fora de `config/settings.py`; todo caminho deve vir de `config.settings` ou CLI.
+- Nenhum caminho hardcoded de projeto (`E:/02_Projetos_Trabalho/Projetos_Ativos/DIVISOR`, `C:/Users/THIAGO`) é permitido fora de `config/settings.py`; todo caminho deve vir de `config.settings` ou CLI.
 - Não mover código de volta para a raiz de `src/`; não duplicar módulos em múltiplas localizações; não remover wrappers de compatibilidade sem antes atualizar TODOS os consumidores.
 
 **Validação obrigatória após alterações:**
@@ -428,3 +428,51 @@ Os 34 arquivos `config/planejamento_2026/giro_*.json` (jan–ago/2026) e 10 GNCs
 5. `processar_boletim.py`: fix para pular divisão se arquivo já é CABECA/CORPO — commit `370fc72`.
 
 **Proibido reverter:** usar datas incorretas nos JSONs, default errado para `--boletins`, ou max_boletins fora do intervalo [4,6].
+
+---
+
+## Item 18. Pipeline canônico de boletins: correções 18 SET B6-B10 e migração de caminho (2026-09-21)
+
+**Motivo:**
+Processamento do arquivo `boletins/18 SET B6-B10.mp3` (5 boletins) expôs uma cadeia de bugs no `scripts_pipeline/boletim/processar_boletim_canonico.py` que foram corrigidos iterativamente (v1→v15), com auditoria proativa validando 5/5 boletins aprovados. Em seguida, o projeto foi migrado de `F:/Projetos/DIVISOR` (drive desmontado) para `E:/02_Projetos_Trabalho/Projetos_Ativos/DIVISOR`.
+
+**Correções aplicadas no pipeline canônico (validadas com auditoria proativa 5/5 OK):**
+
+1. **Regex claquete geral** (`detectar_claquete_geral`): expandido para `b\w*?t[ií]nh?o?s\s+\d+` (aceita "Bolitinhos", alucinação com H) e `B\d+\s*[O0\-]\s*L?\d+` (aceita "B6-LB10" com hífen).
+2. **Regex claquete individual**: `^B[\-\s]?\d+[\.\s,]` (aceita hífen: "B-10"). Depois estendido para `^[A-Z][\-\s]?\d+` após Whisper alucinar "M-10"/"M3." (claquete real do locutor Leonardo: "M" de Macedo).
+3. **Anti-vazamento de assinatura** (`detectar_estrutura`): 2 cenários — assinatura no segmento seguinte OU no anterior ao marcador (Whisper junta off+assinatura no mesmo segmento).
+4. **Bug BG inaudível** (`scripts_pipeline/shared/bgm_mixer.py`): constantes `-14`/`-28` eram interpretadas como ganho sobre BG em -21.5 dBFS → BG ficava em -35.5 dBFS (inaudível). Corrigido para `BGM_FULL_DB=12`/`BGM_DUCK_DB=6` (GANHO, não nível alvo) → BG em -9.5/-15.5 dBFS (audível). Ducking dinâmico RMS-based funcionando.
+5. **Loudnorm pós-montagem**: `ffmpeg -af loudnorm=I=-16:TP=-1.5:LRA=11` aplicado após montagem completa (não antes), equalizando voz (~-10 dBFS, estourando) e vinhetas (~-19.6 dBFS). Resultado: cabeça ~-16 dBFS, OFF ~-19 dBFS, max_dBFS -1.9 a -4.0 (sem clipping).
+6. **Threshold cobertura roteiro**: 70%→60% (ETAPA 7.5) — Whisper alucina nomes próprios TJRN/RN ("Esmarn"→"Marvel", "Aumida"→"Almeida"); 60% + auditoria humana é o equilíbrio.
+7. **Cabeça dinâmica** (`calcular_duracao_cabeca`): word-level timestamps, 8 palavras-chave, threshold 50%.
+8. **Falso positivo "B-10" na vinheta de abertura**: Whisper alucina claquete na vinheta; auditoria usa janela de exclusão de 15s (não remover).
+9. **Auditoria proativa** (`scripts_pipeline/boletim/auditoria_proativa.py`, novo): verifica claquetes (janela 15s), vazamento, vinhetas (NCC), BG (RMS), cobertura roteiro. Reporta por boletim com status OK/PROBLEMA.
+10. **Corte fino por word-timestamp**: quando assinatura+claquete+cabeça estão no MESMO segmento (ex: "do Norte, Leonardo Meida, M2, TJR reforma decisão..."), o marcador aponta para a palavra seguinte à claquete.
+
+**Migração de caminho (2026-09-21):**
+`F:/Projetos/DIVISOR` → `E:/02_Projetos_Trabalho/Projetos_Ativos/DIVISOR`
+Arquivos atualizados: `.env.example` (BASE_DIR), `_legado/src/audit/individual_cuts.py` (help), `docs/auditorias/AUDITORIA_SISTEMA_2026-08-31.md`, `docs/decisoes/DECISOES.md` (4 ocorrências). Verificação: zero ocorrências do caminho antigo restantes no repo.
+
+**Bugs do 17 SET B1-B5 IDENTIFICADOS mas NÃO corrigidos (sessão interrompida):**
+
+- **Bug A (regressão):** `calcular_duracao_cabeca(audio, ...)` na linha 1113 recebe o áudio COMPLETO (439s) em vez de `info['audio']` (segmento do boletim). Log evidência: "B2: cabeça do roteiro = 100.3s", "B3: cabeça = 359.4s" — posições absolutas, não durações locais. B1 coincidiu (começa em 0s), B2-B5 quebraram. **Correção:** passar `info['audio']` no lugar de `audio`.
+- **Bug B (corte fino busca no segmento errado):** o "corte fino" (linhas ~393-421) busca a claquete no segmento do marcador (`seg_marcador`, o SEGUINTE), mas no 17 SET a claquete+cabeça estão no segmento ANTERIOR (mesmo da assinatura, ex: [175.88-188.02s] "do Norte, Leonardo Almeida. M3. Dona de Lavajato é condenada..."). Zero "[corte fino]" no log confirma. **Correção:** buscar também no segmento que contém a assinatura.
+- **Bug C (regex estreito):** claquetes alucinadas "M3."/"M2," não casam com `^B\d+` na remoção (linha 1046). Em B4, rastro da assinatura "do Norte, Leonardo Omedo, B5, comiteja..." vazou para dentro do boletim. **Correção:** estender regex de remoção para `^[A-Z][\-\s]?\d+` e ampliar regex anti-vazamento (nome do repórter "Narda Omeida" não casa com `(nardo|leonardo)\s+(almeida|amida|umeda)`).
+
+**Estado dos outputs:**
+- `boletins/18 SET B6-B10_saida/`: 5/5 aprovados na auditoria proativa (v15). Durações 108-145s, coberturas cabeça 69-92%, OFF 72-92%, BG presente, sem claquetes, sem vazamento.
+- `boletins/17 SET B1-B5_saida/`: 5 boletins gerados mas COM os bugs A/B/C (B1 cobertura 34.5% — off cortado; vazamentos em B2-B5). Requer reprocessamento após correções.
+- `boletins/17 SET B1-B5.txt` e `18 SET B1-B5.txt`: roteiros presentes, não processados ainda.
+
+**Pendências:**
+1. Corrigir bugs A/B/C no pipeline canônico (evidências no log `C:/Users/THIAGO/AppData/Local/Temp/log_17set_fino.txt`).
+2. Reprocessar 17 SET B1-B5.
+3. Processar 18 SET B1-B5 (áudio+roteiro prontos, não processado).
+4. Vinheta de passagem (~1.5s): NCC não detecta (curta demais) — limitação conhecida, RMS sugere presente.
+5. Commit pendente: 17 arquivos modificados/não commitados (ver `git status`).
+
+**Proibido reverter:**
+- `BGM_FULL_DB=12`/`BGM_DUCK_DB=6` como GANHO sobre BG original (não nível alvo).
+- Loudnorm I=-16:TP=-1.5:LRA=11 aplicado APÓS montagem.
+- Threshold cobertura 60% com auditoria humana obrigatória.
+- Janela de exclusão de 15s para claquetes na vinheta de abertura.

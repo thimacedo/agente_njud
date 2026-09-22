@@ -1,0 +1,172 @@
+[
+  {
+    "arquivo": "boletins\\18 SET B6-B10_saida\\BOLETIM_RADIO_TJRN_18_SET_2026_B10__TRE_RN_CAPACITA_O_SERVIDORES_AUDITORIA_VOTA_O.mp3",
+    "duracao": 113.244,
+    "status": "OK",
+    "problemas": [],
+    "claquetes": [],
+    "vazamento": {
+      "detectado": false,
+      "timestamp": null,
+      "texto": null
+    },
+    "vinheta_abertura": {
+      "presente": true,
+      "timestamp": 0.0
+    },
+    "vinheta_encerramento": {
+      "presente": true,
+      "timestamp": 88.83891666666666
+    },
+    "bg_off": {
+      "presente": true,
+      "rms_min": 191.79420471191406
+    },
+    "cobertura_cabeca": {
+      "cobertura": 0.9090909090909091,
+      "cobertas": 10,
+      "total": 11
+    },
+    "cobertura_off": {
+      "cobertura": 0.9245283018867925,
+      "cobertas": 98,
+      "total": 106
+    }
+  },
+  {
+    "arquivo": "boletins\\18 SET B6-B10_saida\\BOLETIM_RADIO_TJRN_18_SET_2026_B6__TJRN_DISCUTE_SOLU_ES_PROCESSOS.mp3",
+    "duracao": 129.244,
+    "status": "OK",
+    "problemas": [],
+    "claquetes": [],
+    "vazamento": {
+      "detectado": false,
+      "timestamp": null,
+      "texto": null
+    },
+    "vinheta_abertura": {
+      "presente": true,
+      "timestamp": 0.0
+    },
+    "vinheta_encerramento": {
+      "presente": true,
+      "timestamp": 106.74025
+    },
+    "bg_off": {
+      "presente": true,
+      "rms_min": 1925.2381591796875
+    },
+    "cobertura_cabeca": {
+      "cobertura": 0.9230769230769231,
+      "cobertas": 12,
+      "total": 13
+    },
+    "cobertura_off": {
+      "cobertura": 0.8814814814814815,
+      "cobertas": 119,
+      "total": 135
+    }
+  },
+  {
+    "arquivo": "boletins\\18 SET B6-B10_saida\\BOLETIM_RADIO_TJRN_18_SET_2026_B7__ESMARN_FORMA_O_PRECEPTORES.mp3",
+    "duracao": 115.244,
+    "status": "OK",
+    "problemas": [],
+    "claquetes": [],
+    "vazamento": {
+      "detectado": false,
+      "timestamp": null,
+      "texto": null
+    },
+    "vinheta_abertura": {
+      "presente": true,
+      "timestamp": 0.0
+    },
+    "vinheta_encerramento": {
+      "presente": true,
+      "timestamp": 90.82883333333334
+    },
+    "bg_off": {
+      "presente": true,
+      "rms_min": 182.71629333496094
+    },
+    "cobertura_cabeca": {
+      "cobertura": 0.7692307692307693,
+      "cobertas": 10,
+      "total": 13
+    },
+    "cobertura_off": {
+      "cobertura": 0.7348484848484849,
+      "cobertas": 97,
+      "total": 132
+    }
+  },
+  {
+    "arquivo": "boletins\\18 SET B6-B10_saida\\BOLETIM_RADIO_TJRN_18_SET_2026_B8__DPERN_EVENTO_ANTIRRACISTA.mp3",
+    "duracao": 108.244,
+    "status": "OK",
+    "problemas": [],
+    "claquetes": [],
+    "vazamento": {
+      "detectado": false,
+      "timestamp": null,
+      "texto": null
+    },
+    "vinheta_abertura": {
+      "presente": true,
+      "timestamp": 0.0
+    },
+    "vinheta_encerramento": {
+      "presente": true,
+      "timestamp": 87.48966666666666
+    },
+    "bg_off": {
+      "presente": true,
+      "rms_min": 294.4103088378906
+    },
+    "cobertura_cabeca": {
+      "cobertura": 0.6923076923076923,
+      "cobertas": 9,
+      "total": 13
+    },
+    "cobertura_off": {
+      "cobertura": 0.7217391304347827,
+      "cobertas": 83,
+      "total": 115
+    }
+  },
+  {
+    "arquivo": "boletins\\18 SET B6-B10_saida\\BOLETIM_RADIO_TJRN_18_SET_2026_B9__MPRN_RECOMENDA_OES_PM_ASSU.mp3",
+    "duracao": 145.244,
+    "status": "OK",
+    "problemas": [],
+    "claquetes": [],
+    "vazamento": {
+      "detectado": false,
+      "timestamp": null,
+      "texto": null
+    },
+    "vinheta_abertura": {
+      "presente": true,
+      "timestamp": 0.0
+    },
+    "vinheta_encerramento": {
+      "presente": true,
+      "timestamp": 124.66408333333334
+    },
+    "bg_off": {
+      "presente": true,
+      "rms_min": 891.0756225585938
+    },
+    "cobertura_cabeca": {
+      "cobertura": 0.7857142857142857,
+      "cobertas": 11,
+      "total": 14
+    },
+    "cobertura_off": {
+      "cobertura": 0.7849462365591398,
+      "cobertas": 146,
+      "total": 186
+    }
+  }
+]

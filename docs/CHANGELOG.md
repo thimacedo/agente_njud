@@ -11,6 +11,15 @@ seguindo [Semantic Versioning](https://semver.org/lang/pt-BR/) informal.
 
 ### Adicionado
 - `scripts_pipeline/aplicar_deprecacoes.sh` — script shell que aplica Itens 3 e 4 do plano de arquitetura (depreciação de orquestradores + avisos runtime em pacotes mortos), arquivando originais em `.trash/` antes de sobrescrever.
+- `scripts_pipeline/boletim/auditoria_proativa.py` — auditoria proativa pós-montagem: claquetes (janela 15s), vazamento de assinatura, vinhetas (NCC), BG no OFF (RMS), cobertura do roteiro (threshold 60%). Reporta OK/PROBLEMA por boletim.
+- **Item 18 (DECISOES.md):** correções iterativas no pipeline canônico de boletins (`scripts_pipeline/boletim/processar_boletim_canonico.py`) validadas no processamento do 18 SET B6-B10 (auditoria proativa 5/5 OK): regex de claquetes (geral e individual, com hífen e letra inicial variável), anti-vazamento de assinatura em 2 cenários, corte fino por word-timestamp, loudnorm pós-montagem (I=-16:TP=-1.5:LRA=11), threshold cobertura 60%.
+
+### Alterado
+- `scripts_pipeline/shared/bgm_mixer.py`: bug BG inaudível — constantes `-14`/`-28` (interpretadas como ganho sobre BG em -21.5 dBFS → BG em -35.5 dBFS, inaudível) corrigidas para `BGM_FULL_DB=12`/`BGM_DUCK_DB=6` (ganho positivo → BG em -9.5/-15.5 dBFS, audível).
+- `.env.example`, `_legado/src/audit/individual_cuts.py`, `docs/auditorias/AUDITORIA_SISTEMA_2026-08-31.md`, `docs/decisoes/DECISOES.md`: migração de caminho `F:/Projetos/DIVISOR` → `E:/02_Projetos_Trabalho/Projetos_Ativos/DIVISOR` (drive F: desmontado).
+
+### Pendente (não corrigido)
+- Bugs A/B/C do 17 SET B1-B5 no pipeline canônico (detalhados no Item 18 de DECISOES.md): (A) `calcular_duracao_cabeca` recebe áudio completo em vez do segmento; (B) corte fino busca claquete no segmento seguinte quando ela está no anterior; (C) regex de remoção de claquete não casa "M2,"/"M3." e anti-vazamento não casa "Narda Omeida". Reprocessamento do 17 SET B1-B5 e processamento do 18 SET B1-B5 aguardam essas correções.
 
 ---
 
