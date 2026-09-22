@@ -1,10 +1,45 @@
 # Documentação de Calibração — Divisor de Boletins (Audios Brutos)
 
 **Data:** 2026-09-17  
+**Última revisão:** 2026-09-21 (status atualizado — ver abaixo)  
 **Contexto:** Calibração do divisor de boletins para áudios sem vinhetas inseridas (brutos).  
 **Objetivo:** Processar 17 arquivos mp3 que contêm múltiplos boletins radiateis semanais do TJRN, separando-os e removendo repetições.
 
 ---
+
+## 0. STATUS (2026-09-21) — LEIA ANTES DE USAR ESTE DOCUMENTO
+
+Este documento é **histórico**: registra a investigação de calibração que levou ao pipeline atual. Partes dele foram **superadas**:
+
+| Seção | Status | Observação |
+|-------|--------|------------|
+| 1-5 (análise de arquivos, correlação, gaps, modelos, padrões) | **VÁLIDA** | Descobertas empíricas que continuam verdadeiras |
+| 6 (estratégia de divisão por "Boletim número N") | **SUPERADA** | O pipeline canônico divide por **assinaturas do locutor** ("Tribunal de Justiça do Rio Grande do Norte, [nome]"), não por cabeçalhos falados. Validado 5/5 no 18 SET B6-B10 |
+| 7 (padrões por tipo de arquivo) | **VÁLIDA** | Nomenclatura e faixas seguem corretas |
+| 8 (remoção de repetições) | **PARCIALMENTE SUPERADA** | Implementado no canônico como ETAPA 3 (`detectar_repeticoes_confirmadas`, confirmação por áudio) + ETAPA 1.5 (`corrigir_alucinacoes.py`) |
+| 9 (plano de teste) | **SUPERADA** | Substituído pela auditoria proativa (`scripts_pipeline/boletim/auditoria_proativa.py`) |
+| 10-11 (implementação: `calibrar_divisor.py`, `boletins_div/`) | **OBSOLETA** | `calibrar_divisor.py` **nunca foi commitado** (perdido na sessão de 17/09); a funcionalidade foi absorvida pelo canônico. `boletins_div/` nunca existiu |
+| 12 (pendências) | **SUPERADA** | Ver estado real abaixo |
+| 13 (lições) | **VÁLIDA** | Todas as 8 lições foram incorporadas à skill `divisor-pipeline` |
+
+**Implementação atual (fonte de verdade):** `scripts_pipeline/boletim/processar_boletim_canonico.py`
+
+```
+python scripts_pipeline/boletim/processar_boletim_canonico.py "boletins/DD SET Bn-N.mp3" --roteiros boletins/
+```
+
+Saída: `boletins/<arquivo>_saida/` com boletins editados + `auditoria.json` + `auditoria_proativa.json`.
+
+**Estado real das pendências da seção 12 (2026-09-21):**
+- [x] Otimização: migrado para `faster-whisper` (commit 2539d23, 1.3x speedup, int8 CPU)
+- [x] Execução validada: 18 SET B6-B10 (5/5 aprovados) e 17 SET B1-B5 (com bugs A/B/C documentados no Item 18 de `docs/decisoes/DECISOES.md`)
+- [x] Remoção de repetições: implementada (ETAPA 3 + 1.5 do canônico)
+- [x] Documentação: DECISOES.md Item 18, CHANGELOG.md, skill `divisor-pipeline`
+- [ ] Calibração completa dos 17 arquivos brutos restantes: **pendente** (apenas 17 SET e 18 SET processados; 15 arquivos aguardam)
+- [ ] Bugs A/B/C do 17 SET B1-B5: **pendente** (detalhados no Item 18)
+
+---
+
 
 ## 1. Visão Geral dos Arquivos
 
