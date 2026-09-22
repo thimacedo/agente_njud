@@ -1,0 +1,176 @@
+
+============================================================
+PROCESSAMENTO CANÔNICO: 17 SET B1-B5.mp3
+============================================================
+
+Carregando modelo de transcrição...
+  Usando faster-whisper (int8, CPU)...
+
+── ETAPA 0: TRIAGEM INICIAL DO ÁUDIO ──
+  Duração: 439.80s
+  Canais: 2, Samplerate: 48000Hz
+  Ações de correção: ['CORRIGIR: substituir canal direito pelo esquerdo (multiplicar direito por fator de escala do esquerdo)', 'AVISO: possível clipping (pico próximo de 0dBFS)']
+
+── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──
+
+── ETAPA 1.5: CORREÇÃO DE ALUCINAÇÕES ──
+  Segmentos antes: 72, depois: 69, removidos: 3
+  Transcrito: 69 segmentos
+
+  Transcrição completa:
+    [   1.04s -    8.80s] Bolitens 17 do 9 do B1O5, B1, empresa terá que devolver valores e demisar cliente por falha
+    [   8.80s -   16.26s] em compras online. Uma empresa de tecnologia e varrei de online terá que restituir valores
+    [  16.26s -   21.40s] pagos por uma consumidora após ela comprar produtos na plataforma e não recebem-lo.
+    [  21.94s -   27.14s] Novo e não recebem-los, como se na sentença que a mulher de queria um notebook no valor
+    [  27.14s -   36.84s] de mil, 199 reais, e um GIP infantil elétrico por 949 e 90, entretanto mesmo custando como entregue
+    [  36.84s -   42.40s] no sistema da rep, o notebook nunca foi recebido pela altura da ação. De acordo com os altos,
+    [  42.42s -   47.84s] a consumidora tentou exercer o direito de arrependimento em relação ao GIP, porém não conseguiu
+    [  47.84s -   55.14s] efetuar o procedimento por sua conta ter sido bloqueada pela rep, viabilizando a devolução e o
+    [  55.38s -   60.64s] GIP. Já a empresa legou a regularidade da prechação do serviço e afirmou que o notebook foi entregue
+    [  60.64s -   66.08s] no endereço da altura. O caso foi julgado pelo quarto juiz adespecial civil criminal da comarca
+    [  66.08s -   71.70s] de Mossoró. O juiz responsável pelo caso destacou que a relação jurídica entre as partes é de consumo,
+    [  72.26s -   76.92s] levando em consteração o código de defesa do consumidor, ainda de acordo com o magistrado,
+    [  77.28s -   82.94s] mesmo com a rea afirmando que o notebook foi entregue em dezembro do ano passado, segundo registro
+    [  82.94s -   91.36s] os sistêmicos internos, essas provas são suficientes para comprovar o ad implemento da obrigação.
+    [  93.26s -  100.26s] No Tribunal de Justiça do Rio Grande do Norte, Leonardo Aumida, M2, TJR reforma decisão e nega,
+    [ 100.34s -  106.44s] a remissão de pena por curso sem convenio com o sistema presional. A câmara criminal do TJR
+    [ 106.44s -  112.34s] reformou decisão da terceira vara regional de execução penal de Mossoró e negou a remissão de 9
+    [ 112.34s -  118.34s] dias de pena concedida a um apenado pela realização de um curso na modalidade de ensino distância.
+    [ 119.00s -  124.50s] Ao acolher o recurso do Ministério Público, o colégiado entendeu que a instituição responsável pelo curso
+    [ 124.50s -  130.22s] não possui a convenio com o sistema presional, nem integrava o projeto político pedagógico da unidade
+    [ 130.22s -  136.34s] presional, requisitos previstos para o reconhecimento do benefício. Segundo a decisão, a resolução do
+    [ 136.56s -  141.46s] Tribunal Nacional de Justiça admite a remissão de pena por atividades educacionais, inclusive
+    [ 141.46s -  146.96s] cursos de capacitação profissional desde que observadas as regras e estabelecidas para garantir
+    [ 146.96s -  153.26s] a finalidade de resta-osalização do apenado. Conforme o relator, a participação em cursos na modalidade
+    [ 153.26s -  159.92s] repete, na modalidade é AD, por si só não assegou o direito à remissão de pena, além de ser reconhecida
+    [ 159.92s -  165.24s] pelo Ministério da Educação, a instituição de ensino deve estar integrada ao projeto político
+    [ 165.24s -  170.40s] pedagógico da unidade presional, ou no ter convenio com o sistema penultenciário, permitindo
+    [ 170.40s -  175.88s] o acompanhamento da frequência e das atividades desenvolvidas do Tribunal de Justiça do Rio Grande
+    [ 175.88s -  188.02s] do Norte, Leonardo Almeida. M3. Dona de Lavajato é condenada, após polícia localizar carros roubados
+    [ 188.02s -  193.90s] em estabelecimento, Linatau. A décima vara criminal da comarca de Natau condenou a aproprietária
+    [ 193.90s -  199.46s] de Lavajato, localizado no barbão pastou, após polícia civil localizar no estabelecimento
+    [ 199.46s -  205.12s] e na garagem da residencia dada enunciada, dois veículos com registro e roubo. A acusada
+    [ 205.12s -  210.86s] legou que os automóveis pertenciam a clientes, mas não sabem nitricar os proprietários nem apresentou
+    [ 210.86s -  217.92s] qualquer registro dos veículos. A sentença concluiu que a mulher mantinha bens de origem
+    [ 217.92s -  224.22s] e lista em depósito no exercício de atividade comercial e por esse motivo, e por esse motivo,
+    [ 224.60s -  229.92s] aplicou apenas restrativas de direitos. Segundo o denúncia do Ministério Público da Rene, uma
+    [ 229.92s -  235.58s] equipe da polícia civil rastreava uma camioneta e Toyota Hilux roubada na noite de 10 de julho
+    [ 242.38s -  247.58s] o veículo no interior do Lavajato, durante a fiscalização dos demais automóveis resistentes
+    [ 247.58s -  252.98s] no local, os policiais contrataram que um ronda fit também possuía registro de roubo. Os dois
+    [ 252.98s -  258.96s] veículos foram aprendidos e a empresária presa em flagrante. Os automóveis foram submitidos à
+    [ 258.96s -  264.02s] perícia no Instituto Técnico Centrífico de Perícia e o lado concluiu que ambos estavam sem as
+    [ 264.02s -  269.46s] placas originais e possuíu o registro de ocorrência por roubo. Conduzida da legacy de plantão,
+    [ 269.46s -  274.32s] acusada a negócios fatos, ela firmou o seu proprietário do Lavajato e alegou que os veículos
+    [ 274.32s -  280.48s] pertenciam a clientes, mas, disse não saber informar os nomes ou indereços das pessoas que
+    [ 280.48s -  285.32s] haviam deixado sob sua guarda. No Tribunal de Justiça do Rio Grande do Norte,
+    [ 285.40s -  291.72s] lá o Narda Omeida. B-4, Tejota Rene mantém decisão que afastou a regressão de regime após
+    [ 291.72s -  297.12s] rompimento de todos eleiros, eletrônica. A Câmara criminal do Tejota Rene mantava decisão
+    [ 297.12s -  302.12s] que deixou de reconhecer falta grave de um apenado após o rompimento de tornozeleira
+    [ 302.12s -  306.64s] eletrônica. O colégiado negou o recurso do Ministério Público e entendeu que o desse
+    [ 306.64s -  312.20s] comprimento das condições de imunitoramento por si só não justifica a regressão automática
+    [ 312.20s -  317.52s] do regime de comprimento de pera. O recurso questionava a decisão da terceira vara regional
+    [ 317.52s -  323.40s] de execução penal demossorou que aplicou ao apenado a penalidade de a divertencia, se
+    [ 328.28s -  334.02s] o Ministério Público, o rompimento do equipamento ocorrido em março de 2003 seria conduta, equiparável
+    [ 334.02s -  339.54s] a fuga. O entendimento da comarca porém foi diferente, segundo colégiado, embora o rompimento
+    [ 339.54s -  344.66s] da tornozeleira representa desse comprimento das condições impostas ao apenado, cada caso
+    [ 344.66s -  350.24s] deve ser analisado individualmente, levando em consideração às circunstâncias em que o fato
+    [ 350.24s -  357.90s] ocorreu do Tribunal de Justiça, do Rio Grande do Norte, Leonardo Omedo, B5, comiteja e chone
+    [ 357.90s -  363.32s] de penas pecuniárias de Natal, publica novo e de tal para cada estramento de projetos sociais.
+    [ 365.00s -  370.20s] O comiteja e chone de penas pecuniárias já comarca de Natal, publico e de tal destinado
+    [ 370.20s -  376.22s] ao quadastramento de entidades públicas ou privadas com finalidade social. O valor é de 900 mil
+    [ 381.50s -  387.10s] atividades de cara a ter essencial à segurança pública, educação e saúde, compre dominância
+    [ 387.10s -  392.46s] nas temáticas apresentadas no item 8 do edital. As inscrições já vim ser feitas até o de
+    [ 392.46s -  399.84s] 30 de setembro através de aplicativo titinha social desenvolvido pelo Tjn no endereço penas
+    [ 399.84s -  407.54s] pecuniárias.tjn.juiz.br. Na definição dos valores para cada projeto foram consideradas
+    [ 407.54s -  413.74s] informações contidas nas metas acerem cumpridas em 2026 pelo grupo de monitoramento e fiscalização
+    [ 413.74s -  418.88s] do sistema cacerário e de execução das medidas sócio educativas do Tribunal de Justiça, do
+    [ 418.88s -  426.32s] R&N, devidamente descritos no documento. Os projetos inscritos e considerados aptos serão
+    [ 426.32s -  431.70s] encaminhados ao Ministério Público para análise e, posteriormente, submetidos à apreciação
+    [ 431.70s -  438.00s] do comiteje estudo de penas pecuniárias da comarca de Natal. No Tribunal de Justiça, do Rio Grande
+
+── ETAPA 2: DETECÇÃO DE ESTRUTURA ──
+  Data detectada: 17 SET → 17_SET_2026
+  Faixa: B1 - B5
+  Buscando roteiros em: boletins
+  Roteiros encontrados: 5 boletins
+  Marcadores B{N}. encontrados: [1, 2, 3, 4, 5]
+  Assinaturas detectadas: 4
+    [93.55s]  — 
+    [175.88s]  — 
+    [282.65s]  — 
+    [351.23s]  — 
+
+── ETAPA 3: DETECÇÃO DE REPETIÇÕES (confirmação por áudio) ──
+  Repetições confirmadas: 0
+  Repetições rejeitadas: 0
+
+── ETAPA 4: DETECÇÃO DE CLAKETES (gatilho por assinatura) ──
+  Assinaturas sem claquete detectada nos próximos 5s: 4
+    [93.55s] 
+    [175.88s] 
+    [282.65s] 
+    [351.23s] 
+  Claquetes detectadas: 0
+
+── ETAPA 4.5: CLAQUETE GERAL DETECTADA ──
+  Claquete geral: [1.04s - 5.22s]
+  Será removida do B1
+
+── ETAPA 5: CORTE + REMOÇÃO ──
+  Convertendo para mono (canal morto: direito)
+  B1: removendo claquete geral [1.04s - 5.22s]
+  B1: [0.00s → 93.26s] = 89.08s → BOLETIM_RADIO_TJRN_17_SET_2026_B1__TJRN_EMPRESA_DEVOLVER_VALORES_FALHA_COMPRA.mp3
+  B2: [100.34s → 170.40s] = 70.06s → BOLETIM_RADIO_TJRN_17_SET_2026_B2__TJRN_REFORMA_DECIS_O_MEGA_REMI_O_PENA.mp3
+  B3: [188.02s → 280.48s] = 92.46s → BOLETIM_RADIO_TJRN_17_SET_2026_B3__TJRN_DONA_LAVA_JATO_CONDENADA.mp3
+  B4: [285.40s → 350.24s] = 64.84s → BOLETIM_RADIO_TJRN_17_SET_2026_B4__TJRN_MANT_M_DECIS_O_REGRESS_O_REGIME.mp3
+  B5: [357.90s → 439.80s] = 81.90s → BOLETIM_RADIO_TJRN_17_SET_2026_B5__TJRN_COMIT_GESTOR_PENAS_PECUNI_RIAS.mp3
+
+── ETAPA 6: MONTAGEM COM VINHETAS ──
+  [DEBUG] cabeça termina em 7.3s (6/13 palavras encontradas)
+  B1: cabeça do roteiro = 7.3s
+  ✓ B1: montado → BOLETIM_RADIO_TJRN_17_SET_2026_B1__TJRN_EMPRESA_DEVOLVER_VALORES_FALHA_COMPRA.mp3 (114.32s)
+  [DEBUG] cabeça termina em 100.3s (5/15 palavras encontradas)
+  B2: cabeça do roteiro = 100.3s
+  ✓ B2: montado → BOLETIM_RADIO_TJRN_17_SET_2026_B2__TJRN_REFORMA_DECIS_O_MEGA_REMI_O_PENA.mp3 (95.30s)
+  [DEBUG] cabeça termina em 359.4s (14/14 palavras encontradas)
+  B3: cabeça do roteiro = 359.4s
+  ✓ B3: montado → BOLETIM_RADIO_TJRN_17_SET_2026_B3__TJRN_DONA_LAVA_JATO_CONDENADA.mp3 (117.70s)
+  [DEBUG] cabeça termina em 302.8s (13/13 palavras encontradas)
+  B4: cabeça do roteiro = 302.8s
+  ✓ B4: montado → BOLETIM_RADIO_TJRN_17_SET_2026_B4__TJRN_MANT_M_DECIS_O_REGRESS_O_REGIME.mp3 (90.08s)
+  [DEBUG] cabeça termina em 42.0s (1/15 palavras encontradas)
+  B5: cabeça do roteiro = 42.0s
+  ✓ B5: montado → BOLETIM_RADIO_TJRN_17_SET_2026_B5__TJRN_COMIT_GESTOR_PENAS_PECUNI_RIAS.mp3 (107.14s)
+
+── ETAPA 7: AUDITORIA ──
+  ✓ BOLETIM_RADIO_TJRN_17_SET_2026_B1__TJRN_EMPRESA_DEVOLVER_VALORES_FALHA_COMPRA.mp3 — 114.32s, 1787.1 KB
+  ✓ BOLETIM_RADIO_TJRN_17_SET_2026_B2__TJRN_REFORMA_DECIS_O_MEGA_REMI_O_PENA.mp3 — 95.31s, 1490.1 KB
+  ✓ BOLETIM_RADIO_TJRN_17_SET_2026_B3__TJRN_DONA_LAVA_JATO_CONDENADA.mp3 — 117.70s, 1840.0 KB
+  ✓ BOLETIM_RADIO_TJRN_17_SET_2026_B4__TJRN_MANT_M_DECIS_O_REGRESS_O_REGIME.mp3 — 90.08s, 1408.4 KB
+  ✓ BOLETIM_RADIO_TJRN_17_SET_2026_B5__TJRN_COMIT_GESTOR_PENAS_PECUNI_RIAS.mp3 — 107.14s, 1675.0 KB
+
+── ETAPA 7.5: VALIDAÇÃO DE QUALIDADE (transcrição vs roteiro) ──
+  B1: cobertura original = 34.55%
+  B1: cobertura baixa — aplicando correções de alucinações...
+  B1: cobertura corrigida = 34.55%
+  B2: cobertura original = 90.00%
+  B3: cobertura original = 77.94%
+  B4: cobertura original = 88.10%
+  B5: cobertura original = 85.71%
+
+  Auditoria salva: boletins\17 SET B1-B5_saida\auditoria.json
+
+============================================================
+PROCESSAMENTO COMPLETO: 5 boletins gerados
+Saída: boletins\17 SET B1-B5_saida
+============================================================
+
+⚠️  AUDITORIA HUMANA OBRIGATÓRIA ANTES DE ENTREGAR:
+   1. Ouvir cada boletim gerado
+   2. Verificar: sem repetições, sem claquetes, conteúdo faz sentido
+   3. Cobertura de palavras NÃO substitui audição
+   4. Se reprovações: ajustar pipeline e reprocessar
+============================================================
+
+PROCESSAMENTO COMPLETO: 5 boletins gerados
+EXIT_CODE=0

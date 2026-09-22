@@ -465,7 +465,7 @@ Arquivos atualizados: `.env.example` (BASE_DIR), `_legado/src/audit/individual_c
 - `boletins/17 SET B1-B5.txt` e `18 SET B1-B5.txt`: roteiros presentes, não processados ainda.
 
 **Pendências:**
-1. Corrigir bugs A/B/C no pipeline canônico (evidências no log `C:/Users/THIAGO/AppData/Local/Temp/log_17set_fino.txt`).
+1. Corrigir bugs A/B/C no pipeline canônico (evidências no log `docs/auditorias/EVIDENCIAS_17SET_B1-B5_bugs_ABC.txt (copia do Temp; original em C:/Users/THIAGO/AppData/Local/Temp/log_17set_fino.txt)`).
 2. Reprocessar 17 SET B1-B5.
 3. Processar 18 SET B1-B5 (áudio+roteiro prontos, não processado).
 4. Vinheta de passagem (~1.5s): NCC não detecta (curta demais) — limitação conhecida, RMS sugere presente.
