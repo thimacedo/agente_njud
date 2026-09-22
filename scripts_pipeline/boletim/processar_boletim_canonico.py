@@ -23,10 +23,25 @@ except ImportError:
 from corrigir_alucinacoes import corrigir_transcricao
 from shared.bgm_mixer import mix_bgm
 
-VHT_DIR = Path(r"E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\assets\vinhetas\boletim")
-OUTPUT_BASE = Path(r"E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\boletins_edi")
+# ── Configuração (todas as variáveis antes hardcoded) ─────────────────────────
+# Overrides via variáveis de ambiente (opcional): DIVISOR_ASSETS, DIVISOR_TMP,
+# DIVISOR_WHISPER_MODEL, DIVISOR_COBERTURA_MIN.
+# Defaults derivados da localização deste script — funciona em qualquer checkout.
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+VHT_DIR = Path(os.environ.get("DIVISOR_ASSETS", PROJECT_ROOT / "assets" / "vinhetas" / "boletim"))
+TMP_DIR = Path(os.environ.get("DIVISOR_TMP", tempfile.gettempdir()))
 BG_PATH = VHT_DIR / "BG - BOLETIM.mp3"
-BG_DUCKING_DB = -10  # reduzir BG em 10dB durante o off
+
+WHISPER_MODEL = os.environ.get("DIVISOR_WHISPER_MODEL", "base")
+COBERTURA_MIN = float(os.environ.get("DIVISOR_COBERTURA_MIN", "0.6"))  # Item 18: 60% + auditoria humana
+
+# Fallbacks de data quando o filename não traz mês/ano explícitos
+MES_PADRAO = "09"   # arquivos "DD SET" → setembro
+ANO_PADRAO = "2026" # projeto DIVISOR 2026
+
+# Offset do início do boletim seguinte após a assinatura (segundos)
+OFFSET_APOS_ASSINATURA = 0.3
 
 
 def nomear_boletim(data_str, numero, roteiro_texto=None, data_completa_str=None):
@@ -48,8 +63,8 @@ def nomear_boletim(data_str, numero, roteiro_texto=None, data_completa_str=None)
         m_data = re.search(r'(\d{1,2})\s*[Ss][Ee][Tt]', data_str or "", re.I)
         if m_data:
             dd = m_data.group(1).zfill(2)
-            mm = "09"  # SET = setembro = 09
-            aaaa = "2026"  # padrão do DIVISOR
+            mm = MES_PADRAO
+            aaaa = ANO_PADRAO
         else:
             dd, mm, aaaa = "??", "??", "????"
     
@@ -103,7 +118,7 @@ def extrair_info_nome(arquivo, transcricao_texto=None):
         if ano_transcricao:
             data_completa_str = f"{dia_filename}_SET_{ano_transcricao}"
         else:
-            data_completa_str = f"{dia_filename}_SET_2026"
+            data_completa_str = f"{dia_filename}_SET_{ANO_PADRAO}"
     elif dia_transcricao and ano_transcricao:
         data_str = f"{dia_transcricao} SET"
         data_completa_str = f"{dia_transcricao}_SET_{ano_transcricao}"
@@ -111,7 +126,7 @@ def extrair_info_nome(arquivo, transcricao_texto=None):
         data_str = f"{dia_filename} SET"
         # Se a transcrição só tem dia sem ano, usar ano do filename se tiver, ou 2026
         if dia_transcricao and not ano_transcricao:
-            data_completa_str = f"{dia_transcricao}_SET_2026"
+            data_completa_str = f"{dia_transcricao}_SET_{ANO_PADRAO}"
         else:
             data_completa_str = None
     else:
@@ -131,7 +146,7 @@ def extrair_info_nome(arquivo, transcricao_texto=None):
     if not data_completa_str:
         # Se só temos o dia do filename, assumir 2026
         if dia_filename:
-            data_completa_str = f"{dia_filename}_SET_2026"
+            data_completa_str = f"{dia_filename}_SET_{ANO_PADRAO}"
         else:
             data_completa_str = "??_SET_????"
 
@@ -279,10 +294,10 @@ def carregar_modelo():
     """Carrega modelo Whisper (faster-whisper se disponível, senão openai-whisper)."""
     if USE_FASTER:
         print("  Usando faster-whisper (int8, CPU)...")
-        return WhisperModel("base", device="cpu", compute_type="int8")
+        return WhisperModel(WHISPER_MODEL, device="cpu", compute_type="int8")
     else:
         print("  Usando openai-whisper (fallback)...")
-        return whisper.load_model("base")
+        return whisper.load_model(WHISPER_MODEL)
 
 
 def transcrever(audio, tmp_path, modelo):
@@ -371,7 +386,7 @@ def detectar_estrutura(segmentos, b_ini, b_fim):
 
     # Cada assinatura marca o FIM de um boletim
     # O próximo boletim começa no PRÓXIMO SEGMENTO DE FALA após a assinatura
-    OFFSET_APOS_ASSINATURA = 0.3  # pequeno offset para evitar cortar a claquete
+    # OFFSET_APOS_ASSINATURA agora é constante do módulo (topo do arquivo)
 
     if assinaturas:
         # B1 começa no início (0s)
@@ -708,7 +723,7 @@ def calcular_duracao_cabeca(segmento_audio, texto_cabeca, modelo):
         return 20  # fallback
     
     # Transcrever com word timestamps
-    tmp = tempfile.mktemp(suffix='.wav', dir=str(Path(r"C:/Users/THIAGO/AppData/Local/Temp")))
+    tmp = tempfile.mktemp(suffix='.wav', dir=str(TMP_DIR))
     segmento_audio.export(tmp, format="wav")
     
     if USE_FASTER:
@@ -834,8 +849,8 @@ def montar_boletim_com_vinhetas(segmento_audio, vht_abertura, vht_passagem, vht_
     # Vinhetas estão em ~-19.6 dBFS; voz em ~-10 dBFS (estourando)
     # loudnorm equaliza para que voz e vinhetas fiquem no mesmo nível percebido
     import subprocess
-    tmp_in = tempfile.mktemp(suffix='.wav', dir=str(Path(r"C:/Users/THIAGO/AppData/Local/Temp")))
-    tmp_out = tempfile.mktemp(suffix='.wav', dir=str(Path(r"C:/Users/THIAGO/AppData/Local/Temp")))
+    tmp_in = tempfile.mktemp(suffix='.wav', dir=str(TMP_DIR))
+    tmp_out = tempfile.mktemp(suffix='.wav', dir=str(TMP_DIR))
     montado.export(tmp_in, format="wav")
     subprocess.run([
         "ffmpeg", "-y", "-i", tmp_in,
@@ -878,7 +893,7 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
 
     # ETAPA 1: Transcrição
     print("\n── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──")
-    with tempfile.NamedTemporaryFile(suffix='.wav', delete=False, dir=str(Path(r"C:/Users/THIAGO/AppData/Local/Temp"))) as tmp:
+    with tempfile.NamedTemporaryFile(suffix='.wav', delete=False, dir=str(TMP_DIR)) as tmp:
         tmp_path = tmp.name
     segmentos = transcrever(audio, tmp_path, modelo)
 
@@ -1187,7 +1202,7 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
                 continue
             
             # Transcrever boletim editado
-            tmp = tempfile.mktemp(suffix='.wav', dir=str(Path(r'C:/Users/THIAGO/AppData/Local/Temp')))
+            tmp = tempfile.mktemp(suffix='.wav', dir=str(TMP_DIR))
             audio_b = AudioSegment.from_mp3(str(caminho))
             segmentos_transcritos = transcrever(audio_b, tmp, modelo)
             
@@ -1221,7 +1236,7 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
             
             # Se cobertura baixa (< 60%), aplicar correções e retranscrever
             # Threshold 60%: Whisper alucina nomes próprios (ex: "Tejota Reino" em vez de "TJRN")
-            if sim_original < 0.6:
+            if sim_original < COBERTURA_MIN:
                 print(f"  B{n}: cobertura baixa — aplicando correções de alucinações...")
                 
                 # Aplicar correções na transcrição

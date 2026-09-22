@@ -118,7 +118,7 @@ for n in range(1, 6):
     
     # Transcrever
     audio = AudioSegment.from_mp3(str(boletim_file))
-    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False, dir="C:/Users/THIAGO/AppData/Local/Temp") as tmp:
+    with tempfile.NamedTemporaryFile(suffix=".wav", delete=False, dir=None) as tmp:
         tmp_path = tmp.name
     audio.export(tmp_path, format="wav")
     result = modelo.transcribe(tmp_path, language="pt", fp16=False)
