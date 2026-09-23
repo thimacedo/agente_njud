@@ -6,12 +6,19 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts_pipeline"))
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts_pipeline" / "boletim"))
 
 from shared.avaliacao import (
     avaliar_transcricao,
     extrair_entidades,
     calcular_similaridade_semantica,
     calcular_preservacao_entidades,
+)
+
+from corrigir_alucinacoes import (
+    corrigir_alucinacoes_conhecidas,
+    _corrigir_anos_alucinados,
+    ALUCINACOES_CONHECIDAS,
 )
 
 
@@ -124,6 +131,68 @@ def test_avaliacao_corte_inaceitavel():
     )
     assert not resultado.aprovado
     print(f"  ✅ Corte inaceitável reprovado: {resultado.motivo}")
+
+
+# ═══════════════════════════════════════════════════════════
+# Testes: corrigir_alucinacoes_conhecidas
+# ═══════════════════════════════════════════════════════════
+
+def test_corrigir_tejota_rene():
+    """'Tejota Rene' deve ser corrigido para 'tjrn'."""
+    segmentos = [{"start": 0, "end": 5, "text": "Tejota Rene mantem decisao"}]
+    resultado = corrigir_alucinacoes_conhecidas(segmentos)
+    assert "tjrn" in resultado[0]["text"]
+    assert "tejota" not in resultado[0]["text"].lower()
+    print("  ✅ Correcao 'Tejota Rene' -> 'tjrn' OK")
+
+
+def test_corrigir_natau():
+    """'Natau' deve ser corrigido para 'natal'."""
+    segmentos = [{"start": 0, "end": 5, "text": "A comarca de Natau condenou"}]
+    resultado = corrigir_alucinacoes_conhecidas(segmentos)
+    assert "natal" in resultado[0]["text"]
+    print("  ✅ Correcao 'Natau' -> 'natal' OK")
+
+
+def test_corrigir_ano_alucinado():
+    """Ano 2003 (alucinado) deve virar 2026 quando roteiro indica 2026."""
+    texto = "ocorrido em marco de 2003 seria conduta"
+    roteiro = "ocorrido em marco de 2026 seria conduta"
+    corrigido = _corrigir_anos_alucinados(texto, roteiro)
+    assert "2026" in corrigido
+    assert "2003" not in corrigido
+    print("  ✅ Correcao ano 2003 -> 2026 OK")
+
+
+def test_corrigir_ano_sem_roteiro():
+    """Sem roteiro, ano não deve ser alterado."""
+    texto = "ocorrido em marco de 2003 seria conduta"
+    corrigido = _corrigir_anos_alucinados(texto, "")
+    assert "2003" in corrigido  # Sem roteiro, não tem como saber
+    print("  ✅ Ano preservado sem roteiro OK")
+
+
+def test_corrigir_gip():
+    """'GIP' deve ser corrigido para 'jipe'."""
+    segmentos = [{"start": 0, "end": 5, "text": "um GIP infantil eletrico"}]
+    resultado = corrigir_alucinacoes_conhecidas(segmentos)
+    assert "jipe" in resultado[0]["text"]
+    print("  ✅ Correcao 'GIP' -> 'jipe' OK")
+
+
+def test_corrigir_barbao_pastou():
+    """'barbão pastou' deve ser corrigido para 'bom pastor'."""
+    segmentos = [{"start": 0, "end": 5, "text": "localizado no barbão pastou"}]
+    resultado = corrigir_alucinacoes_conhecidas(segmentos)
+    assert "bom pastor" in resultado[0]["text"]
+    print("  ✅ Correcao 'barbão pastou' -> 'bom pastor' OK")
+
+
+def test_alucinacoes_conhecidas_lista():
+    """Verifica que a lista de alucinacoes conhecidas não está vazia."""
+    assert len(ALUCINACOES_CONHECIDAS) > 0
+    assert len(ALUCINACOES_CONHECIDAS) >= 10  # Pelo menos 10 padrões conhecidos
+    print(f"  ✅ {len(ALUCINACOES_CONHECIDAS)} padroes de alucinacoes cadastrados")
 
 
 if __name__ == "__main__":

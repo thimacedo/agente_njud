@@ -171,12 +171,95 @@ def corrigir_transcricao(segmentos: list[dict], texto_roteiro: Optional[str] = N
     1. Remove repeticoes
     2. Se roteiro disponivel, alinha e corrige
     3. Corrige numeros
+    4. Corrige alucinacoes conhecidas do Whisper
     """
     segmentos = remover_repeticoes(segmentos)
     if texto_roteiro:
         segmentos = alinhar_com_roteiro(segmentos, texto_roteiro)
         segmentos = corrigir_numeros(segmentos, texto_roteiro)
+    segmentos = corrigir_alucinacoes_conhecidas(segmentos, texto_roteiro)
     return segmentos
+
+
+# Alucinacoes conhecidas do Whisper em audio de radio TJRN
+# Formato: (padrao_regex, correcao_funcao_ou_none, descricao)
+ALUCINACOES_CONHECIDAS = [
+    # "Tejota Rene" -> "TJRN"
+    (r'tejota\s+rene', 'tjrn', 'Nome da instituicao'),
+    # "Nardo" -> "Leonardo"
+    (r'\bnardo\b', 'leonardo', 'Nome do locutor'),
+    # "Natau" -> "Natal"
+    (r'\bnatau\b', 'natal', 'Nome da cidade'),
+    # "barbão pastou" -> "Bom Pastor"
+    (r'barbão\s+pastou', 'bom pastor', 'Bairro'),
+    # "GIP" -> "jipe" (quando infantil/eletrico)
+    (r'\bgip\b', 'jipe', 'Veiculo'),
+    # "presional" -> "prisional"
+    (r'\bpresional\b', 'prisional', 'Termo juridico'),
+    # "penultenciario" -> "penitenciario"
+    (r'\bpenultenciario\b', 'penitenciario', 'Termo juridico'),
+    # "cacerario" -> "carcerario"
+    (r'\bcacerario\b', 'carcerario', 'Termo juridico'),
+    # "quadastramento" -> "cadastramento"
+    (r'\bquadastramento\b', 'cadastramento', 'Termo do edital'),
+    # "estramento" -> "cadastramento"
+    (r'\bestramento\b', 'cadastramento', 'Termo do edital'),
+    # "comiteja e chone" -> "comite gestor"
+    (r'comiteja\s+e?\s*chone', 'comite gestor', 'Orgao'),
+    # "titinha social" -> manter (nome correto do app)
+    # "R&N" -> "RN"
+    (r'r&n', 'rn', 'Sigla do estado'),
+]
+
+
+def corrigir_alucinacoes_conhecidas(segmentos: list[dict], texto_roteiro: Optional[str] = None) -> list[dict]:
+    """
+    Corrige alucinacoes conhecidas do Whisper em audio de radio TJRN.
+    
+    Quando o roteiro esta disponivel, tambem corrige anos que o Whisper
+    alucinou (ex: 2003 -> 2026 quando o roteiro indica 2026).
+    """
+    for seg in segmentos:
+        texto = seg["text"]
+        
+        # Aplicar correcoes de padroes conhecidos
+        for padrao, correcao, _ in ALUCINACOES_CONHECIDAS:
+            texto = re.sub(padrao, correcao, texto, flags=re.IGNORECASE)
+        
+        # Corrigir anos quando roteiro disponivel
+        if texto_roteiro:
+            texto = _corrigir_anos_alucinados(texto, texto_roteiro)
+        
+        seg["text"] = texto
+    
+    return segmentos
+
+
+def _corrigir_anos_alucinados(texto: str, roteiro: str) -> str:
+    """
+    Corrige anos que o Whisper alucinou comparando com o roteiro.
+    
+    Exemplo: Whisper transcreve "2003" mas roteiro diz "2026" -> corrigir para 2026
+    """
+    # Extrair anos do roteiro
+    anos_roteiro = set(re.findall(r'\b(19\d{2}|20\d{2})\b', roteiro))
+    
+    # Extrair anos da transcricao
+    anos_transcricao = re.findall(r'\b(19\d{2}|20\d{2})\b', texto)
+    
+    # Para cada ano na transcricao, verificar se existe no roteiro
+    for ano_transcricao in anos_transcricao:
+        if ano_transcricao not in anos_roteiro and anos_roteiro:
+            # Ano nao existe no roteiro — possivel alucinacao
+            # Tentar encontrar o ano correto mais proximo
+            for ano_roteiro in anos_roteiro:
+                # Se a diferenca for pequena (ex: 2003 vs 2026 = 23 anos)
+                # e o roteiro tem apenas um ano, usar o do roteiro
+                if len(anos_roteiro) == 1:
+                    texto = texto.replace(ano_transcricao, ano_roteiro)
+                    break
+    
+    return texto
 
 
 if __name__ == "__main__":
