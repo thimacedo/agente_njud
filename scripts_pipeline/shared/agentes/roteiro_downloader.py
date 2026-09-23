@@ -145,7 +145,7 @@ def baixar_doc(doc_id: str, timeout: int = 30) -> str:
                 raise Exception(f"Falha ao baixar {doc_id} após {max_retries} tentativas: {e}")
 
 
-def salvar_roteiro_unificado(documentos: list[dict], pasta_saida: Path) -> Path:
+def salvar_roteiro_unificado(documentos: list[dict], pasta_saida: Path, data_referencia: str = None) -> Path:
     """
     Salva roteiros baixados como arquivo TXT unificado.
     
@@ -154,20 +154,31 @@ def salvar_roteiro_unificado(documentos: list[dict], pasta_saida: Path) -> Path:
     - B{N}- TITULO
     - CABEÇA: ...
     - OFF: ...
-    """
-    # Determinar nome do arquivo
-    todas_datas = []
-    for doc in documentos:
-        datas = extrair_datas(doc["conteudo"])
-        todas_datas.extend(datas)
     
-    if todas_datas:
-        data_str = max(todas_datas).strftime("%Y-%m-%d")
+    Args:
+        data_referencia: Data no formato "DD-MM" ou "DD/MM" para usar no nome do arquivo.
+                         Se None, extrai do conteúdo (fallback).
+    """
+    if data_referencia:
+        # data_referencia vem como "DD-MM" → converter para "MM-DD" (formato ISO YYYY-MM-DD)
+        partes = data_referencia.replace("/", "-").split("-")
+        if len(partes) == 2:
+            data_str = f"{partes[1]}-{partes[0]}"  # MM-DD
+        else:
+            data_str = data_referencia.replace("/", "-")
     else:
-        data_str = datetime.now().strftime("%Y-%m-%d")
+        todas_datas = []
+        for doc in documentos:
+            datas = extrair_datas(doc["conteudo"])
+            todas_datas.extend(datas)
+        
+        if todas_datas:
+            data_str = max(todas_datas).strftime("%Y-%m-%d")
+        else:
+            data_str = datetime.now().strftime("%Y-%m-%d")
     
     pasta_saida.mkdir(parents=True, exist_ok=True)
-    nome_arquivo = pasta_saida / f"roteiros_{data_str}.txt"
+    nome_arquivo = pasta_saida / f"roteiros_2026-{data_str}.txt"
     
     with open(nome_arquivo, "w", encoding="utf-8") as f:
         for i, doc in enumerate(documentos, 1):
@@ -219,7 +230,7 @@ def salvar_roteiros_individuais(documentos: list[dict], pasta_saida: Path) -> li
     return paths
 
 
-def processar_links(links_texto: str, pasta_saida: Path, modo: str = "unificado") -> dict:
+def processar_links(links_texto: str, pasta_saida: Path, modo: str = "unificado", data_referencia: str = None) -> dict:
     """
     Pipeline completo: links → download → salvamento.
     
@@ -272,7 +283,7 @@ def processar_links(links_texto: str, pasta_saida: Path, modo: str = "unificado"
     arquivos_criados = []
     
     if modo == "unificado":
-        path = salvar_roteiro_unificado(documentos, pasta_saida)
+        path = salvar_roteiro_unificado(documentos, pasta_saida, data_referencia=data_referencia)
         arquivos_criados.append(str(path))
     elif modo == "individual":
         paths = salvar_roteiros_individuais(documentos, pasta_saida)
