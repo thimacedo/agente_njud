@@ -1,13 +1,16 @@
 """
 Etapa 0: Triagem inicial do áudio e carregamento do modelo Whisper.
 """
+import sys
+# Limpar paths do Hermes para evitar conflito de imports do faster_whisper
+sys.path = [p for p in sys.path if 'hermes' not in p.lower() and 'AppData/Local/hermes' not in p]
+
 import os
 import tempfile
 from pathlib import Path
 
 from pydub import AudioSegment
 
-import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent))  # scripts_pipeline/
 
 # Usar faster-whisper (CTranslate2) — 1.3-3x mais rápido em CPU

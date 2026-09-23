@@ -1,9 +1,17 @@
 """
 Etapa 6: Montagem final com vinhetas, BG e normalização de loudness.
 """
+import sys
+# Garantir que .venv_pipeline é encontrado antes do Hermes
+import os
+_VENV_SITE = os.path.join(os.path.dirname(__file__).rsplit(os.sep + "scripts_pipeline", 1)[0], ".venv_pipeline", "Lib", "site-packages")
+if _VENV_SITE not in sys.path:
+    sys.path.insert(0, _VENV_SITE)
+# Limpar paths do Hermes para evitar conflito de imports do faster_whisper
+sys.path = [p for p in sys.path if 'hermes' not in p.lower() and 'AppData/Local/hermes' not in p]
+
 import os
 import re
-import sys
 import subprocess
 import tempfile
 from pathlib import Path
@@ -38,84 +46,23 @@ def carregar_vht(nome):
 def calcular_duracao_cabeca(segmento_audio, texto_cabeca, modelo):
     """Calcula a duração da cabeça no áudio com base no texto do roteiro.
     
-    Usa word-level timestamps do Whisper para encontrar onde cada palavra
-    do roteiro aparece no áudio. A cabeça termina na última palavra encontrada.
+    Usa heurística: número de palavras × 0.4s/palavra (média para locução em PT-BR).
+    Evita transcrever novamente (economiza RAM).
     
     Retorna a duração em segundos.
-    Se não encontrar correspondência, retorna 20s como fallback.
     """
     if not texto_cabeca:
         return 20  # fallback
     
-    # Transcrever com word timestamps
-    tmp = tempfile.mktemp(suffix='.wav', dir=str(TMP_DIR))
-    segmento_audio.export(tmp, format="wav")
+    # Heurística: palavra leva ~0.4s em locução jornalística
+    import re
+    palavras = re.findall(r'\w+', texto_cabeca)
+    duracao = len(palavras) * 0.4
     
-    if USE_FASTER:
-        segments_iter, info = modelo.transcribe(tmp, language="pt", word_timestamps=True)
-        segmentos_boletim = [{"start": s.start, "end": s.end, "text": s.text, "words": s.words} for s in segments_iter]
-    else:
-        result = modelo.transcribe(tmp, language="pt", word_timestamps=True)
-        segmentos_boletim = result["segments"]
+    # Limites razoáveis
+    duracao = max(5, min(duracao, 30))
     
-    os.unlink(tmp)
-    
-    # Normalizar texto da cabeça para comparação
-    cabeca_norm = re.sub(r'[^\w\s]', '', texto_cabeca.lower()).strip()
-    palavras_cabeca = cabeca_norm.split()
-    
-    if not palavras_cabeca:
-        return 20
-    
-    # Coletar todas as palavras com timestamps
-    todas_palavras = []
-    for seg in segmentos_boletim:
-        if "words" in seg:
-            for w in seg["words"]:
-                todas_palavras.append({"word": w.word, "start": w.start, "end": w.end})
-        else:
-            # Fallback: estimar timestamps
-            todas_palavras.append({"word": seg["text"], "start": seg["start"], "end": seg["end"]})
-    
-    # Procurar palavras da cabeça em ordem no áudio
-    # A cabeça termina quando encontramos uma palavra que NÃO pertence à cabeça
-    palavras_encontradas = []
-    idx_palavra = 0
-    
-    for palavra_audio in todas_palavras:
-        if idx_palavra >= len(palavras_cabeca):
-            break
-        
-        palavra_cabeca = palavras_cabeca[idx_palavra]
-        palavra_norm = re.sub(r'[^\w]', '', palavra_cabeca.lower())
-        palavra_audio_norm = re.sub(r'[^\w]', '', palavra_audio["word"].lower())
-        
-        if not palavra_norm or not palavra_audio_norm:
-            continue
-        
-        # Verificar se a palavra do áudio corresponde à palavra da cabeça
-        if palavra_norm in palavra_audio_norm or palavra_audio_norm in palavra_norm:
-            score = len(set(palavra_norm) & set(palavra_audio_norm)) / max(len(palavra_norm), len(palavra_audio_norm))
-            if score >= 0.5:
-                palavras_encontradas.append({
-                    "palavra": palavra_cabeca,
-                    "timestamp": palavra_audio["end"],
-                    "score": score
-                })
-                idx_palavra += 1
-    
-    if palavras_encontradas:
-        # A cabeça termina na última palavra encontrada em ordem
-        ultima_palavra = palavras_encontradas[-1]
-        duracao = ultima_palavra["timestamp"]
-        print(f"  [DEBUG] cabeça termina em {duracao:.1f}s ({len(palavras_encontradas)}/{len(palavras_cabeca)} palavras encontradas)")
-        return duracao
-    
-    # Fallback: 20% do boletim
-    duracao_total = len(segmento_audio) / 1000
-    fallback = min(max(duracao_total * 0.20, 10), 30)
-    print(f"  [DEBUG] FALLBACK: {fallback:.1f}s (duracao_total={duracao_total:.1f}s)")
-    return fallback
+    return duracao
 
 
 def montar_boletim_com_vinhetas(segmento_audio, vht_abertura, vht_passagem, vht_encerramento, cabeça_duracao=20):
