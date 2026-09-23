@@ -3,8 +3,10 @@
 Pipeline canônico de edição de boletins — processar_boletim_canonico.py
 Uso: processar_boletim_canonico.py <arquivo_entrada> [--roteiros <pasta_roteiros>]
 Saída: pasta <arquivo_entrada>_saida/ com boletins editados + auditoria.json
+
+Refatorado: funções extraídas para módulos em etapas/.
 """
-import argparse, re, os, json, shutil, sys, tempfile
+import argparse, re, os, json, sys, tempfile
 from pathlib import Path
 from datetime import date
 from pydub import AudioSegment
@@ -12,19 +14,21 @@ from pydub import AudioSegment
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))  # adiciona scripts_pipeline/ao path
 
-# Usar faster-whisper (CTranslate2) — 1.3-3x mais rápido em CPU (validado spike 002)
-try:
-    from faster_whisper import WhisperModel
-    USE_FASTER = True
-except ImportError:
-    import whisper
-    USE_FASTER = False
-
 from corrigir_alucinacoes import corrigir_transcricao
-from shared.bgm_mixer import mix_bgm
-from shared.transcricao_cache import TranscricaoCache, calcular_hash_audio, get_cache
 from shared.text_utils import normalizar_texto
 from shared.logging_config import setup_logging, get_logger
+
+# Importar etapas modularizadas
+from etapas.etapa_triagem import triagem_audio, carregar_modelo
+from etapas.etapa_transcricao import transcrever
+from etapas.etapa_estrutura import (
+    detectar_estrutura,
+    detectar_repeticoes_confirmadas,
+    detectar_claquete_geral,
+    detectar_claquetes_por_assinatura
+)
+from etapas.etapa_cortes import processar_cortes_boletim
+from etapas.etapa_montagem import montar_boletim_com_vinhetas, calcular_duracao_cabeca
 
 # ── Configuração (todas as variáveis antes hardcoded) ─────────────────────────
 # Overrides via variáveis de ambiente (opcional): DIVISOR_ASSETS, DIVISOR_TMP,
@@ -36,15 +40,12 @@ VHT_DIR = Path(os.environ.get("DIVISOR_ASSETS", PROJECT_ROOT / "assets" / "vinhe
 TMP_DIR = Path(os.environ.get("DIVISOR_TMP", tempfile.gettempdir()))
 BG_PATH = VHT_DIR / "BG - BOLETIM.mp3"
 
-WHISPER_MODEL = os.environ.get("DIVISOR_WHISPER_MODEL", "base")
+WHISPER_MODEL = os.environ.get("DIVISOR_WHISPER_MODEL", "small")
 COBERTURA_MIN = float(os.environ.get("DIVISOR_COBERTURA_MIN", "0.6"))  # Item 18: 60% + auditoria humana
 
 # Fallbacks de data quando o filename não traz mês/ano explícitos
 MES_PADRAO = "09"   # arquivos "DD SET" → setembro
 ANO_PADRAO = "2026" # projeto DIVISOR 2026
-
-# Offset do início do boletim seguinte após a assinatura (segundos)
-OFFSET_APOS_ASSINATURA = 0.3
 
 
 def nomear_boletim(data_str, numero, roteiro_texto=None, data_completa_str=None):
@@ -245,627 +246,6 @@ def carregar_roteiros(pasta_roteiros, data_str, b_ini, b_fim):
     return roteiros
 
 
-def triagem_audio(audio):
-    """ETAPA 0: triagem inicial. Retorna dict com análise e ações."""
-    duracao = len(audio) / 1000
-    canais = audio.channels
-    frame_rate = audio.frame_rate
-    sample_width = audio.sample_width
-
-    resultado = {
-        "duracao_segundos": duracao,
-        "canais": canais,
-        "frame_rate": frame_rate,
-        "sample_width": sample_width,
-        "acoes": []
-    }
-
-    # Canal morto: um canal com amplitude próxima de 0
-    if canais == 2:
-        monoEsq = audio.split_to_mono()[0]
-        monoDir = audio.split_to_mono()[1]
-
-        maxEsq = monoEsq.max
-        maxDir = monoDir.max
-
-        if maxEsq < 500 and maxDir > 5000:
-            resultado["canal_morto"] = "esquerdo"
-
-        if maxEsq < 100 and maxDir > 1000:
-            resultado["canal_morto"] = "esquerdo"
-            resultado["acoes"].append("CORRIGIR: substituir canal esquerdo pelo direito (multiplicar esquerdo por fator de escala do direito)")
-        elif maxDir < 100 and maxEsq > 1000:
-            resultado["canal_morto"] = "direito"
-            resultado["acoes"].append("CORRIGIR: substituir canal direito pelo esquerdo (multiplicar direito por fator de escala do esquerdo)")
-
-        # Estéreo duplicado
-        samplesEsq = list(monoEsq.get_array_of_samples())
-        samplesDir = list(monoDir.get_array_of_samples())
-        if samplesEsq == samplesDir:
-            resultado["estereo_duplicado"] = True
-            resultado["acoes"].append("CONVERTER: áudio estereo duplicado (L==R) → converter para mono")
-
-    # Clipping
-    if audio.max >= 32767 * 0.99:
-        resultado["clipping_detectado"] = True
-        resultado["acoes"].append("AVISO: possível clipping (pico próximo de 0dBFS)")
-
-    return resultado
-
-
-def carregar_modelo():
-    """Carrega modelo Whisper (faster-whisper se disponível, senão openai-whisper)."""
-    if USE_FASTER:
-        print("  Usando faster-whisper (int8, CPU)...")
-        return WhisperModel(WHISPER_MODEL, device="cpu", compute_type="int8")
-    else:
-        print("  Usando openai-whisper (fallback)...")
-        return whisper.load_model(WHISPER_MODEL)
-
-
-def transcrever(audio, tmp_path, modelo):
-    """ETAPA 1: transcrição com Whisper. Compatível com faster-whisper e openai-whisper.
-    Usa word_timestamps=True para permitir cortes finos (claquete vs cabeça no mesmo segmento)."""
-    audio.export(tmp_path, format="wav")
-    
-    if USE_FASTER:
-        segments_iter, info = modelo.transcribe(tmp_path, language="pt", word_timestamps=True)
-        segmentos = []
-        for seg in segments_iter:
-            entry = {
-                "start": seg.start,
-                "end": seg.end,
-                "text": seg.text
-            }
-            # Preservar word timestamps para corte fino de claquetes
-            if hasattr(seg, "words") and seg.words:
-                entry["words"] = [
-                    {"word": w.word, "start": w.start, "end": w.end}
-                    for w in seg.words
-                ]
-            segmentos.append(entry)
-        os.unlink(tmp_path)
-        return segmentos
-    else:
-        result = modelo.transcribe(tmp_path, language="pt", fp16=False, word_timestamps=True)
-        os.unlink(tmp_path)
-        return result["segments"]
-
-
-def detectar_estrutura(segmentos, b_ini, b_fim):
-    """ETAPA 2: detectar estrutura dos boletins.
-    Usa assinaturas do locutor como delimitadores principais.
-    Cada assinatura finaliza um boletim; o próximo começa após a assinatura.
-    Retorna dict:
-      - marcadores: {n_boletim: tempo_segundo}
-      - assinaturas: [(tempo, nome_reporter, texto_assinatura), ...]
-      - falta: [numeros faltantes]"""
-    marcadores = {}
-    assinaturas = []
-
-    # Regex assinatura: "do/no Tribunal de Justiça do Rio Grande do Norte"
-    # Aceita variações: "Tribunal de Justiça, do Rio Grande" (com vírgula)
-    # Regex para assinatura do locutor — pode estar dividida em 2 segmentos
-    # faster-whisper divide "No Tribunal de Justiça do Rio Grande" / "do Norte, Nome"
-    # openai-whisper junta tudo em um segmento só
-    padrao_ass_parcial = re.compile(
-        r'tribunal\s+de\s+justi[çc]a\s*,?\s*do\s+rio\s+grande\s*$',
-        re.I
-    )
-    padrao_ass_completo = re.compile(
-        r'tribunal\s+de\s+justi[çc]a\s*,?\s*do\s+rio\s+grande\s+do\s+norte',
-        re.I
-    )
-
-    # Coletar todas as assinaturas em ordem
-    # Assinatura pode estar completa em 1 segmento ou dividida em 2 (faster-whisper)
-    i = 0
-    while i < len(segmentos):
-        seg = segmentos[i]
-        texto = seg["text"]
-        
-        # Tentar match completo primeiro
-        m_completo = padrao_ass_completo.search(texto)
-        if m_completo:
-            pos_ratio = m_completo.start() / len(texto) if len(texto) > 0 else 0
-            t = seg["start"] + (seg["end"] - seg["start"]) * pos_ratio
-            assinaturas.append(t)
-            i += 1
-            continue
-        
-        # Tentar match parcial (faster-whisper divide em 2 segmentos)
-        m_parcial = padrao_ass_parcial.search(texto)
-        if m_parcial:
-            # Verificar se próximo segmento continua com "do Norte"
-            if i + 1 < len(segmentos):
-                texto_seguinte = segmentos[i + 1]["text"].strip()
-                if re.match(r'^do\s+norte', texto_seguinte, re.I):
-                    # Assinatura confirmada — timestamp no fim deste segmento
-                    assinaturas.append(seg["end"])
-                    i += 2
-                    continue
-        
-        i += 1
-
-    # Cada assinatura marca o FIM de um boletim
-    # O próximo boletim começa no PRÓXIMO SEGMENTO DE FALA após a assinatura
-    # OFFSET_APOS_ASSINATURA agora é constante do módulo (topo do arquivo)
-
-    if assinaturas:
-        # B1 começa no início (0s)
-        marcadores[b_ini] = 0.0
-        # Cada boletim subsequente começa no próximo segmento de fala após a assinatura
-        for i, t_ass in enumerate(assinaturas):
-            n_proximo = b_ini + i + 1
-            if n_proximo <= b_fim:
-                # Encontrar o primeiro segmento que COMEÇA após a assinatura
-                t_proximo = t_ass + 1.5  # fallback
-                for seg in segmentos:
-                    if seg["start"] > t_ass + 0.5:
-                        t_proximo = seg["start"]
-                        break
-                
-                # CORTE FINO: o segmento pode conter assinatura + claquete + CABEÇA juntos
-                # (ex: "do Norte, Leonardo Meida, M2, TJRN reforma decisão e nega...")
-                # Nesse caso, o marcador deve apontar para o INÍCIO DA CABEÇA
-                # (palavra seguinte à claquete individual "M2,"/"B2,"), não para o segmento seguinte.
-                seg_marcador = None
-                for seg in segmentos:
-                    if abs(seg["start"] - t_proximo) < 0.1:
-                        seg_marcador = seg
-                        break
-                
-                if seg_marcador and "words" in seg_marcador and seg_marcador["words"]:
-                    palavras_seg = seg_marcador["words"]
-                    # Procurar claquete individual (B2, M2, B-10...) dentro do segmento
-                    for idx_w in range(len(palavras_seg) - 1):
-                        w = palavras_seg[idx_w]
-                        w_norm = w["word"].strip().strip('.,;: ').lower()
-                        # Claquete individual: letra+numero — mas não a data (17, 2026)
-                        if re.match(r'^[a-z][\-\s]?\d{1,2}$', w_norm) and len(w_norm) <= 4:
-                            # A palavra seguinte deve ser conteúdo (não número, não claquete)
-                            w_prox = palavras_seg[idx_w + 1]["word"].strip().strip('.,;: ').lower()
-                            if not re.match(r'^[a-z]?[\-\s]?\d+$', w_prox) and len(w_prox) > 2:
-                                # Verificar que a claquete não é o PRIMEIRO conteúdo do segmento
-                                # (a assinatura vem antes: "do Norte, Leonardo Meida, M2, ...")
-                                # A claquete individual só é válida se houver assinatura antes dela
-                                # (palavras como "norte", "leonardo", "meida", "justiça")
-                                texto_antes = ' '.join(
-                                    palavras_seg[k]["word"] for k in range(max(0, idx_w - 6), idx_w)
-                                ).lower()
-                                if re.search(r'(norte|nardo|leonardo|justi[çc]a|meida|almeida)', texto_antes):
-                                    t_proximo = palavras_seg[idx_w + 1]["start"]
-                                    print(f"    [corte fino] cabeça de B{n_proximo} inicia em {t_proximo:.2f}s (após claquete '{w_norm}')")
-                                    break
-                
-                marcadores[n_proximo] = t_proximo
-
-        # Ajuste anti-vazamento: o Whisper pode juntar a última frase do off
-        # com a assinatura do locutor no mesmo segmento.
-        # Dois cenários:
-        # 1. Assinatura no segmento ANTERIOR ao marcador (fim do boletim anterior)
-        # 2. Assinatura no segmento NO marcador (início do boletim seguinte)
-        for i, t_ass in enumerate(assinaturas):
-            n_proximo = b_ini + i + 1
-            if n_proximo > b_fim:
-                continue
-            t_marc = marcadores.get(n_proximo)
-            if t_marc is None:
-                continue
-            
-            # Cenário 1: segmento anterior contém assinatura
-            for seg in segmentos:
-                if abs(seg["end"] - t_marc) < 0.5:
-                    texto_seg = seg["text"].strip()
-                    if padrao_ass_completo.search(texto_seg) or texto_seg.lower().endswith("norte"):
-                        for seg2 in segmentos:
-                            if seg2["start"] >= seg["end"] - 0.1:
-                                marcadores[n_proximo] = seg2["start"]
-                                break
-                        break
-            
-            # Cenário 2: segmento no marcador (início do próximo boletim) contém assinatura
-            # Ex: "ele é o Nardo Aumeda. De sete, formação..." — "Nardo Aumeda" é assinatura
-            t_marc = marcadores.get(n_proximo)  # recalcular após cenário 1
-            for seg in segmentos:
-                if abs(seg["start"] - t_marc) < 0.5:
-                    texto_seg = seg["text"].strip()
-                    # Verificar se o INÍCIO do segmento contém assinatura
-                    if re.search(r'tribunal\s+de\s+justi[cç]a', texto_seg, re.I) or \
-                       re.search(r'(nardo|leonardo)\s+(almeida|amida|umeda)', texto_seg, re.I) or \
-                       re.search(r'(é|o)\s+(nardo|leonardo)', texto_seg, re.I):
-                        # Avançar para o próximo segmento com conteúdo real
-                        for seg2 in segmentos:
-                            if seg2["start"] > seg["end"] and seg2["end"] - seg2["start"] > 1.5:
-                                marcadores[n_proximo] = seg2["start"]
-                                break
-                        break
-
-    else:
-        # Sem assinaturas: interpolar igualmente
-        for n in range(b_ini, b_fim + 1):
-            pos = (n - b_ini) / (b_fim - b_ini + 1)
-            marcadores[n] = pos * duracao_estimada
-
-    return {"marcadores": marcadores, "assinaturas": [(t, "", "") for t in assinaturas], "falta": []}
-
-def detectar_repeticoes_confirmadas(segmentos, audio, threshold_similaridade=0.90):
-    """ETAPA 3: detectar repetições confirmadas por análise de áudio.
-    Somente mantém "Repete." se o áudio antes e depois tiver similaridade >= threshold.
-    Retorna: (repeticoes_confirmadas, repeticoes_rejeitadas)"""
-    confirmadas = []
-    rejeitadas = []
-
-    for i, seg in enumerate(segmentos[:-1]):
-        texto = seg["text"].strip()
-        if texto.lower() != "repete.":
-            continue
-
-        # Procurar próximo segmento com conteúdo (pular outros "Repete.")
-        seg_prox = None
-        for j in range(i + 1, min(i + 5, len(segmentos))):
-            if segmentos[j]["text"].strip().lower() != "repete.":
-                seg_prox = segmentos[j]
-                break
-
-        if not seg_prox:
-            rejeitadas.append({"posicao": seg["start"], "motivo": "sem segmento próximo com conteúdo"})
-            continue
-
-        # Comparar áudio antes e depois
-        t_antes_inicio = max(0, seg["start"] - 3)
-        t_antes_fim = seg["start"]
-        t_depois_inicio = seg_prox["start"]
-        t_depois_fim = min(len(audio)/1000, seg_prox["end"] + 3)
-
-        try:
-            audio_antes = audio[int(t_antes_inicio*1000):int(t_antes_fim*1000)]
-            audio_depois = audio[int(t_depois_inicio*1000):int(t_depois_fim*1000)]
-
-            if len(audio_antes) < 500 or len(audio_depois) < 500:
-                rejeitadas.append({"posicao": seg["start"], "motivo": "trecho muito curto para comparação"})
-                continue
-
-            # Similaridade por correlação cruzada simplificada
-            import numpy as np
-            samples_antes = np.array(audio_antes.get_array_of_samples(), dtype=np.float32)
-            samples_depois = np.array(audio_depois.get_array_of_samples(), dtype=np.float32)
-
-            if len(samples_antes) < 100 or len(samples_depois) < 100:
-                rejeitadas.append({"posicao": seg["start"], "motivo": "amostras insuficientes"})
-                continue
-
-            # Normalizar
-            s_antes = samples_antes - np.mean(samples_antes)
-            s_depois = samples_depois - np.mean(samples_depois)
-
-            if np.std(s_antes) < 1e-6 or np.std(s_depois) < 1e-6:
-                rejeitadas.append({"posicao": seg["start"], "motivo": "um dos trechos é silêncio"})
-                continue
-
-            corr = np.correlate(s_antes, s_depois, mode='valid')
-            similaridade = np.max(np.abs(corr)) / (np.linalg.norm(s_antes) * np.linalg.norm(s_depois))
-
-            if similaridade >= threshold_similaridade:
-                confirmadas.append({
-                    "inicio": seg_prox["start"],
-                    "fim": seg_prox["end"],
-                    "texto_repetido": seg_prox["text"].strip()[:80],
-                    "similaridade": float(similaridade)
-                })
-            else:
-                rejeitadas.append({"posicao": seg["start"], "motivo": f"similaridade {similaridade:.2f} < {threshold_similaridade}"})
-
-        except Exception as e:
-            rejeitadas.append({"posicao": seg["start"], "motivo": f"erro na análise: {str(e)}"})
-
-    return confirmadas, rejeitadas
-
-
-def detectar_claquete_geral(segmentos, b_ini, b_fim):
-    """Detecta claquete geral introdutória no início do áudio.
-    
-    Formatos conhecidos (variam conforme data e faixa):
-    - "Boletins 17 do 9 do B1O5" (dia 17, setembro, B1 a B5)
-    - "Boletins 4 do 9 do B6O7" (dia 4, setembro, B6 a B7)
-    - "Boletins 18 do 9 do B1O10" (dia 18, setembro, B1 a B10)
-    - "Bolitinhos 18 de setembro do B6-LB10" (com hífen, L antes do número)
-    
-    Retorna (inicio, fim) da claquete geral ou None se não encontrada.
-    O fim inclui eventuais claquetes individuais introdutórias (ex: "B6.").
-    """
-    # Padrão 1: Faixa de boletins — tolerante a alucinações do Whisper
-    # "B1O5", "B1 O5", "B6-LB10", "B105", "B1 05", "B6 B10"
-    padrao_faixa = re.compile(r'B\d+\s*[O0\-]\s*L?\d+', re.I)
-
-    # Padrão 2: "Boletins" (qualquer variação) + números (anúncio da faixa)
-    # Tolerante a alucinações: "Bolitinhos", "Boleteins", "boletins", "Bolitins", etc.
-    padrao_boletins = re.compile(
-        r'b\w*?t[ií]nh?o?s\s+\d+',
-        re.I
-    )
-
-    # NOTA: Vinheta de abertura ("No ar, notícias da hora...") NÃO é lixo — faz parte do boletim final
-
-    for seg in segmentos:
-        if seg["start"] > 15:
-            break
-        texto = seg["text"]
-        if padrao_faixa.search(texto) or padrao_boletins.search(texto):
-            # Encontrou início da claquete geral
-            # Agora encontrar o FIM da introdução: primeiro segmento com conteúdo real
-            # O conteúdo real começa APÓS todas as claquetes introdutórias
-            
-            # CORTE FINO: se o segmento contém claquete + cabeça juntos
-            # (ex: "Bolitens 17 do 9 do B1O5, B1, empresa terá que devolver..."), 
-            # usar word timestamps para cortar apenas após a claquete individual
-            # e preservar a cabeça que vem na sequência
-            fim_intro = seg["end"]
-            
-            # Buscar claquete individual dentro do próprio segmento usando words
-            # Ex: "Bolitens 17 do 9 do B1O5, B1," → cortar após "B1,"
-            if "words" in seg and seg["words"]:
-                palavras = seg["words"]
-                # Procurar o padrão claquete individual: "B1," / "B6." / "B-10."
-                # seguido de conteúdo (palavra não-claquete)
-                for idx_w in range(len(palavras) - 1):
-                    w = palavras[idx_w]
-                    w_norm = w["word"].strip().strip('.,;: ').lower()
-                    # Claquete individual: letra+numero (b1, b6, b-10, m-10)
-                    if re.match(r'^[a-z][\-\s]?\d+$', w_norm):
-                        # Verificar se a palavra seguinte NÃO é outra claquete
-                        # (é o início da cabeça/conteúdo)
-                        w_prox = palavras[idx_w + 1]["word"].strip().strip('.,;: ').lower()
-                        if not re.match(r'^[a-z]?\d+$', w_prox) and not re.match(r'^[a-z][\-\s]?\d+$', w_prox):
-                            # Corte fino: manter a partir da palavra seguinte (cabeça)
-                            fim_intro = palavras[idx_w + 1]["start"]
-                            return (seg["start"], fim_intro)
-            
-            for seg2 in segmentos:
-                if seg2["start"] <= seg["start"]:
-                    continue
-                if seg2["start"] > seg["start"] + 15:
-                    break
-                texto2 = seg2["text"].strip()
-
-                # Claquete individual do primeiro boletim: "B1.", "B1,", "B6.", "B-10."
-                # O Whisper pode transcrever com hífen: "B-10" ou letra errada: "M-10"
-                if re.match(r'^[A-Z][\-\s]?\d+[\.\s,]', texto2, re.I) and len(texto2) < 80:
-                    # NÃO parar aqui — a claquete individual também deve ser removida
-                    # Continuar procurando o verdadeiro início do conteúdo
-                    fim_intro = seg2["end"]
-                    continue
-
-                # Se o segmento tem mais de 8 palavras, é conteúdo real
-                palavras = texto2.split()
-                if len(palavras) > 8:
-                    fim_intro = seg2["start"]
-                    break
-
-                # Se é um segmento curto mas não é claquete, pode ser continuação da intro
-                if len(texto2) < 40:
-                    fim_intro = seg2["end"]
-                    continue
-
-                # Segmento médio — provavelmente conteúdo
-                fim_intro = seg2["start"]
-                break
-
-            return (seg["start"], fim_intro)
-
-    return None
-
-
-def detectar_claquetes_por_assinatura(segmentos, assinaturas, b_ini, b_fim):
-    """ETAPA 4: detectar claquetes após assinatura do locutor.
-    Para cada assinatura encontrada, busca nos próximos 5s a próxima claquete B{N}.
-    Retorna dict {n_boletim_claquete: {"inicio": t, "fim": t_estimado, "motivo": ...}}"""
-    claquetes = {}
-    marcadores_b = {}
-
-    for seg in segmentos:
-        m = re.search(r'\bB(\d{1,2})\.', seg["text"])
-        if m:
-            try:
-                n = int(m.group(1))
-                if b_ini <= n <= b_fim:
-                    if n not in marcadores_b:
-                        marcadores_b[n] = seg["start"]
-            except ValueError:
-                pass
-
-    for t_ass, nome, texto_ass in assinaturas:
-        # Buscar próximo B{N}. nos próximos 5s
-        t_max_busca = t_ass + 5
-        claquette_encontrada = None
-
-        for seg in segmentos:
-            if seg["start"] >= t_ass and seg["start"] <= t_max_busca:
-                m = re.search(r'\bB(\d{1,2})\.', seg["text"])
-                if m:
-                    try:
-                        n = int(m.group(1))
-                        if b_ini <= n <= b_fim and n != len(claquetes) + 1:
-                            claquette_encontrada = n
-                            # Estimar fim: até início do conteúdo útil ou próxima assinatura
-                            fim = seg["end"]
-                            for s2 in segmentos:
-                                if s2["start"] > seg["start"] and "Tribunal de Justiça" not in s2["text"]:
-                                    fim = s2["start"]
-                                    break
-                            claquetes[n] = {"inicio": seg["start"], "fim": fim, "numero": n}
-                            break
-                    except ValueError:
-                        pass
-
-        if not claquette_encontrada:
-            # Registrar para análise manual
-            claquetes["sem_deteccao"] = claquetes.get("sem_deteccao", []) + [{"tempo_assinatura": t_ass, "nome_reporter": nome}]
-
-    return claquetes
-
-
-def carregar_vht(nome):
-    """Carrega uma vinheta do diretório de assets."""
-    caminho = VHT_DIR / nome
-    if caminho.exists():
-        return AudioSegment.from_mp3(str(caminho))
-    return None
-
-
-def calcular_duracao_cabeca(segmento_audio, texto_cabeca, modelo):
-    """Calcula a duração da cabeça no áudio com base no texto do roteiro.
-    
-    Usa word-level timestamps do Whisper para encontrar onde cada palavra
-    do roteiro aparece no áudio. A cabeça termina na última palavra encontrada.
-    
-    Retorna a duração em segundos.
-    Se não encontrar correspondência, retorna 20s como fallback.
-    """
-    if not texto_cabeca:
-        return 20  # fallback
-    
-    # Transcrever com word timestamps
-    tmp = tempfile.mktemp(suffix='.wav', dir=str(TMP_DIR))
-    segmento_audio.export(tmp, format="wav")
-    
-    if USE_FASTER:
-        segments_iter, info = modelo.transcribe(tmp, language="pt", word_timestamps=True)
-        segmentos_boletim = [{"start": s.start, "end": s.end, "text": s.text, "words": s.words} for s in segments_iter]
-    else:
-        result = modelo.transcribe(tmp, language="pt", word_timestamps=True)
-        segmentos_boletim = result["segments"]
-    
-    os.unlink(tmp)
-    
-    # Normalizar texto da cabeça para comparação
-    cabeca_norm = re.sub(r'[^\w\s]', '', texto_cabeca.lower()).strip()
-    palavras_cabeca = cabeca_norm.split()
-    
-    if not palavras_cabeca:
-        return 20
-    
-    # Coletar todas as palavras com timestamps
-    todas_palavras = []
-    for seg in segmentos_boletim:
-        if "words" in seg:
-            for w in seg["words"]:
-                todas_palavras.append({"word": w.word, "start": w.start, "end": w.end})
-        else:
-            # Fallback: estimar timestamps
-            todas_palavras.append({"word": seg["text"], "start": seg["start"], "end": seg["end"]})
-    
-    # Procurar palavras da cabeça em ordem no áudio
-    # A cabeça termina quando encontramos uma palavra que NÃO pertence à cabeça
-    palavras_encontradas = []
-    idx_palavra = 0
-    
-    for palavra_audio in todas_palavras:
-        if idx_palavra >= len(palavras_cabeca):
-            break
-        
-        palavra_cabeca = palavras_cabeca[idx_palavra]
-        palavra_norm = re.sub(r'[^\w]', '', palavra_cabeca.lower())
-        palavra_audio_norm = re.sub(r'[^\w]', '', palavra_audio["word"].lower())
-        
-        if not palavra_norm or not palavra_audio_norm:
-            continue
-        
-        # Verificar se a palavra do áudio corresponde à palavra da cabeça
-        if palavra_norm in palavra_audio_norm or palavra_audio_norm in palavra_norm:
-            score = len(set(palavra_norm) & set(palavra_audio_norm)) / max(len(palavra_norm), len(palavra_audio_norm))
-            if score >= 0.5:
-                palavras_encontradas.append({
-                    "palavra": palavra_cabeca,
-                    "timestamp": palavra_audio["end"],
-                    "score": score
-                })
-                idx_palavra += 1
-    
-    if palavras_encontradas:
-        # A cabeça termina na última palavra encontrada em ordem
-        ultima_palavra = palavras_encontradas[-1]
-        duracao = ultima_palavra["timestamp"]
-        print(f"  [DEBUG] cabeça termina em {duracao:.1f}s ({len(palavras_encontradas)}/{len(palavras_cabeca)} palavras encontradas)")
-        return duracao
-    
-    # Fallback: 20% do boletim
-    duracao_total = len(segmento_audio) / 1000
-    fallback = min(max(duracao_total * 0.20, 10), 30)
-    print(f"  [DEBUG] FALLBACK: {fallback:.1f}s (duracao_total={duracao_total:.1f}s)")
-    return fallback
-
-
-def montar_boletim_com_vinhetas(segmento_audio, vht_abertura, vht_passagem, vht_encerramento, cabeça_duracao=20):
-    """ETAPA 6: monta estrutura completa: ABERTURA + CABEÇA + PASSAGEM + OFF(com BG ducking) + ENCERRAMENTO.
-
-    - BG (background music) toca durante o OFF com ducking (volume reduzido).
-    - BG nunca ultrapassa o fim do off.
-    - Se o off é mais curto que o BG, o BG é cortado.
-    - Se o off é mais longo, o BG termina antes do encerramento.
-    - A vinheta de passagem é inserida entre a cabeça e o OFF.
-    """
-    vht_a = vht_abertura or carregar_vht("VHT_ABERTURA_BOLETIM.mp3")
-    vht_p = vht_passagem or carregar_vht("VHT_PASSAGEM_BOLETIM.mp3")
-    vht_e = vht_encerramento or carregar_vht("VHT_ENCERRAMENTO_BOLETIM.mp3")
-    bg = carregar_vht("BG - BOLETIM.mp3")
-
-    # Dividir em cabeça e off
-    duracao_total = len(segmento_audio) / 1000
-    if duracao_total > cabeça_duracao:
-        cabeça = segmento_audio[:int(cabeça_duracao * 1000)]
-        off = segmento_audio[int(cabeça_duracao * 1000):]
-    else:
-        cabeça = segmento_audio
-        off = AudioSegment.silent(duration=0)
-
-    # Montar partes sem BG primeiro
-    partes = []
-    if vht_a:
-        partes.append(vht_a)
-
-    partes.append(cabeça)
-
-    # Inserir vinheta de passagem entre cabeça e OFF
-    if vht_p:
-        partes.append(vht_p)
-
-    # OFF com BG em ducking dinâmico (BG desce durante a fala, sobe no silêncio)
-    if len(off) > 0 and bg is not None:
-        # Usa mix_bgm para ducking profissional baseado em RMS da voz
-        off_com_bg = mix_bgm(off, BG_PATH)
-        partes.append(off_com_bg)
-    elif len(off) > 0:
-        partes.append(off)
-
-    if vht_e:
-        partes.append(vht_e)
-
-    if len(partes) > 1:
-        montado = sum(partes[1:], partes[0])
-    elif partes:
-        montado = partes[0]
-    else:
-        montado = AudioSegment.silent(duration=1000)
-    
-    # Normalizar loudness para -16 LUFS (padrão rádio), TP=-1.5, LRA=11
-    # Vinhetas estão em ~-19.6 dBFS; voz em ~-10 dBFS (estourando)
-    # loudnorm equaliza para que voz e vinhetas fiquem no mesmo nível percebido
-    import subprocess
-    tmp_in = tempfile.mktemp(suffix='.wav', dir=str(TMP_DIR))
-    tmp_out = tempfile.mktemp(suffix='.wav', dir=str(TMP_DIR))
-    montado.export(tmp_in, format="wav")
-    subprocess.run([
-        "ffmpeg", "-y", "-i", tmp_in,
-        "-af", "loudnorm=I=-16:TP=-1.5:LRA=11",
-        tmp_out
-    ], check=True, capture_output=True)
-    os.unlink(tmp_in)
-    resultado = AudioSegment.from_wav(tmp_out)
-    os.unlink(tmp_out)
-    return resultado
-
-
 def processar_canonico(arquivo_entrada, pasta_roteiros=None):
     """Pipeline canônico completo. Retorna dict com resultados e estatísticas."""
     arquivo = Path(arquivo_entrada)
@@ -982,7 +362,7 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
     else:
         print(f"\n── ETAPA 4.5: Claquete geral não detectada ──")
 
-    # ETAPA 5: Corte e remoção
+    # ETAPA 5: Corte e remoção (módulo especializado)
     print("\n── ETAPA 5: CORTE + REMOÇÃO ──")
     # Criar pasta de saída
     saida = arquivo.parent / f"{arquivo.stem}_saida"
@@ -995,122 +375,24 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
     else:
         audio_corte = audio
 
-    # Gerar corte_limpo para cada boletim
-    boletims_cortados = {}
+    # Processar cortes via módulo especializado
+    boletims_cortados = processar_cortes_boletim(
+        segmentos=segmentos,
+        audio_corte=audio_corte,
+        rep_confirmadas=rep_confirmadas,
+        claquetes=claquetes,
+        claquete_geral=claquete_geral,
+        estrutura=estrutura,
+        b_ini=b_ini,
+        b_fim=b_fim
+    )
 
-    marcadores_ordenados = sorted(estrutura['marcadores'].items(), key=lambda x: x[1])
-    assinaturas_ordenadas = sorted([t for t, _, _ in estrutura['assinaturas']])
-
-    for i, (n, t_ini) in enumerate(marcadores_ordenados):
-        if n < b_ini or n > b_fim:
-            continue
-
-        # Limite de início: marcação B{n} (claquete)
-        t_start = max(0, t_ini)
-
-        # Limite de fim: assinatura do boletim atual
-        # A assinatura é a primeira que vem DEPOIS do início do boletim
-        t_fim = len(audio) / 1000  # fallback: fim do áudio
-        for t_ass in assinaturas_ordenadas:
-            if t_ass > t_start + 2:  # pelo menos 2s de conteúdo
-                # Usar o INÍCIO do segmento que contém a assinatura
-                # (não o timestamp exato da assinatura, que pode estar no meio do segmento)
-                for seg in segmentos:
-                    if seg["start"] <= t_ass <= seg["end"]:
-                        t_fim = seg["start"]
-                        break
-                else:
-                    t_fim = t_ass
-                break
-
-        # Recortar boletim crú
-        t_start_ms = int(t_start * 1000)
-        t_fim_ms = int(t_fim * 1000)
-        if t_fim_ms <= t_start_ms:
-            t_fim_ms = t_start_ms + 1000  # mínimo 1s
-        segmento = audio_corte[t_start_ms:t_fim_ms]
-
-        # Remover repetições confirmadas dentro do boletim
-        cortes_repeticao = [r for r in rep_confirmadas if r['inicio'] >= t_start and r['fim'] <= t_fim]
-        if cortes_repeticao:
-            print(f"  B{n}: removendo {len(cortes_repeticao)} repetição(ões) confirmada(s)")
-
-        # Remover claquetes detectadas dentro do boletim
-        cortes_claquette = [info for n2, info in claquetes.items() if isinstance(n2, int) and info['inicio'] >= t_start and info['fim'] <= t_fim]
-        if cortes_claquette:
-            print(f"  B{n}: removendo {len(cortes_claquette)} claquete(s)")
-
-        # Remover claquete introdutória do primeiro boletim (B1 ou equivalente)
-        # Inclui: claquete geral, claquete individual, e data de referência
-        # Tudo que vier ANTES do conteúdo real (primeira frase do OFF) deve ser cortado
-        if n == b_ini and claquete_geral:
-            cg_inicio, cg_fim = claquete_geral
-            if cg_inicio >= t_start - 1 and cg_fim <= t_fim:
-                cortes_claquette.append({"inicio": cg_inicio, "fim": cg_fim})
-                print(f"  B{n}: removendo claquete geral [{cg_inicio:.2f}s - {cg_fim:.2f}s]")
-        
-        # Para TODOS os boletins: remover claquete individual + data de referência
-        # que aparecem nos primeiros ~8s (antes do conteúdo real)
-        for seg in segmentos:
-            if seg["start"] < t_start or seg["start"] >= t_start + 8:
-                continue
-            if seg["start"] >= t_fim:
-                break
-            texto_seg = seg["text"].strip()
-            eh_claquete = False
-            motivo = ""
-            
-            # Padrão 1: Claquete individual "B{N}." ou "B{N}, título" (curta, sem conteúdo)
-            if re.match(r'^B\d+[\.\s,]', texto_seg, re.I) and len(texto_seg) < 60:
-                if "tribunal" not in texto_seg.lower() and "justiça" not in texto_seg.lower():
-                    eh_claquete = True
-                    motivo = "claquete individual"
-            
-            # Padrão 2: Data de referência "Natal, 17 de setembro de 2026"
-            if re.search(r'\d{1,2}\s+de\s+\w+\s+de\s+\d{4}', texto_seg) and len(texto_seg) < 80:
-                # Verificar se é só a data (não é conteúdo)
-                palavras_significativas = [w for w in texto_seg.split() if w.lower() not in (
-                    'natal', 'de', 'do', 'da', 'em', 'no', 'na', 'e', 'rn', 'rio', 'grande', 'norte',
-                    'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado', 'domingo',
-                    'janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho',
-                    'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
-                ) and not re.match(r'^\d+$', w) and not re.match(r'^\d{1,2}h\d{2}$', w)]
-                if len(palavras_significativas) <= 2:
-                    eh_claquete = True
-                    motivo = "data de referência"
-            
-            if eh_claquete:
-                # Estimar fim: próximo segmento ou +2s
-                fim_claquete = seg["end"]
-                for seg2 in segmentos:
-                    if seg2["start"] > seg["start"] and seg2["start"] < seg["start"] + 5:
-                        fim_claquete = seg2["start"]
-                        break
-                cortes_claquette.append({"inicio": seg["start"], "fim": fim_claquete})
-                print(f"  B{n}: removendo {motivo} [{seg['start']:.2f}s - {fim_claquete:.2f}s]")
-
-        # Aplicar cortes sequencialmente (do fim para o início para manter timestamps)
-        segmento_limpo = segmento
-        for corte in sorted(cortes_repeticao, key=lambda x: x['fim'], reverse=True) + \
-                       sorted(cortes_claquette, key=lambda x: x['fim'], reverse=True):
-            t_inicio_seg = max(0, corte['inicio'] - t_start)
-            t_fim_seg = min(len(segmento)/1000, corte['fim'] - t_start)
-            if t_fim_seg > t_inicio_seg:
-                segmento_limpo = segmento_limpo[:int(t_inicio_seg*1000)] + segmento_limpo[int(t_fim_seg*1000):]
-
-        boletims_cortados[n] = {
-            "audio": segmento_limpo,
-            "inicio_original": t_start,
-            "fim_original": t_fim,
-            "duracao_cortada": len(segmento_limpo)/1000,
-            "repeticoes_removidas": len(cortes_repeticao),
-            "claquetes_removidas": len(cortes_claquette)
-        }
-
+    # Imprimir resumo dos cortes
+    for n, info in boletims_cortados.items():
         rot_n = roteiros.get(n, {}) if roteiros else {}
         titulo_rot = rot_n.get("titulo", "") if isinstance(rot_n, dict) else rot_n
         nome_arquivo = nomear_boletim(data_str, n, titulo_rot, data_completa_str)
-        print(f"  B{n}: [{t_start:.2f}s → {t_fim:.2f}s] = {boletims_cortados[n]['duracao_cortada']:.2f}s → {nome_arquivo}")
+        print(f"  B{n}: [{info['inicio_original']:.2f}s → {info['fim_original']:.2f}s] = {info['duracao_cortada']:.2f}s → {nome_arquivo}")
 
     # ETAPA 6: Montagem com vinhetas
     print("\n── ETAPA 6: MONTAGEM COM VINHETAS ──")

@@ -21,15 +21,14 @@ def detectar_estrutura(segmentos, b_ini, b_fim):
 
     # Regex assinatura: "do/no Tribunal de Justiça do Rio Grande do Norte"
     # Aceita variações: "Tribunal de Justiça, do Rio Grande" (com vírgula)
-    # Regex para assinatura do locutor — pode estar dividida em 2 segmentos
-    # faster-whisper divide "No Tribunal de Justiça do Rio Grande" / "do Norte, Nome"
-    # openai-whisper junta tudo em um segmento só
+    # Aceita variações do modelo small: "Tribunal da Justiça", "e do Norte"
+    # O modelo small pode dividir em vários padrões diferentes - ser flexível
     padrao_ass_parcial = re.compile(
-        r'tribunal\s+de\s+justi[çc]a\s*,?\s*do\s+rio\s+grande\s*$',
+        r'(?:tribunal\s+(?:de|da)\s+)?justi[çc]a\s*,?\s*(?:do\s+)?(?:rio\s+grande\s*(?:e\s+do)?|do)\s*$',
         re.I
     )
     padrao_ass_completo = re.compile(
-        r'tribunal\s+de\s+justi[çc]a\s*,?\s*do\s+rio\s+grande\s+do\s+norte',
+        r'(?:tribunal\s+(?:de|da)\s+)?justi[çc]a\s*,?\s*(?:do\s+)?rio\s+grande\s*(?:e\s+do|do)\s+norte',
         re.I
     )
 
@@ -55,7 +54,7 @@ def detectar_estrutura(segmentos, b_ini, b_fim):
             # Verificar se próximo segmento continua com "do Norte"
             if i + 1 < len(segmentos):
                 texto_seguinte = segmentos[i + 1]["text"].strip()
-                if re.match(r'^do\s+norte', texto_seguinte, re.I):
+                if re.match(r'^(?:e\s+do\s+)?norte', texto_seguinte, re.I):
                     # Assinatura confirmada — timestamp no fim deste segmento
                     assinaturas.append(seg["end"])
                     i += 2
