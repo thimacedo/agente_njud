@@ -22,7 +22,7 @@ except ImportError:
     USE_FASTER = False
 
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
-WHISPER_MODEL = os.environ.get("DIVISOR_WHISPER_MODEL", "base")
+WHISPER_MODEL = os.environ.get("DIVISOR_WHISPER_MODEL", "small")
 
 
 def triagem_audio(audio):

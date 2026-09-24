@@ -275,7 +275,7 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
     precisa_mono = triagem.get("canal_morto") or triagem.get("estereo_duplicado")
 
     # ETAPA 1: Transcrição
-    print("\n── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──")
+    print(f"\n── ETAPA 1: TRANSCRIÇÃO (Whisper {WHISPER_MODEL}) ──")
     with tempfile.NamedTemporaryFile(suffix='.wav', delete=False, dir=str(TMP_DIR)) as tmp:
         tmp_path = tmp.name
     segmentos = transcrever(audio, tmp_path, modelo)
