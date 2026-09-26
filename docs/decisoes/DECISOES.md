@@ -206,8 +206,6 @@ de data/; não regenerar _backup_estado_* sem política de retenção (consolida
 
 **Proibido reverter:** não apagar arquivos do Drive sem mover para `_arquivo_morto`; não alterar pastas mensais fora desse fluxo.
 
-*Fim do registro de decisões.*
-
 ## Item 10. Estrutura modular canônica (2026-08-29)
 
 **Motivo:** A raiz `src/` acumulava 42 scripts com sobreposição de responsabilidades e caminhos hardcoded. Para impedir regressão e facilitar manutenção, o código foi reorganizado em pacotes temáticos.
@@ -475,3 +473,103 @@ Arquivos atualizados: `.env.example` (BASE_DIR), `_legado/src/audit/individual_c
 - Loudnorm I=-16:TP=-1.5:LRA=11 aplicado APÓS montagem.
 - Threshold cobertura 60% com auditoria humana obrigatória.
 - Janela de exclusão de 15s para claquetes na vinheta de abertura.
+
+---
+
+## Item 19. Desambiguação: qual pipeline usar por formato de entrada (2026-09-25)
+
+**Motivo:** Item 9 (padrão, sem roteiro) e Item 18 (arquivo concatenado, com
+roteiro para auditoria) descrevem cenários diferentes que compartilham a
+palavra "boletim". Sem distinção explícita por nome de arquivo, sessões
+futuras confundem os dois e buscam roteiro onde não é necessário.
+
+**Regra de decisão, por nome de arquivo de entrada:**
+1. `BOLETIM_RADIO_TJRN_DD_MM_AAAA_Bx_...mp3` (já individualizado, um arquivo
+   por peça) → pipeline padrão do Item 9. Split por correlação com vinhetas
+   (`audio.py`/`calibracao.py`/`montagem.py`). NÃO buscar roteiro.
+2. Arquivo único com múltiplas claquetes concatenadas (ex: `DD MES Bx-By.mp3`)
+   → `processar_boletim_canonico.py` (Item 18). Split por claquete-regex;
+   roteiro usado só para auditoria de cobertura, não para montagem.
+
+**Proibido reverter:** tratar boletins já individualizados como se precisassem
+de roteiro ou de detecção de claquete.
+
+---
+
+## Item 20. Princípio de generalidade — proibido hardcode específico de instância (2026-09-25)
+
+**Motivo:** Código com valores hardcoded para uma instância específica (nome
+de locutor, data, caminho, contagem fixa) não generaliza para novos boletins
+e exige manutenção reativa a cada caso novo.
+
+**Violação confirmada:** Item 18, Bug C — regex anti-vazamento de assinatura
+`(nardo|leonardo)\s+(almeida|amida|umeda)` está hardcoded ao nome do locutor
+testado (Leonardo Almeida) e suas variações de alucinação do Whisper. Quebra
+para qualquer outro locutor. **Correção pendente** (não aplicada — requer o
+código-fonte de `divisor_boletins`/`processar_boletim_canonico.py` para
+reescrever): substituir a detecção por nome próprio por detecção estrutural
+— posição (últimos N segundos antes do marcador de claquete/encerramento)
+e/ou forma ("Nome Sobrenome" seguido de referência à emissora/TJRN), nunca
+lista de nomes.
+
+**Candidatos a revisar** (não confirmados como violação — requerem o código
+-fonte para verificar): `calcular_duracao_cabeca` usa "8 palavras-chave" e
+threshold 50% (Item 18, item 7) — checar se as palavras são genéricas
+(ex: conectivos estruturais) ou específicas de um roteiro/locutor testado.
+
+**Regra:** todo código de processamento deve operar sobre QUALQUER boletim
+de entrada sem modificação, usando padrões estruturais (posição, marcador,
+forma) em vez de valores específicos de uma instância (nomes próprios, datas
+fixas, caminhos fixos — este último já coberto pelo Item 10).
+
+**Proibido reverter:** adicionar nomes próprios, datas ou identificadores
+específicos de um boletim/locutor/programa em regex, listas ou condicionais
+de código de produção. Se a detecção precisa de um nome, ele deve vir de
+configuração/metadado do próprio arquivo de entrada, nunca de literal no
+código.
+
+---
+
+## Item 21. Pipeline NJUD — reconstrução e documentação (2026-09-26)
+
+**Motivo:** durante verificação do ffprobe e testes do pipeline NJUD,
+o pacote `divisor_boletins` foi encontrado ausente em disco e o script
+`montagem_jornais.py` também estava ausente. Ambos eram necessários
+para o funcionamento do pipeline NJUD (divisão + montagem).
+
+**Decisão:**
+1. Reconstruir `scripts_pipeline/divisor_boletins/` (6 arquivos: `__init__.py`,
+   `__main__.py`, `audio.py`, `deteccao.py`, `calibracao.py`, `log.py`) a partir
+   do legado (`_legado/src/core/audio/`, `_legado/src/core/processamento/`)
+   e da documentação (`ARQUITETURA_REAL.md`, `DECISOES.md`).
+2. Criar `scripts_pipeline/montagem_jornais.py` (15KB) — lê cortes CABEÇA/CORPO
+   já gerados e monta o jornal seguindo a receita imutável do Item 9.
+3. Corrigir `scripts_pipeline/njud/njud_dividir.sh` para chamar
+   `montagem_jornais.py` (restaurar chamada original, que apontava para
+   arquivo inexistente).
+4. Atualizar `docs/AGENTE_NJUD.md` para refletir a realidade atual dos
+   módulos em disco.
+
+**Raiz do bug do `_CORPO.mp3` vazio (671 bytes):**
+`buscar_ancora()` sempre retornava `tempo_ancora_s=0.0`. Fix: regex estrutural
+buscando de trás pra frente na transcrição, retornando `None` se não encontrar.
+`transcrever_audio()` expõe segmentos com timestamps.
+
+**Contradição "eliminado vs em uso" do `divisor_boletins`:**
+DECISOES.md Item 19/20 (2026-09-25) é a fonte de verdade — boletins
+individualizados usam `divisor_boletins`. Alegação do skill de "eliminado
+em 2026-09-18" é sobreposta por decisão mais recente.
+
+**Proibido reverter:** não confundir `scripts_pipeline/montagem_jornais.py`
+(faz montagem a partir de cortes prontos) com
+`scripts_pipeline/njud/montar_jornal.py` (faz transcrição + montagem
+do zero a partir de MP3s brutos). São scripts complementares para
+fluxos diferentes.
+
+**Verificação de disco (regra permanente):** nunca confiar em "CONCLUÍDA"
+impresso pelo script. Sempre `ffprobe` nos arquivos gerados para validar
+que são MP3s válidos com durações reais.
+
+---
+
+*Fim do registro de decisões.*
