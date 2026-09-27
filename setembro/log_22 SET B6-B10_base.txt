@@ -1,0 +1,139 @@
+
+============================================================
+PROCESSAMENTO CANÔNICO: 22 SET B6-B10.mp3
+============================================================
+
+Carregando modelo de transcrição...
+  Usando faster-whisper (int8, CPU)...
+
+── ETAPA 0: TRIAGEM INICIAL DO ÁUDIO ──
+  Duração: 419.66s
+  Canais: 2, Samplerate: 48000Hz
+  Ações de correção: ['CORRIGIR: substituir canal direito pelo esquerdo (multiplicar direito por fator de escala do esquerdo)', 'AVISO: possível clipping (pico próximo de 0dBFS)']
+
+── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──
+
+── ETAPA 1.5: CORREÇÃO DE ALUCINAÇÕES ──
+  Segmentos antes: 39, depois: 36, removidos: 3
+  Transcrito: 36 segmentos
+
+  Transcrição completa:
+    [   1.08s -    5.72s] Molotens 22 de setembro do B6 ao B10, B6.
+    [  11.40s -   17.50s] Perita do ITAP deverá ser integrada até conclusão de revisão administrativa em processo de bem missão.
+    [  18.78s -   26.86s] O tribunal pleno do Tejota-Rina determinou a reintegração de uma servidura ao cargo de perita criminal do Instituto Técnico Scientifico de Perícia,
+    [  26.86s -   40.06s] do Rio Grande do Norte, com o restabilicimento da remuneração e demais vantagem do cargo até a conclusão do processo administrativo instaurado para revisar a penalidade de demissão aplicada pela administração pública.
+    [  40.84s -   52.14s] O colegiado considerou que o próprio Estado reconheceu a necessidade de resaminar o caso ao admitir possíveis inconsistências na apuração e determinar a rebertura da instrução processual.
+    [  52.14s -   68.32s] De acordo com o julgamento, manter a demissão enquanto o próprio Estado revisa a penalidade pode representar medida desse proporcional, especialmente antes do caráter alimentar da remuneração da servidura e da inexistência de prejuízo e irreversível para a administração pública.
+    [  68.98s -   77.32s] A decisão também ressalta a existência de precedente a administrativo envolvendo situação semelhante em que foi aplicada a penalidade menos severa.
+    [  77.32s -   88.42s] Para o colegiado, esse fato reforça a necessidade de revalir a proporcionalidade da punição imposta a servidura, no Tribunal de Justiça do Rio Grande do Norte, Leonardo Meida.
+    [  89.48s -   95.62s] O município de Tagará é condenado por cobrança de imposto em devida em obras de absecimento de água.
+    [  96.64s -  110.76s] A varal única da comarca de Tagará determinou que o município deixe de cobrar ou retê o imposto sobre serviços sobre obras de implantação de sistemas de absecimento de água e outros serviços de saneamento básico.
+    [ 111.64s -  116.52s] A sentença reconheceu que as atividades não estão sujeitas à cobrança de imposto.
+    [ 117.08s -  132.98s] De acordo com os autos, três empresas firmaram o contrato no valor de 448 milhões, 460 mil, 460 mil reais, com companhia de desenvolvimento dos valores do São Francisco e do Parnaíba.
+    [ 132.98s -  137.22s] Para executar as obras de serviços de engenharia da doutora agrespo, igual.
+    [ 137.90s -  151.50s] Na ação, as empresas alegaram que os serviços, que os serviços são relacionados ao saneamento básico e ao agachecimento de água potável e não poderiam ser tributados pelo ISS.
+    [ 152.22s -  159.98s] Segundo as empresas, os itens da legislação que previam a cobrança do imposto sobre serviços de saneamento ambiental e tratamento de água foram vetados.
+    [ 160.24s -  172.24s] Não havendo previsão legal valda para cobrança nessas atividades. Inicialmente a justiça já havia determinado que o município não cobrasse ou reatevasse o imposto relacionado ao contrato.
+    [ 173.38s -  176.24s] O Tribunal de Justiça do Rio Grande do Norte, Leonardo Meida.
+    [ 176.24s -  185.48s] B8. Tejota R&E organiza unidades judiciárias de Natal e Parnamirim para equilibrar distribuição de processos.
+    [ 186.22s -  202.50s] O Tribunal de Justiça do rn publicou no dia 16 de setembro a resolução que reorganiza unidades judiciárias de unidades judiciárias, novo, que reorganiza unidades judiciárias e redefine competências nas comarques de Natal e Parnamirim.
+    [ 211.36s -  222.78s] A reorganização dos juizados especiais civis e da fascina pública, a instalação da quinta-vara civil de Parnamirim e a extinção da central de avaliação e a rematação da capital.
+    [ 222.78s -  233.98s] As alterações estarão em vigor após 45 dias. A reorganização de acordo com a resolução não implicará o aumento de despesas para o poder judiciário.
+    [ 234.46s -  242.48s] As medidas buscam equilibrar os acervos processuais e a carga de trabalho entre as unidades, além de aprimorar a prechação juricional.
+    [ 242.48s -  254.98s] Os procedimentos de redistribuição dos processos e as medidas de transição serão disciplinados em ato conjunto da presidência do TJN e da corrigidoria geral de justiça.
+    [ 255.50s -  258.62s] O do Tribunal de Justiça do Rio Grande do Norte, e lá o Norda Omeida.
+    [ 259.40s -  264.92s] O de nove. Capacitação sobre o uso adequado de IA no poder judiciário é concluída.
+    [ 265.92s -  275.62s] A presença de inteligência artificial no ambiente de trabalho tem crescido de forma exuberante nos últimos anos, ampliando também a necessidade de capacitação para o uso dessas ferramentas.
+    [ 276.02s -  285.74s] Nesse cenário, a escala da magistratura do Rio Grande do Norte é smart, concluiu mais uma capacitação sobre o uso adequado dessas ferramentas dentro do poder judiciário do RN.
+    [ 285.74s -  296.20s] O curso, destinado à formação de oficiais de justiça do Tribunal de Justiça do Rio Grande do Norte, foi realizado entre os dias 15 e 18 de setembro no bloco de aulas da escola.
+    [ 296.82s -  314.10s] A proposta foi capacitar os participantes para o uso prático e responsável da IA na rutina de trabalho, incluindo a extração e a organização de dados de mandados de ESPET, de mandados e certidões, a elaboração de comunicações mais eficazes e a padronização de documentos.
+    [ 314.92s -  330.90s] Entre os pontos abordados estão a proteção de dados, os cuidados relacionados à lei geral de proteção de dados, a LGPD, técnicas de anunimação e construção de comandos eficazes e utilização.
+    [ 332.20s -  345.90s] Do Tribunal de Justiça do Rio Grande do Norte, lá no leonardo Amida, V10, Sejuskinatal homologa a cor do de 465 mil reais entre o estado do RN e a GTI, em favor de trabalhadores.
+    [ 346.98s -  363.74s] Dentro da programação da décima semana nacional de execução trabalhista, o centro judiciário de métodos concessionais de soluções de disputas, o Sejuskinatal homologou a cor do que envolve o estado do Rio Grande do Norte, a empresa GTI comércio e serviços de informática limitada e seus trabalhadores.
+    [ 373.50s -  386.96s] No termo firmado, o estado reconheceu um crédito de aproximadamente 465 mil reais devido à empresa, que autorizou a destinação prioritária de parte dos recursos ao pagamento do pessoal.
+    [ 386.96s -  403.98s] O acordo assegura a quitação dos salários e do vale alimentação de setembro, 124 mil emverbas recisórias, além da regulação do FGTS de multas recisórias e das demais obrigações legais.
+    [ 404.54s -  415.44s] A solução consensual via belizou a quitação dos créditos trabalhistas e o encerramento do contrato administrativo, previnindo o ajoisamento de novas ações judiciais.
+    [ 416.10s -  419.00s] No Tribunal de Justiça, no Rio Grande do Norte, e lá o Narlalmeida.
+
+── ETAPA 2: DETECÇÃO DE ESTRUTURA ──
+  Data detectada: 22 SET → 22_SET_2026
+  Faixa: B6 - B10
+  Buscando roteiros em: setembro
+  Roteiros encontrados: 5 boletins
+  Marcadores B{N}. encontrados: [6, 7, 8, 9, 10]
+  Assinaturas detectadas: 5
+    [84.70s]  — 
+    [173.52s]  — 
+    [255.77s]  — 
+    [289.11s]  — 
+    [332.51s]  — 
+
+── ETAPA 3: DETECÇÃO DE REPETIÇÕES (confirmação por áudio) ──
+  Repetições confirmadas: 0
+  Repetições rejeitadas: 0
+
+── ETAPA 4: DETECÇÃO DE CLAKETES (gatilho por assinatura) ──
+  Assinaturas sem claquete detectada nos próximos 5s: 4
+    [84.70s] 
+    [255.77s] 
+    [289.11s] 
+    [332.51s] 
+  Claquetes detectadas: 1
+    B8: [176.24s - 211.36s]
+
+── ETAPA 4.5: Claquete geral não detectada ──
+
+── ETAPA 5: CORTE + REMOÇÃO ──
+  Convertendo para mono (canal morto: direito)
+  B8: removendo 1 claquete(s)
+  B6: [0.00s → 77.32s] = 77.32s → BOLETIM_RADIO_TJRN_22_SET_2026_B6__REINTEGRA_O_PERITA_ITEP.mp3
+  B7: [89.48s → 173.38s] = 83.90s → BOLETIM_RADIO_TJRN_22_SET_2026_B7__COBRAN_A_INDEVIDA_GUA_TANGAR.mp3
+  B8: [176.24s → 255.50s] = 44.14s → BOLETIM_RADIO_TJRN_22_SET_2026_B8__REORGANIZA_O_UNIDADES_JUDICI_RIAS.mp3
+  B9: [259.40s → 285.74s] = 26.34s → BOLETIM_RADIO_TJRN_22_SET_2026_B9__CAPACITA_O_USO_IA_PODER_JUDICI_RIO.mp3
+  B10: [296.82s → 332.20s] = 35.38s → BOLETIM_RADIO_TJRN_22_SET_2026_B10__TRT_RN_CEJUSC_ACORDO_465_MIL.mp3
+
+── ETAPA 6: MONTAGEM COM VINHETAS ──
+  B6: cabeça do roteiro = 6.0s
+  ✓ B6: montado → BOLETIM_RADIO_TJRN_22_SET_2026_B6__REINTEGRA_O_PERITA_ITEP.mp3 (102.56s)
+  B7: cabeça do roteiro = 6.4s
+  ✓ B7: montado → BOLETIM_RADIO_TJRN_22_SET_2026_B7__COBRAN_A_INDEVIDA_GUA_TANGAR.mp3 (109.14s)
+  B8: cabeça do roteiro = 5.2s
+  ✓ B8: montado → BOLETIM_RADIO_TJRN_22_SET_2026_B8__REORGANIZA_O_UNIDADES_JUDICI_RIAS.mp3 (69.38s)
+  B9: cabeça do roteiro = 5.0s
+  ✓ B9: montado → BOLETIM_RADIO_TJRN_22_SET_2026_B9__CAPACITA_O_USO_IA_PODER_JUDICI_RIO.mp3 (51.59s)
+  B10: cabeça do roteiro = 8.0s
+  ✓ B10: montado → BOLETIM_RADIO_TJRN_22_SET_2026_B10__TRT_RN_CEJUSC_ACORDO_465_MIL.mp3 (60.62s)
+
+── ETAPA 7: AUDITORIA ──
+  ✓ BOLETIM_RADIO_TJRN_22_SET_2026_B6__REINTEGRA_O_PERITA_ITEP.mp3 — 102.56s, 1603.4 KB
+  ✓ BOLETIM_RADIO_TJRN_22_SET_2026_B7__COBRAN_A_INDEVIDA_GUA_TANGAR.mp3 — 109.14s, 1706.1 KB
+  ✓ BOLETIM_RADIO_TJRN_22_SET_2026_B8__REORGANIZA_O_UNIDADES_JUDICI_RIAS.mp3 — 69.39s, 1085.1 KB
+  ✓ BOLETIM_RADIO_TJRN_22_SET_2026_B9__CAPACITA_O_USO_IA_PODER_JUDICI_RIO.mp3 — 51.59s, 806.9 KB
+  ✓ BOLETIM_RADIO_TJRN_22_SET_2026_B10__TRT_RN_CEJUSC_ACORDO_465_MIL.mp3 — 60.62s, 948.2 KB
+
+── ETAPA 7.5: VALIDAÇÃO DE QUALIDADE (transcrição vs roteiro) ──
+  B6: cobertura original = 80.00%
+  B7: cobertura original = 76.74%
+  B8: cobertura original = 48.33%
+  B8: cobertura baixa — aplicando correções de alucinações...
+  B8: cobertura corrigida = 48.33%
+  B9: cobertura original = 90.70%
+  B10: cobertura original = 20.83%
+  B10: cobertura baixa — aplicando correções de alucinações...
+  B10: cobertura corrigida = 20.83%
+
+  Auditoria salva: setembro\22 SET B6-B10_saida\auditoria.json
+
+============================================================
+PROCESSAMENTO COMPLETO: 5 boletins gerados
+Saída: setembro\22 SET B6-B10_saida
+============================================================
+
+⚠️  AUDITORIA HUMANA OBRIGATÓRIA ANTES DE ENTREGAR:
+   1. Ouvir cada boletim gerado
+   2. Verificar: sem repetições, sem claquetes, conteúdo faz sentido
+   3. Cobertura de palavras NÃO substitui audição
+   4. Se reprovações: ajustar pipeline e reprocessar
+============================================================
+
+PROCESSAMENTO COMPLETO: 5 boletins gerados

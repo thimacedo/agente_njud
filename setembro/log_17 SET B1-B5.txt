@@ -1,0 +1,30 @@
+
+============================================================
+PROCESSAMENTO CANÔNICO: 17 SET B1-B5.mp3
+============================================================
+
+Carregando modelo de transcrição...
+  Usando faster-whisper (int8, CPU)...
+
+── ETAPA 0: TRIAGEM INICIAL DO ÁUDIO ──
+  Duração: 439.80s
+  Canais: 2, Samplerate: 48000Hz
+  Ações de correção: ['CORRIGIR: substituir canal direito pelo esquerdo (multiplicar direito por fator de escala do esquerdo)', 'AVISO: possível clipping (pico próximo de 0dBFS)']
+
+── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──
+Traceback (most recent call last):
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\processar_boletim_canonico.py", line 593, in <module>
+    resultado = processar_canonico(args.arquivo, pasta_roteiros)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\processar_boletim_canonico.py", line 281, in processar_canonico
+    segmentos = transcrever(audio, tmp_path, modelo)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\etapas\etapa_transcricao.py", line 33, in transcrever
+    for seg in segments_iter:
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\transcribe.py", line 1213, in generate_segments
+    ) = self.generate_with_fallback(encoder_output, prompt, tokenizer, options)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\transcribe.py", line 1446, in generate_with_fallback
+    result = self.model.generate(
+             ^^^^^^^^^^^^^^^^^^^^
+RuntimeError: mkl_malloc: failed to allocate memory

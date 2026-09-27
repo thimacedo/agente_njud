@@ -1,0 +1,127 @@
+{
+  "arquivo_entrada": "setembro\\15 SET B6-B10.mp3",
+  "data_detectada": "15 SET",
+  "faixa": [
+    6,
+    10
+  ],
+  "duracao_original": 469.056,
+  "triagem": {
+    "duracao_segundos": 469.056,
+    "canais": 2,
+    "frame_rate": 48000,
+    "sample_width": 2,
+    "acoes": [
+      "CONVERTER: áudio estereo duplicado (L==R) → converter para mono",
+      "AVISO: possível clipping (pico próximo de 0dBFS)"
+    ],
+    "estereo_duplicado": true,
+    "clipping_detectado": true
+  },
+  "transcricao": {
+    "segmentos": 96,
+    "texto_completo": "Boletins, 15 de setembro. B6. Justiça determina que Estado e Banca Examinadora reconheçam a especialização e retifique nota de candidata em Acari. A vara única da comarca de Acari reconheceu a validade do certificado de especialização em história e cultura africana e afro-brasileira, apresentado por uma candidata que disputa uma vaga em concurso público promovido pela secretaria estadual de educação, para a fim de avaliação de títulos do concurso público regido por edital. A sentença reconhece como válida a especialização apresentada pela autora com a temática História e Cultura Africana e Afro-brasileira. O magistrado ainda determinou as autoridades res que atribuam a autora do mandado de segurança a pontuação correspondente ao referido título, acrescendo-lhe dois pontos, de modo que sua nota na avaliação de títulos passe de dois para quatro pontos. Por fim, determinou a retificação do resultado da avaliação de títulos e a consequente reclassificação da candidata no certame, observada a nova pontuação. Assim, a Fundação Getúlio Vargas e o Estado do Rio Grande do Norte devem comprovar o que foi determinado judicialmente em um prazo de 30 dias sob pena de pagamento de multa de área arbitrada em 500 reais, limitada a 10 mil reais, que será usada, caso necessário, a aplicação pelo Fundo da Infância e Adolescência do município de Acari em projetos que trazem da valorização da história e cultura africana e afro-brasileira, do Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues, B7. Plano de saúde deverá fornecer medicamento para tratamento de doença inflamatória crônica. A primeira Câmara Civil do Tribunal de Justiça do Rio Grande do Norte manteve decisão da Quarta Varecível da Comarca de Mossoró, que determinou a um plano de saúde o custeio de terapia imunobiológica subcutânea com o fornecimento do medicamento pré-escrito para tratamento de um beneficiário. Ao recorrer da decisão de primeiro grau, a operadora alegou que a negativa de cobertura foi regular e que o quadro clínico apresentado pelo paciente não atendia os critérios previchos nas diretrizes de utilização da agência nacional de saúde suplementar. Os argumentos, entretanto, não foram acolhidos. Para o colegiado, a operadora não pode restringir as alternativas de tratamento indicadas ao paciente quando a cobertura encontra respaldo nas normas aplicáveis a relação entre plano de saúde e consumidor. O relator destacou que os contratos de plano de saúde estão submetidos às normas de proteção ao consumidor e que suas cláusulas devem ser interpretadas de forma a preservar o equilíbrio da relação contratual. Segundo o julgamento, as cláusulas contratuais não podem ser utilizadas para estabelecer limitações consideradas abusivas ao tratamento. Do Tribunal de Justiça do Rio Grande e do Norte, Lívia Rodrigues. B8 Corrida da Advocacia 2025 abre inscrições com provas de 5 e 10 quilômetros. A Corrida da Advocacia 2025 já tem data marcada, 15 de novembro, com largada a partir 10.05 da manhã do Complexo Cultural da Rampa em Natal. Promovida pela OABRN e pela CARNE, a iniciativa reúne a Advocacia e Comunidade em uma programação que contará com percussos de 5 e 10 quilômetros, além da Corrida Kids. No primeiro lote, a inscrição tem o valor promocional de R$ 99 para a Advocacia. Já a inscrição solidária tem o valor de R$ 119 para a Comunidade Geral. E a inscrição inteira é de R$ 238. Há ainda um desconto especial para a jovem Advocacia. Para retirada dos kids do corredor, os participantes devem também doar 2 quilos de alimentos não perecíveis. Com percussos que passam por alguns dos principais cartões postais de Natal, a Corrida promete unir esporte, cultura e valorização da cidade em uma experiência inesquecível. Assim como em 2025, o Museu da Rampa será o ponto de largada e chegada. O trajeto de 5 quilômetros seguirá até as proximidades do Forte dos Resmagos, enquanto o percurso de 10 quilômetros inclui a travessia da ponte Newton-Navarro, com o retorno próximo ao Mercado da Redinha. A prova também irá contar com uma ampla estrutura de apoio com pontos de hidratação, segurança, sinalização e ambulância. Do Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues. B9 TRRN Realiza Atividade de Votação em Escola da Vila de Ponta Negra O Tribunal Regional Eleitoral do Rio Grande do Norte promoveu na... e simulação de votação da Escola Educandário de Luz, localizada na Vila de Ponta Negra, A iniciativa proporcionou aos estudantes o primeiro contato com uma urna eletrônica em uma votação organizada pela própria comunidade escolar. A ação foi conduzida pelas servidoras Paula Carina da Nóbrega e Teresa Pimentel da Câmara, da sessão de gestão de estágio, adicionais e teletrabalho. Também participaram o chefe de gabinete, Solão Almeida e o estagiário de pedagogia, A Escola Judiciária Eleitoral deu suporte à atividade com a disponibilização das urnas eletrônicas utilizadas na votação. A simulação teve como objetivo apresentar aos estudantes, de forma prática, o funcionamento de uma eleição e estimular o conhecimento sobre cidadania, participação e democracia com uma votação que fará diferença real no dia a dia da Escola. Ao todo, cinco chapas concorreram à liderança do projeto, com candidatos à líder e vice-líder. Do Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues. B10. Construtor Assoares faz proposta de R$ 14 milhões para evitar dívidas trabalhistas. A Construtor Assoares... A Construtor Assoares formalizou uma proposta de acordo de R$ 14 milhões para quitar processos entre amitação na justiça do trabalho. O plano prevê a quitação com deságio de 20%, o que garante aos credores optantes o recebimento de 80% do valor devido. Para o cumprimento da primeira etapa, foi autorizada a liberação imediata de R$ 3 milhões, montante formado por depósitos judiciais já vinculados ao caso e repasse financeiros de valores devidos à construtura. Os credores que homologarem a concordância até 17 de setembro terão um repasse judicial prom... terão um repasse judicial programado para o dia seguinte, 18 de setembro, respeitando a ordem de protocolo e dependendo do teto financeiro disponível no lote. As adesões após esse primeiro prazo serão enquadradas em lotes seguintes, financiados por novos repasses mensais, bloqueios judiciais e sobras de processos já habitados. Para preservar a celeridade e evitar a sobrecarga do sistema eletrônico, não serão aceitas adesões protocoladas por meio de petições e avulsas no processo piloto, prevendo-se o des... Prevendo-se o desentranhamento de tais peças sem necessidade de nova ordem judicial. Do Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues."
+  },
+  "estrutura": {
+    "marcadores": {
+      "6": 0.0,
+      "7": 115.94,
+      "8": 190.46,
+      "9": 282.62,
+      "10": 363.28
+    },
+    "assinaturas": [
+      [
+        113.28279069767441,
+        "",
+        ""
+      ],
+      [
+        186.4230303030303,
+        "",
+        ""
+      ],
+      [
+        278.4175,
+        "",
+        ""
+      ],
+      [
+        358.65749999999997,
+        "",
+        ""
+      ],
+      [
+        464.5025,
+        "",
+        ""
+      ]
+    ],
+    "falta": []
+  },
+  "repeticoes": {
+    "confirmadas": [],
+    "rejeitadas": []
+  },
+  "claquetes": {
+    "10": {
+      "inicio": 363.28,
+      "fim": 365.22,
+      "numero": 10
+    }
+  },
+  "boletims_gerados": [
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_15_SET_2026_B6__TJRN_BANCA_EXAMINADORA_NOTA_CANDIDATA.mp3",
+      "duracao_segundos": 135.26,
+      "tamanho_bytes": 2165229,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.9,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_15_SET_2026_B7__TJRN_PLANO_SA_DE_FORNECER_MEDICAMENTO.mp3",
+      "duracao_segundos": 95.5,
+      "tamanho_bytes": 1528941,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.75,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_15_SET_2026_B8__OAB_RN_CORRIDA_ADVOCACIA.mp3",
+      "duracao_segundos": 112.96,
+      "tamanho_bytes": 1808109,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.694,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_15_SET_2026_B9__TRT_RN_MUTIR_O_APRENDIZAGEM.mp3",
+      "duracao_segundos": 101.0,
+      "tamanho_bytes": 1616877,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.357,
+        "cobertura_roteiro_corrigida": 0.357,
+        "correcoes_aplicadas": true,
+        "texto_corrigido": "No ar, notícias da hora, o boletim informativo do Tribunal de Justiça do Rio Grande do Norte. B9, TRRN Realiza atividade de votação em Escola da Vila de Ponta Negra. O Tribunal Regional Eleitoral do Rio Grande do Norte... promoveu uma ação de treinamento e simulação de votação da Escola Educandária de Luz, localizada na Vila de Ponta Negra, em Natal. A iniciativa proporcionou aos estudantes o primeiro contato com uma urna eletrônica em uma votação organizada pela própria comunidade escolar. A aç",
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_15_SET_2026_B10__TRT_RN_CONSTRUTORA_PROPOSTA_D_VIDAS.mp3",
+      "duracao_segundos": 122.38,
+      "tamanho_bytes": 1959021,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.868,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    }
+  ]
+}

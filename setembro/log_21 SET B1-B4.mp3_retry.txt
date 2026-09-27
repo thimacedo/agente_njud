@@ -1,0 +1,171 @@
+
+============================================================
+PROCESSAMENTO CANÔNICO: 21 SET B1-B4.mp3
+============================================================
+
+Carregando modelo de transcrição...
+  Usando faster-whisper (int8, CPU)...
+
+── ETAPA 0: TRIAGEM INICIAL DO ÁUDIO ──
+  Duração: 509.45s
+  Canais: 2, Samplerate: 48000Hz
+  Ações de correção: ['CONVERTER: áudio estereo duplicado (L==R) → converter para mono', 'AVISO: possível clipping (pico próximo de 0dBFS)']
+
+── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──
+
+── ETAPA 1.5: CORREÇÃO DE ALUCINAÇÕES ──
+  Segmentos antes: 96, depois: 73, removidos: 23
+  Transcrito: 73 segmentos
+
+  Transcrição completa:
+    [   0.00s -    2.34s] Boletins, 21 de setembro.
+    [   2.82s -    3.26s] B1.
+    [   4.38s -    9.66s] Fona José Tenerante, com miteis de escutem desafios e soluções para a judicialização da saúde
+    [  11.12s -   15.16s] Os principais desafios da judicialização da saúde pública e suplementar no Rio Grande
+    [  15.16s -   20.50s] do Norte foram debatidos na última quarta-feira de 16 de setembro no Tejota rn, por
+    [  20.50s -   26.08s] integrantes do comitei executivo nacional, do comitei estadual e representantes de instituições
+    [  26.08s -   28.24s] do Sistema de Justiça e de Saúde.
+    [  28.24s -   34.58s] Filas para cirurgias e consultas especializadas, regulação, atendimento do domiciliar.
+    [  43.06s -   48.88s] acesso a leito de UTI e fornecimento de medicamentos estiveram entre os temas da reunião realizada
+    [  54.06s -   59.56s] Realizada no primeiro dia do Fona José Tenerante, o Fórum Nacional do Judiciário para a Saúde
+    [  62.14s -   73.34s] Com diferentes atribuições, reuniram-se com diferentes atribuições, reuniram-se para confrontar
+    [  73.34s -   78.96s] dados da judicialização com a realidade do atendimento à população, com o objetivo de identificar
+    [  78.96s -   84.22s] gargá-los, conhecer experiências desenvolvidas no estado e discutir soluções e fluxos
+    [  89.20s -   95.02s] No Rio Grande do Norte, de acordo com a Conselheira, os dados processuais disponíveis no CNJ indicam
+    [  95.02s -  100.24s] inicialmente maior ênfase na judicialização da Saúde pública, embora as demandas relacionadas
+    [ 100.24s -  104.20s] a saúde suplementar também estejam crescendo de forma consistente.
+    [ 104.20s -  110.32s] Na área pública, chama a atenção principalmente processos relacionados ao acesso a cirurgias
+    [ 110.32s -  115.84s] e consultas especializadas, enquanto a menor presença relativa de demandas por medicamentos.
+    [ 116.46s -  121.24s] No Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues, B2.
+    [ 122.54s -  126.70s] Clímic é condenada, pois intercorrencia em tratamento autontológico.
+    [ 127.36s -  133.02s] O décimo segundo juizado especial cível da comarca de Natal, condenou uma clímic autontológica
+    [ 133.02s -  138.68s] ao pagamento de indenização por danos morais, no valor de R$ 4.000, para um então paciente,
+    [ 139.08s -  144.22s] bem como o custeio de exâmbro de tomografia computadorizada de feixe icônico ou outro exâmbio
+    [ 144.22s -  150.54s] equivalente indicado por profissional habilitado, e também consulta especializada para redefinição
+    [ 152.68s -  158.54s] E também consulta especializada para a definição de conduta e eventual procedimento necessário
+    [ 158.54s -  163.86s] para a remoção do fragmento ou conclusão do tratamento do elemento dentário afetado.
+    [ 167.50s -  171.92s] As condenações se referem a uma intercorrencia ocorrida durante a realização de um canal.
+    [ 172.48s -  178.26s] Segundo os altos, a própria REC conhece documentalmente que durante o tratamento, realizado
+    [ 178.26s -  185.24s] em 14 de outubro de 2025, ocorreu fratura de lima dentária, registrado em prontoário
+    [ 185.24s -  190.48s] que a paciente foi orientada, medicada, recebeu radiografia e foi instruída a buscar
+    [ 190.48s -  195.86s] atendimento em centro especializado, posteriormente houve reposição de curativo e troca de
+    [ 197.20s -  201.70s] Ainda de acordo com o caderno processual, a empresa reconheceu que a intercorrencia ocorreu
+    [ 201.70s -  206.20s] durante o procedimento realizado em suas dependências e sob responsabilidade de profissional
+    [ 206.20s -  207.70s] vinculada ao estabelecimento.
+    [ 207.70s -  214.90s] O Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues, B3, Tejota Rieni mantém
+    [ 214.90s -  216.34s] condenação de padr...
+    [ 218.48s -  221.02s] Tejota Rieni mantém condenação de padr...
+    [ 245.88s -  258.64s] Tejota Rieni mantém condenação de padrasto por estupro de vulnerável e ajuda.
+    [ 315.14s -  319.52s] contra os provos do crime e acolheu apenas um ponto relacionado ao cálculo da pena,
+    [ 319.88s -  326.58s] que passou de 19 anos, 10 meses e 15 dias, para 18 anos, 3 meses e 18 dias de reclusão
+    [ 326.58s -  328.34s] em regime inicial fechado.
+    [ 329.44s -  334.02s] Entre os argumentos apresentados pela defesa, estava o fato de o exame de condução carnal
+    [ 334.02s -  336.34s] não ter apresentado o resultado conclusivo.
+    [ 336.94s -  341.98s] Para o Tribunal, entretanto, essa circunstância não afasta a ocorrência do crime quando a
+    [ 342.20s -  347.44s] denação está sustentada por outros elementos de prova, no caso, o colegiado considerou
+    [ 349.32s -  354.60s] No caso, o colegiado considerou que o relato da vítima foi firme e coerente e encontrou
+    [ 354.60s -  357.44s] o respaldo em outras provas produzidas durante o processo.
+    [ 358.20s -  363.14s] No Tribunal de Justiça do Rio Grande do Norte, Olivia Rodrigues, B4.
+    [ 363.96s -  368.84s] Influenciador será endeneizado em R$ 2.000 por danos morais após ter conta desativada
+    [ 368.84s -  370.64s] indevidamente em rede social.
+    [ 371.68s -  376.76s] O desmo primeiro-juizado especial civil da comarca de natal, condenou uma plataforma digital
+    [ 376.76s -  381.42s] por desativar de forma indevida o perfil de um influenciador em uma rede social.
+    [ 382.00s -  387.30s] Ao analisar o caso, o juiz Eduardo Pinheio concluiu que a empresa não demonstrou quais conteúdos
+    [ 387.30s -  391.36s] ou condutos atribuídas ao autor teriam violadas políticas de uso da plataforma.
+    [ 392.24s -  397.62s] Com isso, o magistrado determinou a reativação da conta no prazo de 5 dias úteis, além do
+    [ 397.62s -  400.00s] pagamento de R$ 2.000 por danos morais.
+    [ 400.64s -  405.30s] Segundo o narrado, o autor é criador de conteúdo digital e desenvolve a vários anos
+    [ 405.30s -  410.02s] trabalho profissional por meio da plataforma, utilizando o perfil no qual publica vídeo
+    [ 410.02s -  415.36s] de humor inspirados em situações cotidianas, vivenciadas com familiares e amigos, sempre
+    [ 415.36s -  419.26s] com linguagem leve descontraida e voltada ao entretenimento do público.
+    [ 420.70s -  425.20s] Sustentou que ao longo de sua trajetória na internet, o autor consolidou-se como figura
+    [ 425.20s -  430.08s] amplamente conhecida nas redes sociais, conquistando expressiva audiência e elevado
+    [ 430.08s -  435.56s] o grau de engajamento, e que na data da suspensão indevida de sua conta, o perfil contava
+    [ 435.56s -  442.00s] com aproximadamente 267.000 seguidores, além de mais de 427 publicações.
+    [ 443.26s -  449.16s] Entretanto, em maio de 2026, o autor foi abruptamente surpreendido com a suspensão integral de
+    [ 453.42s -  458.44s] Sobe a legação genérica de que grande parte da atividade da sua conta não segue os
+    [ 458.44s -  463.62s] padrões da comunidade, sem que fosse apontado qualquer conteúdo específico supostamente
+    [ 463.62s -  469.86s] irregular, tão pouco indicada qual conduta concreta teria ocasionado à penalidade.
+    [ 470.46s -  476.66s] Após a suspensão apresentou o recurso administrativo por meio da ferramenta disponibilizada pela própria
+    [ 477.34s -  493.86s] O Tribunal de Justiça do Rio Grande do Norte, Lívia Rodríguez, B5, definidas penalidades
+    [ 493.86s -  496.52s] para autores de furtos em farmácias em Natal.
+    [ 497.64s -  502.70s] A Quarta-Vara criminal da Comarca de Natal, após denúncia do Ministério Público, estabeleceu
+    [ 502.70s -  506.90s] a penalidade aplicada para quatro pessoas que realizaram em datas diferentes.
+
+── ETAPA 2: DETECÇÃO DE ESTRUTURA ──
+  Data detectada: 21 SET → 21_SET_2026
+  Faixa: B1 - B4
+  Buscando roteiros em: setembro
+  Roteiros encontrados: 4 boletins
+  Marcadores B{N}. encontrados: [1, 2, 3, 4]
+  Assinaturas detectadas: 4
+    [116.74s]  — 
+    [207.95s]  — 
+    [358.49s]  — 
+    [477.90s]  — 
+
+── ETAPA 3: DETECÇÃO DE REPETIÇÕES (confirmação por áudio) ──
+  Repetições confirmadas: 0
+  Repetições rejeitadas: 0
+
+── ETAPA 4: DETECÇÃO DE CLAKETES (gatilho por assinatura) ──
+  Assinaturas sem claquete detectada nos próximos 5s: 4
+    [116.74s] 
+    [207.95s] 
+    [358.49s] 
+    [477.90s] 
+  Claquetes detectadas: 0
+
+── ETAPA 4.5: Claquete geral não detectada ──
+
+── ETAPA 5: CORTE + REMOÇÃO ──
+  Convertendo para mono (canal morto: None)
+  B1: removendo claquete individual [2.82s - 4.38s]
+  B1: [0.00s → 116.46s] = 114.90s → BOLETIM_RADIO_TJRN_21_SET_2026_B1__FONAJUS_ITINERANTE_JUDICIALIZA_O_SA_DE.mp3
+  B2: [122.54s → 207.70s] = 85.16s → BOLETIM_RADIO_TJRN_21_SET_2026_B2__CONDENA_O_TRATAMENTO_ODONTOL_GICO.mp3
+  B3: [214.90s → 358.20s] = 143.30s → BOLETIM_RADIO_TJRN_21_SET_2026_B3__CONDENA_O_ESTUPRO_VULNER_VEL.mp3
+  B4: [363.96s → 477.34s] = 113.38s → BOLETIM_RADIO_TJRN_21_SET_2026_B4__INFLUENCIADOR_INDENIZADO_REDES_SOCIAIS.mp3
+
+── ETAPA 6: MONTAGEM COM VINHETAS ──
+  B1: cabeça do roteiro = 5.6s
+  ✓ B1: montado → BOLETIM_RADIO_TJRN_21_SET_2026_B1__FONAJUS_ITINERANTE_JUDICIALIZA_O_SA_DE.mp3 (140.14s)
+  B2: cabeça do roteiro = 5.0s
+  ✓ B2: montado → BOLETIM_RADIO_TJRN_21_SET_2026_B2__CONDENA_O_TRATAMENTO_ODONTOL_GICO.mp3 (110.40s)
+  B3: cabeça do roteiro = 5.6s
+  ✓ B3: montado → BOLETIM_RADIO_TJRN_21_SET_2026_B3__CONDENA_O_ESTUPRO_VULNER_VEL.mp3 (168.54s)
+  B4: cabeça do roteiro = 7.2s
+  ✓ B4: montado → BOLETIM_RADIO_TJRN_21_SET_2026_B4__INFLUENCIADOR_INDENIZADO_REDES_SOCIAIS.mp3 (138.62s)
+
+── ETAPA 7: AUDITORIA ──
+  ✓ BOLETIM_RADIO_TJRN_21_SET_2026_B1__FONAJUS_ITINERANTE_JUDICIALIZA_O_SA_DE.mp3 — 140.14s, 2190.6 KB
+  ✓ BOLETIM_RADIO_TJRN_21_SET_2026_B2__CONDENA_O_TRATAMENTO_ODONTOL_GICO.mp3 — 110.40s, 1726.0 KB
+  ✓ BOLETIM_RADIO_TJRN_21_SET_2026_B3__CONDENA_O_ESTUPRO_VULNER_VEL.mp3 — 168.54s, 2634.2 KB
+  ✓ BOLETIM_RADIO_TJRN_21_SET_2026_B4__INFLUENCIADOR_INDENIZADO_REDES_SOCIAIS.mp3 — 138.62s, 2167.0 KB
+
+── ETAPA 7.5: VALIDAÇÃO DE QUALIDADE (transcrição vs roteiro) ──
+  B1: cobertura original = 53.09%
+  B1: cobertura baixa — aplicando correções de alucinações...
+  B1: cobertura corrigida = 53.09%
+  B2: cobertura original = 40.68%
+  B2: cobertura baixa — aplicando correções de alucinações...
+  B2: cobertura corrigida = 40.68%
+  B3: cobertura original = 68.85%
+  B4: cobertura original = 30.77%
+  B4: cobertura baixa — aplicando correções de alucinações...
+  B4: cobertura corrigida = 30.77%
+
+  Auditoria salva: setembro\21 SET B1-B4_saida\auditoria.json
+
+============================================================
+PROCESSAMENTO COMPLETO: 4 boletins gerados
+Saída: setembro\21 SET B1-B4_saida
+============================================================
+
+⚠️  AUDITORIA HUMANA OBRIGATÓRIA ANTES DE ENTREGAR:
+   1. Ouvir cada boletim gerado
+   2. Verificar: sem repetições, sem claquetes, conteúdo faz sentido
+   3. Cobertura de palavras NÃO substitui audição
+   4. Se reprovações: ajustar pipeline e reprocessar
+============================================================
+
+PROCESSAMENTO COMPLETO: 4 boletins gerados

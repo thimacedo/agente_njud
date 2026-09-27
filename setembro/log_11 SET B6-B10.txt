@@ -1,0 +1,244 @@
+
+============================================================
+PROCESSAMENTO CANÔNICO: 11 SET B6-B10.mp3
+============================================================
+
+Carregando modelo de transcrição...
+  Usando faster-whisper (int8, CPU)...
+
+── ETAPA 0: TRIAGEM INICIAL DO ÁUDIO ──
+  Duração: 474.05s
+  Canais: 2, Samplerate: 48000Hz
+  Ações de correção: ['CONVERTER: áudio estereo duplicado (L==R) → converter para mono', 'AVISO: possível clipping (pico próximo de 0dBFS)']
+
+── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──
+
+── ETAPA 1.5: CORREÇÃO DE ALUCINAÇÕES ──
+  Segmentos antes: 164, depois: 136, removidos: 28
+  Transcrito: 136 segmentos
+
+  Transcrição completa:
+    [   0.00s -    2.38s] Leitins 11 de setembro, B6.
+    [   3.28s -    6.58s] Universidade Acondenada pode reduzir bolsa de 70%
+    [   6.58s -    9.50s] prometida a estudante e aumentar valor das mensalidades.
+    [  10.42s -   13.84s] Um instituição de ensino superior deve restabelecer as condições
+    [  13.84s -   15.96s] originalmente afertadas a um estudante,
+    [  16.34s -   19.36s] após alterar o percentual de bolsa concedido e aumentar o valor
+    [  19.36s -   20.98s] das mensalidades durante o curso.
+    [  23.20s -   26.60s] A sentença também determinou o pagamento de R$2.000 por danos morais
+    [  26.60s -   29.52s] e a restituição em dobro dos valores cobrados indevidamente.
+    [  30.36s -   33.20s] De acordo com os altos, o estudante realizou a matrícula
+    [  33.20s -   37.10s] no curso de direito, após receber proposta comercial de...
+    [  47.44s -   50.46s] de direito, após receber proposta comercial da instituição
+    [  50.46s -   52.28s] por meio de aplicativo de mensagens.
+    [  52.74s -   56.02s] Conforme relatado, a oferta previa bolsa de 70%
+    [  63.30s -   68.80s] a ausência de reajustes anuais e mensalidade fixa no valor de R$4.38.
+    [  73.96s -   78.60s] E mensalidade fixa no valor de R$4.33 durante todo o curso,
+    [  78.86s -   82.62s] incluindo o programa financeiro de diluição das três primeiras mensalidades.
+    [  83.20s -   87.24s] No entanto, a partir de R$2.023, a instituição passou
+    [  87.24s -   89.36s] a aumentar progressivamente as mensalidades,
+    [  89.94s -   91.76s] alegando que teria ocorrido um erro interno,
+    [  92.10s -   96.40s] além de reduzir o percentual da bolsa de 70% para 65%.
+    [  96.40s -  100.08s] O estudante declarou que buscou resolver a situação administrativamente,
+    [ 100.60s -  103.66s] mas não obter viésito e precisou pagar valores superiores
+    [ 103.66s -  106.64s] aos inicialmente afartados para não interromper o curso.
+    [ 107.36s -  110.82s] Do Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues.
+    [ 119.42s -  120.10s] B7.
+    [ 121.78s -  125.10s] Loga e financeira são condenadas após negativar cliente
+    [ 125.10s -  126.52s] que teve nome usado em fraude.
+    [ 127.80s -  131.04s] O juizado especial civil criminal da comarca de açúcar
+    [ 131.04s -  134.74s] condenou uma loja de departamentos e uma empresa de fundo de investimentos
+    [ 134.74s -  138.66s] ao pagamento de indenização por danos morais no valor de R$5.000
+    [ 138.66s -  143.38s] pela inscrição e devida da autora na ação nos cadágio de restrição ao crédito.
+    [ 144.60s -  147.92s] Segundo os altos, a consumidor identificou em sua conta bancária
+    [ 147.92s -  151.66s] boletos referentes à uma compra de uma televisão que a firma não ter realizado
+    [ 151.66s -  155.38s] na unidade da loja de Parna-Mirin em 30 de dezembro de 2025
+    [ 155.96s -  158.96s] no valor de R$6.477.
+    [ 159.54s -  162.38s] Conforme a sentença, competem as empresas reais,
+    [ 162.58s -  164.60s] comprovarem a regularidade da contratação,
+    [ 164.80s -  166.68s] ou no juiz do qual não se desculpa.
+    [ 169.62s -  170.92s] Para uma contratação.
+    [ 174.28s -  177.24s] A consumidor afirma que jamais esteve na cidade indicada
+    [ 177.24s -  179.72s] e registrou boletim de ocorrência relatão do fraude.
+    [ 180.32s -  182.38s] Do Tribunal de Justiça do Rio Grande do Norte,
+    [ 186.70s -  188.68s] Sistema nacional de adoção e acolhimento
+    [ 188.68s -  191.38s] é tema de curso para mais gestrados e servidores.
+    [ 195.70s -  199.36s] contribui diretamente para dar mais agilidade aos processos
+    [ 199.36s -  202.92s] e fortalecer a proteção de direito de crianças e adolescentes.
+    [ 203.30s -  205.48s] Confoca o no aperfeiçoamento dessa toação,
+    [ 205.82s -  208.00s] a Escola da Magistratura do Rio Grande do Norte
+    [ 208.00s -  209.90s] está com inscrições abertas para o curso,
+    [ 210.36s -  212.60s] sistema nacional de adoção e acolhimento,
+    [ 213.24s -  216.12s] funcionalidades básicas e garantia de direitos de crianças
+    [ 217.54s -  219.90s] A formação é destinada a magistrados e servidores
+    [ 219.90s -  221.96s] do poder judiciário do Rio Grande do Norte.
+    [ 225.04s -  228.76s] As inscrições podem ser realizadas até o dia 27 de setembro,
+    [ 228.76s -  231.88s] por meio do ambiente virtual de aprendizagem da esmarra.
+    [ 232.24s -  234.84s] Ao todo, estão disponíveis 40 vagas
+    [ 234.84s -  236.86s] e a relação das inscrições homologadas
+    [ 236.86s -  239.22s] será divulgada no dia 28 de setembro.
+    [ 239.82s -  241.62s] Com o cargo horário de 20 horas aula,
+    [ 241.98s -  243.76s] o curso será realizado remotamente
+    [ 243.76s -  245.70s] pela plataforma Microsoft e Teams,
+    [ 246.22s -  248.20s] entre os dias 5 e 8 de outubro.
+    [ 248.84s -  251.40s] A programação abordará as principais funcionalidades
+    [ 251.40s -  253.76s] do sistema, incluindo a gestão...
+    [ 260.82s -  262.64s] do sistema nacional de adoção,
+    [ 263.02s -  266.06s] incluindo a gestão dos perfis de crianças e adolescentes.
+    [ 266.34s -  268.40s] O cadastro e acompanhamento de pretendentes
+    [ 268.40s -  271.34s] da adoção, as ferramentas de busca e compat...
+    [ 276.44s -  278.24s] As ferramentas de busca e compatibilidade,
+    [ 279.42s -  281.78s] a produção de documentos técnicos e jurídicos
+    [ 281.78s -  285.32s] e o uso de relatórios e estatísticas para a gestão estratégica.
+    [ 285.32s -  287.78s] Do Tribunal de Justiça do Rio Grande do Norte,
+    [ 289.78s -  290.36s] B9.
+    [ 291.76s -  293.96s] É empragado de condomínio que teve empréstimos
+    [ 293.96s -  295.70s] feitos em seu nome por chefe,
+    [ 297.48s -  299.88s] A das materceira vara do trabalho de natal
+    [ 299.88s -  301.56s] com o denom condomínio residencial
+    [ 301.56s -  304.82s] apagar 20.786 reais de indenização
+    [ 304.82s -  308.26s] por danos materiais e 10.000 reais por danos borais,
+    [ 308.68s -  311.26s] há um auxiliar de serviços gerais sem manalfabeto,
+    [ 311.42s -  314.24s] que teve empréstimos bancários contraídos em seu nome
+    [ 314.24s -  316.90s] pelo então gerenta de ministrativo do empreendimento.
+    [ 317.62s -  319.24s] Admetido em abril de 2025,
+    [ 319.54s -  322.26s] o trabalhador relatou que, por não saber ler nem escrever,
+    [ 322.78s -  324.64s] entregava o cartão bancário ao gerente
+    [ 324.64s -  326.14s] para que ele sacasse o salário.
+    [ 326.72s -  329.24s] De acordo com ele, o superior valeu-se do cargo de confiança,
+    [ 330.12s -  331.80s] da pósse do cartão e da senha,
+    [ 332.06s -  334.60s] para contrair empréstimos em nome do empregado.
+    [ 335.06s -  338.40s] Por isso, perio a devolução em dobro dos valores dos impréstimos,
+    [ 338.78s -  340.48s] além de indenização por danos morais
+    [ 340.48s -  341.82s] por omissão no empregador.
+    [ 343.64s -  347.02s] Além de indenização por danos morais por omissão do empregador,
+    [ 348.12s -  349.60s] O condomínio defendeu-se firme.
+    [ 351.18s -  354.12s] O condomínio defendeu-se afirmando que a conduta do ex-gerente
+    [ 354.12s -  356.98s] configura críme de estelionato estritamente pessoal
+    [ 356.98s -  360.34s] sem qualquer vínculo com os fins institucionais do empreendimento
+    [ 360.34s -  363.70s] e que a responsabilidade pelo golpe não poderia ser transferida
+    [ 365.12s -  367.90s] Para o juiz, a prova produzida revelou uma dinâmica
+    [ 367.90s -  370.74s] que conecta o contrato de trabalho ao evento danoso,
+    [ 370.74s -  373.70s] o magistrado observou que o condomínio paga salários
+    [ 373.70s -  376.34s] exigindo dos empregados à abertura de conta corrente
+    [ 376.34s -  378.78s] e que essa exigência, embora lícita,
+    [ 379.16s -  382.54s] introduziu um fator de grave risco para quem não domina leitura
+    [ 382.54s -  383.24s] e é escrita.
+    [ 383.78s -  385.80s] Do Tribunal de Justiça do Rio Grande do Norte,
+    [ 388.26s -  388.80s] B10.
+    [ 389.84s -  393.30s] MPRN deflagra a operação para combater tráfico de drogas
+    [ 393.30s -  396.16s] e organização criminosa em Bahia, Formosa.
+    [ 396.84s -  399.24s] O ministério Público do Rio Grande do Norte deflagrou
+    [ 399.24s -  401.42s] na última quinta-feira, 10 de julho.
+    [ 407.86s -  409.74s] na esta quinta-feira, 10 de setembro,
+    [ 409.88s -  411.00s] a operação setos.
+    [ 411.50s -  413.62s] A ação é desobramento das operações,
+    [ 413.80s -  415.72s] Levietan, Kraken e Idra.
+    [ 416.26s -  418.86s] Todas deflagradas anteriormente pelo MPRN
+    [ 418.86s -  421.78s] e visa desarticular uma associação criminosa
+    [ 421.78s -  424.32s] voltada ao tráfico de drogas que opera ativamente
+    [ 424.32s -  426.20s] no município de Bahia, Formosa.
+    [ 426.20s -  429.64s] Realizada com o apoio do grupo de atuação especial
+    [ 429.64s -  432.46s] de combate ao crime organizado e da Polícia Militar,
+    [ 433.10s -  435.66s] a operação setos cumpria três mandados de prisão
+    [ 435.66s -  437.48s] e outro doito de busca e a preenção
+    [ 437.48s -  440.48s] contra diversos alvos espalhados por Bahia Formosa.
+    [ 441.98s -  444.14s] Participaram dois promotores de justiça,
+    [ 444.42s -  448.40s] 14 servidores do MPRN e 39 policiais militares.
+    [ 449.08s -  451.90s] Durante a ação foram aprendidos uma arma,
+    [ 451.90s -  455.54s] muneção, drogas, dinheiro e aparelhos de telefonia celular.
+    [ 456.62s -  459.00s] Os investigados em um material elícito aprendido
+    [ 459.00s -  461.48s] foram encaminhados às delegacia de polícia civil
+    [ 461.48s -  462.86s] para as providências cabíveis.
+    [ 463.60s -  466.38s] O MPRN ainda aporo cometimento de outros crimes
+    [ 466.38s -  468.20s] e o envolvimento de outras pessoas
+    [ 468.20s -  469.98s] com um núcleo criminoso investigado.
+    [ 470.48s -  472.50s] Do Tribunal de Justiça do Rio Grande do Norte,
+
+── ETAPA 2: DETECÇÃO DE ESTRUTURA ──
+  Data detectada: 11 SET → 11_SET_2026
+  Faixa: B6 - B10
+  Buscando roteiros em: setembro
+  Roteiros encontrados: 5 boletins
+  Marcadores B{N}. encontrados: [6, 7, 8, 9, 10]
+  Assinaturas detectadas: 5
+    [107.58s]  — 
+    [180.50s]  — 
+    [285.53s]  — 
+    [383.95s]  — 
+    [470.65s]  — 
+
+── ETAPA 3: DETECÇÃO DE REPETIÇÕES (confirmação por áudio) ──
+  Repetições confirmadas: 0
+  Repetições rejeitadas: 0
+
+── ETAPA 4: DETECÇÃO DE CLAKETES (gatilho por assinatura) ──
+  Assinaturas sem claquete detectada nos próximos 5s: 3
+    [107.58s] 
+    [180.50s] 
+    [470.65s] 
+  Claquetes detectadas: 2
+    B9: [289.78s - 291.76s]
+    B10: [388.26s - 389.84s]
+
+── ETAPA 4.5: Claquete geral não detectada ──
+
+── ETAPA 5: CORTE + REMOÇÃO ──
+  Convertendo para mono (canal morto: None)
+  B7: removendo claquete individual [119.42s - 121.78s]
+  B9: removendo 1 claquete(s)
+  B9: removendo claquete individual [289.78s - 291.76s]
+  B10: removendo 1 claquete(s)
+  B10: removendo claquete individual [388.26s - 389.84s]
+  B6: [0.00s → 107.36s] = 107.36s → BOLETIM_RADIO_TJRN_11_SET_2026_B6__TJRN_UNIVERSIDADE_CONDENADA_REDUZIR_BOLSA.mp3
+  B7: [119.42s → 180.32s] = 58.54s → BOLETIM_RADIO_TJRN_11_SET_2026_B7__TJRN_LOJA_E_FINACEIRAS_CONDENADAS.mp3
+  B8: [186.70s → 285.32s] = 98.62s → BOLETIM_RADIO_TJRN_11_SET_2026_B8__ESMARN_SISTEMA_ADO_O_E_ACOLHIMENTO.mp3
+  B9: [289.78s → 383.78s] = 90.04s → BOLETIM_RADIO_TJRN_11_SET_2026_B9__TRT_RN_EMPREGADO_CONDOM_NIO_EMPR_STIMOS.mp3
+  B10: [388.26s → 470.48s] = 79.06s → BOLETIM_RADIO_TJRN_11_SET_2026_B10__MPRN_OPERA_O_BA_A_FORMOSA.mp3
+
+── ETAPA 6: MONTAGEM COM VINHETAS ──
+  [DEBUG] cabeça termina em 188.9s (2/16 palavras encontradas)
+  B6: cabeça do roteiro = 188.9s
+  ✓ B6: montado → BOLETIM_RADIO_TJRN_11_SET_2026_B6__TJRN_UNIVERSIDADE_CONDENADA_REDUZIR_BOLSA.mp3 (132.60s)
+  [DEBUG] cabeça termina em 132.0s (2/14 palavras encontradas)
+  B7: cabeça do roteiro = 132.0s
+  ✓ B7: montado → BOLETIM_RADIO_TJRN_11_SET_2026_B7__TJRN_LOJA_E_FINACEIRAS_CONDENADAS.mp3 (83.78s)
+  [DEBUG] cabeça termina em 219.9s (14/14 palavras encontradas)
+  B8: cabeça do roteiro = 219.9s
+  ✓ B8: montado → BOLETIM_RADIO_TJRN_11_SET_2026_B8__ESMARN_SISTEMA_ADO_O_E_ACOLHIMENTO.mp3 (123.86s)
+  [DEBUG] cabeça termina em 353.0s (4/14 palavras encontradas)
+  B9: cabeça do roteiro = 353.0s
+  ✓ B9: montado → BOLETIM_RADIO_TJRN_11_SET_2026_B9__TRT_RN_EMPREGADO_CONDOM_NIO_EMPR_STIMOS.mp3 (115.28s)
+  [DEBUG] cabeça termina em 395.2s (12/14 palavras encontradas)
+  B10: cabeça do roteiro = 395.2s
+  ✓ B10: montado → BOLETIM_RADIO_TJRN_11_SET_2026_B10__MPRN_OPERA_O_BA_A_FORMOSA.mp3 (104.30s)
+
+── ETAPA 7: AUDITORIA ──
+  ✓ BOLETIM_RADIO_TJRN_11_SET_2026_B6__TJRN_UNIVERSIDADE_CONDENADA_REDUZIR_BOLSA.mp3 — 132.60s, 2072.9 KB
+  ✓ BOLETIM_RADIO_TJRN_11_SET_2026_B7__TJRN_LOJA_E_FINACEIRAS_CONDENADAS.mp3 — 83.78s, 1310.1 KB
+  ✓ BOLETIM_RADIO_TJRN_11_SET_2026_B8__ESMARN_SISTEMA_ADO_O_E_ACOLHIMENTO.mp3 — 123.86s, 1936.4 KB
+  ✓ BOLETIM_RADIO_TJRN_11_SET_2026_B9__TRT_RN_EMPREGADO_CONDOM_NIO_EMPR_STIMOS.mp3 — 115.28s, 1802.1 KB
+  ✓ BOLETIM_RADIO_TJRN_11_SET_2026_B10__MPRN_OPERA_O_BA_A_FORMOSA.mp3 — 104.31s, 1630.7 KB
+
+── ETAPA 7.5: VALIDAÇÃO DE QUALIDADE (transcrição vs roteiro) ──
+  B6: cobertura original = 95.45%
+  B7: cobertura original = 82.05%
+  B8: cobertura original = 89.13%
+  B9: cobertura original = 87.80%
+  B10: cobertura original = 84.44%
+
+  Auditoria salva: setembro\11 SET B6-B10_saida\auditoria.json
+
+============================================================
+PROCESSAMENTO COMPLETO: 5 boletins gerados
+Saída: setembro\11 SET B6-B10_saida
+============================================================
+
+⚠️  AUDITORIA HUMANA OBRIGATÓRIA ANTES DE ENTREGAR:
+   1. Ouvir cada boletim gerado
+   2. Verificar: sem repetições, sem claquetes, conteúdo faz sentido
+   3. Cobertura de palavras NÃO substitui audição
+   4. Se reprovações: ajustar pipeline e reprocessar
+============================================================
+
+PROCESSAMENTO COMPLETO: 5 boletins gerados

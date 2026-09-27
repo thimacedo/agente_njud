@@ -1,0 +1,221 @@
+
+============================================================
+PROCESSAMENTO CANÔNICO: 21 SET B5-B10.mp3
+============================================================
+
+Carregando modelo de transcrição...
+  Usando faster-whisper (int8, CPU)...
+
+── ETAPA 0: TRIAGEM INICIAL DO ÁUDIO ──
+  Duração: 604.34s
+  Canais: 2, Samplerate: 48000Hz
+  Ações de correção: ['CONVERTER: áudio estereo duplicado (L==R) → converter para mono', 'AVISO: possível clipping (pico próximo de 0dBFS)']
+
+── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──
+
+── ETAPA 1.5: CORREÇÃO DE ALUCINAÇÕES ──
+  Segmentos antes: 99, depois: 95, removidos: 4
+  Transcrito: 95 segmentos
+
+  Transcrição completa:
+    [   0.00s -    8.56s] OI, OI, Boletins 21 de setembro, B5, definidas penalidades para autores de furtos em farmácias
+    [   8.56s -   13.58s] em Natal. A Quarta-Vara criminal da Comarca de Natal, após denúncia do Ministério
+    [  13.58s -   18.48s] Público, estabeleceu a penalidade aplicada para quatro pessoas que realizaram em data
+    [  18.48s -   23.82s] diferentes furtos qualificados em mais de uma unidade de um arrede de farmácias localizadas
+    [  23.82s -   29.50s] em Natal. As penas aplicadas para os quatro reos foi de pouco mais de dois anos de reclusão
+    [  29.50s -   34.14s] além de dias multa com valor fixado para o dia multa em 50 reais.
+    [  35.60s -   40.92s] Segundo os altos, os denunciados agindo em comunhão de ações e unidades de designos
+    [  40.92s -   46.06s] subtrairam conforme a auto de exibição e a preenção vários produtos e cosméticos
+    [  46.06s -   52.50s] avaliados em aproximadamente 10.400 reais. A sentença aplicou medidas restritíveis de direito,
+    [  52.92s -   56.38s] bem como a reparação do dano mataria ao sofrido pelos estabelecimentos.
+    [  57.22s -   62.22s] Conforme o processo, policiais lotados na cidade de Santa Maria foram acionados através
+    [  62.22s -   66.40s] do grupo de ocorrências da companhia e receberam a informação de que um grupo de
+    [  66.40s -   71.44s] indivíduos havia praticado furtos em Natal e que estavam se deslocando em direção àquela
+    [  71.44s -   76.96s] região. Desorte que na póssa das informações do veículo conduzido pelo grupo, conseguiram
+    [  76.96s -   82.10s] localizar e realizaram a abordagem dos denunciados os quais foram conduzidos a da legacia.
+    [  82.10s -   87.96s] Do Tribunal de Justiça do Rio Grande do Norte, Lívia Rodríguez, B.C.
+    [  88.88s -   94.44s] Tejota I.N. recebe Conselheira do CNJ para discutir judicialização da saúde no Rio Grande
+    [  94.44s -   99.30s] do Norte. O presidente do Tribunal de Justiça do Rio Grande do Norte, desembargador e
+    [  99.30s -  105.26s] banês-monteiro, recebeu na manhã da última quinta-feira, 17 de setembro, a Conselheira do Conselho
+    [ 105.26s -  110.58s] Nacional de Justiça da I.Nogueira de Lira para uma reunião institucional dentro da programação
+    [ 116.90s -  122.32s] o juiz Demétrio Demeval, coordenador do comitê estadual de demandas de saúde do Rio Grande do Norte,
+    [ 122.86s -  128.30s] representantes dos Conselhos Nacional de Justiça, da Justiça Federal, defensoria pública da
+    [ 128.30s -  135.18s] união e procuradoria geral da Bahia. Na reunião foi informado que o número de processos judiciais
+    [ 135.18s -  143.86s] relacionados a saúde no Tejota R.N. aumentou mais de 20% comparado a 2025 e 2025. Esse
+    [ 143.86s -  149.08s] crescimento exige atenção, especialmente em relação à atuação dos núcleos de apoio técnico
+    [ 149.08s -  154.86s] e judiciário. Ainda conforme destacado, a maior parte das demandas estão ligadas a saúde
+    [ 154.86s -  161.66s] pública que registra quase 10 mil processos. Já a saúde suplementar tem representado um desafio
+    [ 161.66s -  167.76s] com o aumento da judicialização em diversos estados anos. O desembargador e banez
+    [ 167.76s -  171.92s] monteiro destacou que é necessário fortalecer o diálogo entre as diferentes...
+    [ 171.92s -  177.98s] Revete. O desembargador e banez monteiro destacou que é necessário fortalecer o diálogo entre os
+    [ 177.98s -  184.46s] diferentes atores envolvidos na judicialização da saúde em todo o Brasil. Segundo o presidente do Tejota
+    [ 184.46s -  191.20s] R.N. grande parte das ações judiciais envolvem cirurgias de urgência e fornecimento de medicamentos para
+    [ 191.20s -  198.88s] o tratamento de doenças, do Tribunal de Justiça do Rio Grande do Norte, livre a Rodrigues. B7.
+    [ 200.08s -  206.90s] Tejota R.N. apresenta ações de justiça restaurativa a supervisora nacional do C.N. de Jota. A
+    [ 206.90s -  212.06s] equipe de justiça restaurativa do Tribunal de Justiça do Rio Grande do Norte recebeu na manhã da
+    [ 212.06s -  217.82s] última quinta-feira de sete de setembro, em Natal, a visita da Conselheira do Conselho Nacional de
+    [ 217.82s -  224.44s] Justiça da Iane Nogueira de Lira, coordenadora do comiteja estoura da justiça restaurativa. Durante o
+    [ 224.44s -  231.16s] encontro, foram apresentadas iniciativas desenvolvidas pelo Tribunal na área, além da resolução do Tej...
+    [ 238.76s -  244.14s] além da resolução do Tejota R.N. que regulamenta a implementação de um centro judiciário de
+    [ 244.14s -  248.44s] solução de conflitos e cidadania, especializado em justiça restaurativa.
+    [ 249.74s -  255.64s] Foram apresentados projetos na área da violência doméstica e sistema carcerário com ações como grupos
+    [ 255.64s -  261.32s] reflexivos para homens agressores e mulheres vítimas de violência e desdobramentos da aplicação da
+    [ 261.32s -  267.02s] justiça restaurativa, como o projeto vencedor do Prêmio Inovari, escritores do cárcer, que foi
+    [ 267.02s -  272.76s] apresentado pelo mais justrado do Tejota R.N. Fabio A.I. de aos presentes. O desembargador
+    [ 272.76s -  277.88s] Glaube Rego, coordenador do núcleo de métodos consensuais e centros de soluções de conflitos,
+    [ 278.16s -  283.74s] ao qual está vinculada a coordenação de justiça restaurativa, destacou a importância de apresentar
+    [ 283.74s -  290.66s] as iniciativas desenvolvidas pelo Tribunal. O juiz Gustavo Marinho, coordenador de justiça restaurativa
+    [ 290.66s -  296.86s] no R.N. destacou que a equipe atua mais de cinco anos, com foco prioritário na formação de
+    [ 296.86s -  304.18s] facilitadores. Entre 2025 e 2025, em parceria com a escola da magistratura do Rio Grande do Norte,
+    [ 304.64s -  310.16s] foram realizados mais de 20 cursos de formação. De acordo com o magistrado após a captação,
+    [ 310.54s -  316.92s] os profissionais passam a atuar como multiplicadores da política. Do Tribunal de Justiça do Rio Grande do Norte,
+    [ 317.62s -  326.76s] Lívia Rodríguez. B8. Tejota R.N. regulamento para o
+    [ 327.46s -  332.32s] Tribunal de Justiça do Rio Grande do Norte regulamentou o procedimento da atrar a identificação
+    [ 332.32s -  337.92s] complementar a autodecleração de candidatos negros que participarão do sexto exame nacional da
+    [ 337.92s -  344.04s] magistratura. Devem solicitar a validação da autodecleração os candidatos que se declararam pretos
+    [ 344.04s -  351.32s] ou pardos no momento da inscrição no enan e são domiciliados no Rio Grande do Norte. O pedido deve ser
+    [ 351.44s -  358.00s] feito entre os dias 17 e 28 de setembro a partir do fomulario eletrônico disponibilizado no portal
+    [ 358.00s -  365.72s] do Tejota R.N. na área com cursos e processos eletivos no campo destinado ao inam. Para realizar a
+    [ 365.72s -  371.26s] solicitação, candidata deverá preencher os dados pessoais e enviar em formato PDF o fomular
+    [ 371.26s -  378.00s] de autodecleração assinado, um documento oficial com foto, uma fotografia colorida, recente e mítida,
+    [ 378.00s -  384.00s] e um comprovante de residência. A foto deve ter sido emitida a no máximo um ano e seguir as
+    [ 384.00s -  390.36s] orientações estabelecidas pela portaria, como boa iluminação, cabelo solto, ausência de assessórios e
+    [ 390.36s -  395.42s] enquadramento do rosto até os hombros. Na primeira parte do procedimento de análise, a
+    [ 395.42s -  401.38s] comissão de atrar a identificação fará análise das fotografias enviadas pelos candidatos. Os candidatos
+    [ 407.90s -  413.14s] não tiverem a autodecleração confirmada nesta fase serão convocados para a segunda etapa,
+    [ 413.40s -  418.98s] que será realizada presencialmente em Natal. A Itapa presencial está prevista para 16 de outubro em
+    [ 418.98s -  424.48s] local e horário a serem divulgados pelo do J.R.M. A análise será feita por uma banca formada por
+    [ 424.48s -  428.40s] integrantes da comissão de atrar a identificação do poder de o desciário do Rio Grande do Norte.
+    [ 428.92s -  434.08s] O procedimento será filmado e a gravação poderia ser utilizada na análise de eventuais recursos.
+    [ 434.08s -  440.20s] O Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues, B9.
+    [ 450.04s -  457.06s] de concorso não pode impedir pósse de candidato. Decisão do Tribunal Pleno do Tejatarriém voltou a
+    [ 457.06s -  462.72s] destacar que candidatos aprovados em concorso público não podem serem pedidos de tomar pósse apenas por
+    [ 462.72s -  467.96s] possuir informação superior à exigida no edital, desde que a qualificação apresentada seja
+    [ 467.96s -  472.72s] compatível com as atribuções do cargo e os demais requisitos do certão sejam atendidos.
+    [ 473.32s -  478.38s] Conforme o julgamento, as reglas do edital devem ser interpretadas de forma razoável,
+    [ 478.78s -  484.46s] evitando formalismos excessivos que não comprometam a finalidade do concorso. A decisão envolve o
+    [ 484.46s -  489.90s] concorso para o cargo de técnico de laboratório da secretaria de estado da saúde pública. A candidata
+    [ 489.90s -  495.02s] aprovada apresentou diploma de graduação em área relacionadas a atribuções do cargo, embora o
+    [ 495.02s -  501.20s] edital exigisse curso técnico em análises clínicas. De antes da negativa de pósse, ela recorreu a justiça
+    [ 501.20s -  506.14s] alegando que sua formação em globa e supera os conhecimentos técnicos necessários para o exercício
+    [ 506.14s -  511.36s] da função. Segundo a decisão, o entendimento está alinhado a jurisprudência do superior tribunado
+    [ 511.36s -  516.16s] justiça, que já afimou a tese de que candidatos com o diploma de nível superior na mesma área
+    [ 516.16s -  520.96s] profissional, podem assumir cargos cujo requisito à deformação técnica ou em sino médio
+    [ 520.96s -  526.04s] profissionalizante. Do tribunal de justiça do Rio Grande do Norte, Lívia Rodrigues.
+    [ 531.64s -  538.42s] B10. Acusado de atirar contra PMs irá a júri popular. A Câmara criminal do Tegiotarriê
+    [ 538.42s -  544.28s] enimanteve a decisão que levou um homem a julgamento pelo tribunal do júri acusado de tentativa de homicídio
+    [ 544.28s -  550.82s] qualificado contra policiais militares. Segundo a denúncia, ele teria afetuado disparos contra uma
+    [ 550.82s -  557.82s] viatura durante uma abordagem policial. O colegiado rejeitou o argumento da defesa de que houve irregularidade
+    [ 557.82s -  563.08s] no reconhecimento do acusado ao entender que os policiais já o conheciam de ocorrências
+    [ 563.08s -  570.08s] anteriores na comunidade onde os fatos aconteceram. Conforme a decisão, além do reconhecimento realizado
+    [ 570.08s -  576.38s] pelos agentes, os altos reúnen outros elementos que reforçam a acusação. Como lábos periciais,
+    [ 576.70s -  582.74s] fotografias da viatura atingida, boletinde ao corrente e depoimentos dos policiais que integrava
+    [ 582.74s -  589.56s] uma aguardição. Segundo o julgamento, embora o acusado negue participação no caso e atribuos
+    [ 589.56s -  595.92s] disparos a um terceiro já falecido, essa versão entra em confronto com os demais elementos reunidos
+    [ 595.92s -  602.26s] durante a instrução processual do Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues.
+
+── ETAPA 2: DETECÇÃO DE ESTRUTURA ──
+  Data detectada: 21 SET → 21_SET_2026
+  Faixa: B5 - B10
+  Buscando roteiros em: setembro
+  Roteiros encontrados: 6 boletins
+  Marcadores B{N}. encontrados: [5, 6, 7, 8, 9, 10]
+  Assinaturas detectadas: 9
+    [82.44s]  — 
+    [95.97s]  — 
+    [193.54s]  — 
+    [208.76s]  — 
+    [314.49s]  — 
+    [327.51s]  — 
+    [434.35s]  — 
+    [522.41s]  — 
+    [598.26s]  — 
+
+── ETAPA 3: DETECÇÃO DE REPETIÇÕES (confirmação por áudio) ──
+  Repetições confirmadas: 0
+  Repetições rejeitadas: 0
+
+── ETAPA 4: DETECÇÃO DE CLAKETES (gatilho por assinatura) ──
+  Assinaturas sem claquete detectada nos próximos 5s: 8
+    [82.44s] 
+    [95.97s] 
+    [193.54s] 
+    [208.76s] 
+    [327.51s] 
+    [434.35s] 
+    [522.41s] 
+    [598.26s] 
+  Claquetes detectadas: 1
+    B8: [317.62s - 332.32s]
+
+── ETAPA 4.5: CLAQUETE GERAL DETECTADA ──
+  Claquete geral: [0.00s - 4.88s]
+  Será removida do B1
+
+── ETAPA 5: CORTE + REMOÇÃO ──
+  Convertendo para mono (canal morto: None)
+  B5: removendo claquete geral [0.00s - 4.88s]
+  B5: [0.00s → 82.10s] = 77.22s → BOLETIM_RADIO_TJRN_21_SET_2026_B5__PENALIDADES_FURTOS_FARM_CIAS.mp3
+  B6: [88.88s → 94.44s] = 5.56s → BOLETIM_RADIO_TJRN_21_SET_2026_B6__VISITA_CONSELHEIRA_CNJ.mp3
+  B7: [99.30s → 191.20s] = 91.90s → BOLETIM_RADIO_TJRN_21_SET_2026_B7__APRESENTA_O_JUSTI_A_RESTAURATIVA.mp3
+  B8: [200.08s → 206.90s] = 6.82s → BOLETIM_RADIO_TJRN_21_SET_2026_B8__HETEROIDENTIFICA_O_ENAM.mp3
+  B9: [212.06s → 310.54s] = 98.48s → BOLETIM_RADIO_TJRN_21_SET_2026_B9__POSSE_CONCURSO.mp3
+  B10: [317.62s → 327.46s] = 9.84s → BOLETIM_RADIO_TJRN_21_SET_2026_B10__J_RI_POPULAR_ATIRADOR_PM.mp3
+
+── ETAPA 6: MONTAGEM COM VINHETAS ──
+  B5: cabeça do roteiro = 5.0s
+  ✓ B5: montado → BOLETIM_RADIO_TJRN_21_SET_2026_B5__PENALIDADES_FURTOS_FARM_CIAS.mp3 (102.46s)
+  B6: cabeça do roteiro = 6.0s
+  ✓ B6: montado → BOLETIM_RADIO_TJRN_21_SET_2026_B6__VISITA_CONSELHEIRA_CNJ.mp3 (30.80s)
+  B7: cabeça do roteiro = 5.0s
+  ✓ B7: montado → BOLETIM_RADIO_TJRN_21_SET_2026_B7__APRESENTA_O_JUSTI_A_RESTAURATIVA.mp3 (117.14s)
+  B8: cabeça do roteiro = 5.0s
+  ✓ B8: montado → BOLETIM_RADIO_TJRN_21_SET_2026_B8__HETEROIDENTIFICA_O_ENAM.mp3 (32.06s)
+  B9: cabeça do roteiro = 5.6s
+  ✓ B9: montado → BOLETIM_RADIO_TJRN_21_SET_2026_B9__POSSE_CONCURSO.mp3 (123.72s)
+  B10: cabeça do roteiro = 5.0s
+  ✓ B10: montado → BOLETIM_RADIO_TJRN_21_SET_2026_B10__J_RI_POPULAR_ATIRADOR_PM.mp3 (35.08s)
+
+── ETAPA 7: AUDITORIA ──
+  ✓ BOLETIM_RADIO_TJRN_21_SET_2026_B5__PENALIDADES_FURTOS_FARM_CIAS.mp3 — 102.46s, 1601.9 KB
+  ✓ BOLETIM_RADIO_TJRN_21_SET_2026_B6__VISITA_CONSELHEIRA_CNJ.mp3 — 30.80s, 482.1 KB
+  ✓ BOLETIM_RADIO_TJRN_21_SET_2026_B7__APRESENTA_O_JUSTI_A_RESTAURATIVA.mp3 — 117.14s, 1831.4 KB
+  ✓ BOLETIM_RADIO_TJRN_21_SET_2026_B8__HETEROIDENTIFICA_O_ENAM.mp3 — 32.06s, 502.0 KB
+  ✓ BOLETIM_RADIO_TJRN_21_SET_2026_B9__POSSE_CONCURSO.mp3 — 123.72s, 1934.1 KB
+  ✓ BOLETIM_RADIO_TJRN_21_SET_2026_B10__J_RI_POPULAR_ATIRADOR_PM.mp3 — 35.08s, 548.9 KB
+
+── ETAPA 7.5: VALIDAÇÃO DE QUALIDADE (transcrição vs roteiro) ──
+  B5: cobertura original = 44.23%
+  B5: cobertura baixa — aplicando correções de alucinações...
+  B5: cobertura corrigida = 44.23%
+  B6: cobertura original = 23.64%
+  B6: cobertura baixa — aplicando correções de alucinações...
+  B6: cobertura corrigida = 23.64%
+  B7: cobertura original = 42.59%
+  B7: cobertura baixa — aplicando correções de alucinações...
+  B7: cobertura corrigida = 42.59%
+  B8: cobertura original = 47.83%
+  B8: cobertura baixa — aplicando correções de alucinações...
+  B8: cobertura corrigida = 47.83%
+  B9: cobertura original = 20.69%
+  B9: cobertura baixa — aplicando correções de alucinações...
+  B9: cobertura corrigida = 20.69%
+  B10: cobertura original = 12.50%
+  B10: cobertura baixa — aplicando correções de alucinações...
+  B10: cobertura corrigida = 12.50%
+
+  Auditoria salva: setembro\21 SET B5-B10_saida\auditoria.json
+
+============================================================
+PROCESSAMENTO COMPLETO: 6 boletins gerados
+Saída: setembro\21 SET B5-B10_saida
+============================================================
+
+⚠️  AUDITORIA HUMANA OBRIGATÓRIA ANTES DE ENTREGAR:
+   1. Ouvir cada boletim gerado
+   2. Verificar: sem repetições, sem claquetes, conteúdo faz sentido
+   3. Cobertura de palavras NÃO substitui audição
+   4. Se reprovações: ajustar pipeline e reprocessar
+============================================================
+
+PROCESSAMENTO COMPLETO: 6 boletins gerados

@@ -1,0 +1,21 @@
+
+============================================================
+PROCESSAMENTO CANÔNICO: 22 SET B6-B10.mp3
+============================================================
+
+Carregando modelo de transcrição...
+  Usando faster-whisper (int8, CPU)...
+Traceback (most recent call last):
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\processar_boletim_canonico.py", line 593, in <module>
+    resultado = processar_canonico(args.arquivo, pasta_roteiros)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\processar_boletim_canonico.py", line 261, in processar_canonico
+    modelo = carregar_modelo()
+             ^^^^^^^^^^^^^^^^^
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\etapas\etapa_triagem.py", line 80, in carregar_modelo
+    return WhisperModel(WHISPER_MODEL, device="cpu", compute_type="int8")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\.venv_pipeline\Lib\site-packages\faster_whisper\transcribe.py", line 689, in __init__
+    self.model = ctranslate2.models.Whisper(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: mkl_malloc: failed to allocate memory

@@ -1,0 +1,115 @@
+{
+  "arquivo_entrada": "setembro\\21 SET B1-B4.mp3",
+  "data_detectada": "21 SET",
+  "faixa": [
+    1,
+    4
+  ],
+  "duracao_original": 509.448,
+  "triagem": {
+    "duracao_segundos": 509.448,
+    "canais": 2,
+    "frame_rate": 48000,
+    "sample_width": 2,
+    "acoes": [
+      "CONVERTER: áudio estereo duplicado (L==R) → converter para mono",
+      "AVISO: possível clipping (pico próximo de 0dBFS)"
+    ],
+    "estereo_duplicado": true,
+    "clipping_detectado": true
+  },
+  "transcricao": {
+    "segmentos": 78,
+    "texto_completo": "Boletins, 21 de setembro. B1. Fona José Tenerante, com miteis de escutem desafios e soluções para a judicialização da saúde Os principais desafios da judicialização da saúde pública e suplementar no Rio Grande do Norte foram debatidos na última quarta-feira de 16 de setembro no Tejota rn, por integrantes do comitei executivo nacional, do comitei estadual e representantes de instituições do Sistema de Justiça e de Saúde. Filas para cirurgias e consultas especializadas, regulação, atendimento do domiciliar. acesso a leito de UTI e fornecimento de medicamentos estiveram entre os temas da reunião realizada Realizada no primeiro dia do Fona José Tenerante, o Fórum Nacional do Judiciário para a Saúde Com diferentes atribuições, reuniram-se com diferentes atribuições, reuniram-se para confrontar dados da judicialização com a realidade do atendimento à população, com o objetivo de identificar gargá-los, conhecer experiências desenvolvidas no estado e discutir soluções e fluxos No Rio Grande do Norte, de acordo com a Conselheira, os dados processuais disponíveis no CNJ indicam inicialmente maior ênfase na judicialização da Saúde pública, embora as demandas relacionadas a saúde suplementar também estejam crescendo de forma consistente. Na área pública, chama a atenção principalmente processos relacionados ao acesso a cirurgias e consultas especializadas, enquanto a menor presença relativa de demandas por medicamentos. No Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues, B2. Clímic é condenada, pois intercorrencia em tratamento autontológico. O décimo segundo juizado especial cível da comarca de Natal, condenou uma clímic autontológica ao pagamento de indenização por danos morais, no valor de R$ 4.000, para um então paciente, bem como o custeio de exâmbro de tomografia computadorizada de feixe icônico ou outro exâmbio equivalente indicado por profissional habilitado, e também consulta especializada para redefinição E também consulta especializada para a definição de conduta e eventual procedimento necessário para a remoção do fragmento ou conclusão do tratamento do elemento dentário afetado. As condenações se referem a uma intercorrencia ocorrida durante a realização de um canal. Segundo os altos, a própria REC conhece documentalmente que durante o tratamento, realizado em 14 de outubro de 2025, ocorreu fratura de lima dentária, registrado em prontoário que a paciente foi orientada, medicada, recebeu radiografia e foi instruída a buscar atendimento em centro especializado, posteriormente houve reposição de curativo e troca de Ainda de acordo com o caderno processual, a empresa reconheceu que a intercorrencia ocorreu durante o procedimento realizado em suas dependências e sob responsabilidade de profissional vinculada ao estabelecimento. O Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues, B3, Tejota Rieni mantém condenação de padr... Tejota Rieni mantém condenação de padr... Tejota Rieni mantém condenação de padrasto por estupro de vulnerável e ajuda. A condenação de um homem por estupro de vulnerável praticado contra a inteada foi pelo Tribunal Plendo do Tejota Rieni. Aujugaram a revisão criminal apos... Aujugaram a revisão criminal apresentada pela defesa o colegiar do rejeitô, os relacionamentos contra os provos do crime e acolheu apenas um ponto relacionado ao cálculo da pena, que passou de 19 anos, 10 meses e 15 dias, para 18 anos, 3 meses e 18 dias de reclusão em regime inicial fechado. Entre os argumentos apresentados pela defesa, estava o fato de o exame de condução carnal não ter apresentado o resultado conclusivo. Para o tribunal, entretanto, essa circunstancia não afasta a ocorrência do crime, quando a condenação está sustentada por outros elementos de prova, no caso, o colegiado considerou No caso, o colegiado considerou que o relato da vítima foi firme e coerente e encontrou o respaldo em outras provas produzidas durante o processo. No Tribunal de justiça do Rio Grande do Norte, Eleiver Rodrigues. B4. Influenciador será endeneizado em R$ 2.000 por danos morais após ter conta desativada indevidamente em reles social. O décimo primeiro juizado especial civil da comarca de natal, condenou uma plataforma digital por desativar de forma indevida o perfil de um influenciador em uma rede social. Ao analisar o caso, o juiz Eduardo Pinheiro concluiu que a empresa não demonstrou quais conteúdos ou condutos atribuídas ao autor teriam violadas políticas de uso da plataforma. Com isso, o magistrado determinou a reativação da conta no prazo de cinco dias úteis, além do pagamento de R$ 2.000 por danos morais. Segundo o narrado, o autor criador de conteúdo digital e desenvolve a vários anos trabalho profissional por meio da plataforma, utilizando o perfil no qual publica vídeo de humor inspirados em situações cotidianas, vivenciadas com familiares e amigos, sempre com linguagem leve, descontraída e voltada ao entretenimento do público. Sustentou que ao longo do estúdio trajetória na internet, o autor consolidou-se como figura amplamente conhecida nas redes sociais, conquistando expressiva audiência e elevado o grau de engajamento, e que na data da suspensão em devida de sua conta, o perfil contava com aproximadamente 267.000 seguidores, além de mais de 427 publicações. Entretanto em maio de 2016, o autor foi abruptamente surpreendido com a suspensão integral de sua conta Sobe a legação genérica de que grande parte da atividade da sua conta não segue os padrões da comunidade, sem que fosse apontado qualquer conteúdo específico, supostamente irregular, tão pouco indicada qual conduta concreta teria ocasionado à penalidade. Após a suspensão apresentou o recurso administrativo por meio da ferramenta disponibilizada pela própria O Tribunal de Justiça do Rio Grande do Norte, livre Rodríguez, B5, definidas penalidades para autores de furtos em farmácias em Natal. A Quarta-Vara criminal da comarca de Natal, após denúncia do Ministério Público, estabeleceu a penalidade aplicada para quatro pessoas que realizaram indatas diferentes."
+  },
+  "estrutura": {
+    "marcadores": {
+      "1": 0.0,
+      "2": 122.54,
+      "3": 214.9,
+      "4": 362.48
+    },
+    "assinaturas": [
+      [
+        116.74117647058823,
+        "",
+        ""
+      ],
+      [
+        207.94827586206895,
+        "",
+        ""
+      ],
+      [
+        358.4133333333333,
+        "",
+        ""
+      ],
+      [
+        477.9161797752809,
+        "",
+        ""
+      ]
+    ],
+    "falta": []
+  },
+  "repeticoes": {
+    "confirmadas": [],
+    "rejeitadas": []
+  },
+  "claquetes": {
+    "4": {
+      "inicio": 362.48,
+      "fim": 364.0,
+      "numero": 4
+    }
+  },
+  "boletims_gerados": [
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_21_SET_2026_B1__FONAJUS_ITINERANTE_JUDICIALIZA_O_SA_DE.mp3",
+      "duracao_segundos": 140.14,
+      "tamanho_bytes": 2243181,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.531,
+        "cobertura_roteiro_corrigida": 0.531,
+        "correcoes_aplicadas": true,
+        "texto_corrigido": "No ar, notícias da hora, o boletinho informativo do Tribunal de Justiça é do Rio Grande do Norte. Boletins 21 de setembro. Muita jogada é, por emcaigrante do comiteio executivo nacional, do comiteio estadual e representantes de instituições de sistema de justiça inicial. Filas pareceram guias e consultas especiales à razaça, regulação atendimental na ciléria. em acessão a lei, de deterir, informe esse membro de americanos, estilharam entre os temas da caminhão, realizada no primeiro dia do fone ",
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_21_SET_2026_B2__CONDENA_O_TRATAMENTO_ODONTOL_GICO.mp3",
+      "duracao_segundos": 110.4,
+      "tamanho_bytes": 1767405,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.407,
+        "cobertura_roteiro_corrigida": 0.407,
+        "correcoes_aplicadas": true,
+        "texto_corrigido": "No ar, notícias da hora, o voletinho informativo do Tribunal de Justiça do Rio Grande do Norte. Clímica é condenada, pois intercorrencia em tratamento autontológico. Esteia de exames de tão parafim, tanto para a visada de fiche único ou outra exemplo de talento imicálico profissional habilitado e também consulta especializada para a redefinição de saúde. E também consulta especializada para a definição de conduta e afinal procedimento necessário para a remoção do freinem ou conclusão do tratamen",
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_21_SET_2026_B3__CONDENA_O_ESTUPRO_VULNER_VEL.mp3",
+      "duracao_segundos": 168.54,
+      "tamanho_bytes": 2697453,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.689,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_21_SET_2026_B4__INFLUENCIADOR_INDENIZADO_REDES_SOCIAIS.mp3",
+      "duracao_segundos": 137.09,
+      "tamanho_bytes": 2194029,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.308,
+        "cobertura_roteiro_corrigida": 0.308,
+        "correcoes_aplicadas": true,
+        "texto_corrigido": "No ar, notícias da hora, o voletinho informativo do Tribunal de justiça do Rio Grande do Norte. De R$ 2.000 por danos morais após ter conta desativada indevidamente em Reino Social. O décimo primeiro... Entretanto, em 1906, o autor foi abruptamente surpreendendo com a sua intervenção em Reino Social. Sobe a legação genérica de vida indevidamente. Sobe a legação genérica de grande parte da identidade da sua canta não segue esportando de a comunidade. Sim, o que fosse encontrado qualquer conteúdo ",
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    }
+  ]
+}

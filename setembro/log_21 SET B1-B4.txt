@@ -1,0 +1,177 @@
+
+============================================================
+PROCESSAMENTO CANÔNICO: 21 SET B1-B4.mp3
+============================================================
+
+Carregando modelo de transcrição...
+  Usando faster-whisper (int8, CPU)...
+
+── ETAPA 0: TRIAGEM INICIAL DO ÁUDIO ──
+  Duração: 509.45s
+  Canais: 2, Samplerate: 48000Hz
+  Ações de correção: ['CONVERTER: áudio estereo duplicado (L==R) → converter para mono', 'AVISO: possível clipping (pico próximo de 0dBFS)']
+
+── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──
+
+── ETAPA 1.5: CORREÇÃO DE ALUCINAÇÕES ──
+  Segmentos antes: 82, depois: 68, removidos: 14
+  Transcrito: 68 segmentos
+
+  Transcrição completa:
+    [   0.00s -    2.34s] Boleitins 21 de setembro.
+    [   2.80s -    3.28s] B1.
+    [   4.38s -    9.66s] Fona José Tenerante, comiteis de escutem desafios e soluções para a judicialização da saúde
+    [  11.12s -   15.16s] Os principais desafios da judicialização da saúde pública e suplementar no Rio Grande
+    [  15.16s -   20.50s] do Norte foram debatidos na última quarta-feira de 16 de setembro no Tejota rn, por
+    [  20.50s -   26.06s] integrantes do comitei executivo nacional, do comitei estadual e representantes de instituições
+    [  26.06s -   28.22s] do sistema de justiça e de saúde.
+    [  37.02s -   43.26s] Filas para cirurgias e consultas especializadas, regulação, atendimento do domiciliar, acesso
+    [  43.26s -   48.88s] a leito de UTI e fornecimento de medicamentos estiveram entre os temas da reunião realizada
+    [  56.90s -   60.52s] o Foram Nacional do Judiciário para a Saúde de Instituições.
+    [  61.54s -   64.40s] Com diferentes atribuições, reuniram-se.
+    [  70.24s -   75.52s] Com diferentes atribuições, reuniram-se para confrontar dados da judicialização com a realidade
+    [  75.52s -   81.10s] do atendimento à população, com o objetivo de identificar gargalos, conhecer experiências
+    [  81.10s -   84.84s] desenvolvidas no Estado e discutir soluções e fluxos de atuação.
+    [  89.10s -   95.02s] No Rio Grande do Norte, de acordo com a Conselheira, os dados processuais disponíveis no CNJ indicam
+    [  95.02s -  100.22s] inicialmente maior ênfase na judicialização da saúde pública, embora as demandas relacionadas
+    [ 100.22s -  104.20s] a saúde supplementar também estejam crescendo de forma consistente.
+    [ 104.72s -  111.10s] Na área pública chama atenção principalmente processos relacionados ao acesso a cirurgias e consultas
+    [ 111.10s -  115.84s] especializadas, enquanto a menor presença relativa de demandas por medicamentos.
+    [ 116.46s -  121.22s] No Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues, B2.
+    [ 122.72s -  126.70s] Clímica é condenada, pois intercorrencia em tratamento ao dontológico.
+    [ 127.32s -  133.02s] O décimo segundo o juizado especial civil da comarca de natal, condenou uma clínica ao dontológica
+    [ 133.02s -  138.64s] ao pagamento de indenização por danos morais, no valor de R$ 4.000, para uma então paciente,
+    [ 138.64s -  144.22s] bem como custeio de exâmbro e tomografia computadorizada de feixe icônico ou outro exâmbio
+    [ 144.22s -  150.52s] equivalente indicado por profissional habilitado e também consulta especializada para redefinição
+    [ 153.32s -  158.54s] E também consulta especializada para a definição de conduta e eventual procedimento necessário
+    [ 158.54s -  163.18s] para a remoção do fragmento ou conclusão do tratamento do elemento dentário afetado.
+    [ 167.42s -  171.92s] As condanações se refere em uma intercorrencia ocorrida durante a realização de um canal.
+    [ 172.48s -  178.42s] Segundo os altos, a própria REC conhece documentalmente que durante o tratamento, realizado em
+    [ 178.42s -  185.52s] 14 de outubro de 2025, ocorreu fratura de lima dentária, registrado em prontoário que
+    [ 185.52s -  190.48s] a paciente foi orientada, medicada, recebeu radiografia e foi instruída a buscar
+    [ 190.48s -  195.86s] atendimento em centro especializado, posteriormente houve reposição de curativo e troca de
+    [ 197.20s -  201.70s] Ainda de acordo com o caderno processual, a empresa reconheceu que a intercorrencia ocorreu
+    [ 201.70s -  206.80s] durante o procedimento realizado em suas dependências e sob responsabilidade de profissional vinculada
+    [ 206.80s -  213.22s] ao estabelecimento do Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues, B3.
+    [ 217.94s -  234.50s] Tejota Rieni mantém condenação de padrasto de padrasto de padrasto de padrasto por estrupo.
+    [ 257.32s -  257.70s] de padrasto por estrupo de vulnerable.
+    [ 262.44s -  268.68s] Tejota Rieni mantém condenação de padrasto por estrupo de vulnerable.
+    [ 285.14s -  290.62s] da pena. A condinação de um homem por estupro de vulnerável praticado contra a inteada foi
+    [ 310.58s -  315.98s] revisão criminal apresentada pela defesa, o colegiado rejeitou os questionamentos contra as provas do
+    [ 315.98s -  321.96s] crime e acolheu apenas um ponto relacionado ao cálculo da pena, que passou de 19 anos, 10 meses
+    [ 321.96s -  329.88s] e 15 dias, para 18 anos, 3 meses e 18 dias de reclusão em regime inicial fechado. Entre os
+    [ 329.88s -  335.04s] argumentos apresentados pela defesa estava o fato de o exame de condução carnal não teria apresentado
+    [ 335.04s -  341.20s] o resultado conclusivo. Para o tribunal, entretanto, essa circunstância não afasta a ocorrência do
+    [ 341.20s -  347.66s] crime, quando a condinação está sustentada por outros elementos de prova. No caso, o colegiado considerou que o
+    [ 354.60s -  360.18s] o respaldo em outras provas produzidas durante o processo. No Tribunal de Justiça do Rio Grande do Norte,
+    [ 360.18s -  368.12s] Lívia Rodrigues. B4. Influenciador será endenezado em 2000 reais por danos morais após ter conta
+    [ 368.12s -  374.36s] desativada indevidamente em rede social. O desmo primeiro juizado especial civil da com marca
+    [ 374.36s -  380.80s] dinatal, condenou uma plataforma digital por desativar de forma indevida, o perfil de um influenciador em uma
+    [ 380.80s -  386.64s] rede social. Ao analisar o caso, o juiz Eduardo Pinheio concluiu que a empresa não demonstrou quais
+    [ 386.64s -  391.34s] conteúdos ou condutos atribuídas ao autor teriam violadas políticas de uso da plataforma.
+    [ 392.16s -  396.88s] Com isso, o magistrado determinou a reativação da conta no prazo de cinco dias úteis,
+    [ 397.28s -  403.80s] além do pagamento de R$ 2.000 por danos morais. Segundo o narrado, o autor criador de conteúdo digital
+    [ 403.80s -  409.28s] e desenvolve a vários anos trabalho profissional por meio da plataforma, utilizando o perfil no qual
+    [ 409.28s -  414.58s] publica vídeo de humor inspirados em situações cotidianas, vivenciadas com familiares e amigos,
+    [ 414.58s -  419.28s] sempre com linguagem leve descontraída e voltada ao entretenimento do público.
+    [ 420.66s -  425.82s] Sustentou que ao longo do sua trajetória na internet, o autor consolidou-se como figura amplamente
+    [ 425.82s -  431.20s] conhecida nas redes sociais, conquistando expressiva audiência e elevado o grau de engajamento,
+    [ 431.48s -  436.24s] e que na data da suspensão indevida de sua conta, o perfil contava com o aproximadamente
+    [ 437.16s -  446.20s] 267.000 seguidores, além de mais de 427 publicações. Entretanto, em maio de 2026, o autor foi
+    [ 453.52s -  458.82s] Sobe a legação genérica de que grande parte da atividade da sua conta não segue os padrões
+    [ 458.82s -  464.28s] da comunidade, sem que fosse apontado qualquer conteúdo específico supostamente irregular,
+    [ 464.28s -  471.86s] tão pouco indicada qual conduta concreta teria ocasionado a penalidade. Após a suspensão,
+    [ 472.10s -  477.32s] apresentou o recurso de ministro ativo por meio da ferramenta disponibilizada pela própria plataforma.
+    [ 478.04s -  481.56s] O Tribunal de Justiça do Rio Grande do Norte, livre Rodrigues.
+    [ 490.28s -  496.52s] B5. Definidas penalidades para autores de furtos em farmácias em Natal.
+    [ 497.66s -  502.84s] A Quarta-Vara criminal da Comarca de Natal, após denúncia do Ministério Público, estabeleceu a
+    [ 502.84s -  506.90s] penalidade aplicada para quatro pessoas que realizaram indatas diferentes.
+
+── ETAPA 2: DETECÇÃO DE ESTRUTURA ──
+  Data detectada: 21 SET → 21_SET_2026
+  Faixa: B1 - B4
+  Buscando roteiros em: setembro
+  Roteiros encontrados: 4 boletins
+  Marcadores B{N}. encontrados: [1, 2, 3, 4]
+  Assinaturas detectadas: 4
+    [116.74s]  — 
+    [208.50s]  — 
+    [357.92s]  — 
+    [478.21s]  — 
+
+── ETAPA 3: DETECÇÃO DE REPETIÇÕES (confirmação por áudio) ──
+  Repetições confirmadas: 0
+  Repetições rejeitadas: 0
+
+── ETAPA 4: DETECÇÃO DE CLAKETES (gatilho por assinatura) ──
+  Assinaturas sem claquete detectada nos próximos 5s: 3
+    [116.74s] 
+    [208.50s] 
+    [478.21s] 
+  Claquetes detectadas: 1
+    B4: [360.18s - 368.12s]
+
+── ETAPA 4.5: CLAQUETE GERAL DETECTADA ──
+  Claquete geral: [0.00s - 4.38s]
+  Será removida do B1
+
+── ETAPA 5: CORTE + REMOÇÃO ──
+  Convertendo para mono (canal morto: None)
+  B1: removendo claquete geral [0.00s - 4.38s]
+  B1: removendo claquete individual [2.80s - 4.38s]
+  B4: removendo 1 claquete(s)
+  B1: [0.00s → 116.46s] = 110.50s → BOLETIM_RADIO_TJRN_21_SET_2026_B1__FONAJUS_ITINERANTE_JUDICIALIZA_O_SA_DE.mp3
+  B2: [122.72s → 206.80s] = 84.08s → BOLETIM_RADIO_TJRN_21_SET_2026_B2__CONDENA_O_TRATAMENTO_ODONTOL_GICO.mp3
+  B3: [217.94s → 354.60s] = 136.66s → BOLETIM_RADIO_TJRN_21_SET_2026_B3__CONDENA_O_ESTUPRO_VULNER_VEL.mp3
+  B4: [360.18s → 478.04s] = 109.92s → BOLETIM_RADIO_TJRN_21_SET_2026_B4__INFLUENCIADOR_INDENIZADO_REDES_SOCIAIS.mp3
+
+── ETAPA 6: MONTAGEM COM VINHETAS ──
+Traceback (most recent call last):
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\etapas\etapa_montagem.py", line 56, in calcular_duracao_cabeca
+    segments_iter, info = modelo_cabeca.transcribe(tmp, language="pt", word_timestamps=True)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\transcribe.py", line 916, in transcribe
+    features = self.feature_extractor(audio, chunk_length=chunk_length)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\feature_extractor.py", line 215, in __call__
+    stft = self.stft(
+           ^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\feature_extractor.py", line 189, in stft
+    output = np.fft.rfft(input_array, n=n_fft, axis=-1, norm=norm)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\numpy\fft\_pocketfft.py", line 417, in rfft
+    output = _raw_fft(a, n, axis, True, True, norm, out=out)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\numpy\fft\_pocketfft.py", line 101, in _raw_fft
+    return ufunc(a, fct, axes=[(axis,), (), (axis,)], out=out)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 156. MiB for an array with shape (1, 50946, 201) and data type complex128
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\processar_boletim_canonico.py", line 593, in <module>
+    resultado = processar_canonico(args.arquivo, pasta_roteiros)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\processar_boletim_canonico.py", line 413, in processar_canonico
+    duracao_cabeca = calcular_duracao_cabeca(audio, cabeca_rot, modelo)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\etapas\etapa_montagem.py", line 61, in calcular_duracao_cabeca
+    segments_iter, info = modelo.transcribe(tmp, language="pt", word_timestamps=True)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\transcribe.py", line 916, in transcribe
+    features = self.feature_extractor(audio, chunk_length=chunk_length)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\feature_extractor.py", line 215, in __call__
+    stft = self.stft(
+           ^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\feature_extractor.py", line 189, in stft
+    output = np.fft.rfft(input_array, n=n_fft, axis=-1, norm=norm)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\numpy\fft\_pocketfft.py", line 417, in rfft
+    output = _raw_fft(a, n, axis, True, True, norm, out=out)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\numpy\fft\_pocketfft.py", line 101, in _raw_fft
+    return ufunc(a, fct, axes=[(axis,), (), (axis,)], out=out)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 155. MiB for an array with shape (1, 50946, 400) and data type float64

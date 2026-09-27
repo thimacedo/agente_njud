@@ -1,0 +1,138 @@
+
+============================================================
+PROCESSAMENTO CANÔNICO: 15 SET B6-B10.mp3
+============================================================
+
+Carregando modelo de transcrição...
+  Usando faster-whisper (int8, CPU)...
+
+── ETAPA 0: TRIAGEM INICIAL DO ÁUDIO ──
+  Duração: 469.06s
+  Canais: 2, Samplerate: 48000Hz
+  Ações de correção: ['CONVERTER: áudio estereo duplicado (L==R) → converter para mono', 'AVISO: possível clipping (pico próximo de 0dBFS)']
+
+── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──
+
+── ETAPA 1.5: CORREÇÃO DE ALUCINAÇÕES ──
+  Segmentos antes: 55, depois: 50, removidos: 5
+  Transcrito: 50 segmentos
+
+  Transcrição completa:
+    [   0.00s -    2.44s] Boletins 15 de setembro, B6.
+    [   3.86s -   10.18s] Justiça da Termina Que Estado e Banca Examinadora reconheceu a especialização e retifique nota de candidata em Acarei.
+    [  11.00s -   18.10s] A varão única da comarca de Acarei reconheceu a validade do certificado de especialização em história e cultura africana e afro-brasileira,
+    [  18.44s -   24.72s] apresentado por uma candidata que disputa uma vaga em concurso público promovido pela secretaria estadual de educação,
+    [  25.02s -   28.50s] para a fim de avaliação de títulos do concurso público regido por edital.
+    [  28.50s -   36.86s] A sentença reconhece como válida a especialização apresentada pela autora com a temática história e cultura africana e afro-brasileira.
+    [  38.04s -   41.50s] Uma gestradonia determinou as autoridades res, que atribuam a repetir.
+    [  42.50s -   50.18s] Uma gestradonia ainda determinou as autoridades res, que atribuam a autora do mandado de segurança, a pontuação correspondente ao referido título,
+    [  50.18s -   56.20s] acrescendo-lhe dois pontos, de modo que sua nota na avaliação de títulos passa de dois para quatro pontos.
+    [  56.74s -   63.42s] Por fim, determinou a retificação do resultado da avaliação de títulos e a consequente reclassificação da candidata no certão,
+    [  64.04s -   65.62s] observada a nova pontuação.
+    [  68.16s -   74.66s] Assim a Fundação Jettolho Vargas e o Estado do Rio Grande do Norte devem comprovar o que foi determinado judicialmente
+    [  74.66s -   78.96s] em um prazo de 30 dias, sobre pena depagamento de multa diária atrib...
+    [  81.48s -   89.40s] Sobe pena depagamento de multa diária arbitrada em 500 reais, limitada a 10 mil reais, que será usada caso necessário a aplicação
+    [  95.54s -  104.06s] Em projetos que tratem da valorização da história e cultura africana e afro-brasileira, do Tribunal de Justiça do Rio Grande do Norte, livre Rodrigues.
+    [ 106.32s -  111.30s] Plano de Saúde deverá fornecer medicamento para tratamento de doença inflamatória crônica.
+    [ 112.00s -  118.06s] A primeira câmera civil do Tribunal de Justiça do Rio Grande do Norte manteve decisão da Quarta Vara Civil da Commarca de Mossorol,
+    [ 118.26s -  127.26s] que determinou a um plano de saúde custeio de terapia e mundo biológica subcutânia, com um fornecimento do medicamento prescrito para tratamento de um beneficiário.
+    [ 130.16s -  144.12s] Ao recorrer da decisão de primeiro grau, a operadora legou que a negativa de cobertura foi regular e que o quadro clínico apresentado pelo paciente não atendia os critérios previchos na diretriza e de utilização da agência nacional de saúde suplementar.
+    [ 145.14s -  155.22s] Os argumentos entre tanto não foram acolhidos. Para o colegiado, a operadora não pode restringir as alternativas de tratamento indicadas ao paciente
+    [ 155.22s -  160.94s] quando a cobertura encontra respaldo nas normas aplicáveis a relação entre plano de saúde e consumidor.
+    [ 166.72s -  177.28s] O relator destacou que os contratos de plano de saúde estão submetidos às normas de proteção ou consumidor e que suas cláusulas devem ser interpretadas de forma preservável e que libre da relação contratual.
+    [ 178.28s -  185.34s] Segundo o julgamento, as cláusulas contratuais não podem ser utilizadas para estabelecer limitações consideradas abusivas ao tratamento.
+    [ 186.26s -  191.18s] Do Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrigues, B8.
+    [ 192.26s -  197.10s] Corrida da Advocacia 2025 abre inscrições comprovas de 5 e 10 quilômetros.
+    [ 198.10s -  207.64s] A Corrida da Advocacia 2025 já tem data marcada, 15 de novembro, com largada a partir das 5 da manhã do complexo cultural da rampa em Natal.
+    [ 208.26s -  218.60s] Promovia da Pelaoa BRN e Pelaca Arni, a iniciativa reunia a Advocacia e comunidade em uma programação que contará com percussos de 5 e 10 quilômetros além da Corrida Kids.
+    [ 220.10s -  224.58s] No primeiro lote, a inscrição tem o valor promocional de 99 reais para a Advocacia.
+    [ 224.58s -  232.94s] Já a inscrição solidária tem o valor de 119 reais para a comunidade geral, e a inscrição inteira é de 238 reais.
+    [ 233.54s -  242.42s] Ainda um desconto especial para a jovem a Advocacia, para a retirada dos kits do corredor, os participantes devem também do ar 2 quilômetros não pericíveis.
+    [ 243.32s -  252.98s] Com percussos que passam por alguns dos principais cartões postais de Natal, a Corrida promete unir esporte, cultura e valorização da cidade em uma experiência inesquecível.
+    [ 253.80s -  258.34s] Assim como em 2025, o museu da rampa será o ponto de largada e chegada.
+    [ 258.82s -  269.56s] O trajeto de 5 quilômetros seguirá até as proximidades do forte dos resmagos, enquanto o percoço de 10 quilômetros inclui a travessia da ponta inilton navarro, com retorno próximo ao mercado da redinha.
+    [ 270.30s -  277.38s] A prova também irá contar com uma ampla estrutura de apoio com pontos de hidratação, segurança, sinalização e ambulância.
+    [ 277.38s -  288.36s] O Tribunal justiça do Rio Grande do Norte, Lívia Rodríguez, B9, THRN, Realiza atividade de votação em escola da Vila de Ponta Negra.
+    [ 296.18s -  306.48s] O Tribunal Regional Eleitoral do Rio Grande do Norte promoveu uma ação de treinamento e simulação de votação na escola educandário de luz, localizada na Vila de Ponta Negra in Natal.
+    [ 307.38s -  314.40s] A iniciativa proporcionou os estudantes o primeiro contato como a urna eletrônica em uma votação organizada pela própria comunidade escolar.
+    [ 315.62s -  324.26s] A ação foi conduzida pela inservidora Paula Carina da Nobrega e Teresa Pimentel da Câmara, da sessão de gestão de estádio adicionais e da letrabalho.
+    [ 324.84s -  337.12s] Também participaram o chefe de gabineite solão ao meida e o estagiário de pedagogia ou ilha encosme. A escola judiciária Eleitoral deu suporte à atividade com a disponibilização das urnas eletrônicas utilizadas na votação.
+    [ 337.38s -  351.54s] A simulação teve como objetivo apresentar aos estudantes de forma prática o funcionamento de uma eleição e estimular o conhecimento sobre cidadania, participação e democracia com a votação que fará a diferença real no dia a dia da escola.
+    [ 352.70s -  358.36s] Ao todo, cinco chapas concorreram a liderança do projeto com candidatos à líder e vice-líder.
+    [ 358.36s -  363.96s] O Tribunal de Justiça do Rio Grande do Norte, Lívia Rodrindes, B10.
+    [ 365.10s -  370.26s] Construtora Solares faz proposta de 14 milhões de reais para evitar dívidas trabalhistas.
+    [ 371.18s -  387.04s] A Construtora Solare, a Eleitor DA, a Construtora Solare, a Construtora Solares formalizou uma proposta de acordo de 14 milhões de reais
+    [ 387.04s -  398.46s] para evitar processos em tramitação na justiça do trabalho. O plano prevê a quitação com o deságio de 20%, o que garante aos credores optantes o recebimento de 80% do valor devido.
+    [ 399.40s -  411.64s] Para o comprimento da primeira etapa foi autorizada a liberação imediata de 3 milhões de reais, montando e formado por depósito judiciais já vinculados ao caso e repasse financeiros de valores devidos à Construtora.
+    [ 411.64s -  417.64s] Os credores que homologarem a concordância até 17 de setembro terão um repasse judiciais prom...
+    [ 429.24s -  433.64s] respeitando a ordem de protocolo e dependendo do teto financeiro disponível no lote.
+    [ 434.54s -  444.82s] As adesões após esse primeiro prazo serão enquadradas em lote seguintes financiados por novos repasses mensais, bloqueio judiciais e sobras de processos já habitados.
+    [ 445.54s -  455.64s] Para preservar a aceleridade e evitar a sobrecarga do sistema eletrônico, não serão aceitas as adesões protocoladas por meio de petições avulsas no processo piloto, prevendo-se o desen...
+
+── ETAPA 2: DETECÇÃO DE ESTRUTURA ──
+  Data detectada: 15 SET → 15_SET_2026
+  Faixa: B6 - B10
+  Buscando roteiros em: setembro
+  Roteiros encontrados: 5 boletins
+  Marcadores B{N}. encontrados: [6, 7, 8, 9, 10]
+  Assinaturas detectadas: 4
+    [100.70s]  — 
+    [113.29s]  — 
+    [186.55s]  — 
+    [358.61s]  — 
+
+── ETAPA 3: DETECÇÃO DE REPETIÇÕES (confirmação por áudio) ──
+  Repetições confirmadas: 0
+  Repetições rejeitadas: 0
+
+── ETAPA 4: DETECÇÃO DE CLAKETES (gatilho por assinatura) ──
+  Assinaturas sem claquete detectada nos próximos 5s: 4
+    [100.70s] 
+    [113.29s] 
+    [186.55s] 
+    [358.61s] 
+  Claquetes detectadas: 0
+
+── ETAPA 4.5: CLAQUETE GERAL DETECTADA ──
+  Claquete geral: [0.00s - 3.86s]
+  Será removida do B1
+
+── ETAPA 5: CORTE + REMOÇÃO ──
+  Convertendo para mono (canal morto: None)
+  B6: removendo claquete geral [0.00s - 3.86s]
+  B6: [0.00s → 95.54s] = 91.68s → BOLETIM_RADIO_TJRN_15_SET_2026_B6__TJRN_BANCA_EXAMINADORA_NOTA_CANDIDATA.mp3
+  B7: [106.32s → 112.00s] = 5.68s → BOLETIM_RADIO_TJRN_15_SET_2026_B7__TJRN_PLANO_SA_DE_FORNECER_MEDICAMENTO.mp3
+  B8: [118.26s → 186.26s] = 68.00s → BOLETIM_RADIO_TJRN_15_SET_2026_B8__OAB_RN_CORRIDA_ADVOCACIA.mp3
+  B9: [192.26s → 358.36s] = 166.10s → BOLETIM_RADIO_TJRN_15_SET_2026_B9__TRT_RN_MUTIR_O_APRENDIZAGEM.mp3
+  B10: [365.10s → 469.06s] = 103.96s → BOLETIM_RADIO_TJRN_15_SET_2026_B10__TRT_RN_CONSTRUTORA_PROPOSTA_D_VIDAS.mp3
+
+── ETAPA 6: MONTAGEM COM VINHETAS ──
+  [DEBUG] cabeça termina em 6.5s (7/16 palavras encontradas)
+  B6: cabeça do roteiro = 6.5s
+  ✓ B6: montado → BOLETIM_RADIO_TJRN_15_SET_2026_B6__TJRN_BANCA_EXAMINADORA_NOTA_CANDIDATA.mp3 (116.92s)
+  [DEBUG] cabeça termina em 111.3s (12/12 palavras encontradas)
+  B7: cabeça do roteiro = 111.3s
+  ✓ B7: montado → BOLETIM_RADIO_TJRN_15_SET_2026_B7__TJRN_PLANO_SA_DE_FORNECER_MEDICAMENTO.mp3 (30.92s)
+  [DEBUG] cabeça termina em 273.0s (9/14 palavras encontradas)
+  B8: cabeça do roteiro = 273.0s
+  ✓ B8: montado → BOLETIM_RADIO_TJRN_15_SET_2026_B8__OAB_RN_CORRIDA_ADVOCACIA.mp3 (93.24s)
+Traceback (most recent call last):
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\processar_boletim_canonico.py", line 593, in <module>
+    resultado = processar_canonico(args.arquivo, pasta_roteiros)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\processar_boletim_canonico.py", line 413, in processar_canonico
+    duracao_cabeca = calcular_duracao_cabeca(audio, cabeca_rot, modelo)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\etapas\etapa_montagem.py", line 56, in calcular_duracao_cabeca
+    segmentos_boletim = [{"start": s.start, "end": s.end, "text": s.text, "words": s.words} for s in segments_iter]
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\etapas\etapa_montagem.py", line 56, in <listcomp>
+    segmentos_boletim = [{"start": s.start, "end": s.end, "text": s.text, "words": s.words} for s in segments_iter]
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\transcribe.py", line 1213, in generate_segments
+    ) = self.generate_with_fallback(encoder_output, prompt, tokenizer, options)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\transcribe.py", line 1446, in generate_with_fallback
+    result = self.model.generate(
+             ^^^^^^^^^^^^^^^^^^^^
+RuntimeError: mkl_malloc: failed to allocate memory

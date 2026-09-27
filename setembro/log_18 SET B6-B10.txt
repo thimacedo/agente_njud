@@ -1,0 +1,225 @@
+
+============================================================
+PROCESSAMENTO CANÔNICO: 18 SET B6-B10.mp3
+============================================================
+
+Carregando modelo de transcrição...
+  Usando faster-whisper (int8, CPU)...
+
+── ETAPA 0: TRIAGEM INICIAL DO ÁUDIO ──
+  Duração: 535.10s
+  Canais: 2, Samplerate: 48000Hz
+  Ações de correção: ['CORRIGIR: substituir canal direito pelo esquerdo (multiplicar direito por fator de escala do esquerdo)', 'AVISO: possível clipping (pico próximo de 0dBFS)']
+
+── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──
+
+── ETAPA 1.5: CORREÇÃO DE ALUCINAÇÕES ──
+  Segmentos antes: 124, depois: 111, removidos: 13
+  Transcrito: 111 segmentos
+
+  Transcrição completa:
+    [   1.30s -    5.20s] Bolitinhos 18 de setembro do B6-LB10.
+    [   5.82s -    6.48s] B6.
+    [   7.28s -   12.94s] tjrn discute soluções para agilizar processos de progressão, promoção e adicionais
+    [  12.94s -   14.50s] de servidores públicos.
+    [  15.02s -   19.52s] O núcleo interinstitucional de soluções de demandas estruturais do Poder Judiciário
+    [  19.52s -   24.20s] do Rene realizou na Quarta-Feira, mais uma reunião com representantes dos órgãos públicos
+    [  25.20s -   30.80s] para debater sobre os processos judiciais relacionados à progressão, promoção e adicional
+    [  30.80s -   33.06s] de tempo de serviço dos servidores e chaduais.
+    [  33.48s -   39.18s] O objetivo foi alinhar as principais problemáticas relacionadas aos vereitos judiciadores públicos,
+    [  39.48s -   44.84s] bem como propor soluções para garantir agilidade no desenvolvimento desses em pecilhos.
+    [  46.10s -   50.64s] A Rene foi aberta pela juiz Roosevelt Toscano, do segundo juizado especial da fazenda pública,
+    [  50.64s -   57.02s] da comarra cadina tal, que apresentou o levantamento sobre demandas relacionadas à promoção
+    [  57.02s -   64.36s] e progressão dos professores ADTs, em específico o impacto, no período da pandemia, a resolução
+    [  64.36s -   69.78s] de auxílios de alimentação dos policiais desse Monteseiro Férias e Piso Salarial.
+    [  70.62s -   76.90s] De acordo com o magistrado, tramitam anomento e 12.000 processos relacionados à progressão,
+    [  76.90s -   84.62s] promoção e aditês dos servidores e chaduais, o que mostra a necessidade de ideálogos
+    [  84.62s -   89.72s] entre os órgãos para a decisão de estratégias que podem ajudar a repetir,
+    [  89.84s -   93.06s] que ajudem a mitigar as dificuldades à cerca do problema.
+    [  93.58s -   99.02s] Na reunião também foram debatidas as alternativas para resolução de processos que têm como parte
+    [ 100.78s -  106.04s] Os participantes decidiram que é necessário analisar os custos realizados na requisições
+    [ 106.04s -  111.62s] das demandas, assim como a produção de relatórios com o comparativo desses valores
+    [ 112.14s -  114.86s] e em um projeto para solucionar a problemática.
+    [ 115.48s -  119.90s] Do Tribunal de Justiça do Rio Grande do Norte, Leonardo Ameida, etc.,
+    [ 119.90s -  125.82s] formação de pré-septores do programa de residência judicial abre inscrições para a turma 2.
+    [ 126.72s -  131.42s] A escola da magistratura do Rio Grande do Norte, as Marne, abre inscrições para a turma 2
+    [ 132.02s -  136.78s] do curso Programa de Informação de pré-septores para o programa de residência judicial
+    [ 137.98s -  142.50s] A formação é voltada a magistrados vitalícios do Poder Judiciário Poteguá,
+    [ 143.64s -  147.96s] capete, do Poder Judiciário Poteguá, e oferece 40 vagas.
+    [ 148.34s -  155.12s] As inscrições seguem até o dia 5 de outubro e devem ser feitas pelo Ambiente virtual de aprendizagem 10 Marne.
+    [ 155.64s -  159.56s] O preenchimento das vagas obedecerá a ordem cronológica dos pedidos,
+    [ 160.16s -  163.90s] com o cargo horário de 20 horas o curso será realizado de forma sem me presencial.
+    [ 165.04s -  166.50s] De forma sem me presencial.
+    [ 168.62s -  170.36s] Ambientação no Módulo-M.
+    [ 174.82s -  179.22s] Ambientação ocorrerá de 12 a 14 de outubro em horário livre.
+    [ 179.72s -  187.20s] As duas aulas presenciales estão marcadas para os dias 15 e 16 de outubro no bloco de aulas das Marne.
+    [ 187.80s -  190.72s] A etapa final com as atividades acincronas,
+    [ 190.76s -  198.44s] acincronas de novo, com as atividades acincronas será desenvolvida entre os dias 17 e 25 de outubro.
+    [ 198.90s -  202.78s] A programação aborda a estrutura do programa de residência judicial,
+    [ 203.34s -  209.84s] as atribuições dos pré-septores, as metas pedagógicas, e o acompanhamento dos residentes.
+    [ 210.22s -  213.94s] Também serão discutidos temas como planejamento, avaliação da aprendizagem,
+    [ 213.94s -  219.24s] construção do vínculo pedagógico e mediação de conflitos no ambiente de trabalho,
+    [ 220.26s -  223.88s] do Tribunal de Justiça do Rio Grande do Norte, lá na Ardomida.
+    [ 225.20s -  225.80s] B8.
+    [ 227.08s -  233.32s] Defensoria do Reino e Valença em Evento Popular, grupo anti-racista com comunidades tradicionais.
+    [ 236.82s -  240.50s] A Defensoria Pública do Estado do Rio Grande do Norte realiza no dia 9 de outubro
+    [ 240.50s -  246.92s] das 9 às 13 horas no auditorio geólogo.
+    [ 247.90s -  251.92s] No auditorio geólogo José Gilson Vilaça, novo.
+    [ 257.70s -  260.96s] o lançamento popular do grupo de atuação temático para a programação.
+    [ 268.50s -  273.14s] para a promoção da igualdade etnco-racial, gato e manhouiza.
+    [ 273.92s -  277.50s] Além de um ato institucional, a evento também será um lançamento popular.
+    [ 278.10s -  282.30s] A programação reserva espaço para fala de representantes de comunidades tradicionais
+    [ 282.30s -  286.72s] e das instituições parceiras presentes, garantindo que essas comunidades
+    [ 286.72s -  291.48s] não sejam apenas ouvintes, mas protagonistas da construção do grupo.
+    [ 292.16s -  296.58s] A proposta é que a partir dessa escuta, o encontro resulta na construção colativa
+    [ 296.58s -  302.08s] de uma carta de compromissos e encaminhamentos, documento que deve servir de referência
+    [ 302.08s -  305.78s] para a atuação futura do gato e para a articulação da defensoria
+    [ 305.78s -  308.30s] com comunidades e instituições parceiras.
+    [ 309.12s -  312.84s] No Tribunal de Justiça do Rio Grande do Norte, Leonardo Ameida.
+    [ 314.58s -  315.14s] B9.
+    [ 316.96s -  320.92s] MPR Renemite, Recumidações, Apolicia Militar e Apolicia Civil
+    [ 320.92s -  323.58s] sobre atendimento mulheres em azul.
+    [ 324.58s -  327.76s] O Ministério Público do Rio Grande do Norte, por meio da segunda promotoria
+    [ 327.76s -  331.44s] de justiça de azul, expediu recumidações dirigidas ao comando
+    [ 331.44s -  335.18s] do décimo batalhão de polícia militar e a delegacia de polícia civil local
+    [ 335.18s -  338.90s] orientando padronizar a atuação das forças de segurança da região
+    [ 338.90s -  342.92s] no acolhimento de mulheres vítimas de violência doméstica e familiar,
+    [ 343.44s -  346.78s] além de garantir proteção integral durante os atendimentos.
+    [ 347.18s -  350.90s] A recumidação enviada a polícia militar da termina prioridade
+    [ 350.90s -  354.12s] para os chamados recebidos pelo telefone 1-9-0,
+    [ 354.64s -  357.04s] que envolvam agressões ou ameaças a mulheres.
+    [ 358.26s -  361.08s] As equipes policiais devem realizar abordagens como empatia,
+    [ 361.72s -  366.84s] a abordagem com empatia e sem missão de julgamento sobre o comportamento,
+    [ 367.34s -  369.54s] vestimenta ou histórico das vítimas.
+    [ 370.08s -  373.06s] O documento também orienta a isolamento imediato da cena
+    [ 373.06s -  377.10s] em ocorrência de morte violenta ou tentativa de assassinato.
+    [ 377.10s -  383.00s] O texto direcionado da polícia civil estabelece a obrigatoriedade
+    [ 388.76s -  391.74s] Para resguardar na privacidade e o cegiro das informações,
+    [ 392.52s -  396.44s] a orientação prevê a realização de depoimento detalhados na fase inicial,
+    [ 396.92s -  399.04s] inclusive, por registro audiovisual.
+    [ 399.72s -  404.86s] A medida vida evita convocações repetitivas da mulher
+    [ 404.86s -  408.44s] para recontar os fatos durante as investigações.
+    [ 409.18s -  411.64s] As duas polícias devem aplicar obrigatoriamente
+    [ 411.64s -  414.82s] a formular o nacional de avaliação de risco em seus atendimentos.
+    [ 415.50s -  419.46s] As informações registradas servirão de base para o pedido,
+    [ 419.56s -  423.82s] de medidas de urgência, a justiça, como uma faixamento do agressor do lado
+    [ 423.82s -  427.82s] e o monitoramento preventivo por meio de rundas aos interessos indicados.
+    [ 428.40s -  431.98s] Os boletins e relatórios policiais não podem com ter questionamentos
+    [ 431.98s -  436.26s] sobre a conduta moral ou a vida privada da vítima.
+    [ 437.48s -  441.16s] No Tribunal de justiça do Rio Grande do Norte, Leonardo Meida.
+    [ 444.42s -  450.26s] TR-R-N, inicia a capacitação de 130 servidores para a auditoria da votação eletrônica.
+    [ 450.88s -  454.68s] O Tribunal Regional Eleitoral do Rio Grande do Norte iniciou na terça-feira
+    [ 454.68s -  458.78s] a capacitação de 130 servidores públicos voluntários que atuarão
+    [ 458.78s -  462.56s] nos procedimentos de auditoria da votação eletrônica nas eleições
+    [ 462.56s -  467.00s] de 2025. O treinamento aconteceu no auditório do Centro de Operações
+    [ 467.00s -  468.80s] de Justiça Eleitoral e Natal.
+    [ 470.20s -  473.70s] Divididos em três turmas, os participantes receberam orientações
+    [ 473.70s -  475.66s] sobre os procedimentos que serão realizados,
+    [ 476.22s -  480.22s] que serão realizados durante auditoria, além de participar
+    [ 480.22s -  482.58s] em de atividades práticas e simulações.
+    [ 483.08s -  486.74s] A capacitação busca preparava equipes para que os trabalhos
+    [ 490.76s -  494.12s] e sem divergências de correntes de falhas humanas.
+    [ 494.60s -  497.92s] A auditoria da votação eletrônica envolve dois propriedades.
+    [ 498.16s -  501.26s] Envolve dois procedimentos distintos de checagem,
+    [ 501.90s -  505.44s] o teste de integridade e o teste de autentes cidades.
+    [ 505.82s -  509.44s] O teste de integridade verifica se os votos inseridos na ONU
+    [ 509.44s -  513.08s] durante a votação simulada correspondem aos votos
+    [ 513.08s -  515.20s] contabilizados ao final do procedimento.
+    [ 519.66s -  522.44s] Verifica se os sistemas instalados nas urnas eletrônicas
+    [ 522.44s -  526.26s] são os mesmos que foram submetidos às etapas de fiscalização
+    [ 526.26s -  529.88s] e lacração realizadas pela justiça eleitoral.
+    [ 530.56s -  534.16s] Do Tribunal de Justiça do Rio Grande do Norte, Leonardo Amida.
+
+── ETAPA 2: DETECÇÃO DE ESTRUTURA ──
+  Data detectada: 18 SET → 18_SET_2026
+  Faixa: B6 - B10
+  Buscando roteiros em: setembro
+  Roteiros encontrados: 5 boletins
+  Marcadores B{N}. encontrados: [6, 7, 8, 9, 10]
+  Assinaturas detectadas: 5
+    [115.73s]  — 
+    [220.49s]  — 
+    [309.35s]  — 
+    [437.71s]  — 
+    [530.79s]  — 
+
+── ETAPA 3: DETECÇÃO DE REPETIÇÕES (confirmação por áudio) ──
+  Repetições confirmadas: 0
+  Repetições rejeitadas: 0
+
+── ETAPA 4: DETECÇÃO DE CLAKETES (gatilho por assinatura) ──
+  Assinaturas sem claquete detectada nos próximos 5s: 4
+    [115.73s] 
+    [309.35s] 
+    [437.71s] 
+    [530.79s] 
+  Claquetes detectadas: 1
+    B8: [225.20s - 227.08s]
+
+── ETAPA 4.5: CLAQUETE GERAL DETECTADA ──
+  Claquete geral: [1.30s - 4.52s]
+  Será removida do B1
+
+── ETAPA 5: CORTE + REMOÇÃO ──
+  Convertendo para mono (canal morto: direito)
+  B6: removendo claquete geral [1.30s - 4.52s]
+  B6: removendo claquete individual [5.82s - 7.28s]
+  B8: removendo 1 claquete(s)
+  B8: removendo claquete individual [225.20s - 227.08s]
+  B9: removendo claquete individual [314.58s - 316.96s]
+  B6: [0.00s → 115.48s] = 110.80s → BOLETIM_RADIO_TJRN_18_SET_2026_B6__TJRN_DISCUTE_SOLU_ES_PROCESSOS.mp3
+  B7: [119.90s → 220.26s] = 100.36s → BOLETIM_RADIO_TJRN_18_SET_2026_B7__ESMARN_FORMA_O_PRECEPTORES.mp3
+  B8: [225.20s → 309.12s] = 80.16s → BOLETIM_RADIO_TJRN_18_SET_2026_B8__DPERN_EVENTO_ANTIRRACISTA.mp3
+  B9: [314.58s → 437.48s] = 120.52s → BOLETIM_RADIO_TJRN_18_SET_2026_B9__MPRN_RECOMENDA_OES_PM_ASSU.mp3
+  B10: [444.42s → 530.56s] = 86.14s → BOLETIM_RADIO_TJRN_18_SET_2026_B10__TRE_RN_CAPACITA_O_SERVIDORES_AUDITORIA_VOTA_O.mp3
+
+── ETAPA 6: MONTAGEM COM VINHETAS ──
+Traceback (most recent call last):
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\etapas\etapa_montagem.py", line 56, in calcular_duracao_cabeca
+    segments_iter, info = modelo_cabeca.transcribe(tmp, language="pt", word_timestamps=True)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\transcribe.py", line 916, in transcribe
+    features = self.feature_extractor(audio, chunk_length=chunk_length)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\feature_extractor.py", line 215, in __call__
+    stft = self.stft(
+           ^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\feature_extractor.py", line 189, in stft
+    output = np.fft.rfft(input_array, n=n_fft, axis=-1, norm=norm)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\numpy\fft\_pocketfft.py", line 417, in rfft
+    output = _raw_fft(a, n, axis, True, True, norm, out=out)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\numpy\fft\_pocketfft.py", line 101, in _raw_fft
+    return ufunc(a, fct, axes=[(axis,), (), (axis,)], out=out)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 164. MiB for an array with shape (1, 53512, 201) and data type complex128
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\processar_boletim_canonico.py", line 593, in <module>
+    resultado = processar_canonico(args.arquivo, pasta_roteiros)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\processar_boletim_canonico.py", line 413, in processar_canonico
+    duracao_cabeca = calcular_duracao_cabeca(audio, cabeca_rot, modelo)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\scripts_pipeline\boletim\etapas\etapa_montagem.py", line 61, in calcular_duracao_cabeca
+    segments_iter, info = modelo.transcribe(tmp, language="pt", word_timestamps=True)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\transcribe.py", line 916, in transcribe
+    features = self.feature_extractor(audio, chunk_length=chunk_length)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\feature_extractor.py", line 215, in __call__
+    stft = self.stft(
+           ^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\faster_whisper\feature_extractor.py", line 189, in stft
+    output = np.fft.rfft(input_array, n=n_fft, axis=-1, norm=norm)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\numpy\fft\_pocketfft.py", line 417, in rfft
+    output = _raw_fft(a, n, axis, True, True, norm, out=out)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\THIAGO\AppData\Local\hermes\hermes-agent\venv\Lib\site-packages\numpy\fft\_pocketfft.py", line 101, in _raw_fft
+    return ufunc(a, fct, axes=[(axis,), (), (axis,)], out=out)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+numpy._core._exceptions._ArrayMemoryError: Unable to allocate 163. MiB for an array with shape (1, 53512, 400) and data type float64

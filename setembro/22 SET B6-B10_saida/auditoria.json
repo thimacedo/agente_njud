@@ -1,0 +1,121 @@
+{
+  "arquivo_entrada": "setembro\\22 SET B6-B10.mp3",
+  "data_detectada": "22 SET",
+  "faixa": [
+    6,
+    10
+  ],
+  "duracao_original": 419.664,
+  "triagem": {
+    "duracao_segundos": 419.664,
+    "canais": 2,
+    "frame_rate": 48000,
+    "sample_width": 2,
+    "acoes": [
+      "CORRIGIR: substituir canal direito pelo esquerdo (multiplicar direito por fator de escala do esquerdo)",
+      "AVISO: possível clipping (pico próximo de 0dBFS)"
+    ],
+    "canal_morto": "direito",
+    "clipping_detectado": true
+  },
+  "transcricao": {
+    "segmentos": 85,
+    "texto_completo": "Boletins 22 de setembro do B6 Albidex, B6. Perita do ITEP deverá ser reintegrada até conclusão de revisão administrativa em processo de emissão. O Tribunal Pleno do TJ Rainer determinou a reintegração de uma servidora ao cargo de perita criminal do Instituto Técnico-Scientífico de Perícia, do Rio Grande do Norte, com o restabelecimento da remuneração e demais vantagens do cargo até a conclusão do processo administrativo instaurado para revisar a penalidade de demissão aplicada pela administração pública. O colegiado considerou que o próprio Estado reconheceu a necessidade de reesaminar o caso ao admitir possíveis inconsistências na aporação e determinar a reabertura da instrução processual. De acordo com o julgamento, manter a demissão enquanto o próprio Estado revisa a penalidade pode representar medida desproporcional, especialmente diante do caráter alimentar da remuneração da servidora e da inexistência de prejuízo irreversível para a administração pública. A decisão também ressalta a existência de precedente administrativo envolvendo situação semelhante em que foi aplicada a penalidade menos severa. Para o colegiado, esse fato reforça a necessidade de revaliar a proporcionalidade da punição imposta à servidora. No Tribunal de Justiça do Rio Grande do Norte, Leonardo Almeida. O município de Tangará é condenado por cobrança de imposto indevida em obras de abastecimento de água. A vara única da comarca de Tangará determinou que o município deixe de cobrar ou reter o imposto sobre serviços sobre obras de implantação de sistemas de abastecimento de água e outros serviços de saneamento básico. A sentença reconheceu que as atividades não estão sujeitas à cobrança do imposto. De acordo com os autos, três empresas firmaram o contrato no valor de 448 milhões 460 mil reais com companhia de desenvolvimento dos vales do São Francisco e do Parnaíba para executar as obras de serviços de engenharia da doutora Agresti Potiguá. Na ação, as empresas alegaram que os serviços são relacionados ao saneamento básico e ao abastecimento de água potável e não poderiam ser tributados pelo ISS. Segundo as empresas, os itens da legislação que previam a cobrança do imposto sobre o serviço de saneamento ambiental e tratamento de água foram vetados, não havendo previsão legal válida para a cobrança nessas atividades. Inicialmente, a justiça já havia determinado que o município não cobrasse ou reativasse o imposto relacionado ao contrato. Do Tribunal de Justiça do Rio Grande do Norte, Ilão Ardalmeida. TJRN reorganiza unidades judiciárias de Natal e Parnamirim para equilibrar distribuição de processos. O Tribunal de Justiça do rn publicou no dia 16 de setembro a resolução que reorganiza unidades judiciárias, de unidades judiciárias, que reorganizam unidades judiciárias e redefinem competências nas comarcas de Natal e Parnamirim. Entre as mudanças estão a ampliação dos juizados da violência doméstica e familiar contra a mulher natal, a reorganização dos juizados especiais cíveis da fazenda pública, a instalação da quinta vara civil de Parnamirim e a extinção da central de avaliação e arrematação da capital. As alterações estarão em vigor após 45 dias. A reorganização, de acordo com a resolução, não implicará o aumento de despesas para o poder judiciário. As medidas buscam equilibrar os acervos processuais e a carga de trabalho entre as unidades, além de aprimorar a prestação jurisdicional. Os procedimentos de redistribuição dos processos e as medidas de transição serão disciplinados em ato conjunto da presidência do TJRN e da corrigidoria geral de justiça. Capacitação sobre o uso adequado de IA no poder judiciário é concluída. A presença de inteligência artificial no ambiente de trabalho tem crescido de forma exuberante nos últimos anos, ampliando também a necessidade de capacitação para o uso dessas ferramentas. Nesse cenário, a Escola da Magistratura do Rio Grande do Norte, Esmarre, concluiu mais uma capacitação sobre o uso adequado dessas ferramentas dentro do poder judiciário. O curso destinado à formação de oficiais de justiça do Tribunal de Justiça do Rio Grande do Norte foi realizado entre os dias 15 e 18 de setembro, no Bloco de Aulas da Escola. A proposta foi capacitar os participantes para o uso prático e responsável da IA na rotina de trabalho, incluindo a extração e a organização de dados demandados e certidões à elaboração de comunicações mais eficazes e a padronização de documentos. Entre os pontos abordados estão a proteção de dados, os cuidados relacionados à Lei Geral de Proteção de Dados, a LGPD, técnicas de anonimação e construção de comandos eficazes e utilização da IA, do Tribunal de Justiça do Rio Grande do Norte e da Launarda Almeida. Sejuskinatal homologa acordo de R$ 465.000 entre o Estado do R&D e AGT em favor de trabalhadores. Dentro da programação da 10ª Semana Nacional de Execução Trabalhista, o Centro Judiciário de Metodos Concessionais de Soluções de Disputas, o Sejuskinatal, homologou o acordo que envolve o Estado do Rio Grande do Norte, a empresa AGT Comércio e Serviços de Informática Limitada e seus trabalhadores. A mediação pré-processual foi conduzida pela juíza Raquel Villar de Oliveira. No termo firmado, o Estado reconheceu um crédito de aproximadamente R$ 465.000 devido à empresa, que autorizou a destinação prioritária de parte dos recursos ao pagamento do pessoal. O acordo assegura a quitação dos salários e do vale-alimentação de setembro. R$ 124.000 em verbas recisórias, além da regulação do FGTS de multas recisórias e das demais obrigações legais. A solução consensual viabilizou a quitação dos créditos trabalhistas e o encerramento do contrato administrativo, prevenindo o ajuizamento de novas ações judiciais. Do Tribunal de Justiça do Rio Grande do Norte e Leonardo Almeida."
+  },
+  "estrutura": {
+    "marcadores": {
+      "6": 0.0,
+      "7": 88.94,
+      "8": 178.24,
+      "9": 291.4,
+      "10": 334.66
+    },
+    "assinaturas": [
+      [
+        85.7923076923077,
+        "",
+        ""
+      ],
+      [
+        173.46875,
+        "",
+        ""
+      ],
+      [
+        289.68347826086955,
+        "",
+        ""
+      ],
+      [
+        331.8727272727273,
+        "",
+        ""
+      ],
+      [
+        416.21818181818185,
+        "",
+        ""
+      ]
+    ],
+    "falta": []
+  },
+  "repeticoes": {
+    "confirmadas": [],
+    "rejeitadas": []
+  },
+  "claquetes": {},
+  "boletims_gerados": [
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_22_SET_2026_B6__REINTEGRA_O_PERITA_ITEP.mp3",
+      "duracao_segundos": 107.96,
+      "tamanho_bytes": 1728237,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.9,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_22_SET_2026_B7__COBRAN_A_INDEVIDA_GUA_TANGAR.mp3",
+      "duracao_segundos": 109.58,
+      "tamanho_bytes": 1754349,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.837,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_22_SET_2026_B8__REORGANIZA_O_UNIDADES_JUDICI_RIAS.mp3",
+      "duracao_segundos": 136.52,
+      "tamanho_bytes": 2185197,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.9,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_22_SET_2026_B9__CAPACITA_O_USO_IA_PODER_JUDICI_RIO.mp3",
+      "duracao_segundos": 64.12,
+      "tamanho_bytes": 1026669,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.326,
+        "cobertura_roteiro_corrigida": 0.326,
+        "correcoes_aplicadas": true,
+        "texto_corrigido": "No ar. Notícias da hora. O boletim informativo do Tribunal de Justiça do Rio Grande do Norte. Foi realizado entre os dias 15 e 18 de setembro, no Bloco de Aulas da Escola. A proposta foi capacitar os participantes para o uso prático e responsável da IA na rotina de trabalho, incluindo a extração e a organização de dados demandados e expectativas de mandados e certidões, a elaboração de comunicações mais eficazes e a padronização de documentos. Entre os pontos abordados estão a proteção de dados,",
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_22_SET_2026_B10__TRT_RN_CEJUSC_ACORDO_465_MIL.mp3",
+      "duracao_segundos": 106.62,
+      "tamanho_bytes": 1706733,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.833,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    }
+  ]
+}

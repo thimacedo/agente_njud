@@ -1,0 +1,93 @@
+{
+  "arquivo_entrada": "setembro\\17 SET B1-B5.mp3",
+  "data_detectada": "17 SET",
+  "faixa": [
+    1,
+    5
+  ],
+  "duracao_original": 439.8,
+  "triagem": {
+    "duracao_segundos": 439.8,
+    "canais": 2,
+    "frame_rate": 48000,
+    "sample_width": 2,
+    "acoes": [
+      "CORRIGIR: substituir canal direito pelo esquerdo (multiplicar direito por fator de escala do esquerdo)",
+      "AVISO: possível clipping (pico próximo de 0dBFS)"
+    ],
+    "canal_morto": "direito",
+    "clipping_detectado": true
+  },
+  "transcricao": {
+    "segmentos": 139,
+    "texto_completo": "Boletins 1719 do B1OB5, B1, empresa terá que devolver valores e indenizar cliente por falha em compras online. Uma empresa de tecnologia e vareijo online terá que restituir valores pagos por uma consumidora após ela comprar produtos na plataforma e não recebê-los, e não recebê-los. Consta na sentença que a mulher adquiriu um notebook no valor de R$ 1.199,00 e um Jeep infantil elétrico por R$ 949,90, entretanto, mesmo constando como entregue no sistema da Ré, o notebook nunca foi recebido pela autora da ação. De acordo com os autos, a consumidora tentou exercer o direito de arrependimento em relação ao Jeep. Porém, não conseguiu efetuar o procedimento por sua conta ter sido bloqueada pela Ré, inviabilizando a devolução e o rei em bolso. Já a empresa legou a regularidade da prestação do serviço e afirmou que o notebook foi entregue no endereço da autora. O caso foi julgado pelo quarto juiz adespecial civil e criminal da comarca de Mossoró. O juiz, responsável pelo caso, destacou que a relação jurídica entre as partes é de consumo, levando em consideração o código de defesa do consumidor, ainda de acordo com o magistrado, mesmo com a Ré afirmando que o notebook foi entregue em dezembro do ano passado, segundo registros sistêmicos internos. Essas provas são suficientes para comprovar o adimplemento da obrigação do Tribunal de Justiça do Rio Grande e do Norte, Leonardo Almeida. 2. TJRN reforma a decisão e nega a remissão de pena por custo sem convenho com o sistema prisional. A Câmara Criminal do TJRN reformou a decisão da terceira vara regional de execução penal de Mossoró e negou a remissão de nove dias de pena concedida a um apenado pela realização de um custo na modalidade de ensino à distância. Ao acolher o recurso do Ministério Público, o colegiado entendeu que a instituição responsável pelo custo não possuía convenho com o sistema prisional nem integrava o projeto político pedagógico da unidade prisional, requisitos previstos para o reconhecimento do benefício. Segundo a decisão, a resolução do Conselho Nacional de Justiça admite a remissão de pena por atividades educacionais, inclusive cursos de capacitação profissional, desde que observado as regras estabelecidas para garantir a finalidade de recitalização do apenado. Conforme relatou, a EAD, por si só, não assegura o direito à remissão de pena. Além de ser reconhecida pelo Ministério da Educação, a instituição de ensino deve estar integrada ao projeto político pedagógico da unidade prisional, ou não ter convenho com o sistema penitenciário permitindo o acompanhamento da frequência e das atividades desenvolvidas. Do Tribunal da Justiça do Rio Grande e do Norte, Leonardo Almeida. B3. Dona de Lava Jato é condenada após polícia localizar carros roubados em estabelecimento de Natal. A décima vara criminal da comarca de Natal condenou a proprietária de um lava jato localizado no bairro pastor, após a polícia civil localizar no estabelecimento e na garagem da residência da denunciada dois veículos com registro e roubo. A acusada legou que os automóveis pertenciam a clientes, mas não sabe identificar os proprietários nem apresentou qualquer registro dos veículos. A sentença concluiu que a mulher mantinha bens de origem e lista em depósito no exercício de atividade comercial e por esse motivo aplicou penas restritivas de direitos. Segundo a denúncia do Ministério Público da R&D, uma equipe da polícia civil rastreava uma camionete Toyota Hilux roubada na noite de 10 de julho de 2019, quando localizou o veículo no interior do lava jato. Durante a fiscalização dos demais automóveis existentes no local, os policiais constataram que um rondafite também possuía registro de roubo. Os dois veículos foram aprendidos e a empresária presa em flagrante. Os automóveis foram submetidos à perícia do Instituto Técnico Científico de Perícia e o laudo concluiu que ambos estavam sem as placas originais e possuíam registro de ocorrência por roubo. Conduzida da elegância de plantão, a acusada negou os fatos. Ela afirmou ser proprietária do lava jato e alegou que os veículos pertenciam a clientes, mas disse não saber informar os nomes ou endereços das pessoas que haviam deixado sobre sua guarda. Do Tribunal de Justiça do Rio Grande do Norte, Leonardo Almeida. B4, TJRN mantém decisão que afastou regressão de regime após rompimento de tornozeleira eletrônica. A Câmara Criminal do TJRN mantém a decisão que deixou de reconhecer falta grave de um apenado após o rompimento de tornozeleira eletrônica. O colageado negou o recurso do Ministério Público e entendeu que o descomprimento das condições de monitoramento, por si só, não justifica a regressão automática do regime de comprimento de pena. O recurso questionava a decisão da terceira vara regional de execução penal de Mossoró que aplicou ao apenado a penalidade de advertência. Se reconhecer a prática da falta grave, se reconhecer a prática de falta grave. Para o Ministério Público, o rompimento do equipamento ocorrido em março de 2023 seria conduta equiparável a fuga. O entendimento da comarca por ém foi diferente. Segundo o colageado, embora o rompimento da tornozeleira represente desse comprimento das condições em postes ao apenado, cada caso deve ser analisado individualmente, levando em consideração as circunstâncias em que o fato ocorreu. Do Tribunal de Justiça, do Rio Grande do Norte, Leonardo Almeida. Comitê gestiu de penas pecuniárias de Natal publica novo edital para cadastramento de projetos sociais. O a comarca de Natal publicou edital destinado ao cadastramento de entidades públicas ou privadas com finalidade social. O valor é de 900 mil reais e será distribuído para 27 projetos que desenvolvam atividades de caráter essencial à segurança pública, educação e saúde, com predominância nas temáticas apresentadas no item 8 do edital. As inscrições já viram ser feitas até o dia 30 de setembro através do aplicativo Titina Social, desenvolvido pelo TJRN no endereço penaspecuniárias tjrn.juice.br. Na definição dos valores para cada projeto foram considerados informações contidas nas metas a serem cumpridas em 2026 pelo grupo de monitoramento e fiscalização do sistema carcerário e de execução das medidas socio educativas do Tribunal de Justiça do RN devidamente descritas no documento. Os projetos escritos e considerados aptos serão encaminhados ao Ministério Público para a análise e posteriormente submetidos à apreciação do comitê de estudo e penaspecuniárias da comarca de Natal, do Tribunal de Justiça do Rio Grande do Norte"
+  },
+  "estrutura": {
+    "marcadores": {
+      "1": 0.0,
+      "2": 87.712,
+      "3": 175.424,
+      "4": 263.13599999999997,
+      "5": 350.848
+    },
+    "assinaturas": [],
+    "falta": []
+  },
+  "repeticoes": {
+    "confirmadas": [],
+    "rejeitadas": []
+  },
+  "claquetes": {},
+  "boletims_gerados": [
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_17_SET_2026_B1__TJRN_EMPRESA_DEVOLVER_VALORES_FALHA_COMPRA.mp3",
+      "duracao_segundos": 460.9,
+      "tamanho_bytes": 7375341,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.909,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_17_SET_2026_B2__TJRN_REFORMA_DECIS_O_MEGA_REMI_O_PENA.mp3",
+      "duracao_segundos": 377.33,
+      "tamanho_bytes": 6038253,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.95,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_17_SET_2026_B3__TJRN_DONA_LAVA_JATO_CONDENADA.mp3",
+      "duracao_segundos": 285.64,
+      "tamanho_bytes": 4570989,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.853,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_17_SET_2026_B4__TJRN_MANT_M_DECIS_O_REGRESS_O_REGIME.mp3",
+      "duracao_segundos": 201.91,
+      "tamanho_bytes": 3231213,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.81,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_17_SET_2026_B5__TJRN_COMIT_GESTOR_PENAS_PECUNI_RIAS.mp3",
+      "duracao_segundos": 114.2,
+      "tamanho_bytes": 1828077,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.81,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    }
+  ]
+}

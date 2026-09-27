@@ -1,0 +1,123 @@
+{
+  "arquivo_entrada": "setembro\\16 SET B1B5.mp3",
+  "data_detectada": "16 SET",
+  "faixa": [
+    1,
+    5
+  ],
+  "duracao_original": 404.136,
+  "triagem": {
+    "duracao_segundos": 404.136,
+    "canais": 2,
+    "frame_rate": 48000,
+    "sample_width": 2,
+    "acoes": [
+      "CORRIGIR: substituir canal direito pelo esquerdo (multiplicar direito por fator de escala do esquerdo)",
+      "AVISO: possível clipping (pico próximo de 0dBFS)"
+    ],
+    "canal_morto": "direito",
+    "clipping_detectado": true
+  },
+  "transcricao": {
+    "segmentos": 60,
+    "texto_completo": "Boletinhos 16 do 9 do B1 ao B5. B1. TJRN, TJRN recebe inspeção da Corrigiduria Nacional de Justiça entre os dias 23 e 25 de setembro. O Tribunal de Justiça do Rio Grande do Norte recebe entre os dias 23 e 25 de setembro uma inspeção de rotina da Corrigiduria Nacional de Justiça. A expressão tem como objetivo verificar o funcionamento dos serviços judiciais e estras judiciais com análise de documentos, informações, sistemas e demais registros relacionados às atividades do Tribunal e das Serventias Estras Judiciais. Os trabalhos serão realizados das 9 às 17 horas com a participação dos magistrados e servidores designados pela Corrigiduria Nacional. A expressão abram gerar setores administrativos e judiciais de primeiro e segundo graus de jurisprudência, além das Serventias Estras Judiciais do Estado. Durante atividade, as equipes do Senjota acompanham o funcionamento das unidades e analisam procedimentos e rotinas sem terar o funcionamento regulado dos fórums e das varas ou prazos dos processos em tramitação. Além do TJRN, outros três tribunais vão receber as equipes da Corrigiduria Nacional de Justiça em um segundo semestre de 2016, do Tribunal de Justiça do Rio Grande do Norte e da Omeida. Primeira vara de João Câmara divulga a seleção para exagerar o remunerado de pós-graduação direito. A primeira vara da comarca de João Câmara divulgou abertura de processo seletivo voltado para exagerar o remunerado de pós-graduação em direito. É ofertada uma vaga, a vindo classificação até o décimo colocado. O estágio teraduração máximo de humano pro hogarvo pelo mesmo período, pro hogarvo pelo mesmo período, desde que comprovado o vínculo com entidade, de ensino, o estágio, a jornada de estágio de 6 horas de áreas e 30 horas semanais, o estágio era o receberamento somente bolsa de complementação a desse apeto. Bolsa de complementação educacional no valor de R$2.060, além de auxílio transporte na contida de R$1.770, as inscrições já encontram, rapidamente, as inscrições já se encontram abertas e podem ser realizadas até o dia 20 de setembro do Tribunal de Justiça do Rio Grande do Norte e da Omeida. M3, com marca de São Beto do Norte se seleciona substituto para a responsável interino pelo ofício único de Caísara do Norte. A como marca de São Beto do Norte publicou edital para a seleção de substituto para a exercício de responsabilidade interina pelo ofício único de Caísara do Norte. As inscrições podem ser realizadas no período de 14 a 23 de setembro, devendo o interessado em caminhar requerimento para o e-mail, São Beto, a rouba de Jrn.js.br, com o assunto heritado de seleção de responsável interino. O candidato deve informar no texto o e-mail, o candidato deverá informar no texto do e-mail no meu completo nacionalidade, o indereço, telefone para contato, e-mail, data de nascimento, sexo, estado civil, RG e CPF, além da filiação. O interessado deverá atender preferencialmente e sucessivamente aos seguintes critérios nesta ordem, residindo o município de Caísara do Norte, ou em municípios contigos, que detém, ao menos, uma das atribuições do serviço vago, que manifeste a interesse na condução da saventia vaga. Do Tribunal de Justiça do Rio Grande do Norte, Leonardo Meida, M4, juizados especiais do Tejotarrini realizam mais de 40 atendimentos durante o primeiro feirão de negociação de dívidas. A corrigidoria geral, a corrigidoria dos juizados especiais do Tribunal de Justiça do Rio, realizou mais de 40 atendimentos, entre orientação jurídica e a juizamento de ações durante o primeiro feirão de negociação de dívidas realizado pelo Procomo no Cipal. Ação aconteceu no período de 9 a 11 de setembro, no shopping estação na zona norte, e teve como principal público pessoas idosas com questões de super-individamento e em preços. Entre os consumidores atendidos, estava o comerciante Arnaldo. Estava o comerciante Arnaldo de Souza, de 75 anos. Ele relatou o ter sido novo. Ele relatou o ter sido um aumento indevido no valor de um empréstimo que realizou. Segundo o comerciante, ao concluir a simulação do crédito, o valor para ser debitado era de 18 mil, mas com o passar dos meses, o número de prestações aumentou e a dívida chegou a 28 mil reais. Sem conseguir resolver o problema, procurou o firão de negociação de dívidas para compreender o que poderia ser feito para revertir a situação. O evento contou com a participação de empresas instituições como Cozerne Caerne, Banco do Brasil, Caixa Econômica, Banco e tal, entre outros fornecedores de serviços. Do Tribunal de Justiça do Rio Grande do Norte, o Tribunal de Justiça do Rio Grande do Norte através do presidente da Comissão criada por meio da portaria, torna público que realizará a contratação de empresas especializadas na prechação de serviços e locação de 12 veículos, tipo Sedan, Suve ou Red. A fase de cadastro das propostas será no dia 15 de setembro de 2006, até o perigo de inicial do envio de lance, que ocorrerá no dia 21 de setembro das 8 às 14 horas. Para todas as referências de tempo, será observado o horário de Brasília. O aviso de contratação e seus anèxios poderão ser adquiridos no site oficial do Tejota Reine, no interesse uratrônico www.tejotareine.juis.br e no site www.gov.br onde ocorrerá disputa. Quais que é outras informações poderão ser obtidas através dos telefones, oito quatro, três meias, sete três, nove dois, nove quatro, de segunda-quinta-feira das indereço electrônico www.tejotareine.juis.br No Tribunal de Justiça do Rio Grande do Norte, ele é o narra da humida."
+  },
+  "estrutura": {
+    "marcadores": {
+      "1": 0.0,
+      "2": 88.72,
+      "3": 230.98,
+      "4": 341.42,
+      "5": 334.88
+    },
+    "assinaturas": [
+      [
+        83.71404255319149,
+        "",
+        ""
+      ],
+      [
+        224.8141573033708,
+        "",
+        ""
+      ],
+      [
+        318.51919191919194,
+        "",
+        ""
+      ],
+      [
+        329.97489795918375,
+        "",
+        ""
+      ],
+      [
+        400.33444444444444,
+        "",
+        ""
+      ]
+    ],
+    "falta": []
+  },
+  "repeticoes": {
+    "confirmadas": [],
+    "rejeitadas": []
+  },
+  "claquetes": {},
+  "boletims_gerados": [
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_16_SET_2026_B1__TJRN_INSPE_O_CORREGEDORIA.mp3",
+      "duracao_segundos": 106.18,
+      "tamanho_bytes": 1699821,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.864,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_16_SET_2026_B2__TJRN_VARA_JO_O_C_MARA_SELE_O.mp3",
+      "duracao_segundos": 158.14,
+      "tamanho_bytes": 2531181,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.676,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_16_SET_2026_B3__TJRN_COMARCA_S_O_BENTO_SUBSTITUTO_INTERINO.mp3",
+      "duracao_segundos": 109.34,
+      "tamanho_bytes": 1750509,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.35,
+        "cobertura_roteiro_corrigida": 0.35,
+        "correcoes_aplicadas": true,
+        "texto_corrigido": "No ar, notícias da hora, o voletinho informativo do Tribunal de Justiça é do Rio Grande do Norte. Juizados especiais do Tejota Reino realizam mais de 40 atendimentos durante o primeiro firão de negociação de dívidas. A corgidoria geral, a corgidoria do juiz, a corgidoria dos Juizados especiais do Tribunal de Justiça do Reino realizou o mar de 40 atendimentos entre orientação jurídica e a juizamento de ações durante o primeiro firão. O durante o primeiro firão de negociação de dívidas realizado p",
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_16_SET_2026_B4__TJRN_JUIZADOS_ESPECIAIS_40_ATENDIMENTOS.mp3",
+      "duracao_segundos": 83.96,
+      "tamanho_bytes": 1344237,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.296,
+        "cobertura_roteiro_corrigida": 0.296,
+        "correcoes_aplicadas": true,
+        "texto_corrigido": "No ar, notícias da hora, o voletinho informativo do Tribunal de justiça é do Rio Grande do Norte. A colocação de 12 veículos tipo sedan suve o red. A fase de cadastro das propostas será no Rio de Janeiro. Veja 15 de setembro em 2016 até o período de iniciar um vio de lance que ocorrerá no dia 21 de setembro das 8 às 14 horas. Para todas as referências de tempo, será observado a hora de Brasília. O aviso de contratação e seus anexos poderão ser ampliados no site oficial do Pejote Reine, www.tejot",
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    },
+    {
+      "arquivo": "BOLETIM_RADIO_TJRN_16_SET_2026_B5__TJRN_AVISO_CONTRATA_O_VE_CULOS.mp3",
+      "duracao_segundos": 90.5,
+      "tamanho_bytes": 1449069,
+      "qualidade": {
+        "cobertura_roteiro_original": 0.8,
+        "correcoes_aplicadas": false,
+        "nota": "Cobertura de palavras do roteiro. NAO substitui audicao humana."
+      }
+    }
+  ]
+}

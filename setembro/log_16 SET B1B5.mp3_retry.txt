@@ -1,0 +1,166 @@
+
+============================================================
+PROCESSAMENTO CANÔNICO: 16 SET B1B5.mp3
+============================================================
+
+Carregando modelo de transcrição...
+  Usando faster-whisper (int8, CPU)...
+
+── ETAPA 0: TRIAGEM INICIAL DO ÁUDIO ──
+  Duração: 404.14s
+  Canais: 2, Samplerate: 48000Hz
+  Ações de correção: ['CORRIGIR: substituir canal direito pelo esquerdo (multiplicar direito por fator de escala do esquerdo)', 'AVISO: possível clipping (pico próximo de 0dBFS)']
+
+── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──
+
+── ETAPA 1.5: CORREÇÃO DE ALUCINAÇÕES ──
+  Segmentos antes: 61, depois: 60, removidos: 1
+  Transcrito: 60 segmentos
+
+  Transcrição completa:
+    [   0.96s -   10.68s] Boletinhos 16 do 9 do B1 ao B5. B1. TJRN, TJRN recebe inspeção da Corrigiduria Nacional
+    [  10.68s -   16.58s] de Justiça entre os dias 23 e 25 de setembro. O Tribunal de Justiça do Rio Grande do
+    [  16.58s -   22.04s] Norte recebe entre os dias 23 e 25 de setembro uma inspeção de rotina da Corrigiduria Nacional
+    [  22.04s -   27.80s] de Justiça. A expressão tem como objetivo verificar o funcionamento dos serviços judiciais
+    [  27.80s -   33.96s] e estras judiciais com análise de documentos, informações, sistemas e demais registros
+    [  33.96s -   39.76s] relacionados às atividades do Tribunal e das Serventias Estras Judiciais. Os trabalhos
+    [  39.76s -   44.74s] serão realizados das 9 às 17 horas com a participação dos magistrados e servidores
+    [  44.74s -   51.48s] designados pela Corrigiduria Nacional. A expressão abram gerar setores administrativos e judiciais
+    [  51.48s -   58.38s] de primeiro e segundo graus de jurisprudência, além das Serventias Estras Judiciais do Estado.
+    [  58.98s -   64.26s] Durante atividade, as equipes do Senjota acompanham o funcionamento das unidades e analisam
+    [  64.26s -   70.62s] procedimentos e rotinas sem terar o funcionamento regulado dos fórums e das varas ou prazos
+    [  70.62s -   76.52s] dos processos em tramitação. Além do TJRN, outros três tribunais vão receber as equipes
+    [  76.52s -   83.52s] da Corrigiduria Nacional de Justiça em um segundo semestre de 2016, do Tribunal
+    [  83.52s -   85.80s] de Justiça do Rio Grande do Norte e da Omeida.
+    [  88.72s -   95.16s] Primeira vara de João Câmara divulga a seleção para exagerar o remunerado de pós-graduação
+    [  95.16s -  100.56s] direito. A primeira vara da comarca de João Câmara divulgou abertura de processo seletivo
+    [ 100.56s -  105.86s] voltado para exagerar o remunerado de pós-graduação em direito. É ofertada uma vaga,
+    [ 105.86s -  110.82s] a vindo classificação até o décimo colocado. O estágio teraduração máximo de humano
+    [ 110.82s -  116.42s] pro hogarvo pelo mesmo período, pro hogarvo pelo mesmo período, desde que comprovado o vínculo
+    [ 116.42s -  127.14s] com entidade, de ensino, o estágio, a jornada de estágio de 6 horas de áreas e 30 horas
+    [ 127.14s -  132.68s] semanais, o estágio era o receberamento somente bolsa de complementação a desse apeto. Bolsa
+    [ 132.68s -  140.20s] de complementação educacional no valor de R$2.060, além de auxílio transporte na
+    [ 140.20s -  149.08s] contida de R$1.770, as inscrições já encontram, rapidamente, as inscrições já se encontram
+    [ 149.08s -  154.22s] abertas e podem ser realizadas até o dia 20 de setembro do Tribunal de Justiça do Rio Grande
+    [ 154.22s -  159.34s] do Norte e da Omeida. M3, com marca de São Beto do Norte se seleciona
+    [ 159.34s -  166.04s] substituto para a responsável interino pelo ofício único de Caísara do Norte. A como marca
+    [ 166.04s -  170.80s] de São Beto do Norte publicou edital para a seleção de substituto para a exercício de responsabilidade
+    [ 170.80s -  178.62s] interina pelo ofício único de Caísara do Norte. As inscrições podem ser realizadas no período
+    [ 178.62s -  183.84s] de 14 a 23 de setembro, devendo o interessado em caminhar requerimento para o e-mail,
+    [ 183.84s -  190.90s] São Beto, a rouba de Jrn.js.br, com o assunto heritado de seleção de responsável interino.
+    [ 191.54s -  197.50s] O candidato deve informar no texto o e-mail, o candidato deverá informar no texto do e-mail
+    [ 197.50s -  203.14s] no meu completo nacionalidade, o indereço, telefone para contato, e-mail, data de nascimento,
+    [ 203.72s -  210.40s] sexo, estado civil, RG e CPF, além da filiação. O interessado deverá atender preferencialmente
+    [ 210.40s -  215.98s] e sucessivamente aos seguintes critérios nesta ordem, residindo o município de Caísara do Norte,
+    [ 216.24s -  221.62s] ou em municípios contigos, que detém, ao menos, uma das atribuições do serviço vago, que manifeste
+    [ 221.62s -  227.80s] a interesse na condução da saventia vaga. Do Tribunal de Justiça do Rio Grande do Norte,
+    [ 227.82s -  235.46s] Leonardo Meida, M4, juizados especiais do Tejotarrini realizam mais de 40 atendimentos durante o primeiro
+    [ 235.46s -  244.16s] feirão de negociação de dívidas. A corrigidoria geral, a corrigidoria dos juizados especiais
+    [ 244.16s -  250.16s] do Tribunal de Justiça do Rio, realizou mais de 40 atendimentos, entre orientação jurídica e
+    [ 250.16s -  257.56s] a juizamento de ações durante o primeiro feirão de negociação de dívidas realizado pelo Procomo
+    [ 257.56s -  263.56s] no Cipal. Ação aconteceu no período de 9 a 11 de setembro, no shopping estação na zona norte,
+    [ 263.56s -  269.10s] e teve como principal público pessoas idosas com questões de super-individamento e em preços.
+    [ 269.76s -  278.60s] Entre os consumidores atendidos, estava o comerciante Arnaldo. Estava o comerciante Arnaldo de Souza, de 75
+    [ 278.60s -  286.08s] anos. Ele relatou o ter sido novo. Ele relatou o ter sido um aumento indevido no valor de um
+    [ 286.08s -  291.74s] empréstimo que realizou. Segundo o comerciante, ao concluir a simulação do crédito, o valor para ser
+    [ 291.74s -  298.06s] debitado era de 18 mil, mas com o passar dos meses, o número de prestações aumentou e a
+    [ 298.06s -  304.04s] dívida chegou a 28 mil reais. Sem conseguir resolver o problema, procurou o firão de negociação de dívidas
+    [ 304.04s -  309.70s] para compreender o que poderia ser feito para revertir a situação. O evento contou com a
+    [ 309.70s -  314.78s] participação de empresas instituições como Cozerne Caerne, Banco do Brasil, Caixa Econômica,
+    [ 315.08s -  321.16s] Banco e tal, entre outros fornecedores de serviços. Do Tribunal de Justiça do Rio Grande do Norte,
+    [ 329.82s -  334.88s] o Tribunal de Justiça do Rio Grande do Norte através do presidente da Comissão criada por meio da
+    [ 334.88s -  341.42s] portaria, torna público que realizará a contratação de empresas especializadas na prechação de serviços e
+    [ 341.42s -  351.14s] locação de 12 veículos, tipo Sedan, Suve ou Red. A fase de cadastro das propostas será no dia 15 de setembro de 2006, até o perigo
+    [ 351.14s -  358.40s] de inicial do envio de lance, que ocorrerá no dia 21 de setembro das 8 às 14 horas. Para todas as
+    [ 358.40s -  364.02s] referências de tempo, será observado o horário de Brasília. O aviso de contratação e seus anèxios
+    [ 364.02s -  372.42s] poderão ser adquiridos no site oficial do Tejota Reine, no interesse uratrônico www.tejotareine.juis.br
+    [ 372.42s -  380.96s] e no site www.gov.br onde ocorrerá disputa. Quais que é outras informações poderão ser obtidas
+    [ 380.96s -  387.18s] através dos telefones, oito quatro, três meias, sete três, nove dois, nove quatro, de segunda-quinta-feira das
+    [ 395.38s -  400.14s] indereço electrônico www.tejotareine.juis.br
+    [ 400.14s -  403.64s] No Tribunal de Justiça do Rio Grande do Norte, ele é o narra da humida.
+
+── ETAPA 2: DETECÇÃO DE ESTRUTURA ──
+  Data detectada: 16 SET → 16_SET_2026
+  Faixa: B1 - B5
+  Buscando roteiros em: setembro
+  Roteiros encontrados: 5 boletins
+    [corte fino] cabeça de B3 inicia em 230.98s (após claquete 'm4')
+  Marcadores B{N}. encontrados: [1, 2, 3, 4, 5]
+  Assinaturas detectadas: 5
+    [83.71s]  — 
+    [224.81s]  — 
+    [318.52s]  — 
+    [329.97s]  — 
+    [400.33s]  — 
+
+── ETAPA 3: DETECÇÃO DE REPETIÇÕES (confirmação por áudio) ──
+  Repetições confirmadas: 0
+  Repetições rejeitadas: 0
+
+── ETAPA 4: DETECÇÃO DE CLAKETES (gatilho por assinatura) ──
+  Assinaturas sem claquete detectada nos próximos 5s: 5
+    [83.71s] 
+    [224.81s] 
+    [318.52s] 
+    [329.97s] 
+    [400.33s] 
+  Claquetes detectadas: 0
+
+── ETAPA 4.5: CLAQUETE GERAL DETECTADA ──
+  Claquete geral: [0.96s - 3.54s]
+  Será removida do B1
+
+── ETAPA 5: CORTE + REMOÇÃO ──
+  Convertendo para mono (canal morto: direito)
+  B1: removendo claquete geral [0.96s - 3.54s]
+  B1: [0.00s → 83.52s] = 80.94s → BOLETIM_RADIO_TJRN_16_SET_2026_B1__TJRN_INSPE_O_CORREGEDORIA.mp3
+  B2: [88.72s → 221.62s] = 132.90s → BOLETIM_RADIO_TJRN_16_SET_2026_B2__TJRN_VARA_JO_O_C_MARA_SELE_O.mp3
+  B3: [230.98s → 315.08s] = 84.10s → BOLETIM_RADIO_TJRN_16_SET_2026_B3__TJRN_COMARCA_S_O_BENTO_SUBSTITUTO_INTERINO.mp3
+  B5: [334.88s → 400.14s] = 65.26s → BOLETIM_RADIO_TJRN_16_SET_2026_B5__TJRN_AVISO_CONTRATA_O_VE_CULOS.mp3
+  B4: [341.42s → 400.14s] = 58.72s → BOLETIM_RADIO_TJRN_16_SET_2026_B4__TJRN_JUIZADOS_ESPECIAIS_40_ATENDIMENTOS.mp3
+
+── ETAPA 6: MONTAGEM COM VINHETAS ──
+  B1: cabeça do roteiro = 6.4s
+  ✓ B1: montado → BOLETIM_RADIO_TJRN_16_SET_2026_B1__TJRN_INSPE_O_CORREGEDORIA.mp3 (106.18s)
+  B2: cabeça do roteiro = 6.0s
+  ✓ B2: montado → BOLETIM_RADIO_TJRN_16_SET_2026_B2__TJRN_VARA_JO_O_C_MARA_SELE_O.mp3 (158.14s)
+  B3: cabeça do roteiro = 7.2s
+  ✓ B3: montado → BOLETIM_RADIO_TJRN_16_SET_2026_B3__TJRN_COMARCA_S_O_BENTO_SUBSTITUTO_INTERINO.mp3 (109.34s)
+  B5: cabeça do roteiro = 5.0s
+  ✓ B5: montado → BOLETIM_RADIO_TJRN_16_SET_2026_B5__TJRN_AVISO_CONTRATA_O_VE_CULOS.mp3 (90.50s)
+  B4: cabeça do roteiro = 6.8s
+  ✓ B4: montado → BOLETIM_RADIO_TJRN_16_SET_2026_B4__TJRN_JUIZADOS_ESPECIAIS_40_ATENDIMENTOS.mp3 (83.96s)
+
+── ETAPA 7: AUDITORIA ──
+  ✓ BOLETIM_RADIO_TJRN_16_SET_2026_B1__TJRN_INSPE_O_CORREGEDORIA.mp3 — 106.18s, 1660.0 KB
+  ✓ BOLETIM_RADIO_TJRN_16_SET_2026_B2__TJRN_VARA_JO_O_C_MARA_SELE_O.mp3 — 158.14s, 2471.9 KB
+  ✓ BOLETIM_RADIO_TJRN_16_SET_2026_B3__TJRN_COMARCA_S_O_BENTO_SUBSTITUTO_INTERINO.mp3 — 109.34s, 1709.5 KB
+  ✓ BOLETIM_RADIO_TJRN_16_SET_2026_B4__TJRN_JUIZADOS_ESPECIAIS_40_ATENDIMENTOS.mp3 — 83.96s, 1312.7 KB
+  ✓ BOLETIM_RADIO_TJRN_16_SET_2026_B5__TJRN_AVISO_CONTRATA_O_VE_CULOS.mp3 — 90.50s, 1415.1 KB
+
+── ETAPA 7.5: VALIDAÇÃO DE QUALIDADE (transcrição vs roteiro) ──
+  B1: cobertura original = 86.36%
+  B2: cobertura original = 67.65%
+  B3: cobertura original = 35.00%
+  B3: cobertura baixa — aplicando correções de alucinações...
+  B3: cobertura corrigida = 35.00%
+  B4: cobertura original = 29.63%
+  B4: cobertura baixa — aplicando correções de alucinações...
+  B4: cobertura corrigida = 29.63%
+  B5: cobertura original = 80.00%
+
+  Auditoria salva: setembro\16 SET B1B5_saida\auditoria.json
+
+============================================================
+PROCESSAMENTO COMPLETO: 5 boletins gerados
+Saída: setembro\16 SET B1B5_saida
+============================================================
+
+⚠️  AUDITORIA HUMANA OBRIGATÓRIA ANTES DE ENTREGAR:
+   1. Ouvir cada boletim gerado
+   2. Verificar: sem repetições, sem claquetes, conteúdo faz sentido
+   3. Cobertura de palavras NÃO substitui audição
+   4. Se reprovações: ajustar pipeline e reprocessar
+============================================================
+
+PROCESSAMENTO COMPLETO: 5 boletins gerados

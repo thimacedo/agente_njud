@@ -1,0 +1,207 @@
+
+============================================================
+PROCESSAMENTO CANÔNICO: 22 SET B1-B5.mp3
+============================================================
+
+Carregando modelo de transcrição...
+  Usando faster-whisper (int8, CPU)...
+
+── ETAPA 0: TRIAGEM INICIAL DO ÁUDIO ──
+  Duração: 515.57s
+  Canais: 2, Samplerate: 48000Hz
+  Ações de correção: ['CONVERTER: áudio estereo duplicado (L==R) → converter para mono', 'AVISO: possível clipping (pico próximo de 0dBFS)']
+
+── ETAPA 1: TRANSCRIÇÃO (Whisper base) ──
+
+── ETAPA 1.5: CORREÇÃO DE ALUCINAÇÕES ──
+  Segmentos antes: 104, depois: 95, removidos: 9
+  Transcrito: 95 segmentos
+
+  Transcrição completa:
+    [   0.86s -    3.98s] Boletins, 22 de setembro, bem 1.
+    [   4.34s -    8.60s] Família será endinizada após a hospedagem própria para a estadia em região de frio
+    [   8.60s -    9.72s] estreino na Espanha.
+    [  10.38s -   15.44s] Uma plataforma de reservas de viagens foi condenada a endinizar um consumidor em 4.000
+    [  15.44s -   22.00s] reais por danos morais e restituir 3.340 reais por danos matariais após disponibilizar
+    [  25.84s -   30.98s] Após disponibilizar imóvelas em condições inadaquadas de uso durante uma viagem familiar à
+    [  30.98s -   37.52s] Espanha, a sentença do juiz José Maria Nascimento, do 10ª juizado especial cível da comarca
+    [  38.68s -   43.06s] Conforme os altos do processo, o homem organizou uma viagem saindo de Lisboa em Portugal
+    [  43.06s -   48.72s] com destino a região de Sierra Nevada na Espanha, acompanhado da esposa e dos dois filhos menores
+    [  49.98s -   54.18s] Para hospedagem da família, ele realizou a reserva de 4 diárias em um flat por meio de
+    [  54.18s -   55.24s] uma plataforma digital.
+    [  56.08s -   60.42s] Entretanto ao chegar no imóvel, a família contratou que o cano de água quente do banheiro
+    [  60.42s -   65.56s] estava rompido, tornando o local em próprio parabitação em condições mínimas de segurança
+    [  67.40s -   72.28s] Segundo o consumidor, a temperatura na região registrava cerca de 9 graus negativos,
+    [  72.76s -   76.48s] tornando impossível a permanência no imóvel sem o fornecimento de água quente.
+    [  77.20s -   81.18s] O autor afirmou que entrou em contato com a plataforma solicitando providências como
+    [  81.18s -   86.42s] a troca de a computação ou o reparem mediato do problema, mas não obteve solução eficaz,
+    [  86.84s -   89.68s] sendo a família obrigada se hospedar na residência de amigos.
+    [  90.38s -   95.86s] Por sua vez, a empresa legou falta de legitimidade para ser re no processo e sustentou que atuava
+    [  95.86s -  101.06s] apenas como intermediadora da reserva, defendendo a inexistência de responsabilidade pelos
+    [ 101.88s -  107.84s] Do Tribunal de Justiça do Rio Grande do Norte, Leyvia Rodrigues, B2.
+    [ 109.16s -  113.84s] O homem que invadeu o caso da ex-companheira e a constrangiu em público é condenado no
+    [ 115.24s -  119.30s] O terceiro joizado da violência doméstica e familiar contra a mulher condenou um homem
+    [ 119.30s -  124.62s] pelos crimes de violência psicológica e via de fato praticados contra a ex-companheira
+    [ 124.62s -  127.32s] no contexto de violência doméstica e familiar.
+    [ 127.32s -  135.78s] A denúncia apresentada pelo Ministério Público do Rio Grande do Norte foi julgada parcialmente
+    [ 135.78s -  136.42s] para o sadente.
+    [ 136.98s -  144.28s] Segundo os altos, entre setembro de 2022 e abril de 2023, o reloj adotou uma série de comportamentos
+    [ 144.28s -  147.58s] para intimidar e constrangir a mulher com quem tem uma filha.
+    [ 148.28s -  155.70s] Entre os episódios relatados estão a invasão da residência da vítima sem autorização, a
+    [ 155.70s -  159.62s] substrangimentos em locais públicos e agressões na presença da filha do casal.
+    [ 160.08s -  165.64s] Conforme a denúncia, em setembro de 2022, o acusado procurou o então-companheiro da vítima
+    [ 165.64s -  168.42s] para perguntar se ele estava realmente ficando com ela.
+    [ 169.04s -  173.52s] Três meses depois, entrou na residência da ex-companheira sem permissão, foi até o quarto
+    [ 173.52s -  178.42s] onde ela dormia e pegou seu celular, ao sair pediu a diarista que não informasse a vítima
+    [ 178.42s -  179.84s] sobre sua presença no imóvel.
+    [ 180.72s -  186.36s] Em abril de 2023, o homem foi até a academia onde a vítima treinava e passou a constrangi-la
+    [ 195.08s -  197.34s] gritando de antes de outras pessoas.
+    [ 198.06s -  203.06s] A denúncia relata ainda que o reo frequentemente procurava pessoas do convívio da vítima para
+    [ 203.06s -  207.88s] obter informações sobre sua rotina e dizer a terceiros que havia sido ele quem colocou
+    [ 207.88s -  208.90s] o fim ao relacionamento.
+    [ 209.62s -  214.04s] Ao analisar o caso, a juiz assuzando a Paula Deraújo destacou que crimes de violência
+    [ 214.04s -  218.84s] doméstica costumam ocorrer sem a presença de testemunhas, e por isso, o depoimento da
+    [ 218.84s -  223.64s] vítima, quando coerente e em sintonia com os demais provas, possui especial relevância.
+    [ 224.54s -  229.22s] O homem foi condenado há seis meses de reclusão pelo crime de violência psicológica e é
+    [ 229.22s -  232.12s] 28 dias de prisão simples pelo crime de vias de fato.
+    [ 232.72s -  237.36s] As penas deverão ser cumpridas inicialmente em rede me aberto, além da condenação criminal.
+    [ 239.30s -  244.46s] Além da condenação criminal, ele deverá pagar três mil reais a vítima a título de
+    [ 244.46s -  245.96s] indenização por danos morais.
+    [ 246.84s -  255.76s] Lutribonó de justiça do Rio Grande do Norte, Ele vê Rodrigues, B3, reconhece, TJN participa
+    [ 255.76s -  260.56s] de ação que garante reconhecimento se viu a 28 pessoas trans e através de isso.
+    [ 261.28s -  266.60s] Na última sexta-feira, 18 de setembro, 28 pessoas trans e rapete.
+    [ 273.10s -  278.20s] documentação com o nome pelo qual se identificam. A ação aconteceu na auditória do centro
+    [ 278.20s -  283.50s] de tecnologia da Universidade Federal do Rio Grande do Norte, com parte do projeto reconheci.
+    [ 284.04s -  288.98s] Iniciativa que reúne o Tribunal de Justiça do Rio Grande do Norte, a UFRN, e a defesoria
+    [ 288.98s -  289.98s] pública do Estado.
+    [ 291.10s -  296.12s] A ação busca facilitar o acesso gratuito e humanizado, a retificação de pronome e gênero
+    [ 296.12s -  301.00s] nos registros civis. A cerimúnia de entrega da documentação contou com a participação
+    [ 301.00s -  305.96s] de representantes de instituições parceiras, pessoas beneficiadas e familiares.
+    [ 306.46s -  311.12s] O juiz Fabio Ataí, de explica que o Tejota Riena atua na iniciativa, a partir da integração
+    [ 311.12s -  316.58s] com os serviços e estes judiciais, pela corrigidoria, da articulação institucional do núcleo
+    [ 316.58s -  322.78s] de ações e programas social ambientais, e do apoio às pessoas, rapete, e do apoio às ações
+    [ 322.78s -  327.48s] de cidadania. Segundo o magistrado, a mudança na documentação permite que essas pessoas
+    [ 327.48s -  333.70s] vivem sim a escrevência do próprio nome, conceito da escritura, conceição evaristo, que combina
+    [ 333.70s -  335.90s] escrever, viver e ser.
+    [ 336.84s -  342.16s] O projeto reconhecer foi criado em nove de junho de 2022, a partir de uma palestra sobre
+    [ 342.16s -  347.16s] violência de gênero e retificação civil ministrada pelo juiz e professor do Departamento de Direito
+    [ 347.16s -  357.98s] Processual, a partir de uma palestra sobre violência de gênero e retificação civil ministrada
+    [ 357.98s -  364.24s] pelo juiz e professor do Departamento de Direito Processual, e propedeu-te cada UFRN Fabio Ataí.
+    [ 365.04s -  369.50s] A partir do encontro, os instituições passaram a construir uma ação conjunta para facilitar
+    [ 369.50s -  371.98s] o acesso aos retificações nos registros civis.
+    [ 371.98s -  385.86s] Do Tribunal de Justiça do Rio Grande do Norte, Lívia Rodríguez, B4, Té jata a reenelamento
+    [ 385.86s -  391.56s] ao falecimento do desembargador aposentado a S. Sampaio Marinho, a presidência do Tribunal
+    [ 391.56s -  395.96s] de Justiça, em nome do poder judiciário do Rio Grande do Norte, lamenta ao falecimento do
+    [ 395.96s -  401.22s] desembargador aposentado a S. Sampaio Marinho, ocorrido neste domingo 20 de setembro.
+    [ 401.22s -  407.04s] Natural de Macau, o desembargador a S. S. Marinho construiu uma trajetória de quase 4 décadas
+    [ 407.04s -  412.56s] no poder judiciário do Rio Grande do Norte, ocupou diversos cargos de tribunal poteiguar entre
+    [ 412.56s -  417.78s] eles o de presidente da Corte, tomou pósse como presidente do Té jata reené 4 décadas depois
+    [ 417.78s -  426.12s] de iniciar sua carreira na justiça norte Rio Grande do Norte para os anos de 2003 e 2004.
+    [ 427.08s -  432.04s] A S. permaneceu na magistratura até a gosto de 2008 quando o sé aposentou voluntariamente
+    [ 432.04s -  437.78s] por tempo de contribuição. Além da atuação institucional, o nome do desembargador permanece
+    [ 437.78s -  442.40s] ligado à memória do judiciário poteiguar. A biblioteca do Fórum Miguel Cébri-Fagun,
+    [ 442.54s -  448.62s] desenatal, recebeu o nome de biblioteca desembargador a S. S. Sampaio Marinho em reconhecimento à sua
+    [ 448.62s -  452.96s] trajetória no Tribunal e a sua contribuição para a justiça do Rio Grande do Norte.
+    [ 453.76s -  461.20s] Do Tribunal do Justiça do Rio Grande do Norte, Lívia Rodrigues, B5, Té jata reené reconhece
+    [ 461.20s -  467.26s] validade de empréstimo consignado e afasta em decisão. A primeira câmara civil do Té jata reené
+    [ 467.26s -  472.64s] reformou sentença da comarca de apodir e reconheceu a regularidade de um contrato de empréstimo
+    [ 472.64s -  478.82s] consignado firmado entre uma instituição financeira e uma cliente. O colegiado entendeu que a documentação
+    [ 478.82s -  484.50s] apresentada pelo banco comprouva contratação e afaste as alegações de fraude ou irregularidade na
+    [ 484.50s -  491.18s] opressão. De acordo com o julgamento, o banco apresentou o contrato assinado pela consumidora com
+    [ 491.18s -  496.40s] uma assinatura compatível com a constante em seu documento de identificação, além de comprovante de
+    [ 496.40s -  502.14s] transferência do valor contratado para a conta de sua titularidade. Para o colegiado, as provas reunidas
+    [ 502.14s -  507.76s] no processo demonstram a regularidade da contratação e não evidenciam fora na prestação do serviço ou
+    [ 507.76s -  512.74s] situação que justifique a indenização por danos materiais ou morais. Dos tribunados de
+    [ 512.74s -  515.46s] justiça do Rio Grande do Norte, livre Rodrigues.
+
+── ETAPA 2: DETECÇÃO DE ESTRUTURA ──
+  Data detectada: 22 SET → 22_SET_2026
+  Faixa: B1 - B5
+  Buscando roteiros em: setembro
+  Roteiros encontrados: 5 boletins
+  Marcadores B{N}. encontrados: [1, 2, 3, 4, 5]
+  Assinaturas detectadas: 7
+    [102.23s]  — 
+    [248.20s]  — 
+    [285.37s]  — 
+    [372.59s]  — 
+    [451.34s]  — 
+    [455.05s]  — 
+    [512.80s]  — 
+
+── ETAPA 3: DETECÇÃO DE REPETIÇÕES (confirmação por áudio) ──
+  Repetições confirmadas: 0
+  Repetições rejeitadas: 0
+
+── ETAPA 4: DETECÇÃO DE CLAKETES (gatilho por assinatura) ──
+  Assinaturas sem claquete detectada nos próximos 5s: 7
+    [102.23s] 
+    [248.20s] 
+    [285.37s] 
+    [372.59s] 
+    [451.34s] 
+    [455.05s] 
+    [512.80s] 
+  Claquetes detectadas: 0
+
+── ETAPA 4.5: Claquete geral não detectada ──
+
+── ETAPA 5: CORTE + REMOÇÃO ──
+  Convertendo para mono (canal morto: None)
+  B1: [0.00s → 101.88s] = 101.88s → BOLETIM_RADIO_TJRN_22_SET_2026_B1__INDENIZA_O_HOSPEDAGEM_IMPR_PRIA.mp3
+  B2: [109.16s → 246.84s] = 137.68s → BOLETIM_RADIO_TJRN_22_SET_2026_B2__CONDENA_O_INVAS_O_CASA_EX_COMPANHEIRA.mp3
+  B3: [255.76s → 284.04s] = 28.28s → BOLETIM_RADIO_TJRN_22_SET_2026_B3__RECONHECIMENTO_CIVIL_PESSOAS_TRANS.mp3
+  B4: [288.98s → 371.98s] = 83.00s → BOLETIM_RADIO_TJRN_22_SET_2026_B4__NOTA_PESAR_A_CIO_MARINHO.mp3
+  B5: [385.86s → 448.62s] = 62.76s → BOLETIM_RADIO_TJRN_22_SET_2026_B5__TJRN_RECONHECE_VALIDADE_EMPR_STIMO.mp3
+
+── ETAPA 6: MONTAGEM COM VINHETAS ──
+  B1: cabeça do roteiro = 6.0s
+  ✓ B1: montado → BOLETIM_RADIO_TJRN_22_SET_2026_B1__INDENIZA_O_HOSPEDAGEM_IMPR_PRIA.mp3 (127.12s)
+  B2: cabeça do roteiro = 6.4s
+  ✓ B2: montado → BOLETIM_RADIO_TJRN_22_SET_2026_B2__CONDENA_O_INVAS_O_CASA_EX_COMPANHEIRA.mp3 (162.92s)
+  B3: cabeça do roteiro = 6.0s
+  ✓ B3: montado → BOLETIM_RADIO_TJRN_22_SET_2026_B3__RECONHECIMENTO_CIVIL_PESSOAS_TRANS.mp3 (53.52s)
+  B4: cabeça do roteiro = 5.0s
+  ✓ B4: montado → BOLETIM_RADIO_TJRN_22_SET_2026_B4__NOTA_PESAR_A_CIO_MARINHO.mp3 (108.24s)
+  B5: cabeça do roteiro = 5.0s
+  ✓ B5: montado → BOLETIM_RADIO_TJRN_22_SET_2026_B5__TJRN_RECONHECE_VALIDADE_EMPR_STIMO.mp3 (88.00s)
+
+── ETAPA 7: AUDITORIA ──
+  ✓ BOLETIM_RADIO_TJRN_22_SET_2026_B1__INDENIZA_O_HOSPEDAGEM_IMPR_PRIA.mp3 — 127.12s, 1987.0 KB
+  ✓ BOLETIM_RADIO_TJRN_22_SET_2026_B2__CONDENA_O_INVAS_O_CASA_EX_COMPANHEIRA.mp3 — 162.92s, 2546.5 KB
+  ✓ BOLETIM_RADIO_TJRN_22_SET_2026_B3__RECONHECIMENTO_CIVIL_PESSOAS_TRANS.mp3 — 53.52s, 837.2 KB
+  ✓ BOLETIM_RADIO_TJRN_22_SET_2026_B4__NOTA_PESAR_A_CIO_MARINHO.mp3 — 108.24s, 1692.2 KB
+  ✓ BOLETIM_RADIO_TJRN_22_SET_2026_B5__TJRN_RECONHECE_VALIDADE_EMPR_STIMO.mp3 — 88.00s, 1375.7 KB
+
+── ETAPA 7.5: VALIDAÇÃO DE QUALIDADE (transcrição vs roteiro) ──
+  B1: cobertura original = 40.43%
+  B1: cobertura baixa — aplicando correções de alucinações...
+  B1: cobertura corrigida = 40.43%
+  B2: cobertura original = 36.84%
+  B2: cobertura baixa — aplicando correções de alucinações...
+  B2: cobertura corrigida = 36.84%
+  B3: cobertura original = 37.50%
+  B3: cobertura baixa — aplicando correções de alucinações...
+  B3: cobertura corrigida = 37.50%
+  B4: cobertura original = 38.46%
+  B4: cobertura baixa — aplicando correções de alucinações...
+  B4: cobertura corrigida = 38.46%
+  B5: cobertura original = 18.60%
+  B5: cobertura baixa — aplicando correções de alucinações...
+  B5: cobertura corrigida = 18.60%
+
+  Auditoria salva: setembro\22 SET B1-B5_saida\auditoria.json
+
+============================================================
+PROCESSAMENTO COMPLETO: 5 boletins gerados
+Saída: setembro\22 SET B1-B5_saida
+============================================================
+
+⚠️  AUDITORIA HUMANA OBRIGATÓRIA ANTES DE ENTREGAR:
+   1. Ouvir cada boletim gerado
+   2. Verificar: sem repetições, sem claquetes, conteúdo faz sentido
+   3. Cobertura de palavras NÃO substitui audição
+   4. Se reprovações: ajustar pipeline e reprocessar
+============================================================
+
+PROCESSAMENTO COMPLETO: 5 boletins gerados
