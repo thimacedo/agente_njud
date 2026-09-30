@@ -5,6 +5,7 @@ CORRECAO: exportar PYTHONPATH no subprocess bash para evitar erro de modulo nao 
 """
 
 import os
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -50,42 +51,72 @@ NJUDs = [
     },
 ]
 
-ICE = "I:/Meu Drive/RADIO TJRN CONTEÚDO/00_PRODUCAO_2026/01_BOLETINS_DIARIOS/03_AUDIOS_RADIO/09 - SET - 26/"
+ICE = str(BASE / "boletins" / "09 - SET - 26")
 BASH_PATH = r"C:/Program Files/Git/bin/bash.exe"
 PYTHON_PATH = str(BASE / ".venv_pipeline" / "Scripts" / "python.exe")
 SCRIPTS_PIPELINE_PATH = str(BASE / "scripts_pipeline")
 NJUD_DIVIDIR_SH = str(BASE / "scripts_pipeline" / "njud" / "njud_dividir.sh")
 
 def copiar_mp3(njud_info):
+    """Copia os boletins do NJUD para o workspace local.
+
+    Fail-closed: cada boletim é copiado e VERIFICADO no destino. Se qualquer
+    arquivo não for copiado, retorna False — nunca reporta sucesso sem prova.
+
+    Nota: o nome real dos boletins é
+        BOLETIM_RADIO_TJRN_DD_MM_AAAA_B<N>_..._NJUD_<codigo>.mp3
+    ou seja, o código do NJUD está no SUFIXO do nome, não no prefixo. Um
+    filtro 'NJUD_<codigo>*.mp3' nunca casa — por isso a cópia é feita por
+    seleção explícita do índice B<N> (que é o dado que o pipeline realmente
+    conhece), não por glob de prefixo.
+    """
     subdir = njud_info["subdir_audio"]
     codigo = njud_info["codigo"]
     src_base = os.path.join(ICE, subdir)
     dest_base = os.path.join(str(BASE), "tmp", f"njud_{codigo}_workspace")
-    
+
     os.makedirs(dest_base, exist_ok=True)
-    
+
     env_path = os.path.join(dest_base, ".env_local")
     with open(env_path, 'w', encoding='utf-8') as f:
         f.write(f"ROTEIRO_NJUD={njud_info['roteiro_txt']}\n")
-    
+
+    if not os.path.isdir(src_base):
+        print(f"    ERRO: pasta de origem inexistente: {src_base}")
+        return False
+
     print(f"  [COPIAR] NJUD {codigo}: copiando {len(njud_info['boletins'])} boletins...")
-    
+
     for b in njud_info["boletins"]:
+        # Seleciona pelo índice B<N> delimitado (B1 não casa com B10) e
+        # exige que o arquivo pertença a este NJUD.
         cmd = [
-            "pwsh", "-NoProfile",
-            "-Command",
-            f"Get-ChildItem -Path '{src_base}' -Filter 'NJUD_{codigo}*.mp3' | ForEach-Object {{ Copy-Item -LiteralPath $_.FullName -Destination '{dest_base}/' + $_.Name -ErrorAction Stop; Write-Host $_.Name }}"
+            "pwsh", "-NoProfile", "-Command",
+            (
+                f"$f = Get-ChildItem -LiteralPath '{src_base}' -Filter '*.mp3' | "
+                f"Where-Object {{ $_.Name -match '(^|[^0-9])B{re.escape(b)}([^0-9]|$)' -and "
+                f"$_.Name -match 'NJUD_{re.escape(codigo)}' }} | "
+                f"Select-Object -First 1; "
+                f"if (-not $f) {{ Write-Error 'nenhum arquivo B{b} para NJUD {codigo}'; exit 2 }}; "
+                f"Copy-Item -LiteralPath $f.FullName -Destination '{dest_base}' -ErrorAction Stop; "
+                f"Write-Output $f.Name"
+            ),
         ]
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=120, cwd=str(BASE))
+
         if result.returncode != 0:
-            print(f"    ERRO copiando B{b}: {result.stderr}")
+            print(f"    ERRO copiando B{b}: {result.stderr.strip()[:200]}")
             return False
-        files = [l.strip() for l in result.stdout.strip().split("\n") if l.strip()]
-        if files:
-            print(f"    OK: {files[-1]}")
-        else:
-            print(f"    OK: B{b}")
-    
+
+        # Verificação independente no disco: o arquivo existe no destino?
+        nome = result.stdout.strip().splitlines()[-1].strip() if result.stdout.strip() else ""
+        destino = os.path.join(dest_base, nome) if nome else None
+        if not destino or not os.path.isfile(destino) or os.path.getsize(destino) == 0:
+            print(f"    ERRO: B{b} não confirmado no destino (esperado em {dest_base})")
+            return False
+
+        print(f"    OK: {nome} ({os.path.getsize(destino)} bytes)")
+
     print(f"  [OK] Workspace NJUD {codigo} pronto")
     return True
 

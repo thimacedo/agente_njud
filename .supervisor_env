@@ -1,0 +1,3 @@
+# Gerado por supervisor.py — aplicar antes do próximo batch
+export DIVISOR_COBERTURA_MIN="0.65"
+export DIVISOR_THRESHOLD_SIMILARIDADE="0.8"

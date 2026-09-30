@@ -1,9 +1,12 @@
 """
 Etapa 1: Transcrição com Whisper + integração com cache.
 """
+import sys
+# Limpar paths do Hermes para evitar conflito de imports do faster_whisper
+sys.path = [p for p in sys.path if 'hermes' not in p.lower() and 'AppData/Local/hermes' not in p]
+
 import os
 import re
-import sys
 import tempfile
 from pathlib import Path
 

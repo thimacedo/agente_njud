@@ -1,0 +1,8 @@
+========================================
+NJUD — DIVISÃO DE BOLETINS
+========================================
+Entrada : E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR/tmp/njud_1957_workspace
+Saída   : E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR/data/processed/PRODUCAO_2026/JORNAIS_DIVIDIDOS/NJUD_1957
+
+2026-09-26 23:23:08,421 [INFO] dividir: entrada=E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\tmp\njud_1957_workspace saida=E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\data\processed\PRODUCAO_2026\JORNAIS_DIVIDIDOS\NJUD_1957 aplicar=True
+2026-09-26 23:23:08,422 [WARNING] nenhum MP3 encontrado em E:\02_Projetos_Trabalho\Projetos_Ativos\DIVISOR\tmp\njud_1957_workspace
