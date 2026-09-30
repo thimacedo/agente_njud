@@ -115,14 +115,24 @@ def processar_cortes_boletim(segmentos, audio_corte, rep_confirmadas, claquetes,
                 cortes_claquette.append({"inicio": seg["start"], "fim": fim_claquete})
                 print(f"  B{n}: removendo {motivo} [{seg['start']:.2f}s - {fim_claquete:.2f}s]")
 
-        # Aplicar cortes sequencialmente (do fim para o início para manter timestamps)
+        # Todos os intervalos usam a linha do tempo original. Mesclar antes de
+        # remover evita cortar fala duas vezes ou deslocar cortes de outra classe.
+        intervalos = sorted(
+            (max(t_start, c['inicio']), min(t_fim, c['fim']))
+            for c in cortes_repeticao + cortes_claquette
+            if min(t_fim, c['fim']) > max(t_start, c['inicio'])
+        )
+        mesclados = []
+        for inicio, fim in intervalos:
+            if mesclados and inicio <= mesclados[-1][1]:
+                mesclados[-1] = (mesclados[-1][0], max(mesclados[-1][1], fim))
+            else:
+                mesclados.append((inicio, fim))
         segmento_limpo = segmento
-        for corte in sorted(cortes_repeticao, key=lambda x: x['fim'], reverse=True) + \
-                       sorted(cortes_claquette, key=lambda x: x['fim'], reverse=True):
-            t_inicio_seg = max(0, corte['inicio'] - t_start)
-            t_fim_seg = min(len(segmento)/1000, corte['fim'] - t_start)
-            if t_fim_seg > t_inicio_seg:
-                segmento_limpo = segmento_limpo[:int(t_inicio_seg*1000)] + segmento_limpo[int(t_fim_seg*1000):]
+        for inicio, fim in reversed(mesclados):
+            inicio_ms = int(inicio * 1000) - t_start_ms
+            fim_ms = int(fim * 1000) - t_start_ms
+            segmento_limpo = segmento_limpo[:inicio_ms] + segmento_limpo[fim_ms:]
 
         boletims_cortados[n] = {
             "audio": segmento_limpo,
@@ -134,3 +144,4 @@ def processar_cortes_boletim(segmentos, audio_corte, rep_confirmadas, claquetes,
         }
 
     return boletims_cortados
+

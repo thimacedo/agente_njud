@@ -23,17 +23,6 @@ from pathlib import Path
 # IMPORTS CANÓNICOS
 # ──────────────────────────────────────────────────────────────────────
 PROJECT = Path(__file__).resolve().parent.parent.parent
-sys.path.insert(0, str(PROJECT / "src"))
-
-from registro_programas import (
-    OUTPUT_DIR,
-    obter_programa,
-    TipoPrograma,
-)
-
-# Guard de isolamento
-from isolamento import requer_programa, validar_path, IsolamentoError
-
 # ──────────────────────────────────────────────────────────────────────
 # CONSTANTES
 # ──────────────────────────────────────────────────────────────────────
@@ -42,10 +31,10 @@ MIN_NOTAS = 4
 MAX_NOTAS = 6
 
 # Pasta de notas isolada
-NOTAS_DIR = OUTPUT_DIR / "GIRO"
+NOTAS_DIR = PROJECT / "data" / "output" / "GIRO"
 
 # Pasta de GNCs (saída final)
-GNC_DIR = OUTPUT_DIR / "GIRO"
+GNC_DIR = NOTAS_DIR
 
 # Vinhetas
 VHT_DIR = PROJECT / "assets" / "vinhetas" / "giro"
@@ -78,7 +67,7 @@ def carregar_vinheta(nome: str):
     raise FileNotFoundError(f"Vinheta não encontrada: {caminho}")
 
 
-def montar_gnc(cod: str, notas: list[Path], data_str: str) -> Path | None:
+def montar_gnc(cod: str, notas: list[Path], data_str: str, pasta_saida: Path | None = None) -> Path | None:
     """Monta um GNC a partir das notas."""
     print(f"  Montando {cod}...")
     
@@ -109,7 +98,9 @@ def montar_gnc(cod: str, notas: list[Path], data_str: str) -> Path | None:
     
     # Salvar
     nome = f"GNC_{cod}_{data_str}.mp3"
-    saida = GNC_DIR / nome
+    destino = Path(pasta_saida) if pasta_saida is not None else GNC_DIR
+    destino.mkdir(parents=True, exist_ok=True)
+    saida = destino / nome
     programa_audio.export(str(saida), format="mp3")
     
     dur = len(programa_audio) / 1000
@@ -135,6 +126,8 @@ def sincronizar_h():
 
 
 def main():
+    sys.path.insert(0, str(PROJECT / "_legado" / "src"))
+    from isolamento import requer_programa, validar_path, IsolamentoError
     parser = argparse.ArgumentParser(
         description="Montagem de GNCs — GIRO (v2 canónica)."
     )
@@ -243,3 +236,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

@@ -279,9 +279,9 @@
     let html='';
     for(const j of sorted) html += jobHTML(j);
     dom.jobsList.innerHTML = html;
-    $$('.jb-cancel').forEach(b=>b.addEventListener('click',()=>cancelJob(+b.dataset.id)));
-    $$('.jb-dismiss').forEach(b=>b.addEventListener('click',()=>dismissJob(+b.dataset.id)));
-    $$('.jb-download').forEach(b=>b.addEventListener('click',()=>downloadJob(+b.dataset.id)));
+    $$('.jb-cancel').forEach(b=>b.addEventListener('click',()=>cancelJob(b.dataset.id)));
+    $$('.jb-dismiss').forEach(b=>b.addEventListener('click',()=>dismissJob(b.dataset.id)));
+    $$('.jb-download').forEach(b=>b.addEventListener('click',()=>downloadJob(b.dataset.id)));
   }
   function jobHTML(j){
     const run=j.status==='running', done=j.status==='done', err=j.status==='error' || j.status==='cancelled';
@@ -386,7 +386,7 @@
     }
     const jobData = await res.json();
     const job = {
-      id:jobData.id,
+      id:jobData.id || jobData.job_id,
       tipo: jobData.tipo || state.modo,
       name: uploads.length===1 ? uploads[0].name : `${jobData.tipo||state.modo} — ${uploads.length} arquivos`,
       status:'running',
@@ -416,8 +416,8 @@
         job.etapa = d.etapa || job.etapa;
         job.progress = d.progress!=null ? d.progress : job.progress;
         job.error = d.error || null;
-        job.downloadUrl = d.download_url || null;
-        job.duration = d.duration ? d.duration : (j.duration?j.duration:Math.round((Date.now()-job.createdAt)/1000));
+        job.downloadUrl = d.download_url ? new URL(d.download_url, BACKEND_URL || location.origin).href : null;
+        job.duration = d.duration_s ?? job.duration ?? Math.round((Date.now()-job.createdAt)/1000);
         render();
         if(d.status==='done' || d.status==='error' || d.status==='cancelled'){
           clearInterval(job._poll);
@@ -434,9 +434,12 @@
   async function cancelJob(id){
     const j=state.jobs.find(x=>x.id===id); if(!j||j.status!=='running') return;
     try{
-      await fetch(API.cancel(id), {method:'DELETE'});
-    }catch(e){}
-    j.status='cancelled'; j.error='Cancelado'; j.progress=100;
+      const res = await fetch(API.cancel(id), {method:'DELETE'});
+      if(!res.ok) throw new Error('Falha ao cancelar');
+      const data = await res.json();
+      j.status=data.status;
+      if(data.status==='cancelled'){j.error='Cancelado';j.progress=100;}
+    }catch(e){dom.hint.textContent='Não foi possível cancelar o processo.';return;}
     render();
   }
   function dismissJob(id){
