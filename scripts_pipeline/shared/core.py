@@ -118,50 +118,25 @@ def _calcular_partes_ajustadas(inicio: float, fim: float, cortes: list) -> list:
     Returns:
         Lista de (inicio_original, fim_original, inicio_ajustado, fim_ajustado)
     """
-    partes = [(inicio, fim, inicio, fim)]
-    
+    partes_originais = [(inicio, fim)]
     for corte in cortes:
         novas_partes = []
-        
-        for parte_orig_inicio, parte_orig_fim, parte_ajust_inicio, parte_ajust_fim in partes:
-            if corte.fim <= parte_orig_inicio or corte.inicio >= parte_orig_fim:
-                if corte.fim <= parte_orig_inicio:
-                    duracao_corte = corte.fim - corte.inicio
-                    novas_partes.append((
-                        parte_orig_inicio, parte_orig_fim,
-                        parte_ajust_inicio - duracao_corte, parte_ajust_fim - duracao_corte
-                    ))
-                else:
-                    novas_partes.append((parte_orig_inicio, parte_orig_fim, parte_ajust_inicio, parte_ajust_fim))
+        for parte_inicio, parte_fim in partes_originais:
+            if corte.fim <= parte_inicio or corte.inicio >= parte_fim:
+                novas_partes.append((parte_inicio, parte_fim))
                 continue
-            
-            if corte.inicio <= parte_orig_inicio and corte.fim >= parte_orig_fim:
-                continue
-            
-            if corte.inicio <= parte_orig_inicio and corte.fim < parte_orig_fim:
-                duracao_corte = corte.fim - corte.inicio
-                novas_partes.append((
-                    corte.fim, parte_orig_fim,
-                    corte.fim - duracao_corte, parte_ajust_fim - duracao_corte
-                ))
-                continue
-            
-            if corte.inicio > parte_orig_inicio and corte.fim >= parte_orig_fim:
-                novas_partes.append((parte_orig_inicio, corte.inicio, parte_ajust_inicio, corte.inicio))
-                continue
-            
-            if corte.inicio > parte_orig_inicio and corte.fim < parte_orig_fim:
-                duracao_corte = corte.fim - corte.inicio
-                novas_partes.append((parte_orig_inicio, corte.inicio, parte_ajust_inicio, corte.inicio))
-                novas_partes.append((
-                    corte.fim, parte_orig_fim,
-                    corte.fim - duracao_corte, parte_ajust_fim - duracao_corte
-                ))
-                continue
-        
-        partes = novas_partes
-    
-    return partes
+            if parte_inicio < corte.inicio:
+                novas_partes.append((parte_inicio, corte.inicio))
+            if corte.fim < parte_fim:
+                novas_partes.append((corte.fim, parte_fim))
+        partes_originais = novas_partes
+
+    def ajustar(tempo):
+        removido = sum(max(0, min(tempo, c.fim) - c.inicio) for c in cortes)
+        return tempo - removido
+
+    return [(a, b, ajustar(a), ajustar(b)) for a, b in partes_originais]
+
 
 
 def calcular_cobertura_roteiro(texto_transcrito: str, texto_roteiro: str) -> tuple:
@@ -329,3 +304,4 @@ def extrair_palavras(texto: str, min_len: int = 3) -> set:
         Set de palavras unicas (normalizadas, sem stopwords)
     """
     return normalizar_texto(texto).split()
+

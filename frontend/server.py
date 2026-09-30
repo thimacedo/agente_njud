@@ -16,6 +16,9 @@ from __future__ import annotations
 import json
 import os
 import shutil
+import signal
+import mimetypes
+import tempfile
 import subprocess
 import sys
 import threading
@@ -35,7 +38,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # ============================================================
 # Config
 # ============================================================
-PROJECT_DIR = Path(os.environ.get('PROJECT_DIR', r'E:/02_Projetos_Trabalho/Projetos_Ativos/DIVISOR'))
+PROJECT_DIR = Path(os.environ.get('PROJECT_DIR', str(Path(__file__).resolve().parents[1])))
 FRONTEND_DIR = PROJECT_DIR / 'frontend'
 INDEX_HTML = FRONTEND_DIR / 'index.html'
 DATA_DIR = PROJECT_DIR / 'data'
@@ -65,7 +68,8 @@ def log(msg: str, *args, **kwargs):
 # State
 # ============================================================
 jobs: Dict[str, Dict[str, Any]] = {}
-jobs_lock = threading.Lock()
+jobs_lock = threading.RLock()
+cancellations: Dict[str, threading.Event] = {}
 
 def load_jobs():
     global jobs
@@ -81,11 +85,22 @@ def load_jobs():
         jobs = {}
 
 def save_jobs():
-    try:
-        with open(JOBS_FILE, 'w', encoding='utf-8') as f:
-            json.dump(jobs, f, ensure_ascii=False, indent=2)
-    except Exception as e:
-        log(f'Falha ao salvar jobs: {e}')
+    # Serialize state snapshots and replace atomically while workers update jobs.
+    with jobs_lock:
+        temporary = None
+        try:
+            JOBS_FILE.parent.mkdir(parents=True, exist_ok=True)
+            with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8',
+                                             dir=JOBS_FILE.parent, delete=False) as f:
+                temporary = Path(f.name)
+                json.dump(jobs, f, ensure_ascii=False, indent=2)
+            os.replace(temporary, JOBS_FILE)
+        except Exception as e:
+            log(f'Falha ao salvar jobs: {e}')
+        finally:
+            if temporary is not None:
+                temporary.unlink(missing_ok=True)
+
 
 def gen_id():
     return str(uuid.uuid4())[:8]
@@ -96,6 +111,8 @@ def gen_id():
 def update_job(job_id: str, **kwargs):
     with jobs_lock:
         if job_id not in jobs:
+            return
+        if jobs[job_id]['status'] == 'cancelled':
             return
         jobs[job_id].update(kwargs)
         jobs[job_id]['updated_at'] = datetime.now().isoformat()
@@ -120,156 +137,119 @@ def set_cancelled(job_id: str):
 # ============================================================
 # Pipeline calls (agentes existentes)
 # ============================================================
-def run_pipeline_boletins(job_id: str, input_path: Path, output_dir: Path) -> Optional[Path]:
-    """
-    Processa um boletim (edição).
-    Por enquanto: simula ou chama subprocess do divisor_boletins.
-    """
-    set_progress(job_id, 10, 'Recebendo áudio…')
-    time.sleep(0.5)
+class JobCancelled(Exception):
+    pass
 
-    if SIMULATE:
-        _simulate(job_id, 'boletins')
-        out = output_dir / f'editado_{input_path.stem}.mp3'
-        out.parent.mkdir(parents=True, exist_ok=True)
-        # não cria arquivo real em simulação
-        set_done(job_id, out, 3.0)
-        return out
 
-    # Tenta subprocess do divisor_boletins (se disponível)
-    # python -m src.divisor_boletins.cli dividir <input> <output>
+def check_cancelled(job_id: str):
+    with jobs_lock:
+        event = cancellations.get(job_id)
+        cancelled = jobs.get(job_id, {}).get('status') == 'cancelled'
+    if cancelled or (event is not None and event.is_set()):
+        raise JobCancelled()
+
+
+def stop_process(process):
+    if process.poll() is not None:
+        return
+    if os.name == 'nt':
+        subprocess.run(['taskkill', '/PID', str(process.pid), '/T', '/F'],
+                       capture_output=True)
+    else:
+        try:
+            os.killpg(process.pid, signal.SIGTERM)
+        except ProcessLookupError:
+            return
     try:
-        cmd = [
-            sys.executable, '-m', 'src.divisor_boletins.cli', 'dividir',
-            str(input_path.parent), str(output_dir),
-            '--apply',
-        ]
-        log(f"Executando: {' '.join(cmd)}")
-        set_progress(job_id, 30, 'Iniciando divisor de boletins…')
-        r = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
-        if r.returncode != 0:
-            raise RuntimeError(f"Código de saída {r.returncode}: {r.stderr}")
-        log(f"Divisor concluído: {r.stdout[-300:]}")
-        out = output_dir / f'{input_path.stem}_editado.mp3'
-        set_done(job_id, out, 10.0)
-        return out
-    except Exception as e:
-        set_error(job_id, f"Erro no pipeline: {e}")
-        return None
-
-def run_pipeline_njud(job_id: str, input_dir: Path, output_dir: Path) -> Optional[Path]:
-    """
-    Monta um NJUD a partir de 4 boletins (já cortes).
-    """
-    set_progress(job_id, 10, 'Recebendo boletins…')
-    time.sleep(0.5)
-
-    if SIMULATE:
-        _simulate(job_id, 'njud')
-        out = output_dir / f'NJUD_{time.strftime("%y%m")}_{time.strftime("%d-%m-%y")}.mp3'
-        set_done(job_id, out, 5.0)
-        return out
-
-    # Tenta subprocess do divisor_boletins montar
-    try:
-        cmd = [
-            sys.executable, '-m', 'src.divisor_boletins.cli', 'montar',
-            str(input_dir), str(output_dir),
-        ]
-        log(f"Executando: {' '.join(cmd)}")
-        set_progress(job_id, 30, 'Montando jornal NJUD…')
-        r = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
-        if r.returncode != 0:
-            raise RuntimeError(f"Código de saída {r.returncode}: {r.stderr}")
-        log(f"Montagem concluída: {r.stdout[-300:]}")
-        # Encontra o jornal gerado
-        montados = list(output_dir.glob('NJUD_*.mp3'))
-        if not montados:
-            raise RuntimeError('Nenhum jornal gerado')
-        out = montados[-1]
-        set_done(job_id, out, 15.0)
-        return out
-    except Exception as e:
-        set_error(job_id, f"Erro no pipeline NJUD: {e}")
-        return None
-
-def run_pipeline_giro(job_id: str, input_dir: Path, output_dir: Path) -> Optional[Path]:
-    """
-    Monta programa GIRO a partir de boletins.
-    Usa src/giro/montagem.montar_programa
-    """
-    set_progress(job_id, 10, 'Recebendo boletins…')
-    time.sleep(0.5)
-
-    if SIMULATE:
-        _simulate(job_id, 'giro')
-        out = output_dir / f'GIRO_{time.strftime("%y%m")}_{time.strftime("%d-%m-%y")}.mp3'
-        set_done(job_id, out, 6.0)
-        return out
-
-    try:
-        # Tenta importar função de montagem
-        from src.giro.montagem import montar_programa
-        mmss = time.strftime('%y%m')
-        notas = list(input_dir.glob('*.mp3'))
-        if not notas:
-            raise RuntimeError('Nenhum boletim para montar')
-        notas_sorted = sorted(notas, key=lambda p: p.name)
-        out = montar_programa(mmss, notas_sorted, output_dir)
-        set_done(job_id, out, 20.0)
-        return out
-    except Exception as e:
-        set_error(job_id, f"Erro no pipeline GIRO: {e}")
-        return None
-
-def _simulate(job_id: str, tipo: str):
-    etapas = {
-        'boletins': ['Enviando áudio…','Transcrevendo…','Detectando erros…','Aplicando cortes…','Gerando áudio editado…'],
-        'njud':    ['Recebendo boletins…','Alinhando matrizes…','Ordenando…','Montando jornal…','Gerando arquivo final…'],
-        'giro':    ['Recebendo boletins…','Verificando…','Definindo ordem…','Montando programa…','Gerando arquivo final…'],
-    }[tipo]
-    for i, etapa in enumerate(etapas):
-        set_progress(job_id, int((i+1)/len(etapas)*80), etapa)
-        time.sleep(0.4 + (i*0.2))
-
-# ============================================================
-# Background job runner
-# ============================================================
-def run_job(job_id: str, tipo: str, input_paths: list[Path]):
-    """Executa pipeline em thread separada."""
-    start = time.time()
-    tipo_label = {'boletins':'Boletim', 'njud':'NJUD', 'giro':'Giro'}.get(tipo, tipo)
-    log(f"Job {job_id} ({tipo_label}): iniciando com {len(input_paths)} arquivos")
-
-    try:
-        if tipo == 'boletins':
-            if len(input_paths) != 1:
-                set_error(job_id, 'Boletins espera exatamente 1 áudio')
-                return
-            out = run_pipeline_boletins(job_id, input_paths[0], OUTPUT_DIR)
-        elif tipo == 'njud':
-            # usa pasta temporária com os 4 boletins
-            tmp = DATA_DIR / f'_tmp_njud_{job_id}'
-            if tmp.exists():
-                shutil.rmtree(tmp)
-            tmp.mkdir(parents=True)
-            for p in input_paths:
-                shutil.copy2(p, tmp / p.name)
-            out = run_pipeline_njud(job_id, tmp, OUTPUT_DIR)
-            shutil.rmtree(tmp, ignore_errors=True)
-        elif tipo == 'giro':
-            tmp = DATA_DIR / f'_tmp_giro_{job_id}'
-            if tmp.exists():
-                shutil.rmtree(tmp)
-            tmp.mkdir(parents=True)
-            for p in input_paths:
-                shutil.copy2(p, tmp / p.name)
-            out = run_pipeline_giro(job_id, tmp, OUTPUT_DIR)
-            shutil.rmtree(tmp, ignore_errors=True)
+        process.wait(timeout=2)
+    except subprocess.TimeoutExpired:
+        if os.name != 'nt':
+            try:
+                os.killpg(process.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
         else:
-            set_error(job_id, f'Tipo desconhecido: {tipo}')
+            process.kill()
+        process.wait()
+
+
+def run_worker(job_id: str, tipo: str, input_dir: Path, output_dir: Path) -> Path:
+    check_cancelled(job_id)
+    env = os.environ.copy()
+    env['PYTHONPATH'] = str(PROJECT_DIR / 'scripts_pipeline') + os.pathsep + env.get('PYTHONPATH', '')
+    cmd = [sys.executable, str(PROJECT_DIR / 'frontend' / 'pipeline_worker.py'),
+           tipo, str(input_dir), str(output_dir)]
+    options = {'start_new_session': True} if os.name != 'nt' else {
+        'creationflags': subprocess.CREATE_NEW_PROCESS_GROUP}
+    process = subprocess.Popen(cmd, cwd=PROJECT_DIR, env=env,
+                               stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                               text=True, **options)
+    deadline = time.monotonic() + 600
+    try:
+        while True:
+            check_cancelled(job_id)
+            if time.monotonic() >= deadline:
+                raise TimeoutError('Pipeline excedeu 600 segundos')
+            try:
+                stdout, stderr = process.communicate(timeout=0.2)
+                break
+            except subprocess.TimeoutExpired:
+                continue
+        check_cancelled(job_id)
+        if process.returncode != 0:
+            raise RuntimeError(f'Pipeline falhou ({process.returncode}): {stderr[-2000:]}')
+        manifest = output_dir / 'resultado.json'
+        result = json.loads(manifest.read_text(encoding='utf-8'))
+        output = Path(result['output_path']).resolve()
+        if not output.is_relative_to(output_dir.resolve()) or not output.is_file() or not output.stat().st_size:
+            raise RuntimeError('Arquivo de saída inválido ou ausente')
+        return output
+    finally:
+        stop_process(process)
+        process.communicate()
+
+
+def _simulate(job_id: str, tipo: str, output_dir: Path) -> Path:
+    for i, etapa in enumerate(['Recebendo áudio…', 'Processando…', 'Gerando arquivo…']):
+        check_cancelled(job_id)
+        set_progress(job_id, (i + 1) * 25, etapa)
+        event = cancellations[job_id]
+        if event.wait(0.4):
+            raise JobCancelled()
+    from pydub import AudioSegment
+    output = output_dir / f'{tipo}_simulacao.wav'
+    AudioSegment.silent(duration=1000).export(str(output), format='wav')
+    return output
+
+
+def run_job(job_id: str, tipo: str, input_paths: list[Path]):
+    """Run each job in private directories and a cancellable child process."""
+    start = time.monotonic()
+    input_dir = DATA_DIR / f'_tmp_{tipo}_{job_id}'
+    output_dir = OUTPUT_DIR / job_id
+    try:
+        check_cancelled(job_id)
+        input_dir.mkdir(parents=True)
+        output_dir.mkdir(parents=True)
+        for p in input_paths:
+            check_cancelled(job_id)
+            shutil.copy2(p, input_dir / p.name)
+        set_progress(job_id, 10, 'Iniciando processamento…')
+        output = (_simulate(job_id, tipo, output_dir) if SIMULATE else
+                  run_worker(job_id, tipo, input_dir, output_dir))
+        check_cancelled(job_id)
+        set_done(job_id, output, time.monotonic() - start)
+    except JobCancelled:
+        set_cancelled(job_id)
     except Exception as e:
         set_error(job_id, str(e))
+    finally:
+        shutil.rmtree(input_dir, ignore_errors=True)
+        with jobs_lock:
+            cancelled = jobs.get(job_id, {}).get('status') == 'cancelled'
+            cancellations.pop(job_id, None)
+        if cancelled:
+            shutil.rmtree(output_dir, ignore_errors=True)
 
 # ============================================================
 # FastAPI App
@@ -325,7 +305,8 @@ async def upload(file: UploadFile = File(...)):
     if ext not in {'mp3','wav','m4a','ogg','flac'}:
         raise HTTPException(400, f'Formato não suportado: {ext}')
     file_id = gen_id()
-    dest = UPLOAD_DIR / f'{file_id}_{file.filename}'
+    filename = Path(file.filename.replace('\\', '/')).name
+    dest = UPLOAD_DIR / f'{file_id}_{filename}'
     try:
         content = await file.read()
         dest.write_bytes(content)
@@ -343,6 +324,15 @@ async def create_job(payload: dict):
         raise HTTPException(400, 'tipo e inputs são obrigatórios')
     if tipo not in {'boletins','njud','giro'}:
         raise HTTPException(400, f'tipo inválido: {tipo}')
+
+    if not isinstance(input_ids, list) or any(not isinstance(uid, str) or not uid for uid in input_ids):
+        raise HTTPException(400, 'inputs deve conter IDs de upload')
+    if len(input_ids) != len(set(input_ids)):
+        raise HTTPException(400, 'Uploads duplicados')
+    if tipo == 'boletins' and len(input_ids) != 1:
+        raise HTTPException(400, 'Boletins exige 1 áudio')
+    if tipo == 'njud' and len(input_ids) != 4:
+        raise HTTPException(400, 'NJUD exige 4 boletins')
 
     with jobs_lock:
         job_id = gen_id()
@@ -370,7 +360,7 @@ async def create_job(payload: dict):
     for uid in input_ids:
         found = False
         for f in UPLOAD_DIR.iterdir():
-            if f.name.startswith(uid):
+            if f.is_file() and f.name.startswith(uid + '_'):
                 input_paths.append(f)
                 job['files'].append({'name': f.name, 'path': str(f)})
                 found = True
@@ -378,16 +368,19 @@ async def create_job(payload: dict):
         if not found:
             log(f'Job {job_id}: upload {uid} não encontrado')
             update_job(job_id, status='error', etapa='Erro', error=f'Upload {uid} não encontrado')
-            return {'job_id': job_id, 'error': f'Upload {uid} não encontrado'}
+            return {'id': job_id, 'job_id': job_id, 'tipo': job['tipo'], 'status': 'error',
+                    'error': f'Upload {uid} não encontrado'}
 
     update_job(job_id, status='running', etapa='Iniciando…', files=job['files'])
     log(f"Job {job_id} ({tipo}): iniciado com {len(input_paths)} arquivos")
 
     # Executa em thread
+    with jobs_lock:
+        cancellations[job_id] = threading.Event()
     t = threading.Thread(target=run_job, args=(job_id, tipo, input_paths), daemon=True)
     t.start()
 
-    return {'job_id': job_id, 'status': 'running'}
+    return {'id': job_id, 'job_id': job_id, 'tipo': job['tipo'], 'status': 'running'}
 
 @app.get('/api/jobs')
 async def list_jobs():
@@ -413,14 +406,15 @@ async def get_job(job_id: str):
 async def cancel_job(job_id: str):
     with jobs_lock:
         job = jobs.get(job_id)
-    if not job:
-        raise HTTPException(404, 'Job não encontrado')
-    if job['status'] == 'running':
-        # Tentativa de cancelamento (melhorável)
-        log(f"Job {job_id}: cancelamento request (best-effort)")
-        set_cancelled(job_id)
-        return {'status': 'cancelled'}
-    return {'status': job['status'], 'message': 'Não estava running'}
+        if not job:
+            raise HTTPException(404, 'Job não encontrado')
+        if job['status'] in {'queued', 'running'}:
+            event = cancellations.get(job_id)
+            if event is not None:
+                event.set()
+            set_cancelled(job_id)
+            return {'status': 'cancelled'}
+        return {'status': job['status'], 'message': 'Não estava running'}
 
 @app.get('/api/download/{job_id}')
 async def download(job_id: str):
@@ -433,7 +427,7 @@ async def download(job_id: str):
     path = Path(job['output_path'])
     if not path.exists():
         raise HTTPException(404, 'Arquivo de saída não encontrado')
-    return FileResponse(path, filename=path.name, media_type='audio/mpeg')
+    return FileResponse(path, filename=path.name, media_type=mimetypes.guess_type(path.name)[0] or 'application/octet-stream')
 
 # ============================================================
 # Run
@@ -442,3 +436,4 @@ if __name__ == '__main__':
     import uvicorn
     log(f'Iniciando server na porta {PORT}')
     uvicorn.run(app, host='0.0.0.0', port=PORT, log_level='info')
+
