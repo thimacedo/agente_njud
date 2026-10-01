@@ -14,21 +14,21 @@ from pydub import AudioSegment
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent))  # adiciona scripts_pipeline/ao path
 
-from corrigir_alucinacoes import corrigir_transcricao
+from boletim.corrigir_alucinacoes import corrigir_transcricao
 from shared.text_utils import normalizar_texto
 from shared.logging_config import setup_logging, get_logger
 
 # Importar etapas modularizadas
-from etapas.etapa_triagem import triagem_audio, carregar_modelo
-from etapas.etapa_transcricao import transcrever
-from etapas.etapa_estrutura import (
+from boletim.etapas.etapa_triagem import triagem_audio, carregar_modelo
+from boletim.etapas.etapa_transcricao import transcrever
+from boletim.etapas.etapa_estrutura import (
     detectar_estrutura,
     detectar_repeticoes_confirmadas,
     detectar_claquete_geral,
     detectar_claquetes_por_assinatura
 )
-from etapas.etapa_cortes import processar_cortes_boletim
-from etapas.etapa_montagem import montar_boletim_com_vinhetas, calcular_duracao_cabeca
+from boletim.etapas.etapa_cortes import processar_cortes_boletim
+from boletim.etapas.etapa_montagem import montar_boletim_com_vinhetas, calcular_duracao_cabeca
 
 # ── Configuração (todas as variáveis antes hardcoded) ─────────────────────────
 # Overrides via variáveis de ambiente (opcional): DIVISOR_ASSETS, DIVISOR_TMP,
@@ -477,7 +477,7 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
     # ETAPA 7.5: Validação de qualidade da transcrição vs roteiro
     if roteiros:
         print(f"\n── ETAPA 7.5: VALIDAÇÃO DE QUALIDADE (transcrição vs roteiro) ──")
-        from corrigir_alucinacoes import corrigir_transcricao as corrige_aluc
+        from boletim.corrigir_alucinacoes import corrigir_transcricao as corrige_aluc
         from difflib import SequenceMatcher
         
         for n in sorted(boletims_cortados.keys()):

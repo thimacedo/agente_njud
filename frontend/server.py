@@ -5,7 +5,7 @@ Programador — DIVISOR
 Backend mínimo para o frontend web.
 
 Serve o frontend + endpoints de upload/jobs/download.
-Chama os agentes existentes do src/ para processar áudio.
+Chama os módulos de scripts_pipeline para processar áudio.
 
 VERSÃO LOCAL: python server.py  →  http://localhost:8001
 VERSÃO ONLINE: backend em host com acesso ao PROJECT_DIR + frontend estático no Vercel
@@ -35,10 +35,12 @@ from fastapi.middleware.cors import CORSMiddleware
 # ============================================================
 # Config
 # ============================================================
-PROJECT_DIR = Path(os.environ.get('PROJECT_DIR', r'E:/02_Projetos_Trabalho/Projetos_Ativos/DIVISOR'))
+PROJECT_DIR = Path(os.environ.get('PROJECT_DIR', str(Path(__file__).resolve().parents[1])))
 FRONTEND_DIR = PROJECT_DIR / 'frontend'
 INDEX_HTML = FRONTEND_DIR / 'index.html'
-DATA_DIR = PROJECT_DIR / 'data'
+PIPELINE_DIR = PROJECT_DIR / 'scripts_pipeline'
+sys.path.insert(0, str(PIPELINE_DIR))
+DATA_DIR = Path(os.environ.get('DATA_DIR', str(PROJECT_DIR / 'data')))
 UPLOAD_DIR = Path(os.environ.get('UPLOAD_DIR', str(DATA_DIR / 'uploads')))
 OUTPUT_DIR = Path(os.environ.get('OUTPUT_DIR', str(DATA_DIR / 'output')))
 JOBS_FILE = DATA_DIR / 'jobs_state.json'
@@ -66,6 +68,51 @@ def log(msg: str, *args, **kwargs):
 # ============================================================
 jobs: Dict[str, Dict[str, Any]] = {}
 jobs_lock = threading.Lock()
+job_processes = {}
+
+class JobCancelled(Exception):
+    pass
+
+def check_cancelled(job_id):
+    with jobs_lock:
+        if jobs.get(job_id, {}).get('status') == 'cancelled':
+            raise JobCancelled(job_id)
+
+def stop_process(process):
+    if process.poll() is not None:
+        return
+    if os.name == 'nt':
+        subprocess.run(['taskkill', '/PID', str(process.pid), '/T', '/F'],
+                       capture_output=True, timeout=10)
+    else:
+        import signal
+        os.killpg(process.pid, signal.SIGKILL)
+    if process.poll() is None:
+        process.kill()
+
+def run_command(job_id, cmd, timeout=600):
+    env = os.environ.copy()
+    env['PYTHONIOENCODING'] = 'utf-8'
+    env['PYTHONPATH'] = str(PROJECT_DIR / 'scripts_pipeline') + os.pathsep + env.get('PYTHONPATH', '')
+    with jobs_lock:
+        if jobs.get(job_id, {}).get('status') == 'cancelled':
+            raise JobCancelled(job_id)
+        process = subprocess.Popen(cmd, cwd=str(PROJECT_DIR), env=env,
+                                   stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                   text=True, encoding='utf-8', errors='replace', start_new_session=(os.name != 'nt'))
+        job_processes[job_id] = process
+    try:
+        stdout, stderr = process.communicate(timeout=timeout)
+        check_cancelled(job_id)
+        return subprocess.CompletedProcess(cmd, process.returncode, stdout, stderr)
+    except subprocess.TimeoutExpired:
+        stop_process(process)
+        process.communicate()
+        raise
+    finally:
+        with jobs_lock:
+            job_processes.pop(job_id, None)
+
 
 def load_jobs():
     global jobs
@@ -97,36 +144,59 @@ def update_job(job_id: str, **kwargs):
     with jobs_lock:
         if job_id not in jobs:
             return
+        if jobs[job_id].get('status') == 'cancelled':
+            return
         jobs[job_id].update(kwargs)
         jobs[job_id]['updated_at'] = datetime.now().isoformat()
     save_jobs()
+    return True
 
 def set_progress(job_id: str, progress: int, etapa: str):
     update_job(job_id, progress=progress, etapa=etapa)
 
 def set_done(job_id: str, output_path: Path, duration_s: float):
-    update_job(job_id, status='done', progress=100, etapa='Concluído',
-               output_path=str(output_path), duration_s=round(duration_s, 1))
+    if not update_job(job_id, status='done', progress=100, etapa='Concluído',
+                      output_path=str(output_path), duration_s=round(duration_s, 1)):
+        return
     log(f"Job {job_id}: concluído em {round(duration_s,1)}s → {output_path.name}")
 
 def set_error(job_id: str, error: str):
-    update_job(job_id, status='error', progress=100, etapa='Erro', error=error)
+    if not update_job(job_id, status='error', progress=100, etapa='Erro', error=error):
+        return
     log(f"Job {job_id}: erro → {error}")
 
 def set_cancelled(job_id: str):
-    update_job(job_id, status='cancelled', progress=100, etapa='Cancelado')
+    with jobs_lock:
+        job = jobs.get(job_id)
+        if not job or job.get('status') not in {'queued', 'running'}:
+            return
+        job.update(status='cancelled', progress=100, etapa='Cancelado',
+                   updated_at=datetime.now().isoformat())
+        process = job_processes.get(job_id)
+    save_jobs()
+    if process is not None:
+        stop_process(process)
     log(f"Job {job_id}: cancelado")
 
 # ============================================================
 # Pipeline calls (agentes existentes)
 # ============================================================
+def pipeline_env():
+    env = os.environ.copy()
+    env['PYTHONPATH'] = os.pathsep.join(
+        [str(PIPELINE_DIR), str(PROJECT_DIR), env.get('PYTHONPATH', '')])
+    return env
+
+
 def run_pipeline_boletins(job_id: str, input_path: Path, output_dir: Path) -> Optional[Path]:
     """
     Processa um boletim (edição).
     Por enquanto: simula ou chama subprocess do divisor_boletins.
     """
     set_progress(job_id, 10, 'Recebendo áudio…')
+    check_cancelled(job_id)
     time.sleep(0.5)
+    check_cancelled(job_id)
 
     if SIMULATE:
         _simulate(job_id, 'boletins')
@@ -136,33 +206,39 @@ def run_pipeline_boletins(job_id: str, input_path: Path, output_dir: Path) -> Op
         set_done(job_id, out, 3.0)
         return out
 
-    # Tenta subprocess do divisor_boletins (se disponível)
-    # python -m src.divisor_boletins.cli dividir <input> <output>
     try:
-        cmd = [
-            sys.executable, '-m', 'src.divisor_boletins.cli', 'dividir',
-            str(input_path.parent), str(output_dir),
-            '--apply',
-        ]
-        log(f"Executando: {' '.join(cmd)}")
-        set_progress(job_id, 30, 'Iniciando divisor de boletins…')
-        r = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+        cmd = [sys.executable, '-m', 'boletim.processar_boletim_canonico', str(input_path)]
+        set_progress(job_id, 30, 'Editando boletins…')
+        r = run_command(job_id, cmd)
         if r.returncode != 0:
             raise RuntimeError(f"Código de saída {r.returncode}: {r.stderr}")
-        log(f"Divisor concluído: {r.stdout[-300:]}")
-        out = output_dir / f'{input_path.stem}_editado.mp3'
+        generated = input_path.parent / f'{input_path.stem}_saida'
+        outputs = sorted(generated.glob('*.mp3'))
+        if not outputs:
+            raise RuntimeError('Nenhum boletim gerado')
+        check_cancelled(job_id)
+        for path in outputs:
+            shutil.copy2(path, output_dir / path.name)
+        out = output_dir / outputs[0].name
+        if not out.is_file():
+            raise RuntimeError('Divisão concluída, mas o CLI gera CABECA/CORPO; arquivo editado não foi gerado')
         set_done(job_id, out, 10.0)
         return out
+    except JobCancelled:
+        return None
     except Exception as e:
         set_error(job_id, f"Erro no pipeline: {e}")
         return None
+
 
 def run_pipeline_njud(job_id: str, input_dir: Path, output_dir: Path) -> Optional[Path]:
     """
     Monta um NJUD a partir de 4 boletins (já cortes).
     """
     set_progress(job_id, 10, 'Recebendo boletins…')
+    check_cancelled(job_id)
     time.sleep(0.5)
+    check_cancelled(job_id)
 
     if SIMULATE:
         _simulate(job_id, 'njud')
@@ -170,15 +246,18 @@ def run_pipeline_njud(job_id: str, input_dir: Path, output_dir: Path) -> Optiona
         set_done(job_id, out, 5.0)
         return out
 
-    # Tenta subprocess do divisor_boletins montar
+    # Montador canônico de jornais
     try:
         cmd = [
-            sys.executable, '-m', 'src.divisor_boletins.cli', 'montar',
+            sys.executable, '-c',
+            'import sys; from pathlib import Path; from montagem_jornais import montar_jornal; '
+            'out = montar_jornal(Path(sys.argv[1]), Path(sys.argv[2])); '
+            'sys.exit(0 if out is not None else 1)',
             str(input_dir), str(output_dir),
         ]
         log(f"Executando: {' '.join(cmd)}")
         set_progress(job_id, 30, 'Montando jornal NJUD…')
-        r = subprocess.run(cmd, capture_output=True, text=True, timeout=600)
+        r = run_command(job_id, cmd)
         if r.returncode != 0:
             raise RuntimeError(f"Código de saída {r.returncode}: {r.stderr}")
         log(f"Montagem concluída: {r.stdout[-300:]}")
@@ -196,10 +275,12 @@ def run_pipeline_njud(job_id: str, input_dir: Path, output_dir: Path) -> Optiona
 def run_pipeline_giro(job_id: str, input_dir: Path, output_dir: Path) -> Optional[Path]:
     """
     Monta programa GIRO a partir de boletins.
-    Usa src/giro/montagem.montar_programa
+    Usa giro.montagem em subprocesso cancelável
     """
     set_progress(job_id, 10, 'Recebendo boletins…')
+    check_cancelled(job_id)
     time.sleep(0.5)
+    check_cancelled(job_id)
 
     if SIMULATE:
         _simulate(job_id, 'giro')
@@ -208,19 +289,24 @@ def run_pipeline_giro(job_id: str, input_dir: Path, output_dir: Path) -> Optiona
         return out
 
     try:
-        # Tenta importar função de montagem
-        from src.giro.montagem import montar_programa
-        mmss = time.strftime('%y%m')
-        notas = list(input_dir.glob('*.mp3'))
-        if not notas:
-            raise RuntimeError('Nenhum boletim para montar')
-        notas_sorted = sorted(notas, key=lambda p: p.name)
-        out = montar_programa(mmss, notas_sorted, output_dir)
+        codigo = time.strftime('%y%m')
+        data_str = time.strftime('%d-%m-%Y')
+        cmd = [sys.executable, '-m', 'giro.montagem', str(input_dir), str(output_dir),
+               '--codigo', codigo, '--data', data_str]
+        r = run_command(job_id, cmd)
+        if r.returncode != 0:
+            raise RuntimeError(f"Código de saída {r.returncode}: {r.stderr}")
+        out = output_dir / f'GNC_{codigo}_{data_str}.mp3'
+        if not out.exists():
+            raise RuntimeError('Nenhum programa GIRO gerado')
         set_done(job_id, out, 20.0)
         return out
+    except JobCancelled:
+        return None
     except Exception as e:
         set_error(job_id, f"Erro no pipeline GIRO: {e}")
         return None
+
 
 def _simulate(job_id: str, tipo: str):
     etapas = {
@@ -229,6 +315,7 @@ def _simulate(job_id: str, tipo: str):
         'giro':    ['Recebendo boletins…','Verificando…','Definindo ordem…','Montando programa…','Gerando arquivo final…'],
     }[tipo]
     for i, etapa in enumerate(etapas):
+        check_cancelled(job_id)
         set_progress(job_id, int((i+1)/len(etapas)*80), etapa)
         time.sleep(0.4 + (i*0.2))
 
@@ -242,11 +329,14 @@ def run_job(job_id: str, tipo: str, input_paths: list[Path]):
     log(f"Job {job_id} ({tipo_label}): iniciando com {len(input_paths)} arquivos")
 
     try:
+        check_cancelled(job_id)
+        job_output = OUTPUT_DIR / job_id
+        job_output.mkdir(parents=True, exist_ok=True)
         if tipo == 'boletins':
             if len(input_paths) != 1:
                 set_error(job_id, 'Boletins espera exatamente 1 áudio')
                 return
-            out = run_pipeline_boletins(job_id, input_paths[0], OUTPUT_DIR)
+            out = run_pipeline_boletins(job_id, input_paths[0], job_output)
         elif tipo == 'njud':
             # usa pasta temporária com os 4 boletins
             tmp = DATA_DIR / f'_tmp_njud_{job_id}'
@@ -255,7 +345,7 @@ def run_job(job_id: str, tipo: str, input_paths: list[Path]):
             tmp.mkdir(parents=True)
             for p in input_paths:
                 shutil.copy2(p, tmp / p.name)
-            out = run_pipeline_njud(job_id, tmp, OUTPUT_DIR)
+            out = run_pipeline_njud(job_id, tmp, job_output)
             shutil.rmtree(tmp, ignore_errors=True)
         elif tipo == 'giro':
             tmp = DATA_DIR / f'_tmp_giro_{job_id}'
@@ -264,7 +354,7 @@ def run_job(job_id: str, tipo: str, input_paths: list[Path]):
             tmp.mkdir(parents=True)
             for p in input_paths:
                 shutil.copy2(p, tmp / p.name)
-            out = run_pipeline_giro(job_id, tmp, OUTPUT_DIR)
+            out = run_pipeline_giro(job_id, tmp, job_output)
             shutil.rmtree(tmp, ignore_errors=True)
         else:
             set_error(job_id, f'Tipo desconhecido: {tipo}')
@@ -415,9 +505,8 @@ async def cancel_job(job_id: str):
         job = jobs.get(job_id)
     if not job:
         raise HTTPException(404, 'Job não encontrado')
-    if job['status'] == 'running':
-        # Tentativa de cancelamento (melhorável)
-        log(f"Job {job_id}: cancelamento request (best-effort)")
+    if job['status'] in {'queued', 'running'}:
+        log(f"Job {job_id}: cancelamento solicitado")
         set_cancelled(job_id)
         return {'status': 'cancelled'}
     return {'status': job['status'], 'message': 'Não estava running'}
