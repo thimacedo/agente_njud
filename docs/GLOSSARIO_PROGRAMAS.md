@@ -26,8 +26,8 @@
 | | |
 |---|---|
 | **Repositório** | `agente_njud` |
-| **Orquestração** | `scripts_pipeline/executar_programa.py` (via `rodar_tudo_giro.sh`) |
-| **Identificador em constantes** | `PROGRAMA_GIRO` |
+| **Orquestração** | `scripts_pipeline/executar_programa.py` → `giro/processo.py` (planejar, validar, montar, sync; decisão 24) |
+| **Identificador em constantes** | `PROGRAMA_GIRO` em `scripts_pipeline/giro/controle_producao.py` (registro GIRO vigente; `src/registro_programas.py` ausente) |
 | **Nota** | `src/giro/*` está **deprecado** (código morto confirmado) — não confundir com o pipeline ativo acima |
 
 ## 3. BOLETIM
@@ -102,3 +102,7 @@ DIVISOR/
 - **Decisão #14**: Fallback cross-month existe em `src/giro/cli.py` (código morto) mas NÃO está na cadeia de produção ativa.
 - **Decisão #15**: Scripts de sync oficiais — cada programa tem o seu, sem mistura.
 - **Decisão #16**: `src/giro/*` é código morto — não usar, não modificar, não importar.
+
+## GIRO vigente — 2026-10-01
+
+O processo GIRO usa `scripts_pipeline/giro/controle_producao.py` para identidade, política e caminhos isolados enquanto o registro antigo está ausente. Não restaurar `src/giro` ou copiar configurações NJUD. Planejamento somente leitura; montagem local por manifesto; sincronização explícita com revisão final. Procedimento: `docs/procedimentos/PRODUCAO_GIRO_MANIFESTO.md`.

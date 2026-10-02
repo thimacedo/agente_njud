@@ -21,6 +21,7 @@ import sys
 import threading
 import time
 import uuid
+from contextlib import asynccontextmanager
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -48,6 +49,11 @@ PORT = int(os.environ.get('PORT', '8001'))
 SIMULATE = os.environ.get('SIMULATE', '0') == '1'
 VERBOSE = os.environ.get('VERBOSE', '0') == '1'
 DRIVER_ENABLED = os.environ.get('DRIVER_ENABLED', '0') == '1'
+
+# Console do Windows pode usar cp1252; logs de upload contêm Unicode.
+for stream in (sys.stdout, sys.stderr):
+    if hasattr(stream, 'reconfigure'):
+        stream.reconfigure(encoding='utf-8', errors='backslashreplace')
 
 # Ensure dirs
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
@@ -93,6 +99,8 @@ def stop_process(process):
 def run_command(job_id, cmd, timeout=600):
     env = os.environ.copy()
     env['PYTHONIOENCODING'] = 'utf-8'
+    env.setdefault('DIVISOR_TMP', str(DATA_DIR / 'tmp'))
+    Path(env['DIVISOR_TMP']).mkdir(parents=True, exist_ok=True)
     env['PYTHONPATH'] = str(PROJECT_DIR / 'scripts_pipeline') + os.pathsep + env.get('PYTHONPATH', '')
     with jobs_lock:
         if jobs.get(job_id, {}).get('status') == 'cancelled':
@@ -221,7 +229,7 @@ def run_pipeline_boletins(job_id: str, input_path: Path, output_dir: Path) -> Op
             shutil.copy2(path, output_dir / path.name)
         out = output_dir / outputs[0].name
         if not out.is_file():
-            raise RuntimeError('Divisão concluída, mas o CLI gera CABECA/CORPO; arquivo editado não foi gerado')
+            raise RuntimeError('Arquivo de áudio de saída não foi gerado')
         set_done(job_id, out, 10.0)
         return out
     except JobCancelled:
@@ -289,18 +297,10 @@ def run_pipeline_giro(job_id: str, input_dir: Path, output_dir: Path) -> Optiona
         return out
 
     try:
-        codigo = time.strftime('%y%m')
-        data_str = time.strftime('%d-%m-%Y')
-        cmd = [sys.executable, '-m', 'giro.montagem', str(input_dir), str(output_dir),
-               '--codigo', codigo, '--data', data_str]
-        r = run_command(job_id, cmd)
-        if r.returncode != 0:
-            raise RuntimeError(f"Código de saída {r.returncode}: {r.stderr}")
-        out = output_dir / f'GNC_{codigo}_{data_str}.mp3'
-        if not out.exists():
-            raise RuntimeError('Nenhum programa GIRO gerado')
-        set_done(job_id, out, 20.0)
-        return out
+        # Upload de uma pasta não contém seleção/editoria/limites verificáveis.
+        # Até a interface suportar manifesto, interromper sem gerar candidato.
+        raise ValueError('O Giro exige notas selecionadas e revisadas antes da montagem. '
+                         'Prepare o manifesto editorial da edição para continuar.')
     except JobCancelled:
         return None
     except Exception as e:
@@ -364,7 +364,20 @@ def run_job(job_id: str, tipo: str, input_paths: list[Path]):
 # ============================================================
 # FastAPI App
 # ============================================================
-app = FastAPI(title='Programador — DIVISOR', version='0.1.0')
+@asynccontextmanager
+async def lifespan(app):
+    load_jobs()
+    log(f'Server iniciado na porta {PORT}')
+    log(f'UPLOAD_DIR: {UPLOAD_DIR}')
+    log(f'OUTPUT_DIR: {OUTPUT_DIR}')
+    log(f'SIMULATE: {SIMULATE}')
+    try:
+        yield
+    finally:
+        log('Server encerrado')
+
+
+app = FastAPI(title='Programador — DIVISOR', version='0.1.0', lifespan=lifespan)
 
 # CORS (frontend pode estar em outra origem no Vercel)
 app.add_middleware(
@@ -377,18 +390,6 @@ app.add_middleware(
 # ============================================================
 # Startup
 # ============================================================
-@app.on_event('startup')
-async def startup():
-    load_jobs()
-    log(f'Server iniciado na porta {PORT}')
-    log(f'UPLOAD_DIR: {UPLOAD_DIR}')
-    log(f'OUTPUT_DIR: {OUTPUT_DIR}')
-    log(f'SIMULATE: {SIMULATE}')
-
-@app.on_event('shutdown')
-async def shutdown():
-    log('Server encerrado')
-
 # ============================================================
 # Endpoints
 # ============================================================

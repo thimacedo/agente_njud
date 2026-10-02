@@ -54,7 +54,7 @@ def detectar_estrutura(segmentos, b_ini, b_fim):
             # Verificar se próximo segmento continua com "do Norte"
             if i + 1 < len(segmentos):
                 texto_seguinte = segmentos[i + 1]["text"].strip()
-                if re.match(r'^(?:e\s+do\s+)?norte', texto_seguinte, re.I):
+                if re.match(r'^(?:(?:e\s+)?do\s+)?norte', texto_seguinte, re.I):
                     # Assinatura confirmada — timestamp no fim deste segmento
                     assinaturas.append(seg["end"])
                     i += 2

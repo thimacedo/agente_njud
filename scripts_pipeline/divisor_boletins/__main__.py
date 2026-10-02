@@ -35,6 +35,7 @@ _CAMPOS_SERIALIZAVEIS = frozenset({
     "caminho_saida",
     "caminho_entrada",
     "erro",
+    "corte",
 })
 
 
@@ -67,14 +68,12 @@ def _salvar_cortado(
     # Se a calibração reportar um tempo de início, usa como fim da cabeça;
     # senão usa 30% do áudio como fallback.
     if tempo_cabeca_fim_s <= 0:
-        try:
-            duracao_total_s = len(audio) / 1000.0
-            tempo_cabeca_fim_s = duracao_total_s * 0.30
-        except Exception:
-            tempo_cabeca_fim_s = 0.0
+        return {"erro_corte": "Sem marcação confiável: fallback de 30% desativado. Usar njud.controle_producao antes da montagem."}
 
     tempo_pos_vinheta_s = calibracao.get("duracao_vinheta_s", 0.0)
     tempo_assinatura_s = ancora.get("tempo_ancora_s", None)
+    if tempo_assinatura_s is None:
+        return {"erro_corte": "Assinatura não identificada; revisão obrigatória"}
 
     try:
         cabeca, corpo = cortar_audio(
@@ -186,9 +185,12 @@ def dividir(
                     pasta_saida / f"{mp3.stem}_saida",
                     mp3.stem,
                 )
-                if "erro_corte" in info_corte:
-                    logger.error("corte falhou em %s: %s", mp3.name, info_corte["erro_corte"])
+                if any(k.startswith("erro") for k in info_corte):
+                    logger.error("corte falhou em %s: %s", mp3.name, info_corte)
                     erros += 1
+                    resultado["status"] = "refazer"
+                    resultado["corte"] = info_corte
+                    saida_json.write_text(json.dumps(_serializavel(resultado), ensure_ascii=False, indent=2), encoding="utf-8")
                 else:
                     logger.info(
                         "corte salvo: cabeca=%s (%ss) corpo=%s (%ss)",

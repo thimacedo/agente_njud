@@ -1,0 +1,8 @@
+{
+  "python": "C:\\Users\\THIAGO\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+  "dependencias": "C:\\Users\\THIAGO\\Documents\\Codex\\2026-09-30\\https-drive-google-com-drive-u\\work\\stem_runtime",
+  "repositorio_modelo": "C:\\Users\\THIAGO\\.cache\\torch\\hub\\checkpoints",
+  "torch": "2.5.1+cpu",
+  "demucs": "4.0.1",
+  "politica": "njud-pre-montagem-2"
+}

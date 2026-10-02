@@ -27,7 +27,7 @@ from pathlib import Path
 # Caminho base
 BASE_DIR = Path(__file__).resolve().parents[2]
 SCRIPTS_DIR = BASE_DIR / "scripts_pipeline"
-PYTHON = os.environ.get("PYTHON", "python")
+PYTHON = os.environ.get("PYTHON", sys.executable)
 
 # Lock file para exclusão mútua
 LOCK_FILE = BASE_DIR / "scripts_pipeline" / ".orquestrador.lock"
@@ -143,7 +143,7 @@ Exemplos:
     # Valida ação suportada
     script_map = {
         "njud": {"prepare", "divide", "montar", "auditar"},
-        "giro": {"processar", "montar", "sync"},
+        "giro": {"planejar", "manifesto", "validar", "processar", "montar", "sync"},
     }
 
     if acao not in script_map[modulo]:
@@ -151,6 +151,12 @@ Exemplos:
             f"Ação inválida para {modulo}: {acao}. "
             f"Opções: {', '.join(sorted(script_map[modulo]))}"
         )
+
+    # GIRO delega diretamente ao processo canônico. Planejamento não cria lock.
+    if modulo == "giro":
+        acao_giro = "planejar" if acao == "processar" else acao
+        return subprocess.call([sys.executable, str(SCRIPTS_DIR / "giro/processo.py"),
+                                acao_giro, *args.args], cwd=str(BASE_DIR))
 
     # Adquire lock e executa
     try:

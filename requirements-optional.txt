@@ -1,0 +1,5 @@
+# Etapas alternativas que importam whisper e auditoria proativa.
+-r requirements.txt
+openai-whisper
+scipy>=1.11,<2
+silero-vad>=5,<7

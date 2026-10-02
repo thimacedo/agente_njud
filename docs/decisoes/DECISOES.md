@@ -6,30 +6,30 @@ Decisões técnicas aplicadas neste projeto, com motivo e data. O objetivo é ev
 
 ## 1. `audio.py` — import do Silero VAD já garantido em `deteccao.py`
 
-**Motivo:**  
+**Motivo:**
 Existe um bug já identificado e corrigido em 2026-08-21: no branch de fallback de abertura, o código chama `_carregar_silero_vad()`. Se esse símbolo não estiver disponível no módulo, o `try/except` externo captura o erro silenciosamente e cai no método antigo `ancoras_fallback`, perdendo a detecção precisa do início da fala.
 
-**Status atual:**  
+**Status atual:**
 A função `_carregar_silero_vad` já está definida e exportada por `divisor_boletins/deteccao.py`, que é importado pelo mesmo pacote. Portanto, a proteção já está ativa no local correto. Não foi feita alteração redundante em `audio.py` para evitar duplicação de comentários.
 
 ---
 
 ## 2. `montagem.py` — data do jornal vem do nome dos boletins, não de contagem de dias úteis
 
-**Motivo:**  
+**Motivo:**
 A nomenclatura final dos jornais (`NJUD_XXXX_DD-MM-YYYY.mp3`) deve refletir a data real contida nos nomes dos boletins (`BOLETIM_RADIO_TJRN_DD_MM_AAAA_...`), não uma data derivada de contagem de dias úteis a partir de uma âncora fixa. Qualquer desvio da premissa (feriado não listado, NJUD pulado, ajuste manual prévio) faz a contagem derivada ficar sistematicamente errada, sem aviso.
 
-**Alteração aplicada em:** 2026-08-21  
+**Alteração aplicada em:** 2026-08-21
 O script lê diretamente o padrão `_(DD)_(MM)_(AAAA)_` nos nomes dos arquivos de corte para montar `data_str`. Se não encontrar, registra aviso e gera o nome sem data. Não reverter para a lógica antiga de dias úteis.
 
 ---
 
 ## 3. `copiar_boletins.py` — validação do plano antes de qualquer alteração em disco
 
-**Motivo:**  
+**Motivo:**
 Existiu uma versão anterior que executava `shutil.rmtree()` em todas as pastas de NJUD **antes** de validar `plano_alocacao.csv`. Se o CSV estivesse ausente, vazio ou malformado, a limpeza já tinha acontecido e não havia como reverter.
 
-**Alteração aplicada em:** 2026-08-21  
+**Alteração aplicada em:** 2026-08-21
 A versão atual:
 1. Valida o plano (colunas obrigatórias, origens existem, ano esperado, mês oficial confere) antes de tocar em qualquer pasta.
 2. Usa `--dry-run` como padrão; `--apply` executa de fato.
@@ -42,7 +42,7 @@ Não reverter para uma versão sem validação prévia nem sem backup.
 
 ## 4. Estrutura do workspace — separação entre código, dados e assets
 
-**Motivo:**  
+**Motivo:**
 A raiz do projeto estava poluída com pastas redundantes (`JORNAIS`, `JORNAIS_DIVIDIDOS`, `jornais_montados`, `boletins_brutos`, `boletins_divididos`, `__pycache__`), dificultando manutenção e causando confusão sobre qual pasta era entrada/saída.
 
 **Estrutura adotada:**
@@ -560,11 +560,27 @@ DECISOES.md Item 19/20 (2026-09-25) é a fonte de verdade — boletins
 individualizados usam `divisor_boletins`. Alegação do skill de "eliminado
 em 2026-09-18" é sobreposta por decisão mais recente.
 
-**Proibido reverter:** não confundir `scripts_pipeline/montagem_jornais.py`
-(faz montagem a partir de cortes prontos) com
-`scripts_pipeline/njud/montar_jornal.py` (faz transcrição + montagem
-do zero a partir de MP3s brutos). São scripts complementares para
-fluxos diferentes.
+**Consolidação dos montadores (2026-09-30) — SUPERSEDE a nota anterior:**
+`scripts_pipeline/njud/montar_jornal.py` foi ELIMINADO. Havia dois montadores
+divergentes e o shell chamava o que não aplicava o BG da RECEITA:
+- `montagem_jornais.py` (chamado pelo shell) montava blocos secos, sem BG.
+- `njud/montar_jornal.py` (nunca chamado) aplicava BG 20% e lia o roteiro.
+
+Agora existe UM montador canônico: `scripts_pipeline/montagem_jornais.py`,
+que detecta o modo de entrada automaticamente:
+- pasta com `*_CABECA.mp3`/`*_CORPO.mp3` → modo cortes prontos;
+- pasta com MP3s brutos → modo bruto (transcreve, separa cabeça/corpo via
+  roteiro↔Whisper / gap natural / primeiro segmento, aplica BG).
+O BG (volume da `RECEITA_NJUD.txt`) é aplicado nos DOIS modos.
+
+**Bug de cópia de boletins (2026-09-30) — causa raiz:**
+O nome real é `BOLETIM_RADIO_TJRN_DD_MM_AAAA_B<N>_..._NJUD_<codigo>.mp3`,
+com o código do NJUD no SUFIXO. Filtrar por `NJUD_<codigo>*.mp3` (prefixo)
+nunca casa — e o PowerShell retornava exit 0 mesmo com zero itens, então o
+script imprimia "OK" sem copiar nada. Fix: seleção pelo índice `B<N>`
+delimitado (`B1` não casa com `B10`) + exigência de `NJUD_<codigo>` no nome
++ verificação do arquivo no destino. A cópia agora é Python puro (`shutil`),
+sem depender de `pwsh` no PATH.
 
 **Verificação de disco (regra permanente):** nunca confiar em "CONCLUÍDA"
 impresso pelo script. Sempre `ffprobe` nos arquivos gerados para validar
@@ -573,3 +589,27 @@ que são MP3s válidos com durações reais.
 ---
 
 *Fim do registro de decisões.*
+
+
+## Item 22. Limpeza pré-montagem e controle por manifesto (2026-10-01)
+
+Supera a aceitação automática de brutos/gaps/proporções do Item 21. O montador canônico montagem_jornais.py exige manifesto_producao.json, gerado por njud.controle_producao, com quatro pares verificados, ordem editorial e data de edição explícita. A limpeza da passagem ocorre no boletim individual antes da montagem. O BG e as passagens do NJUD são acrescentados depois. Cortes sem evidência, fontes alteradas, versões existentes, grade duplicada e duração acima de 300s interrompem a produção. Saídas são candidatas até auditoria sonora/editorial. O mecanismo de revisão registra eventos por hash para aprendizagem operacional; critérios novos dependem de piloto. O montador auxiliar process_njud_local.py foi desativado porque duplicava boletins. Procedimento: docs/procedimentos/PRODUCAO_NJUD_PRE_MONTAGEM.md.
+
+
+## Item 23. Auditoria v03 e política pré-montagem 2 (2026-10-01)
+
+A escuta do usuário encontrou restos de vinhetas, final cortado e música durante notas na v03. A política 2 exige stems pré-montagem para boletins misturados, com voz/acompanhamento preservados e hashes de proveniência; a referência isolada só é aceita para fontes confirmadas sem BG. Tempos ASR precisam de conferência da voz isolada, especialmente a frase final. BG é restrito à escalada; silêncio de respiro usa o sample rate da peça para não deslocar transições. A v04 é candidata, não master aprovado. Procedimento e configuração estão documentados em docs/procedimentos/PRODUCAO_NJUD_PRE_MONTAGEM.md.
+
+
+## Item 24. Processo canônico GIRO por manifesto (2026-10-01)
+
+A pedido do operador, o ponto de entrada GIRO `scripts_pipeline/executar_programa.py` foi restabelecido e delega a `scripts_pipeline/giro/processo.py`, usando controle GIRO próprio, sem importar módulos mortos `src/giro`, `src/regras`, preflight ou registro ausente. Não altera o fluxo NJUD/BOLETIM nem migra automaticamente planos históricos.
+
+- `planejar`: calendário civil de terças (inclui quinta terça), janela inclusiva [X-6, X-1], inventário por data real, duplicatas possíveis e lacunas; imprime JSON sem escrever, salvo `--salvar` explícito. Sem transcrição, cortes, cópia, locks ou sincronização.
+- `validar` e `montar` sem `--apply`: conferem manifesto; não geram áudio. Montagem com `--apply` exige 4–6 notas preparadas, ordem editorial, evidência geográfica RN, revisão humana LOC+OFF/limpeza, hashes e limites. Natal exige autorização e justificativa no manifesto. Rejeita notas duplicadas, sobrepostas, fora da janela ou alteradas.
+- Receita GIRO: abertura, primeira nota, passagem apenas ENTRE notas, encerramento. Sem receita CABEÇA/CORPO NJUD. Faixa 300–900s; não corta/padroniza conteúdo para completar tempo.
+- Saída versionada `data/output/GIRO/<codigo>/<versao>/`, sem sobrescrita; candidato com hashes do manifesto, áudio e vinhetas. Não há aprovação sonora automática.
+- `sync` é a única ação externa GIRO: candidato explícito, revisão final ligada por hash, destino explícito e `--apply`. Sem varredura global, remoção, criação do destino ou sobrescrita. O montador não sincroniza.
+- Entradas legadas GIRO delegam ou interrompem. Upload GIRO sem manifesto no backend é bloqueado até adaptação da interface; não infere código/data do relógio.
+
+O processamento de brutos continua separado: produzir notas/cortes pelo fluxo apropriado ao formato, registrar evidências e submeter ao manifesto. Não acionar pipeline BOLETIM durante planejamento. Procedimento: docs/procedimentos/PRODUCAO_GIRO_MANIFESTO.md.

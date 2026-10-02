@@ -6,6 +6,7 @@ CORRECAO: exportar PYTHONPATH no subprocess bash para evitar erro de modulo nao 
 
 import os
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -66,56 +67,58 @@ def copiar_mp3(njud_info):
     Nota: o nome real dos boletins é
         BOLETIM_RADIO_TJRN_DD_MM_AAAA_B<N>_..._NJUD_<codigo>.mp3
     ou seja, o código do NJUD está no SUFIXO do nome, não no prefixo. Um
-    filtro 'NJUD_<codigo>*.mp3' nunca casa — por isso a cópia é feita por
-    seleção explícita do índice B<N> (que é o dado que o pipeline realmente
-    conhece), não por glob de prefixo.
+    filtro 'NJUD_<codigo>*.mp3' nunca casa — por isso a seleção é feita pelo
+    índice B<N> (o dado que o pipeline realmente conhece), com exigência de
+    que o arquivo pertença a este NJUD.
+
+    A cópia é feita em Python puro (shutil): não depende de pwsh/powershell
+    estar no PATH, que é uma fonte de falha silenciosa no ambiente Windows.
     """
     subdir = njud_info["subdir_audio"]
     codigo = njud_info["codigo"]
-    src_base = os.path.join(ICE, subdir)
-    dest_base = os.path.join(str(BASE), "tmp", f"njud_{codigo}_workspace")
+    src_base = Path(ICE) / subdir
+    dest_base = Path(BASE) / "tmp" / f"njud_{codigo}_workspace"
 
-    os.makedirs(dest_base, exist_ok=True)
+    dest_base.mkdir(parents=True, exist_ok=True)
 
-    env_path = os.path.join(dest_base, ".env_local")
-    with open(env_path, 'w', encoding='utf-8') as f:
-        f.write(f"ROTEIRO_NJUD={njud_info['roteiro_txt']}\n")
+    env_path = dest_base / ".env_local"
+    env_path.write_text(f"ROTEIRO_NJUD={njud_info['roteiro_txt']}\n", encoding="utf-8")
 
-    if not os.path.isdir(src_base):
+    if not src_base.is_dir():
         print(f"    ERRO: pasta de origem inexistente: {src_base}")
         return False
 
     print(f"  [COPIAR] NJUD {codigo}: copiando {len(njud_info['boletins'])} boletins...")
 
+    candidatos = sorted(src_base.glob("*.mp3"))
+    if not candidatos:
+        print(f"    ERRO: nenhum MP3 em {src_base}")
+        return False
+
     for b in njud_info["boletins"]:
-        # Seleciona pelo índice B<N> delimitado (B1 não casa com B10) e
-        # exige que o arquivo pertença a este NJUD.
-        cmd = [
-            "pwsh", "-NoProfile", "-Command",
-            (
-                f"$f = Get-ChildItem -LiteralPath '{src_base}' -Filter '*.mp3' | "
-                f"Where-Object {{ $_.Name -match '(^|[^0-9])B{re.escape(b)}([^0-9]|$)' -and "
-                f"$_.Name -match 'NJUD_{re.escape(codigo)}' }} | "
-                f"Select-Object -First 1; "
-                f"if (-not $f) {{ Write-Error 'nenhum arquivo B{b} para NJUD {codigo}'; exit 2 }}; "
-                f"Copy-Item -LiteralPath $f.FullName -Destination '{dest_base}' -ErrorAction Stop; "
-                f"Write-Output $f.Name"
-            ),
-        ]
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=120, cwd=str(BASE))
+        # B<N> delimitado (B1 não casa com B10) + pertence a este NJUD.
+        pat_b = re.compile(rf"(^|[^0-9]){re.escape(b)}([^0-9]|$)")
+        pat_njud = re.compile(rf"NJUD_{re.escape(codigo)}")
 
-        if result.returncode != 0:
-            print(f"    ERRO copiando B{b}: {result.stderr.strip()[:200]}")
+        matches = [f for f in candidatos if pat_b.search(f.name) and pat_njud.search(f.name)]
+        if len(matches) != 1:
+            print(f"    ERRO: {b} resolveu para {len(matches)} arquivos (esperado 1) em {src_base}")
             return False
 
-        # Verificação independente no disco: o arquivo existe no destino?
-        nome = result.stdout.strip().splitlines()[-1].strip() if result.stdout.strip() else ""
-        destino = os.path.join(dest_base, nome) if nome else None
-        if not destino or not os.path.isfile(destino) or os.path.getsize(destino) == 0:
-            print(f"    ERRO: B{b} não confirmado no destino (esperado em {dest_base})")
+        origem = matches[0]
+        destino = dest_base / origem.name
+        try:
+            shutil.copy2(origem, destino)
+        except Exception as e:
+            print(f"    ERRO copiando {origem.name}: {e}")
             return False
 
-        print(f"    OK: {nome} ({os.path.getsize(destino)} bytes)")
+        # Verificação independente no disco: existe e não está vazio?
+        if not destino.is_file() or destino.stat().st_size == 0:
+            print(f"    ERRO: {b} não confirmado no destino ({destino})")
+            return False
+
+        print(f"    OK: {origem.name} ({destino.stat().st_size} bytes)")
 
     print(f"  [OK] Workspace NJUD {codigo} pronto")
     return True

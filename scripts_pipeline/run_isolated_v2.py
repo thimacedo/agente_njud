@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
-"""Wrapper para isolar o pipeline do Hermes venv"""
-import sys
+"""Compatibilidade: execute o pipeline com o interpretador do projeto."""
 import os
+import subprocess
+import sys
+from pathlib import Path
 
-# Definir __file__ para o script principal
-__file__ = os.path.abspath('scripts_pipeline/boletim/processar_boletim_canonico.py')
-
-# Limpar paths do Hermes
-sys.path = [p for p in sys.path if 'hermes' not in p.lower() and 'AppData/Local/hermes' not in p]
-
-# Garantir que .venv_pipeline é encontrado primeiro
-venv_site = os.path.join(os.path.dirname(os.path.abspath(__file__)), '.venv_pipeline', 'Lib', 'site-packages')
-if venv_site not in sys.path:
-    sys.path.insert(0, venv_site)
-
-sys.path.insert(0, 'scripts_pipeline')
-
-# Executar o pipeline
-exec(compile(open('scripts_pipeline/boletim/processar_boletim_canonico.py').read(), 'scripts_pipeline/boletim/processar_boletim_canonico.py', 'exec'))
+ROOT = Path(__file__).resolve().parents[1]
+PYTHON = ROOT / '.venv_pipeline' / ('Scripts/python.exe' if os.name == 'nt' else 'bin/python')
+if not PYTHON.is_file():
+    raise SystemExit('Crie .venv_pipeline com dev.ps1 setup antes de executar.')
+env = os.environ.copy()
+env.setdefault('DIVISOR_TMP', str(ROOT / 'data/tmp'))
+Path(env['DIVISOR_TMP']).mkdir(parents=True, exist_ok=True)
+env['PYTHONPATH'] = os.pathsep.join([str(ROOT / 'scripts_pipeline'), str(ROOT)])
+raise SystemExit(subprocess.call(
+    [str(PYTHON), str(ROOT / 'scripts_pipeline/boletim/processar_boletim_canonico.py'), *sys.argv[1:]],
+    cwd=ROOT, env=env))

@@ -53,7 +53,7 @@ def _carregar_silero_vad(modelo_nome: str = "silero_vad") -> Any:
     except ImportError:
         return None
     try:
-        return silero_vad.load(model_name=modelo_nome)
+        return silero_vad.load_silero_vad()
     except Exception:
         return None
 

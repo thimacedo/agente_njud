@@ -1,5 +1,46 @@
 # DIVISOR — Pipeline de Boletins de Rádio TJRN
 
+## Ambiente de desenvolvimento e testes
+
+Use **Python 3.11** e o mesmo `.venv_pipeline` para backend e áudio.
+Na raiz do projeto, em PowerShell:
+
+```powershell
+./dev.ps1 setup
+./dev.ps1 check
+./dev.ps1 test
+./dev.ps1 backend
+./dev.ps1 pipeline -m divisor_boletins --help
+./dev.ps1 pipeline scripts_pipeline/montagem_jornais.py --help
+```
+
+O wrapper usa o interpretador explícito, fixa a raiz de execução e inclui
+`scripts_pipeline` nos imports, inclusive nos subprocessos do backend.
+Não é necessário ativar o ambiente. Os comandos de backend/pipeline usam
+`data/tmp` para temporários de áudio, respeitando `DIVISOR_TMP` se definido. `requirements-dev.txt` inclui backend,
+pipeline e testes. FFmpeg e ffprobe precisam estar no PATH (instalação externa).
+Para Whisper alternativo, auditoria com SciPy e VAD Silero:
+
+```powershell
+./dev.ps1 pipeline -m pip install -r requirements-optional.txt
+```
+
+O carregador Silero usa o modelo incluído no pacote. FFmpeg/pydub fazem a
+leitura de áudio; os extras de I/O do Silero não são necessários ao pipeline.
+As dependências opcionais incluem PyTorch. Whisper pode baixar modelos na primeira execução; use um caminho local em `DIVISOR_WHISPER_MODEL` para o modelo faster-whisper já disponível.
+
+Para simular: `$env:SIMULATE='1'; ./dev.ps1 backend`.
+`DATA_DIR`, `UPLOAD_DIR` e `OUTPUT_DIR` permitem isolar dados de testes.
+O pipeline não é executado pelo setup. Testes unitários não baixam modelos.
+A validação de áudio real deve usar pastas isoladas por `DATA_DIR`, `UPLOAD_DIR`,
+`OUTPUT_DIR` e `DIVISOR_TMP`; nunca sobrescrever as entradas de produção.
+
+Avisos conhecidos: pydub usa `audioop` do Python 3.11; Silero/PyTorch usam
+APIs de recursos e TorchScript em descontinuação. Não há filtros que ocultem
+esses avisos. FastAPI usa `lifespan`, e os testes HTTP incluem `httpx2`.
+O aviso de `audioop` exige avaliar uma migração de pydub antes de Python 3.13.
+
+
 Processa boletins (MP3) em jornais NJUD montados, com corte VAD calibrado,
 transcrição Whisper e montagem por NJUD. Pipeline com ciclo fechado por arquivo
 e estado persistido.
@@ -112,6 +153,35 @@ python src/pipeline/dispatcher.py "F:\Projetos\DIVISOR\JORNAIS" ^
 # Janela 2 — monitor em tempo real (só leitura; abrir/fechar à vontade)
 python src/pipeline/monitor.py "F:\Projetos\DIVISOR\data\processed" --intervalo 5 --log
 ```
+
+## Montagem de jornais NJUD
+
+Há UM montador canônico: `scripts_pipeline/montagem_jornais.py`. Ele detecta
+sozinho o modo de entrada e aplica o BG da `RECEITA_NJUD.txt` nos dois casos.
+
+```bash
+# Modo bruto: pasta com os 4 MP3s do NJUD (transcreve, separa cabeça/corpo)
+PYTHONPATH=scripts_pipeline .venv_pipeline/Scripts/python.exe \
+    scripts_pipeline/montagem_jornais.py tmp data/output/JORNAIS_FINAL \
+    --roteiro setembro/roteiros_2026-09-03.txt --njud 1951
+
+# Modo cortes prontos: pasta com *_CABECA.mp3 / *_CORPO.mp3
+PYTHONPATH=scripts_pipeline .venv_pipeline/Scripts/python.exe \
+    scripts_pipeline/montagem_jornais.py \
+    data/processed/PRODUCAO_2026/JORNAIS_DIVIDIDOS data/output/JORNAIS_FINAL
+```
+
+Via shell (o subcomando `montar` aceita roteiro como 3º argumento):
+
+```bash
+bash scripts_pipeline/njud/njud_dividir.sh montar <entrada> <saida> [roteiro]
+```
+
+`--njud <num>` filtra um NJUD específico (a pasta de entrada deve ser o
+diretório-pai que contém as pastas/workspaces de NJUD).
+
+Sempre valide o resultado no disco com `ffprobe` — nunca confie no
+"montado com sucesso" impresso pelo script.
 
 ## Alternativas deprecadas
 

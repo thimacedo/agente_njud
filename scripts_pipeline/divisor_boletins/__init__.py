@@ -19,7 +19,7 @@ Interface CLI pública:
     python -m divisor_boletins dividir <pasta_entrada> <pasta_saida> --apply
 """
 
-from .audio import carregar_modelo, processar_arquivo, transcrever_audio
+from .audio import carregar_modelo, processar_arquivo, transcrever_audio, cortar_audio
 from .calibracao import calibrar_boletim
 from .deteccao import LIMIAR_CORRELACAO, buscar_ancora, _carregar_silero_vad
 from .log import LogPipeline
@@ -28,6 +28,7 @@ __all__ = [
     "carregar_modelo",
     "processar_arquivo",
     "transcrever_audio",
+    "cortar_audio",
     "calibrar_boletim",
     "LIMIAR_CORRELACAO",
     "buscar_ancora",

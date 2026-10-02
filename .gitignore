@@ -2,9 +2,9 @@
 data/
 /JORNAIS/
 /BOLETIM/
-+GIRO/
-+# Exceção: planejamento do GIRO (doc obsoleto e JSONs de planejamento)
-+!GIRO/planejamento_2026/
+/GIRO/*
+# Exceção: planejamento do GIRO (doc obsoleto e JSONs de planejamento)
+!/GIRO/planejamento_2026/
 /NJUD/
 orch/
 downloads/
@@ -75,3 +75,10 @@ H/
 # Assets de áudio (binários, não versionar)
 _legado/
 _legado/
+
+# Ambiente compartilhado de backend/pipeline
+.venv_pipeline/
+
+# Temporarios de testes e audio; preservar no disco, excluir do Git
+pytest-of-*/
+tmp/

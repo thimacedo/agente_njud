@@ -104,56 +104,6 @@ def transcrever_audio(
     return texto
 
 
-def _carregar_vinheta_ref(
-    assets_dir: Optional[Path] = None,
-) -> Optional[Path]:
-    """Retorna o caminho da vinheta de abertura de referência, se existir."""
-    if assets_dir is None:
-        assets_dir = Path(__file__).resolve().parent.parent.parent / "assets" / "vinhetas" / "njud"
-    vinheta = assets_dir / "VHT_ABERTURA_NJUD.mp3"
-    if not vinheta.exists():
-        return None
-    return vinheta
-
-
-def _remover_vinheta(
-    audio: Any,
-    vinheta_ref: Optional[Path] = None,
-    modelo: Optional[WhisperModel] = None,
-) -> tuple[Any, bool, float]:
-    """Tenta remover a vinheta de abertura do áudio.
-
-    Retorna (audio_limpo, foi_removida, duracao_vinheta_s).
-    """
-    if vinheta_ref is None:
-        vinheta_ref = _carregar_vinheta_ref()
-    if vinheta_ref is None or not vinheta_ref.exists():
-        return audio, False, 0.0
-
-    try:
-        from core.audio.remocao_vinheta import remover_vinheta_boletim
-    except ImportError:
-        logger.warning("remocao_vinheta não disponível — pulando remoção de vinheta")
-        return audio, False, 0.0
-
-    try:
-        from pydub import AudioSegment
-    except ImportError:
-        return audio, False, 0.0
-
-    from pathlib import Path
-
-    resultado = remover_vinheta_boletim(
-        Path("entrada_temporaria.mp3"),
-        vinheta_ref,
-        modelo_whisper="tiny",
-        min_palavras_coincidentes=2,
-    )
-    if resultado is None:
-        return audio, False, 0.0
-    return resultado, True, len(resultado) / 1000.0
-
-
 def cortar_audio(
     audio: Any,
     *,
