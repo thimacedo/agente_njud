@@ -104,7 +104,15 @@ def main():
     parser.add_argument("pasta_saida", help="Pasta com boletins MP3")
     parser.add_argument("--roteiros", help="Pasta com roteiros .txt", default=None)
     parser.add_argument("--modelo", default="base", help="Modelo Whisper (tiny/base/small/medium)")
+    parser.add_argument("--auditoria-acervo", action="store_true", help="Auditoria recursiva somente leitura, com cache por hash")
+    parser.add_argument("--saida-auditoria", help="Pasta externa à origem para evidências")
+    parser.add_argument("--limite", type=int, default=None, help="Limite de arquivos para validar um primeiro lote")
     args = parser.parse_args()
+    if args.auditoria_acervo:
+        if not args.saida_auditoria:parser.error("--auditoria-acervo exige --saida-auditoria")
+        from auditoria_acervo import auditar_acervo
+        auditar_acervo(args.pasta_saida,args.saida_auditoria,args.modelo,args.limite)
+        return
     
     pasta = Path(args.pasta_saida)
     if not pasta.exists():

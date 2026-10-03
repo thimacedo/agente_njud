@@ -582,9 +582,20 @@ def processar_canonico(arquivo_entrada, pasta_roteiros=None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Pipeline canônico de edição de boletins")
-    parser.add_argument("arquivo", help="Arquivo MP3 de entrada")
+    parser.add_argument("arquivo", nargs="?", help="Arquivo MP3 de entrada")
+    parser.add_argument("--manifesto", help="Manifesto BOLETIM com intervalos exatos auditados")
+    parser.add_argument("--saida", help="Pasta local exclusiva para montagem por manifesto")
     parser.add_argument("--roteiros", help="Pasta com roteiros em texto (opcional)", default=None)
     args = parser.parse_args()
+    if args.manifesto:
+        if not args.saida:
+            parser.error("--manifesto exige --saida")
+        from boletim.controle_manifesto import montar_manifesto_boletim
+        resultado = montar_manifesto_boletim(args.manifesto, args.saida, VHT_DIR)
+        print(json.dumps(resultado, ensure_ascii=True))
+        sys.exit(0)
+    if not args.arquivo:
+        parser.error("informe arquivo ou --manifesto")
 
     pasta_roteiros = Path(args.roteiros) if args.roteiros else None
     # Se --roteiros for um arquivo, usar o diretório pai
