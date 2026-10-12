@@ -254,6 +254,66 @@ def resumo_aprendizado(pasta):
             "acao": "Revisar causas recorrentes; propor política nova e validar em piloto. Sem ajuste automático de parâmetros."}
 
 
+def preparar_voz_original_njud(proveniencia, destino, autorizacao):
+    """Prepara vozes pré-mixagem verificadas, sem remover música de masters."""
+    from pydub import AudioSegment
+    proveniencia = Path(proveniencia).resolve()
+    data = json.loads(proveniencia.read_text(encoding='utf-8-sig'))
+    date.fromisoformat(data['data_edicao'])
+    date.fromisoformat(data['data_boletins'])
+    partes = data['partes']
+    if len(partes) != 4 or len({p['boletim'] for p in partes}) != 4:
+        raise ValueError('Exatamente quatro vozes distintas são obrigatórias')
+    if autorizacao.get('autorizada') is not True or not autorizacao.get('responsavel') or not autorizacao.get('receita_literal') or not autorizacao.get('duracao_literal'):
+        raise ValueError('Receita e duração exigem orientação humana registrada')
+    # Verificar amostras contra os brutos e os cortes auditados antes de copiar.
+    for index, part in enumerate(partes, 1):
+        if part['ordem'] != index:
+            raise ValueError('Ordem editorial divergente')
+        for key, digest in [('fonte_bruta', 'fonte_sha256'), ('manifesto_boletim', 'manifesto_sha256'), ('auditoria_voz', 'auditoria_voz_sha256')]:
+            if sha256(part[key]) != part[digest]:
+                raise ValueError('Proveniência alterada')
+        m = json.loads(Path(part['manifesto_boletim']).read_text(encoding='utf-8-sig'))
+        audit = json.loads(Path(part['auditoria_voz']).read_text(encoding='utf-8-sig'))
+        if m.get('programa') != 'BOLETIM' or m['fonte_sha256'] != part['fonte_sha256'] or audit.get('fonte_sha256') != m['fonte_sha256']:
+            raise ValueError('Voz sem proveniência BOLETIM correspondente')
+        if audit.get('cabeca') != m['cabeca'] or audit.get('off') != m['off'] or audit.get('claquetes'):
+            raise ValueError('Auditoria de outro corte ou com comandos')
+        raw = AudioSegment.from_file(part['fonte_bruta'])
+        channels = [raw] + (raw.split_to_mono() if raw.channels == 2 else [])
+        for key, sourcekey in [('cabeca','cabeca'), ('off','off')]:
+            item = part[key]
+            if item.get('bg_adicionado') is not False or item.get('vinhetas_adicionadas') is not False or sha256(item['arquivo']) != item['sha256']:
+                raise ValueError('Peça alterada ou misturada')
+            voice = AudioSegment.from_file(item['arquivo'])
+            matches = []
+            for channel in channels:
+                chunks = [channel[round(start*1000):round(end*1000)] for start,end in m[sourcekey]]
+                expected = sum(chunks[1:], chunks[0])
+                matches.append((voice.raw_data,voice.frame_rate,voice.channels,voice.sample_width) == (expected.raw_data,expected.frame_rate,expected.channels,expected.sample_width))
+            if not any(matches):
+                raise ValueError('Amostras não correspondem à voz original')
+    destino = Path(destino).resolve()
+    if any(destino == Path(p[k]['arquivo']).resolve().parent or Path(p[k]['arquivo']).resolve().parent in destino.parents for p in partes for k in ('cabeca','off')):
+        raise ValueError('Destino deve ficar separado das fontes')
+    destino.mkdir(parents=True, exist_ok=False)
+    (destino/'cortes').mkdir()
+    pares = []
+    for part in partes:
+        pair = {'boletim':int(part['boletim'][1:]), 'origem_sha256':part['fonte_sha256']}
+        for key, destkey, label in [('cabeca','cabeca','CABECA'),('off','corpo','CORPO')]:
+            target = destino/'cortes'/f"N{part['ordem']}_{part['boletim']}_{label}.wav"
+            shutil.copy2(part[key]['arquivo'], target)
+            if sha256(target) != part[key]['sha256']:
+                raise ValueError('Cópia divergente')
+            pair[destkey] = str(target)
+            pair[destkey+'_sha256'] = sha256(target)
+        pares.append(pair)
+    prepared = {'politica':POLITICA,'njud':data['njud'],'data_edicao':data['data_edicao'],'data_boletins':data['data_boletins'],'versao':'v01','pares':pares,'status':'candidato_pendente_auditoria','master_aprovado':False,'metodo_preparacao':'voz_original_pre_mixagem','proveniencia':str(proveniencia),'proveniencia_sha256':sha256(proveniencia),'autorizacao_receita':autorizacao,'passagem_entre_notas':False,'limite_duracao_s':900,'autorizacao_duracao':{'autorizada':True,'responsavel':autorizacao['responsavel'],'mensagem':autorizacao['duracao_literal']},'nomenclatura_canonica':True}
+    salvar_json(destino/'manifesto_producao.json', prepared)
+    return prepared
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     sub = parser.add_subparsers(dest="comando", required=True)

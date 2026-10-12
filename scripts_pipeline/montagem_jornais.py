@@ -522,6 +522,11 @@ def _montar_de_cortes(
     trilha_bg = preparar_trilha_bg(len(bloco_cabecas), bg_volume).fade_out(min(80, len(bloco_cabecas)))
     bloco_cabecas_bg = overlay_bg(bloco_cabecas, trilha_bg)
 
+    manifesto_path = pasta_njud / 'manifesto_producao.json'
+    receita_edicao = json.loads(manifesto_path.read_text(encoding='utf-8')) if manifesto_path.exists() else {}
+    passagem_entre_notas = receita_edicao.get('passagem_entre_notas', True)
+    if not passagem_entre_notas and not receita_edicao.get('autorizacao_receita', {}).get('receita_literal'):
+        raise ValueError('Passagem única exige orientação da receita por edição')
     # Ordem imutável do Item 9
     jornal = AudioSegment.empty()
     jornal += vht_abertura
@@ -529,7 +534,7 @@ def _montar_de_cortes(
     jornal += vht_passagem
 
     for indice, (_cabeca_path, corpo_path) in enumerate(pares):
-        if indice:
+        if indice and passagem_entre_notas:
             jornal += vht_passagem
         try:
             jornal += normalize(AudioSegment.from_file(str(corpo_path)))
@@ -627,6 +632,16 @@ def _montar_de_brutos(
     return jornal
 
 
+def limite_duracao_njud(manifesto):
+    limite = manifesto.get('limite_duracao_s', 300)
+    if isinstance(limite, bool) or not isinstance(limite, (int, float)) or not math.isfinite(limite) or not 0 < limite <= 900:
+        raise ValueError('Limite de duração inválido')
+    auth = manifesto.get('autorizacao_duracao', {})
+    if limite > 300 and (auth.get('autorizada') is not True or not auth.get('responsavel') or not auth.get('mensagem')):
+        raise ValueError('Duração acima de cinco minutos exige orientação humana explícita')
+    return limite
+
+
 def montar_jornal(
     pasta_njud: Path,
     pasta_saida: Path,
@@ -692,8 +707,9 @@ def montar_jornal(
         return None
 
     duracao = len(jornal) / 1000
-    if duracao > 300:
-        logger.error(f"[{etapa}] {duracao:.1f}s excede cinco minutos; requer edição conforme roteiro")
+    limite_duracao = limite_duracao_njud(manifesto)
+    if duracao > limite_duracao:
+        logger.error(f"[{etapa}] {duracao:.1f}s excede o limite autorizado de {limite_duracao}s")
         return None
     logger.info(f"[{etapa}] Duração: {int(duracao // 60)}:{int(duracao % 60):02d}")
 
@@ -714,6 +730,8 @@ def montar_jornal(
         logger.error(f"[{etapa}] Versão inválida")
         return None
     nome_arquivo = f"NJUD_{numero_njud}_{data_str}_{versao}_CANDIDATO.mp3"
+    if manifesto.get('nomenclatura_canonica') is True:
+        nome_arquivo = f'NJUD_{numero_njud}_{data_str}.mp3'
     pasta_saida.mkdir(parents=True, exist_ok=True)
     tmp = pasta_saida / f"{nome_arquivo[:-4]}_raw.mp3"
     caminho_saida = pasta_saida / nome_arquivo
@@ -765,6 +783,10 @@ def montar_jornal(
         "versao": manifesto["versao"],
         "bg_aplicado_apenas_cabecas": True,
         "respiro_apos_corpo_ms": 120,
+        "passagem_entre_notas": manifesto.get("passagem_entre_notas", True),
+        "limite_duracao_autorizado_s": limite_duracao,
+        "autorizacao_receita": manifesto.get("autorizacao_receita"),
+        "autorizacao_duracao": manifesto.get("autorizacao_duracao"),
         "assets_sha256": {p.name: sha256(p) for p in DIR_ASSETS_VINHETAS_NJUD.iterdir() if p.is_file()},
     }
     meta_path = pasta_saida / f"{nome_arquivo[:-4]}_metadados.json"
